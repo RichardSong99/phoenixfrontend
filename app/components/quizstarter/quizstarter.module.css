@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    flex: 1;
+    justify-content: space-around;    
+    gap: 40px;
+
+
+}
+
+.title {
+    color: #1387F2;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+
+.text{
+    color: #506B72;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.numberQuestionsWrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.startButton{
+    display: flex;
+    width: 150px;
+    height: 40px;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: normal;
+    color: white;
+    background: linear-gradient(276deg, #1387F2 0%, #F455E4 108.67%);
+    cursor: pointer;
+}

@@ -1,0 +1,95 @@
+.statTile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #666;
+}
+
+.statTileValue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 25px;
+    font-weight: 600;
+
+}
+
+.statTileLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+
+}
+
+.statTileArray {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.backButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background-color: #666;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    width:fit-content;
+}
+
+.backButton:hover{
+    background-color: #333;
+}
+
+.outerDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    padding: 20px 10%;
+}
+
+.mainPanel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 80%;
+    /* background-color: white; */
+    padding: 20px;
+    height: 100%;
+}
+
+.banner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px;
+    background-color: #001947;
+    color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.resultWrapper{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    background-color: white;
+    padding: 20px;
+}

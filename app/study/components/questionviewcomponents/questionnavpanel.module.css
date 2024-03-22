@@ -1,0 +1,144 @@
+/* questionNavPanel.module.css */
+
+/* Styles for the entire panel */
+.questionNavPanel {
+    display: flex; /* Use flexbox */
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+    
+    
+    
+    background-color: #ffffff; /* Background color for the panel */
+    padding: 10px; /* Padding for the panel */
+    z-index: 1; /* Ensure it's above other elements */
+    width: 100%;
+    border: 1px solid #e0e0e0;
+}
+
+.questionNavHeader{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.headerAndLegend {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px; /* Adjust padding as needed */
+}
+
+/* Styles for the questionBoxGroup section */
+.questionBoxGroup {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Styles for the closeButtonContainer section */
+.closeButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+/* Styles for individual question boxes */
+.questionBox {
+    width: 40px; /* Adjust the box width */
+    height: 40px; /* Adjust the box height */
+    background-color: transparent; /* Box background color */
+    color: var(--primary-color); /* Text color */
+    text-align: center; /* Center the text */
+    line-height: 40px; /* Center vertically */
+    margin-right: 10px; /* Spacing between boxes */
+    cursor: pointer; /* Cursor style on hover */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    border: 1px dotted black; /* Add a border to the question boxes */
+    font-weight: bold;
+}
+
+.questionBox:hover {
+    font-size: 18px;
+}
+
+/* Style for answered questions */
+.answered {
+    color: white;
+    background-color: var(--primary-color); /* Blue background for answered questions */
+}
+
+.unanswered{
+    border: 1px dotted black; /* Add a border to the question boxes */
+}
+
+/* Style for flagged questions */
+.flagged {
+    border: #ff0000 2px dashed; /* Red background for flagged questions */
+}
+
+/* Style for the current question */
+.currentQuestion {
+    border-width: 2px; /* Thicker border for the current question */
+}
+
+/* Style for questions for review */
+.review {
+    border: 2px solid #ff0000; /* Red border for questions for review */
+}
+
+/* Hover effect for question boxes */
+
+
+/* Styles for the clickable "Next" and "Back" buttons */
+.nextButton,
+.backButton {
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Text color */
+    padding: 10px 20px; /* Padding for buttons */
+    margin: 10px; /* Spacing around buttons */
+    cursor: pointer; /* Cursor style on hover */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover effect for buttons */
+.nextButton:hover,
+.backButton:hover {
+    background-color: #0056b3; /* Change background color on hover */
+}
+
+/* Styles for the close button */
+.closeButton {
+    padding: 5px 10px; /* Adjust padding as needed */
+    border: 1px solid #000;
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer;
+    background-color: transparent; /* Transparent background */
+    margin-left: 10px; /* Spacing between buttons */
+    color: #000; /* Text color */
+    font-size: 14px; /* Adjust the font size as needed */
+}
+
+/* Hover effect for the close button */
+.closeButton:hover {
+    background-color: #e0e0e0; /* Change background color on hover */
+    color: #000; /* Text color on hover */
+}
+
+
+.legendBox {
+    width: 12px; /* Adjust the width of the legend box */
+    height: 12px; /* Adjust the height of the legend box */
+    display: inline-block;
+    margin-right: 4px; /* Spacing between legend box and text */
+    
+    vertical-align: middle; /* Align the legend box vertically with text */
+    border-radius: 2px;
+}
+
+.legendText{
+    font-size: 14px; /* Adjust the font size as needed */
+
+}

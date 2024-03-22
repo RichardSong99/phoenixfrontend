@@ -1,0 +1,94 @@
+.formcontainer {
+    display: flex;
+    flex-direction: column; /* Change this to column to stack elements vertically */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 13px;
+}
+
+.qbankfilter {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row; /* Keep this as row to arrange filter fields horizontally */
+    justify-content: flex-start; /* Align items to the start horizontally */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px; /* Add some padding to give some space around the items */
+    gap: 40px;
+}
+
+.fieldset {
+    display: flex;
+    flex-direction: column; /* Keep this as column to stack checkboxes vertically */
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the start */
+    margin-bottom: 20px;
+}
+
+.label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.qbankfilter input[type="text"],
+.qbankfilter select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdownContent {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    z-index: 1;
+    border: 3px solid var(--grey1);
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
+  }
+  
+  .dropdown:hover .dropdownContent {
+    display: block;
+  }
+  
+  .dropbtn {
+    background-color: var(--color3);
+    color: var(--color5);
+    font-weight: 600;
+    padding: 10px 15px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+
+  
+  .dropdownContent label {
+    color: black;
+    padding: 5px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+
+  .dropbtn::after {
+    content: " \25BC"; /* Unicode downward arrow */
+    font-size: 0.8em;
+  }

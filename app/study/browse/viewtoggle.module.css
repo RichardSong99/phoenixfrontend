@@ -1,0 +1,29 @@
+.viewToggle {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #73B8F7;
+    width: fit-content;
+    border-radius: 5px;
+
+}
+
+.button{
+    padding: 5px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:first-of-type{
+    border-radius: 5px 0 0 5px;
+}
+
+.button:last-of-type{
+    border-radius: 0 5px 5px 0;
+}
+
+.active{
+    background: #73B8F7;
+}
+

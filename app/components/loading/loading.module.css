@@ -1,0 +1,49 @@
+@keyframes dot {
+    0%, 20% {
+        color: rgba(0,0,0,0);
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    40% {
+        color: white;
+        text-shadow:
+            .25em 0 0 white,
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    60% {
+        text-shadow:
+            .25em 0 0 white,
+            .5em 0 0 white;
+    }
+    80%, 100% {
+        text-shadow:
+            .25em 0 0 white,
+            .5em 0 0 white;
+    }
+}
+
+.loader {
+    font-size: 2em;
+    position: relative;
+}
+
+.loader span {
+    position: relative;
+    animation: dot 1.3s infinite;
+}
+
+.loader span:nth-child(2) {
+    left: .25em;
+    animation-delay: .2s;
+}
+
+.loader span:nth-child(3) {
+    left: .5em;
+    animation-delay: .4s;
+}
+
+.loader span:nth-child(4) {
+    left: .75em;
+    animation-delay: .6s;
+}

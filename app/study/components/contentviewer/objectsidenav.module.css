@@ -1,0 +1,189 @@
+.questionSideNav{
+    position: fixed;
+    display: inline-flex;
+    padding: 15px;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: start;
+    gap: 25px;
+    flex-shrink: 0;
+    width: 300px;
+    background-color: #F9F9F9;
+    height: 100%; /* Change this line */
+    
+}
+
+.infoSection{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+  
+
+    padding: 10px;
+}
+
+.questionLinkSection{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 7px;
+    width: 100%;
+}
+
+.progressTextDiv{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+
+}
+
+.progressDiv{
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-top: 1px solid #B4D1D7;
+    border-bottom: 1px solid #B4D1D7;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.statusPanel{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.50);
+    border-radius: 10px;
+    overflow: hidden;
+    
+}
+
+.viewSelector{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 5px 5px;
+    box-sizing: border-box;
+    background-color: #E2F0FD;
+    border-radius: 10px;
+}
+
+.viewElement{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+    font-size: 12px;
+    color: #1387F2;
+    text-align: center;
+}
+
+.statusPanelWrapper{
+    width: 100%;
+    padding: 15px 4px;
+    border-bottom:  1px solid #B4D1D7;
+
+}
+
+.statusOption{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-self: stretch;
+    width: 100%;
+    /* cursor: pointer; */
+    font-size: 14px;
+    color: black;
+}
+
+/* .statusOption:hover{
+    background-color: #1387F2;
+    color: white;
+} */
+
+
+.questionLink{
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-self: stretch;    
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.questionLink:hover{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.questionNumber{
+    font-size: 13px;
+}
+
+.active{
+    color: #001947;
+    font-weight: 500;
+    background-color: white;
+    border: 1px solid #001947;
+}
+
+.inactive{
+    color: black;
+    background: #E7E3E3;
+}
+
+.statusIconDiv{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.omitted{
+    width: 15px; /* Adjust as needed */
+    height: 15px; /* Adjust as needed */
+    border-radius: 50%;
+    background-color: #F8C540; /* Adjust as needed */
+    min-width: 15px; /* Adjust as needed */
+    min-height: 15px; /* Adjust as needed */
+}
+
+.responseEntered{
+    width: 15px; /* Adjust as needed */
+    height: 15px; /* Adjust as needed */
+    border-radius: 50%;
+    background-color: #1387F2; /* Adjust as needed */
+    min-width: 15px;
+    min-height: 15px;
+
+}
+
+.difficulty{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-self: stretch;
+    width: 100%;
+    cursor: pointer;
+    font-size: 13px;
+    color: black;
+}

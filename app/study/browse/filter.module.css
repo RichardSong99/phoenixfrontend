@@ -1,0 +1,76 @@
+
+
+/* filter.module.css */
+
+/* filter.module.css */
+
+.filterWrapper {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+  }
+  
+  .tab {
+
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 0 16px 16px 0;
+    cursor: pointer;
+    position: relative; /* Added */
+    display: inline-block; /* Added */
+    min-width: 120px; /* Added */
+    text-align: center; /* Added */
+  }
+  
+  .expandText {
+    font-size: 14px;
+  }
+  
+  .filterContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    
+    
+  }
+  
+  .tableContainer{
+    max-height: 800px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+  .open {
+    transform: translateX(0);
+  }
+  
+  .closeTab {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 16px 0 0 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 100%;
+  }
+  
+  .closeText {
+    font-size: 14px;
+  }
+  

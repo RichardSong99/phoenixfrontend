@@ -1,0 +1,145 @@
+"use client"
+import React, { useState, useEffect, useContext } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { fetchTestUnderlyingByID } from '@/app/services/testservice';
+import { SelectionBar } from '../../components/selectionbar/selectionbar';
+import SummaryPanel from '../../components/summarypanel/summarypanel';
+import styles from './reviewpracticetestslug.module.css';
+import { ProgressBar } from "react-bootstrap";
+import { NavBarContext } from '@/app/context/navbarcontext';
+
+export default function Page() {
+    const pathname = usePathname(); // Update variable name
+    const [testID] = pathname.split('/').slice(-1).map(part => decodeURI(part));
+    const [activeTab, setActiveTab] = useState(0);
+
+    const { setIsStudyNavBarVisible, setIsTopNavBarVisible } = useContext(NavBarContext);
+
+    useEffect(() => {
+        setIsStudyNavBarVisible(true);
+        setIsTopNavBarVisible(true);
+    }, []);
+
+
+    const [testObject, setTestObject] = useState(null);
+
+    const moduleNameMapping = [
+        { name: "Reading module 1" },
+        { name: "Reading module 2" },
+        { name: "Math module 1" },
+        { name: "Math module 2" },
+    ]
+
+    const mathTopics = [
+        "Algebra",
+        "Advanced math",
+        "Problem solving and data analysis",
+        "Geometry and trigonometry",
+        "Math"
+    ]
+
+    const readingTopics = [
+        "Information and ideas",
+        "Craft and structure",
+        "Expression of ideas",
+        "Standard English conventions",
+        "Reading"
+    ]
+
+    const loadTestObject = async () => {
+        try {
+            const testObject = await fetchTestUnderlyingByID({ testID });
+            console.log("testObject", testObject);
+            setTestObject(testObject);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
+    useEffect(() => {
+        loadTestObject();
+    }, []);
+
+    const handleTabChange = (tabNum) => {
+        setActiveTab(tabNum);
+    }
+
+
+    return (
+        <div className={styles.outerDiv}>
+            {testObject &&
+                <div className={styles.mainPanel}>
+                    <div className={styles.scaledScorePanel}>
+                        <ScoreTile title={"Overall Score"} score={testObject.totalScaled} range={"400 - 1600"} />
+                        <ScoreTile title={"Math"} score={testObject.mathScaled} range={"200 - 800"} />
+                        <ScoreTile title={"Reading"} score={testObject.readingScaled} range={"200 - 800"} />
+                    </div>
+                    <div className = {styles.overallStatDiv}>
+                        <div className = {styles.subStatDiv}>
+                            {mathTopics.map((topic, index) => {
+                                return (
+                                    <SubjectBar
+                                        key={index}
+                                        subject={topic}
+                                        correct={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Correct}
+                                        total={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Total}
+                                    />
+                                )
+                            })}
+                        </div>
+
+                        <div className = {styles.subStatDiv}>
+                            {readingTopics.map((topic, index) => {
+                                return (
+                                    <SubjectBar
+                                        key={index}
+                                        subject={topic}
+                                        correct={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Correct}
+                                        total={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Total}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </div>
+                    <div ></div>
+                    <SelectionBar
+                        tabList={moduleNameMapping.map(item => item.name)}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                    />
+
+
+                    <SummaryPanel
+                        questionEngagements={testObject.quizResults[activeTab].Questions}
+                        quizID={testObject?.quizResults[activeTab]?.Quiz?.id}
+                    />
+
+                </div>
+            }
+
+        </div>
+    )
+
+}
+
+export const ScoreTile = ({ title, score, range }) => {
+    return (
+        <div className={styles.scoreTile}>
+            <div className={styles.scoreTitle}>{title}</div>
+            <div className={styles.scoreBody}>
+                <div style={{ color: "black", fontWeight: "600", fontSize: "23px" }}>{score}</div>
+                <div className={styles.scoreDivider} />
+                <div style={{ color: "#716E6E", fontSize: "14px" }}>{range}</div>
+            </div>
+        </div>
+    )
+}
+
+export const SubjectBar = ({ subject, correct, total }) => {
+    return (
+        <div className={styles.subjectBar}>
+            <div style={{ color: "black", fontSize: "12px", fontWeight: "700" }}>{subject} {correct}/{total}</div>
+            <ProgressBar now={100 * correct / total} style={{ height: '8px', width: '100%' }} variant="info" />
+        </div>
+    )
+}

@@ -1,0 +1,122 @@
+/* CSS for the table */
+
+
+.summarytitletext{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+}
+
+
+.summaryPanel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.summarytable {
+    width: 100%;
+    /* table-layout: fixed; */
+    font-size: 14px;
+    border-collapse: collapse;
+  }
+  
+  /* Style the table header */
+  .summarytable th {
+    background-color: #73B8F7; /* Light gray background for headers */
+    ; /* Header background color */
+    color: white;
+    text-align: center;
+    padding: 12px;
+    position: sticky;
+
+  }
+
+  .summarytable thead th {
+    top: 0;
+    position: sticky;
+    z-index: 10;
+}
+  
+  /* Style the table rows */
+  .summarytable tr:nth-child(even) {
+    background-color: var(--grey1); /* Alternating row background color */
+  }
+  
+  .summarytable tr:hover {
+    cursor: pointer;
+    background-color: #e7e7e7; /* Hover background color */
+  }
+  
+  /* Style the table cells */
+  .summarytable td {
+    text-align: center;
+    /* need to align horinzontally center */
+    justify-content: center; /* Horizontally center content */
+    color: #666666;
+    padding: 12px;
+
+  }
+
+ 
+
+  .correctAnswer {
+    color: green;
+}
+
+.incorrectAnswer {
+    color: red;
+}
+  
+  /* Style the "Flag" button */
+  .summaryflagbutton {
+    background-color: white; /* Button background color */
+    color: black; /* Button text color */
+    border: 1px solid red;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+  
+  .summaryflagbutton:hover {
+    background-color: red; /* Button background color on hover */
+    color: white;
+}
+  
+/* Style the "Question Number" button */
+.summarytable .questionNumberButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  padding: 0;
+  font-size: 13px;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: white;
+  cursor: pointer;
+}
+
+.summarytable .questionNumberButton:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.flagged{
+  background-color: red;
+  color: white;
+}
+
+.omitted{
+  width: 25px; /* Adjust as needed */
+  height: 25px; /* Adjust as needed */
+  border-radius: 50%;
+  background-color: #F8C540; /* Adjust as needed */
+}

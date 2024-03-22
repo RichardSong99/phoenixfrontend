@@ -1,0 +1,30 @@
+
+
+
+:root{
+  --primary-color: #1387F2;
+  --secondary-color: #EAF5FF;
+  --color3: #D6ECFF;
+  --color4: #004EE4;
+  --color5: #041942;
+  --orange1: #F77D31;
+  --green1: #0f8;
+  --green2: #4CAF50;
+  --green3: #45a049;
+  --grey1: #F7F7F7;
+  --grey2: #A6A5A4;
+}
+
+
+
+
+
+
+
+.bodyStyles{
+  overflow-y: auto;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #F5F5F8;
+}

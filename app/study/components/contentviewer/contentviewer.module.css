@@ -1,0 +1,109 @@
+
+
+.entirePanel{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    gap: 2px;
+}
+
+.objectSideNavPlaceholder{
+    width: 300px;
+    height: 100%;
+    background-color: #E7E5FA;
+    flex-shrink: 0;
+
+}
+
+.mainPanel{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.headerPanel{
+    width: 100%;
+    font-size: 15px;
+    padding: 20px;
+    background: #085296;
+    color: white;
+
+}
+
+.contentPanel{
+    overflow-y: auto;
+    flex-grow: 1;
+    width: 100%;
+    margin-bottom: -100px;
+    display: flex;
+    justify-content: center;
+}
+
+.bottomNavPanelWrapper{
+    width: 100%;
+   
+}
+
+.navPanel {
+    margin-left: 300px;
+    width: calc(100% - 305px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #D9D9D9;
+
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.videoBackground{
+    background-color: black;
+}
+
+.nextPrevGroup{
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
+.navButton{
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #E2F0FD;
+    color: #1387F2;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    
+}
+
+.navButton:disabled{
+    background-color: #D9D9D9;
+    color: #B3B3B3;
+    cursor: not-allowed;
+}
+
+
+
+.navButton:hover{
+    background-color: #1387F2;
+    color: white;
+}
+
+.navButton:disabled:hover{
+    background-color: #D9D9D9;
+    color: #B3B3B3;
+    cursor: not-allowed;
+}

@@ -1,0 +1,214 @@
+/* styles/Login.module.css */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.formContainer {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start; /* Changed from center to flex-start */
+    gap: 0;
+    width: 50%;
+    height: 65%;
+    max-width: 1000px;
+    max-height: 700px;
+}
+
+.descriptionText {
+    flex: 1;
+    background-color: var(--color5);
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    border-radius: 8px;
+}
+
+.divider {
+    border-bottom: 1px solid var(--grey2); /* Change color as needed */
+    width: 90%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loginRegToggle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 15px;
+}
+
+.loginRegToggleActive{
+    background-color: var(--secondary-color);
+    color: var(--color5);
+    width: 50%;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.loginRegToggleInactive{
+    background-color: var(--grey1);
+    color: var(--grey2);
+    width: 50%;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.formDiv{
+    flex: 1;
+    padding: 30px;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subtitle {
+    color: #606770;
+    margin-bottom: 1rem;
+}
+
+.termsText {
+    color: #606770;
+    font-size: 12px;
+    margin-bottom: 1rem;
+}
+
+.link {
+    color: #3b5998;
+    text-decoration: none;
+}
+
+.socialButton {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #dddfe2;
+    cursor: pointer;
+    background-color: white;
+    color: #4b4f56;
+    font-weight: 700;
+    font-size: 13px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.googleLogo{
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.googleSpan{
+    vertical-align: middle;
+}
+
+.socialButton:hover {
+    background-color: var(--grey1);
+}
+
+.inputField {
+    margin-bottom: 15px;
+}
+
+.input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #dddfe2;
+    font-size: 12px;
+    color: #1d2129;
+    width: 80%;
+}
+
+.forgotPassword {
+    display: block;
+    color: var(--color5);
+    text-decoration: underline;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.highlightedButton {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.highlightedButton:hover {
+    background-color: var(--color4);
+}
+
+.greyedButton {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: white;
+    color: var(--grey2);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.greyedButton:hover {
+    background-color: var(--grey1);
+}
+
+.formText{
+    font-size: 12px;
+    color: var(--grey2);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.sameLine {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 12px;
+    margin-bottom: 1em;
+    gap: 10px;
+}
+
+.redText{
+    color: red;
+    font-size: 13px;
+    font-weight: 600;
+    margin: auto;
+}

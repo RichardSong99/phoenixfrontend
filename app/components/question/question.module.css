@@ -1,0 +1,229 @@
+.questionChoiceArea {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+
+.choiceLetter {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    fill: #FFF;
+
+    border-radius: 50%;
+    border: 1px solid #1387F2;
+    color: #1387F2;
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.selectedChoiceLetter {
+    color: white;
+    background: #1387F2;
+
+}
+
+.correctChoiceLetter {
+    color: white;
+    background: #56D819;
+    border: 1px solid #56D819;
+}
+
+.incorrectChoiceLetter {
+    color: white;
+    background: #E65F57;
+    border: 1px solid #E65F57;
+}
+
+
+
+
+.choiceText {
+    width: 491px;
+    flex-shrink: 0;
+    color: #000;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.choiceComponent {
+    display: flex;
+
+    padding: 10px;
+    align-items: center;
+    gap: 20px;
+    border-radius: 5px;
+    border: 1px solid #D0DBDE;
+    background: #FFF;
+    cursor: pointer;
+}
+
+.incorrectChoiceComponent {
+    border: 2px solid #E65F57;
+}
+
+.correctChoiceComponent {
+    border: 2px solid #56D819;
+}
+
+.selectedChoiceComponent {
+    border: 2px solid #1387F2;
+}
+
+
+.questionHeaderContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #D0DBDE;
+}
+
+.flagContainer {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.flagText {
+    color: #73B8F7;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.timerContainer {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #73B8F7;
+    text-align: center;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+.questionHeaderButtonArea {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.questionHeaderButton {
+    display: flex;
+    padding: 5px 10px;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 10px;
+    border: 1px solid #73B8F7;
+    color: #73B8F7;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: white;
+    cursor: pointer;
+}
+
+
+.navAreaContainer {
+    display: flex;
+    align-items: flex-end;
+    align-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.navButtonArea {
+    display: flex;
+    width: 100%;
+    padding: 5px 0px;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.navNumberButtonArea {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+
+
+.nextPrevButtonGroup {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nextPrevButton {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: #73B8F7;
+    color: #FFF;
+    border: none;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.slimButton {
+    display: flex;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: #1387F2;
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.flagIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.showAnswerButton {
+    display: flex;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: #1387F2;
+    color: #FFF;
+    font-size: 13px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}

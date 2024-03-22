@@ -1,0 +1,486 @@
+/* questionview.module.css */
+
+
+
+
+
+.questionView {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  width: 100%;
+  height: 700px;
+  max-height: 80%;
+  box-sizing: border-box;  */
+  display: inline-flex;
+  flex-direction: column;
+  align-content: flex-start; /* Change this line */
+  gap: 25px;
+
+
+
+}
+
+.questionContentContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  height: 500px;
+
+}
+
+.questionTextContainer{
+  border-right: 1px solid #e0e0e0;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.questionRHS{
+  padding: 20px;
+  height: 100%;
+}
+
+.mainQuestionView {
+  width: 100%;
+
+}
+
+.questionNavPanel {
+  margin: 20px;
+}
+
+.questionPanel {
+  display: flex;
+  padding: 15px 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  border: 1px solid #D0DBDE;
+  border-radius: 10px;
+  min-height: 600px;
+  overflow-y: auto;
+  max-width: 1200px;
+  background-color: white;
+  
+}
+
+.questionPrompt {
+  width: 100%;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.responseArea {
+  width: 100%;
+}
+
+
+
+.questionul {
+  list-style-type: none;
+  padding: 2px;
+}
+
+.questionli {
+  margin-bottom: 20px;
+  border-radius: 2px;
+  border-color: black;
+}
+
+.questionlabel {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.questionradio {
+  margin-right: 5px;
+}
+
+.buttonArea {
+  display: flex; /* Change this line */
+  justify-content: space-between;
+  justify-items: center; /* Add this line */
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+
+
+.centralbutton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 10px;
+
+}
+
+.questionNumber {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sleekButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sleekButton:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+
+}
+
+
+.sleekButton:enabled:hover {
+  background-color: #0056b3;
+}
+
+
+
+.questionTextArea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+.questionTextAreaShowAnswerCorrect {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid green;
+  color: green;
+  background-color: #DAF7AF;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+
+.questionTextAreaShowAnswerIncorrect {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid red;
+  color: red;
+  background-color: #fff6f6;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+
+
+.nextprevGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px;
+  gap: 5px;
+
+}
+
+.buttonSpacer {
+  width: 1rem;
+  /* Adjust the width for the desired spacing */
+}
+
+/* Add these styles to your existing CSS file */
+
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  /* Add spacing between question header and content */
+  border-bottom: 1px solid grey;
+  padding: 10px;
+  width: 100%;
+  /* Make it take up the entire horizontal space */
+  box-sizing: border-box;
+}
+
+
+
+
+/* Styles for the circle button */
+.circleButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Makes it circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Styles for the yellow background */
+.yellowBackground {
+  background-color: red;
+  color: #000;
+  /* Text color for contrast */
+}
+
+/* Styles for the transparent background */
+.transparentBackground {
+  background-color: transparent;
+  color: #007bff;
+  /* Text color for contrast */
+}
+
+/* You can adjust the width, height, colors, and other styles as needed */
+.flagButtonContainer {
+  display: flex;
+  align-items: center;
+}
+
+
+
+/* Styles for the button */
+.flagButton {
+  width: 24px;
+  /* Adjust the width as needed */
+  height: 24px;
+  /* Adjust the height as needed */
+  border: 1px solid #000;
+  border-radius: 50%;
+  /* Make it a circle */
+  cursor: pointer;
+  margin-right: 10px;
+  /* Spacing between button and text */
+}
+
+/* Styles for the text */
+.flagButtonText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color5)
+  /* Adjust the font size as needed */
+}
+
+.questionHeaderButton {
+  padding: 5px 10px;
+  /* Adjust padding as needed */
+  border: 1px solid var(--color5);
+  border-radius: 10px;
+  /* Rounded corners */
+  cursor: pointer;
+  background-color: transparent;
+  /* Transparent background */
+  margin-left: 10px;
+  /* Spacing between buttons */
+  color: var(--color5);
+  font-weight: 600;
+  /* Text color */
+  font-size: 14px;
+  /* Adjust the font size as needed */
+}
+
+/* Hover effect for calculator and reference buttons */
+.questionHeaderButton:hover {
+  background-color: #e0e0e0;
+  /* Change background color on hover */
+  color: #000;
+  /* Text color on hover */
+}
+
+
+
+/* CSS for choice buttons */
+
+.choiceButton {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  /* Adjust spacing between buttons */
+  width: 80%;
+  /* Stretch button width */
+  border-radius: 5px;
+}
+
+.choiceLabel {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  /* Button background color */
+  color: black;
+  /* Text color */
+  padding: 10px;
+  /* Adjust padding for buttons */
+  border-radius: 5px;
+  /* Rounded corners */
+  cursor: pointer;
+  width: 100%;
+  border: 1px solid #ccc;
+  /* Add a border */
+
+}
+
+.selectedChoice {
+  border: 3px solid var(--primary-color);
+  /* Thick blue border for the selected choice */
+}
+
+.circle {
+  width: 30px;
+  /* Adjust circle size */
+  height: 30px;
+  background-color: transparent;
+  /* Circle background color */
+  color: black;
+  /* Circle text color */
+  text-align: center;
+  line-height: 30px;
+  /* Center vertically */
+  border-radius: 50%;
+  /* Make it a circle */
+  margin-right: 10px;
+  /* Spacing between circle and text */
+  border: 2px solid black;
+  /* Add a border */
+  font-weight: bold;
+}
+
+.choiceText {
+  margin-left: 20px;
+  flex-grow: 1;
+  /* Expand to fill available space */
+}
+
+.checkWorkTitle {
+  margin: 30px;
+  font-size: 24px;
+}
+
+.checkWorkArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.correctAnswer {
+  outline: 2px solid green;
+}
+
+.incorrectAnswer {
+  outline: 2px solid red;
+}
+
+.answersection {
+  max-width: 1200px;;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  word-wrap: break-word;
+  border: 1px solid #D0DBDE;
+  border-radius: 10px;
+  padding: 15px 10px;
+  font-size: 14px;
+  background-color: #F9FAFB;
+}
+
+.questionDisplayandAnswer{
+  overflow-y: auto;
+width: 100%;
+}
+
+.image{
+  height: 200px;
+}
+
+.roundButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  padding: 0;
+  font-size: 13px;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: white;
+  cursor: pointer;
+}
+
+.roundButton:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
+.navButtonArea{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  gap: 10px;
+}
+
+.navButtonOverall{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.backSummaryButton{
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px 5px;
+  font-size: 13px;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: white;
+  cursor: pointer;
+}
+
+.backSummaryButton:hover {
+  background-color: var(--primary-color);
+  color: white;
+}

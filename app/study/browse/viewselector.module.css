@@ -1,0 +1,19 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sortSelect {
+    padding: 10px;
+    border: 1px solid #73B8F7;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #73B8F7;
+    outline: none;
+    cursor: pointer;
+}
+
+

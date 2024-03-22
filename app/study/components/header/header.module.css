@@ -1,0 +1,14 @@
+.headerContainer{
+    width: 100%;
+    /* background: linear-gradient(307deg, #C9FAFD -1.93%, rgba(250, 250, 250, 0.00) 100%); */
+
+    height: 35px;
+    font-size: 20px;
+    color: #085296;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}

@@ -81,6 +81,7 @@ export const ObjectSideNav = ({
                 {objectList.map((object, index) => {
                     return (
                         <ObjectLink
+                            key = {index}
                             type = {object.type}
                             title = {object.title}
                             objectIndex={index}

@@ -32,7 +32,7 @@ export const BreakScreen = ({ timeLimit, onNext }) => {
                 </div>
                 <div className={styles.rightDiv}>
                     <div style={{ color: "white", fontWeight: "600", fontSize: "14px" }}>Practice Test Break</div>
-                    <div>You can resume this practice test as soon as you're ready to move on.</div>
+                    <div>You can resume this practice test as soon as you&apos;re ready to move on.</div>
 
                 </div>
             </div>

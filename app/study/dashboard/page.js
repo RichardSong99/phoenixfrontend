@@ -12,7 +12,7 @@ export default function Page() {
                 {/* <Header text={"Practice Modules"} /> */}
                 <div className={styles.banner}>
                     <h3>Welcome Back, Richard</h3>
-                    <span>Let's get to work.</span>
+                    <span>Let&apos;s get to work.</span>
                 </div>
 
                 <div className={styles.topicContainer}>

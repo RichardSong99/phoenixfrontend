@@ -190,7 +190,7 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
                                         Login
                                     </button>
                                     <button className={styles.greyedButton} onClick={() => setIsLoginMode(!isLoginMode)}>
-                                        Don't have an account yet? Create an account!
+                                        Don&apos;t have an account yet? Create an account!
                                     </button>
                                     {loginFailed && (<div className = {styles.redText}>
                                         Invalid credentials

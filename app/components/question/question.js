@@ -33,6 +33,7 @@ export const QuestionChoiceArea = ({ answerChoiceArray, correctAnswer, showAnswe
 
                 return (
                     <div
+                        key={index}
                         className={choiceComponentClass}
                         onClick={() => !showAnswer && setUserAnswer(choiceLetter)}
                     >

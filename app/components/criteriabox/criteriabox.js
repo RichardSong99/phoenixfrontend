@@ -6,15 +6,14 @@ import {colors} from '../../study/data/colors';
 
  export const   CriteriaBox = ({ name, elementArray, setActiveStatesArray }) => {
 
-     
 
 
     return (
         <div className = {styles.criteriaBox}>
             <div className = {styles.criteriaHeader}>{name}</div>
             <div className = {styles.criteriaBoxBody}>
-                {elementArray.map((element) => (
-                    <CriteriaElement text={element} /> // Assuming `element.key` is unique
+                {elementArray.map((element, index) => (
+                    <CriteriaElement key = {index} text={element} /> // Assuming `element.key` is unique
                 ))}
 
 

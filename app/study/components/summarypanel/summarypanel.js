@@ -46,7 +46,7 @@ const SummaryPanel = ({ questionEngagements, quizID }) => {
                     </thead>
                     <tbody>
                         {questionEngagements.map((questionEngagement, index) => (
-                            <tr onClick = {() => onClickQuestion(index)}>
+                            <tr onClick = {() => onClickQuestion(index)} key = {index}>
                                 <td>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                         {(questionEngagement?.Engagement?.Status === "omitted" || questionEngagement?.Engagement?.Status == null) && <div className={styles.omitted}></div>}

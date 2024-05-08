@@ -1,14 +1,14 @@
 // components/QuestionModal.js
-import React, {useEffect, useState} from 'react';
-import Modal from 'react-modal';
+import React, { useEffect, useState } from 'react';
 import QuestionView from './questionview';
 import styles from './questionmodal.module.css'; // Import the CSS file
 import { CheckAnswerButton } from '@/app/components/question/question';
 import { handlePostEngagement } from '../../data/questionhelpers';
 import { fetchEngagementByID } from '@/app/services/engagementservice';
 import { fetchEngagementByQuestionID } from '@/app/services/engagementservice';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 
-const QuestionModal = ({ isOpen, onClose, question, mode }) => {
+export const QuestionModal = ({ isOpen, onOpen, onOpenChange, question, mode }) => {
 
     const [userResponse, setUserResponse] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
@@ -19,11 +19,11 @@ const QuestionModal = ({ isOpen, onClose, question, mode }) => {
     };
 
     const handleSubmitAnswer = async () => {
-        let response = await handlePostEngagement({question: question, userResponse: userResponse, mode: mode});
-        const engagementID = response.id;
-        response = await fetchEngagementByID({engagementID: engagementID});
-        console.log("response after fetchEngagementByID", response);
-        setEngagement(response);
+        // let response = await handlePostEngagement({question: question, userResponse: userResponse, mode: mode});
+        // const engagementID = response.id;
+        // response = await fetchEngagementByID({engagementID: engagementID});
+        // console.log("response after fetchEngagementByID", response);
+        // setEngagement(response);
         setShowAnswer(true);
     }
 
@@ -31,17 +31,18 @@ const QuestionModal = ({ isOpen, onClose, question, mode }) => {
         if (question) {
             const initializeView = async () => {
                 try {
-                    const engagement = await fetchEngagementByQuestionID({questionID: question.id});
+                    const engagement = await fetchEngagementByQuestionID({ questionID: question.id });
                     console.log("engagement", engagement);
                     setEngagement(engagement);
                     setShowAnswer(true);
-                } catch(error) {
+                } catch (error) {
                     console.error("Error:", error);
+                    setUserResponse(null);
                     setEngagement(null);
                     setShowAnswer(false);
                 }
             };
-    
+
             initializeView();
         }
     }, [question]); // Assuming you want to run this effect when `question` changes
@@ -49,31 +50,34 @@ const QuestionModal = ({ isOpen, onClose, question, mode }) => {
     return (
         <Modal
             isOpen={isOpen}
-            onRequestClose={onClose}
-            contentLabel="Question Details"
-            className={styles.modal}
+            onOpenChange={onOpenChange}
+            scrollBehavior={"inner"}
+            size="3xl"
         >
-            <div className={styles.modalcontent}>
-                <button className={styles.closebutton} onClick={onClose}>X</button>
-                {question && (
-                    <>
-                        <QuestionView
-                            question={question}
-                            engagement={engagement}
-                            showAnswer={showAnswer}
-                            mode={mode}
-                            handleReportUserResponse={handleReportUserResponse}
-                        />
+            <ModalContent style={{ padding: '10px' }}>
+                <ModalBody>
+                    {question && (
+                        <>
+                            <QuestionView
+                                question={question}
+                                engagement={engagement}
+                                showAnswer={showAnswer}
+                                mode={mode}
+                                handleReportUserResponse={handleReportUserResponse}
+                            />
 
-                        <CheckAnswerButton
-                            checkAnswerHandler={handleSubmitAnswer}
-                            mode={mode}
-                        />
-                    </>
-                )}
-            </div>
+
+                        </>
+                    )}
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={() => handleSubmitAnswer()} color="primary">
+                        Submit Answer
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+
         </Modal>
     );
 };
 
-export default QuestionModal;

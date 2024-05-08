@@ -3,7 +3,7 @@
 import React from 'react';
 import Lightning from '@/app/assets/components/Lightning.svg';
 import Image from 'next/image';
-import styles from './buttons.module.css'
+import styles from './mybuttons.module.css'
 
 
 export const StandardButton = ({ onClick, text, backgroundColor, fontColor }) => {

@@ -11,7 +11,7 @@ import ParametersPanel from '../../components/filter/parameterspanel';
 import QuizStarter from '../../components/quizstarter/quizstarter';
 import PageNavigation from './pagenavigation';
 import { DataContext, useData } from '@/app/context/datacontext';
-import { Header } from '../components/header/header';
+import { Header } from '../_archive/header/header';
 
 
 const PracticePage = () => {
@@ -42,7 +42,8 @@ const PracticePage = () => {
         setCheckedTopics(getTopicList("math").flatMap(option => [option.Name, ...(option.Children || []).map(child => child.Name)]));
     }, []);
 
-    const loadQuestions = async ({ pageSize }) => {
+    
+    const loadQuestions = async ({pageSize}) => {
         try {
             const data = await getQuestions({
                 selectedTopics: checkedTopics,
@@ -93,24 +94,6 @@ const PracticePage = () => {
 
         loadFullQuestion();
     }, [selectedQuestion]);
-
-    const handleStartQuiz = async () => {
-        // make sure questions is not length 0
-
-
-        const data = await loadQuestions({ pageSize: numTotalQuestionsAllPages });
-        const quizQuestions = data.data.slice(0, numQuizQuestions);
-        setQuizQuestions(quizQuestions);
-
-        console.log("quizQuestions", quizQuestions)
-
-        if (quizQuestions.length !== 0) {
-            setQuizStarted(true);
-            console.log("starting quiz with %d questions", quizQuestions.length);
-        }
-    };
-
-
 
     const handleOpenModal = (question) => {
         setSelectedQuestion(question);

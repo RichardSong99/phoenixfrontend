@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './question.module.css'
 import renderMarkdownWithLaTeX from '@/app/study/components/latexrender/markdownwlatex';
-import { RoundButton } from '../buttons/buttons';
+import { RoundButton } from '../buttons/mybuttons';
 import FlaggedIcon from '@/app/assets/components/Flagged.svg';
 import UnflaggedIcon from '@/app/assets/components/Unflagged.svg';
 import Image from 'next/image';

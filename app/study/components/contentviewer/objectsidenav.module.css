@@ -1,5 +1,4 @@
 .questionSideNav{
-    position: fixed;
     display: inline-flex;
     padding: 15px;
     box-sizing: border-box;
@@ -7,7 +6,6 @@
     align-items: start;
     gap: 25px;
     flex-shrink: 0;
-    width: 300px;
     background-color: #F9F9F9;
     height: 100%; /* Change this line */
     
@@ -152,8 +150,9 @@
 
 .statusIconDiv{
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
 }
 
 .omitted{

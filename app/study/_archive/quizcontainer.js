@@ -1,6 +1,6 @@
 
 import QuestionView from "../components/questionviewcomponents/questionview";
-import { StandardButton } from "@/app/components/buttons/buttons";
+import { StandardButton } from "@/app/components/buttons/mybuttons";
 import stlyes from './quizcontainer.module.css';
 
 export const QuizContainer = ({questions , mode, handleBackButton}) => {

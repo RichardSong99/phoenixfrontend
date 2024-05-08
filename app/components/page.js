@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState} from 'react';
-import { StandardButton, NumberChoiceButtons } from './buttons/buttons';
+import { StandardButton, NumberChoiceButtons } from './buttons/mybuttons';
 import {SiteNavBar, SideNavBar} from './navbars/navbar';
 import {CriteriaBox} from './criteriabox/criteriabox';
 import { SignUpOption } from './signup/signupoption';

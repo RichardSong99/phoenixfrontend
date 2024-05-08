@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './navbar.module.css'
-import { StandardButton } from '../buttons/buttons';
+import { StandardButton } from '../buttons/mybuttons';
 
 export const SiteNavBar = () => {
     return (

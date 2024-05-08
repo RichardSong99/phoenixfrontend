@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './signupoption.module.css'
-import { StandardButton } from '../buttons/buttons';
+import { StandardButton } from '../buttons/mybuttons';
 
 export const SignUpOption = ({}) => {
 

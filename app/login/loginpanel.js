@@ -1,30 +1,25 @@
-"use client"
-
 import React, { useState, useEffect } from "react";
-import styles from "./loginpanel.module.css";
 import GoogleIcon from '../../public/googleLogo.png';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { registerUser, loginUser } from '../services/userservice';
 import { useUser } from '../context/usercontext';
+import {Input} from "@nextui-org/react";
 
 
 export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState(null); // New state variable for error message
-    const [loginSuccess, setLoginSuccess] = useState(false); // New state for tracking login success
-    // Add a new state variable for tracking if user already exists
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [loginSuccess, setLoginSuccess] = useState(false);
     const [userExists, setUserExists] = useState(false);
-    const [loginFailed, setLoginFailed] = useState(false); // New state for tracking login failure
+    const [loginFailed, setLoginFailed] = useState(false);
 
     const router = useRouter();
     const { setIsAuthenticated } = useUser();
 
-    // Reset error message when switching between login and register
     useEffect(() => {
         if (!isLoginMode) {
             setUserExists(false);
@@ -37,44 +32,30 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
         }
     }, [email, password, isLoginMode]);
 
-
-
     useEffect(() => {
-        // Check if login was successful and navigate
         if (loginSuccess) {
-            // Update the authentication state
             setIsAuthenticated(true);
-
-
             router.push('/study');
         }
-    }, [loginSuccess, router]); // Depend on loginSuccess and router
-
-
+    }, [loginSuccess, router]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle the form submission logic here
 
         if (!isLoginMode) {
-            //check if passwords match
             if (password !== repeatPassword) {
                 alert("Passwords do not match");
                 return;
             }
-            //check if password is at least 8 characters long
             if (password.length < 8) {
                 alert('Password should be at least 8 characters long');
                 return;
             }
-        
-            //make a post request to the backend to create a new user
+
             try {
                 const data = await registerUser(email, password);
-                // Handle success response here
-                // Assuming registerUser returns a token upon successful registration
                 Cookies.set('token', data.token);
-                setLoginSuccess(true); // Set login success to true on successful registration
+                setLoginSuccess(true);
             } catch (error) {
                 console.log(error.message);
                 if (error.message === 'Email is already in use') {
@@ -82,137 +63,46 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
                 }
             }
         } else {
-            //make a post request to the backend to login
             try {
+                console.log(email, password);
                 const data = await loginUser(email, password);
                 Cookies.set('token', data.token);
-                setLoginSuccess(true); // Set login success to true on successful login
+                setLoginSuccess(true);
             } catch (error) {
-                setErrorMessage(error.message); // Set error message if response is not ok
-                setLoginFailed(true); // Set login failed to true on failed login
+                setErrorMessage(error.message);
+                setLoginFailed(true);
             }
         }
-
     };
 
-
     return (
-        <>
-
-            <div className={styles.container}>
-
-
-                <div className={styles.formContainer}>
-                    <div className={styles.descriptionText}>
-                        <h2 >Log in</h2>
-                        <p>Good to see you again!</p>
-                        <p>
-                            By logging into Edge Prep, you agree to our{' '}
-                            <a href="/terms" className={styles.link}>
-                                Terms of use
-                            </a>{' '}
-                            and{' '}
-                            <a href="/privacy" className={styles.link}>
-                                Privacy Policy
-                            </a>.
-                        </p>
-                    </div>
-
-                    <div className={styles.formDiv}>
-                        <div className={styles.loginRegToggle}>
-                            <button className={isLoginMode ? styles.loginRegToggleActive : styles.loginRegToggleInactive} onClick={() => setIsLoginMode(true)}>Login</button>
-                            <button className={!isLoginMode ? styles.loginRegToggleActive : styles.loginRegToggleInactive} onClick={() => setIsLoginMode(false)}>Register</button>
-                        </div>
-
-                        <div className={styles.divider}></div>
-
-
-                        <form onSubmit={handleSubmit} className={styles.form}>
-
-
-                            <button className={styles.socialButton}><span className={styles.googleSpan}>Continue with </span><Image className={styles.googleLogo} src={GoogleIcon} alt="Google logo" height={20} width={20} /></button>
-
-                            <div className={styles.divider}></div>
-                            <div className={styles.formText}>
-                                Or use your email to {isLoginMode ? 'login' : 'register'}
-                            </div>
-
-                            <div className={styles.inputField}>
-                                <input
-                                    type="text"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Email"
-                                    required
-                                    className={styles.input}
-                                />
-                            </div>
-                            <div className={styles.inputField}>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Password"
-                                    required
-                                    className={styles.input}
-                                />
-                            </div>
-
-                            {!isLoginMode && (<><div className={styles.inputField}>
-                                <input
-                                    type="password"
-                                    value={repeatPassword}
-                                    onChange={(e) => setRepeatPassword(e.target.value)}
-                                    placeholder="Repeat Password"
-                                    required
-                                    className={styles.input}
-                                />
-                            </div>
-
-                                <div className={styles.formText}>
-                                    Password must be at least 8 characters long
-                                </div>
-                            </>
-                            )}
-
-                            {isLoginMode && (
-                                <div className={styles.sameLine}>
-                                    <a href="/forgot-password" className={styles.forgotPassword}>
-                                        Forgot password?
-                                    </a>
-                                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>} {/* Display error message when it's not null */}
-                                </div>
-                            )}
-
-                            {isLoginMode && (
-                                <>
-                                    <button className={styles.highlightedButton} onClick={() => handleSubmit}>
-                                        Login
-                                    </button>
-                                    <button className={styles.greyedButton} onClick={() => setIsLoginMode(!isLoginMode)}>
-                                        Don&apos;t have an account yet? Create an account!
-                                    </button>
-                                    {loginFailed && (<div className = {styles.redText}>
-                                        Invalid credentials
-                                    </div>)}
-                                </>
-                            )}
-
-                            {!isLoginMode && (
-                                <>
-                                    <button className={userExists ? styles.greyedButton : styles.highlightedButton} onClick={() => handleSubmit}>
-                                        Create Account
-                                    </button>
-                                    <button className={userExists ? styles.highlightedButton : styles.greyedButton} onClick={() => setIsLoginMode(!isLoginMode)}>
-                                        Already have an account? Log In
-                                    </button>
-                                </>
-                            )}
-
-                        </form>
-                    </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'linear-gradient(135deg, #0077FF, #3EC2FF)', color: '#fff' }}>
+            <div style={{ maxWidth: '400px', width: '100%', padding: '30px', border: '1px solid #fff', borderRadius: '8px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', background: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: '700', color: '#0077FF' }}>{isLoginMode ? 'Welcome Back' : 'Join Us'}</h2>
+                <div style={{ marginBottom: '20px' }}>
+                    {/* <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', color: '#0077FF' }}>Email<span style={{ color: 'red' }}>*</span>:</label> */}
+                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} label = "Email" defaultValue="myemail@gmail.com" isRequired />
                 </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required style={{ width: '100%', padding: '12px', borderRadius: '4px', border: '1px solid #0077FF', background: 'rgba(255, 255, 255, 0.9)', color: '#0077FF', marginBottom: '10px' }} />
+                </div>
+                {!isLoginMode && (
+                    <div style={{ marginBottom: '20px' }}>
+                        <label htmlFor="repeatPassword" style={{ display: 'block', marginBottom: '5px', color: '#0077FF' }}>Repeat Password<span style={{ color: 'red' }}>*</span>:</label>
+                        <input type="password" id="repeatPassword" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} placeholder="Repeat Password" required style={{ width: '100%', padding: '12px', borderRadius: '4px', border: '1px solid #0077FF', background: 'rgba(255, 255, 255, 0.9)', color: '#0077FF', marginBottom: '10px' }} />
+                    </div>
+                )}
+                {isLoginMode && (
+                    <a href="/forgot-password" style={{ color: '#0077FF', textDecoration: 'none', marginBottom: '15px', display: 'block', textAlign: 'right' }}>Forgot password?</a>
+                )}
+                {errorMessage && <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center' }}>{errorMessage}</div>}
+                <button type="button" onClick={handleSubmit} style={{ width: '100%', padding: '12px', borderRadius: '4px', border: 'none', background: '#0077FF', color: '#fff', cursor: 'pointer', marginBottom: '10px' }}>{isLoginMode ? 'LOGIN' : 'CREATE ACCOUNT'}</button>
+                <button type="button" onClick={() => setIsLoginMode(!isLoginMode)} style={{ width: '100%', padding: '12px', borderRadius: '4px', border: 'none', background: 'none', color: '#0077FF', cursor: 'pointer', marginBottom: '10px', textDecoration: 'underline' }}>{isLoginMode ? 'Create an Account!' : 'Log In'}</button>
+                {loginFailed && <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>Invalid credentials</div>}
             </div>
-        </>
+        </div>
     );
+    
+    
+        
 }

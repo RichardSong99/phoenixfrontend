@@ -1,4 +1,6 @@
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
 :root{
@@ -26,5 +28,5 @@
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #F5F5F8;
+  /* background-color: #F5F5F8; */
 }

@@ -1,4 +1,3 @@
-
 "use client"
 
 
@@ -9,13 +8,15 @@ import { ansStatusData, difficultyData } from '../data/data'; // Import the data
 import ParametersPanel from '../../components/filter/parameterspanel';
 import { QuizStarter } from '../../components/quizstarter/quizstarter';
 import { DataContext, useData } from '@/app/context/datacontext';
-import { Header } from '../components/header/header';
+import { Header } from '../_archive/header/header';
 import { Quiz } from '@mui/icons-material';
 import { initializeQuiz } from '@/app/services/quizservice';
 import { useRouter } from 'next/navigation';
 import { createQueryString } from '../data/utility';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 
-const PracticePage = () => {
+
+export const CreateQuizModal = ({ isOpen, onOpen, onOpenChange }) => {
     const router = useRouter();
 
     const [numTotalQuestionsAllPages, setNumTotalQuestionsAllPages] = useState(0);
@@ -36,6 +37,8 @@ const PracticePage = () => {
     const [checkedTopics, setCheckedTopics] = useState([]);
     const [checkedAnsStatus, setCheckedAnsStatus] = useState(ansStatusData.flatMap(option => [option.Name, ...(option.Children || []).map(child => child.Name)]));
     const [checkedDifficulty, setCheckedDifficulty] = useState(difficultyData.flatMap(option => [option.Name, ...(option.Children || []).map(child => child.Name)]));
+
+
 
     useEffect(() => {
         setCheckedTopics(getTopicList("math").flatMap(option => [option.Name, ...(option.Children || []).map(child => child.Name)]));
@@ -85,47 +88,55 @@ const PracticePage = () => {
     };
 
 
-
-
     // Inside the return statement
     return (
-        <main className={styles.outerDiv}>
-            <div className={styles.mainPanel}>
-                {/* <Header text="Create a Quiz" /> */}
-                <div className = {styles.banner}>
-                    <h3>CREATE A QUIZ</h3>
-                    <span style = {{fontSize : "14px"}}>Choose the topics, difficulty, and number of questions to create a custom quiz.</span>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior={"inner"} size = "3xl">
+            <ModalContent>
+                {(onClose) => (
+                    <>
+                        <ModalHeader className="flex flex-col gap-1">
+                            Create a Quiz
+                        </ModalHeader>
+                        <ModalBody>
 
-                </div>
 
+                            <div className={styles.LHS}>
+                                <ParametersPanel
+                                    checkedTopics={checkedTopics}
+                                    checkedAnsStatus={checkedAnsStatus}
+                                    checkedDifficulty={checkedDifficulty}
+                                    setCheckedTopics={setCheckedTopics}
+                                    setCheckedAnsStatus={setCheckedAnsStatus}
+                                    setCheckedDifficulty={setCheckedDifficulty}
+                                    sortOption={sortOption}
+                                    onSortChange={setSortOption}
+                                    displayMode={displayMode}
+                                    onDisplayModeChange={setDisplayMode}
+                                />
 
-                <div className={styles.LHS}>
-                    <ParametersPanel
-                        checkedTopics={checkedTopics}
-                        checkedAnsStatus={checkedAnsStatus}
-                        checkedDifficulty={checkedDifficulty}
-                        setCheckedTopics={setCheckedTopics}
-                        setCheckedAnsStatus={setCheckedAnsStatus}
-                        setCheckedDifficulty={setCheckedDifficulty}
-                        sortOption={sortOption}
-                        onSortChange={setSortOption}
-                        displayMode={displayMode}
-                        onDisplayModeChange={setDisplayMode}
-                    />
+                                <QuizStarter
+                                    activeNumQuestions={numQuizQuestions}
+                                    setActiveNumQuestions={setNumQuizQuestions}
+                                    handleStartQuiz={handleStartQuiz}
+                                    numQuestionsAvailable={numTotalQuestionsAllPages}
+                                />
 
-                    <QuizStarter
-                        activeNumQuestions={numQuizQuestions}
-                        setActiveNumQuestions={setNumQuizQuestions}
-                        handleStartQuiz={handleStartQuiz}
-                        numQuestionsAvailable={numTotalQuestionsAllPages}
-                    />
+                            </div>
+                        </ModalBody>
+                        {/* <ModalFooter>
+                            <Button color="danger" variant="light" onPress={onClose}>
+                                Close
+                            </Button>
+                            <Button color="primary" onPress={onClose}>
+                                Action
+                            </Button>
+                        </ModalFooter> */}
+                    </>
+                )}
+            </ModalContent>
 
-                </div>
-            </div>
-
-        </main>
+        </Modal>
     );
 };
 
-export default PracticePage;
 

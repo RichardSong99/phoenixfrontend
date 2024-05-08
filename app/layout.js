@@ -8,6 +8,7 @@ import { QuestionProvider } from './context/questioncontext';
 import { DataProvider } from "./context/datacontext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavBarProvider } from "./context/navbarcontext";
+import { MyNextUIProvider } from "./context/mynextuiprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,21 +20,25 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-
-      <UserProvider>
-        <DataProvider>
-          <QuestionProvider>
-
-            <NavBarProvider>
-
-              <body className={`${inter.className} bodyStyles`} style={{ position: "relative" }}>
-                <SiteNavBar />
+      <MyNextUIProvider>
+        <UserProvider>
+          <DataProvider>
+            <QuestionProvider>
+              <NavBarProvider>
+                <body className={`${inter.className} bodyStyles`} style={{ position: "relative" }}>
+                  {/* Content */}
                   {children}
-              </body>
-            </NavBarProvider>
-          </QuestionProvider>
-        </DataProvider>
-      </UserProvider>
+
+                  {/* Top Navbar */}
+                  {/* <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 1000 }}>
+                    <SiteNavBar />
+                  </div> */}
+                </body>
+              </NavBarProvider>
+            </QuestionProvider>
+          </DataProvider>
+        </UserProvider>
+      </MyNextUIProvider>
     </html>
   );
 }

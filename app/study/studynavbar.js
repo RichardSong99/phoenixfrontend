@@ -5,12 +5,23 @@ import React, { useContext, useState, useEffect } from 'react';
 import styles from './studynavbar.module.css';
 import { NavBarContext } from '../context/navbarcontext';
 import { useRouter } from 'next/navigation';
+import { Avatar } from "@nextui-org/react";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User } from "@nextui-org/react";
+import { CreateQuizModal } from './dashboardcomponents/createquiz';
+import { useDisclosure } from '@nextui-org/react';
+import { IoMdHome } from "react-icons/io";
+import { IoIosSearch } from "react-icons/io";
+import { IoSparkles } from "react-icons/io5";
+
+
 
 const StudyNavBar = () => {
-    console.log("hello world")
-    const router = useRouter()
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+    const router = useRouter();
     const [currentPath, setCurrentPath] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         if (router.pathname) {
@@ -21,7 +32,6 @@ const StudyNavBar = () => {
     const handleLinkClick = (path) => {
         setCurrentPath(path);
         router.push(`/study/${path}`);
-        console.log('currentPath', currentPath);
     };
 
     const isActive = (pathname) => {
@@ -30,60 +40,89 @@ const StudyNavBar = () => {
 
     const { isStudyNavBarVisible } = useContext(NavBarContext);
 
-
     if (!isStudyNavBarVisible) {
         return null;
     }
 
     return (
-        <div className={styles.studyNavbar}>
-            <div className={styles.navGroup}>
-                {/* <div className={styles.navText}>Math topics</div> */}
-                <div className={`${styles.navItem} ${isActive('dashboard') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('dashboard')}>
-                    <span >Dashboard</span>
-                </div>
-                <div className={`${styles.navItem} ${isActive('practicemodule') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('practicemodule')}>
-                    <span >Practice Modules</span>
+        <>
+
+            <CreateQuizModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+            />
+
+            <div className={styles.studyNavbar}>
+                <div className='flex flex-col p-3 gap-2 mt-4'>
+                    <div className={`${styles.navItem} ${isActive('mydashboard') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('mydashboard')}>
+                        <IoMdHome size={24} />
+                        <span>Dashboard</span>
+                    </div>
+
+                    <div className={`${styles.navItem} ${isActive('browse') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('browse')}>
+                        <IoIosSearch size={24} />
+
+                        <span>Browse QBank</span>
+                    </div>
+                    <div className={`${styles.navItem} ${isActive('createquiz') ? styles.activeNavItem : ''}`} onClick={() => onOpen()}>
+                        <IoSparkles size={24} />
+
+                        <span>Create Quiz</span>
+                    </div>
+                    <div className={`${styles.navItem} ${isActive('qbank') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('qbank')}>
+                        <span>Admin: QBank</span>
+                    </div>
+
                 </div>
 
-                <div className={`${styles.navItem} ${isActive('lessonmodule') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('lessonmodule')}>
-                    <span >Lesson Modules</span>
-                </div>
 
-                <div className={`${styles.navItem} ${isActive('browse') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('browse')}>
-                    <span >Browse QBank</span>
-                </div>
 
-                <div className={`${styles.navItem} ${isActive('createquiz') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('createquiz')}>
-                    <span >Create Quiz</span>
-                </div>
-                <div className={`${styles.navItem} ${isActive('myquizzes') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('myquizzes')}>
-                    <span >My Quizzes</span>
-                </div>
-                <div className={`${styles.navItem} ${isActive('practicetest') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('practicetest')}>
-                    <span >Practice Test</span>
-                </div>
-                
-               
+                <Dropdown
+                    classNames={{
+                        base: "before:bg-default-200", // change arrow background
+                        content: "p-0 border-small border-divider bg-background",
+                    }}
+                >
+                    <DropdownTrigger>
+
+
+                        <div className={styles.footer}>
+                            <Avatar >
+                                <IoPersonCircleSharp />
+                            </Avatar>
+                            <div>Richard Song</div>
+                            {showPopup && (
+                                <div className={styles.popup}>
+                                    <a href="/account">Account</a>
+                                    <a href="/logout">Logout</a>
+                                </div>
+                            )}
+                        </div>
+                    </DropdownTrigger>
+
+                    <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                        <DropdownSection>
+                            <DropdownItem className="ml-0"
+                                key="logout"
+
+                            >
+                                <div className="w-100">
+                                    Log Out
+                                </div>
+                            </DropdownItem>
+                        </DropdownSection>
+                    </DropdownMenu>
+
+
+
+
+                </Dropdown>
+
+
+
+
             </div>
-
-            <div className={styles.navGroup}>
-
-                <div className={styles.navText}>Reading topics</div>
-            </div>
-            <div className={styles.navGroup}>
-
-                <div className={styles.navText}>More resources</div>
-
-                
-
-                <div className={`${styles.navItem} ${isActive('qbank') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('qbank')}>
-                    <span >Admin: QBank</span>
-                </div>
-            </div>
-
-
-        </div>
+        </>
     );
 };
 

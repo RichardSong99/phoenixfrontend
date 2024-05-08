@@ -49,20 +49,7 @@
    
 }
 
-.navPanel {
-    margin-left: 300px;
-    width: calc(100% - 305px);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid #D9D9D9;
 
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: white;
-}
 
 .videoBackground{
     background-color: black;

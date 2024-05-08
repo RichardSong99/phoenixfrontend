@@ -4,7 +4,7 @@ import SummaryPanel from '../../components/summarypanel/summarypanel';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
 import { fetchQuizUnderlyingById } from '@/app/services/quizservice';
 import styles from './myquizzesslug.module.css';
-import { Header } from '../../components/header/header';
+import { Header } from '../header/header';
 
 export default function Page() {
 

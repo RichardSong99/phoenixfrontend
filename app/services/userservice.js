@@ -25,7 +25,7 @@ export async function loginUser(email, password) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ Email: email, Password: password }),
+        body: JSON.stringify({ "email": email, "password": password }),
     });
 
     if (!response.ok) {

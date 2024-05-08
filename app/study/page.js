@@ -1,15 +1,14 @@
+"use client"
 
-import StudyMain from "./studyMain";
-import styles from "./study.module.css";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Study() {
-    return (
-      <div>
-            <div className={styles.selectorHeader}>
-                <h1>Start Practicing!</h1>
-            </div>
-        <StudyMain/>
-      </div>
-    );
-  }
-  
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/study/mydashboard"); // Replace "/study/mydashboard" with the desired URL
+  }, []);
+
+  return null;
+}

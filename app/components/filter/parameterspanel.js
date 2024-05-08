@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CriteriaElement } from '@/app/components/criteriabox/criteriabox';
 import styles from './parameterspanel.module.css';
-import { ViewToggle } from '../../study/browse/viewtoggle';
+import { ViewToggle } from '../../study/_archive/viewtoggle';
 import UpIcon from '@/app/assets/components/Up-icon.svg';
 import DownIcon from '@/app/assets/components/Down-icon.svg';
 import Image from 'next/image';

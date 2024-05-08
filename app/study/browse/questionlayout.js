@@ -11,9 +11,13 @@ import DownIcon from '@/app/assets/components/Down-icon.svg';
 import Image from 'next/image';
 import { capitalizeFirstLetter } from '../data/utility';
 import { useUser } from '@/app/context/usercontext';
-import QuestionModal from '../components/questionviewcomponents/questionmodal';
+import { QuestionModal}  from '../components/questionviewcomponents/questionmodal';
+import { QuestionCard } from './questioncard';
+import { useDisclosure } from '@nextui-org/react';
 
 export function useQuestionSelection() {
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const { isAuthenticated } = useUser();
 
@@ -29,26 +33,21 @@ export function useQuestionSelection() {
             setShowSelectedQuestion(true);
         }
 
-        setIsModalOpen(true);
+        onOpen();
+
     }
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    }
-
-    return { selectedQuestion, showSelectedQuestion, clickQuestionHandler, isAuthenticated , isModalOpen, handleCloseModal};
+    return { selectedQuestion, showSelectedQuestion, clickQuestionHandler, isAuthenticated , isOpen, onOpen, onOpenChange};
 }
 
 export function QuestionGridLayout({ questions }) {
 
-    const { selectedQuestion, showSelectedQuestion, clickQuestionHandler, isAuthenticated, isModalOpen, handleCloseModal } = useQuestionSelection();
+    const { selectedQuestion, showSelectedQuestion, clickQuestionHandler, isAuthenticated, isOpen, onOpen, onOpenChange } = useQuestionSelection();
 
     return (
 
         <div className={styles.questionsContainer}>
-            {selectedQuestion && <QuestionModal question={selectedQuestion} mode={'browse'} isOpen={isModalOpen} onClose= {handleCloseModal} />}
+            {selectedQuestion && <QuestionModal question={selectedQuestion} mode={'browse'} isOpen={isOpen} onOpenChange= {onOpenChange} />}
 
 
             {questions && questions.length !== 0 && (
@@ -61,20 +60,7 @@ export function QuestionGridLayout({ questions }) {
 
 
                     {questions.map((question, index) => (
-                        <>
-                            <div
-                                key={index}
-                                className={`${styles.questionCard} ${selectedQuestion && objectsAreEqual(question, selectedQuestion) ? styles.selectedQuestionCard : ''}`}
-                                onClick={() => clickQuestionHandler(question)}
-                            >
-                                <p>{parseLatexString(question.Prompt)}</p>
-                                <CriteriaElement text={question.Topic}></CriteriaElement>
-                                <CriteriaElement text={capitalizeFirstLetter(question.Difficulty)}></CriteriaElement>
-                                <CriteriaElement text={capitalizeFirstLetter(isAuthenticated ? question.Status : "unattempted")} ></CriteriaElement>
-                            </div>
-
-
-                        </>
+                            <QuestionCard clickQuestionHandler = {clickQuestionHandler} question={question} key = {index} selected = {selectedQuestion && objectsAreEqual(question, selectedQuestion)}/>
                     ))}
 
                 </React.Fragment>

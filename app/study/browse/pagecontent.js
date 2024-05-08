@@ -2,7 +2,7 @@
 import React from 'react';
 import styles from './practice.module.css';
 import { QuestionGridLayout, QuestionTableLayout } from './questionlayout';
-import { StandardButton } from '@/app/components/buttons/buttons';
+import { StandardButton } from '@/app/components/buttons/mybuttons';
 
 const PageContent = ({ questions, currentPage, lastPage, handleOpenModal, userTier, displayMode }) => {
     return (

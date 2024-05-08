@@ -49,8 +49,17 @@ export default function Page() {
             activeIndex={parseInt(activeIndex)}
             handleClose={handleClose}
             objectList={objectList}
+            quizID = {quizID}
             refreshObjectList={handleFetchQuizData}
             reviewMode = {search === "true" ? true : false}
+            numCompleted={numCompleted}
+            numTotal={numTotal}
+            numCorrect={numCorrect}
+            numIncorrect={numIncorrect}
+            numOmitted={numOmitted}
+            numUnattempted={numUnattempted}
+            percentCompleted={percentCompleted}
+            percentCorrect={percentCorrect}
         />}
         </>
     );

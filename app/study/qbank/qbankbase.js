@@ -7,7 +7,7 @@ import { parseLatexString } from '../components/latexrender/latexrender';
 import renderMarkdownWithLaTeX from '../components/latexrender/markdownwlatex';
 import PageNavigation from '../browse/pagenavigation';
 import QbankTable from './qbanktable';
-import { NumberChoiceButtons, SubjectButton } from '@/app/components/buttons/buttons';
+import { NumberChoiceButtons, SubjectButton } from '@/app/components/buttons/mybuttons';
 
 const QBankBase = ({setIsModalOpen, setQuestion}) => {
 

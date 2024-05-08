@@ -7,7 +7,7 @@ import UpIcon from '@/app/assets/components/Up-icon.svg';
 import DownIcon from '@/app/assets/components/Down-icon.svg';
 import { Filter } from './filter';
 import { useData } from '@/app/context/datacontext';
-import { ViewSelector } from './viewshortcut';
+import { ViewSelector } from '../_archive/viewshortcut';
 
 export const ControlPanel = ({ 
     activeNumQuestions, 

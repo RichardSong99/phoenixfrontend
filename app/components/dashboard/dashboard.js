@@ -4,10 +4,11 @@ import styles from './dashboard.module.css';
 import { DataContext, useData } from '@/app/context/datacontext';
 import { useUser } from '@/app/context/usercontext';
 import { Switch } from '../switch/switch';
-import { SecondaryButton, NumberChoiceButtons } from '../buttons/buttons';
+import { SecondaryButton, NumberChoiceButtons } from '../buttons/mybuttons';
 import { Dashboard } from '@mui/icons-material';
 import { displayNumber, safeAccess } from '@/app/study/data/utility';
 import { ProgressBar } from 'react-bootstrap';
+import { Tabs, Tab, Card, CardBody, CardFooter, CardHeader, Progress, Divider } from "@nextui-org/react";
 
 export const DashboardTile = ({ children }) => {
     return (
@@ -67,7 +68,7 @@ export const DashboardContents = ({ activeSubject }) => {
             let accuracy = 0;
             if (datacube) {
                 try {
-                    let usedRaw = datacube?.Rows?.[topic]["Cells"]["usage"]["Values"]["total"];
+                    let usedRaw = datacube?.Rows?.[topic]["Cells"]["unattempted"]["Values"]["total"];
                     let accuracyRaw = datacube?.Rows?.[topic]["Cells"]["accuracy"]["Values"]["total"];
 
                     used = usedRaw ? usedRaw : 0;
@@ -85,7 +86,7 @@ export const DashboardContents = ({ activeSubject }) => {
             let accuracy = 0;
             if (datacube) {
                 try {
-                    let usedRaw = datacube?.Rows?.[topic]["Cells"]["usage"]["Values"]["total"];
+                    let usedRaw = datacube?.Rows?.[topic]["Cells"]["unattempted"]["Values"]["total"];
                     let accuracyRaw = datacube?.Rows?.[topic]["Cells"]["accuracy"]["Values"]["total"];
 
                     used = usedRaw ? usedRaw : 0;
@@ -120,89 +121,48 @@ export const DashboardContents = ({ activeSubject }) => {
 
 
     return (
-        <div className={styles.container}>
-            <div className={styles.topPanel}>
-                <div className={styles.titleText}>Questions Remaining</div>
-                <div className={styles.subTopPanel}>
-                    <div className={styles.tile}>
-                        <div className={styles.bigText}>{loadingHere ? 0 : (mathUnattempted + readingUnattempted)}</div>
-                        <div className={styles.smallText}>Total</div>
-                    </div>
-                    <div className={styles.tile}>
-                        <div className={styles.bigText}>{loadingHere ? 0 : mathUnattempted}</div>
-                        <div className={styles.smallText}>Math</div>
-                    </div>
-                    <div className={styles.tile}>
-                        <div className={styles.bigText}>{loadingHere ? 0 : readingUnattempted}</div>
-                        <div className={styles.smallText}>Reading</div>
-                    </div>
-                </div>
+            
+
+            <div className="flex gap-10 w-full justify-center">
+                <Card className="w-80 mx-2 my-2 rounded-lg shadow-md">
+                    <CardHeader className="bg-blue-800 text-white font-semibold text-sm py-2 text-center justify-center">Math</CardHeader>
+                    <CardBody className="py-3 text-center"> {/* Increased py value */}
+                        <div className="flex flex-col gap-2">
+                            <div className="text-3xl font-bold text-blue-800 mt-1">{loadingHere ? 0 : mathUnattempted}</div> {/* Added mt-2 class for margin-top */}
+                            <Divider />
+                            {mathData.map((data) => (
+                                data.name !== "Math" && (
+                                    <div className="flex justify-between">
+                                        <div className="text-xs">{data.name}</div>
+                                        <div className="text-sm font-bold text-blue-800">{loadingHere ? 0 : data.used}</div>
+                                    </div>
+                                )
+                            ))}
+                        </div>
+                    </CardBody>
+                </Card>
+
+                <Card className="w-80 mx-2 my-2 rounded-lg shadow-md">
+                    <CardHeader className="bg-blue-800 text-white font-semibold text-sm py-2 text-center justify-center">Reading</CardHeader>
+                    <CardBody className="py-3 text-center"> {/* Increased py value */}
+                        <div className="flex flex-col gap-2">
+                            <div className="text-3xl font-bold text-blue-800 mt-1">{loadingHere ? 0 : readingUnattempted}</div> {/* Added mt-2 class for margin-top */}
+                            <Divider />
+                            {readingData.map((data) => (
+                                data.name !== "Reading" && (
+                                    <div className="flex justify-between">
+                                        <div className="text-xs">{data.name}</div>
+                                        <div className="text-sm font-bold text-blue-800">{loadingHere ? 0 : data.used}</div>
+                                    </div>
+                                )
+                            ))}
+                        </div>
+                    </CardBody>
+                </Card>
             </div>
 
-            <div/>
-            <div className = {styles.progressWrapper}>
-                Your progress
-            <ProgressBar animated now = {60} style={{ height: '20px', width: '100%' }} />
-            </div>
 
-            <div/>
-            <div/>
-            <div/>
-            <div/>
-
-            <div className={styles.topicPanel}>
-
-                <div className={styles.legend}>
-                    <div className={styles.usedLabel}>% Question bank used</div>
-                    <div className={styles.correctLabel}>% accuracy</div>
-
-                </div>
-
-                {/* <StatPanel topic="All" used={"80%"} accuracy={"80%"} /> */}
-
-                <div className={styles.subTopicPanel}>
-                    <div className={styles.halfPanel}>
-                        <StatPanel topic="Math" used={loadingHere ? 0 : mathData.find(data => data.name === "Math")?.used} accuracy={loadingHere ? 0 : mathData.find(data => data.name === "Math")?.accuracy} />
-                        {mathData.map((data, index) => (
-                            data.name !== "Math" && (
-                                <NormStatPanel key={index} topic={data.name} used={loadingHere ? 0 : data.used} accuracy={loadingHere ? 0 : data.accuracy} />
-                            )
-                        ))}
-                    </div>
-                    <div className={styles.halfPanel}>
-                        <StatPanel topic="Reading" used={loadingHere ? 0 : readingData.find(data => data.name === "Reading").used} accuracy={loadingHere ? 0 : readingData.find(data => data.name === "Reading").accuracy} />
-                        {readingData.map((data, index) => (
-                            data.name !== "Reading" && (
-                                <NormStatPanel key={index} topic={data.name} used={loadingHere ? 0 : data.used} accuracy={loadingHere ? 0 : data.accuracy} />
-                            )
-                        ))}
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
     )
 }
 
-export const StatPanel = ({ topic, used, accuracy }) => {
-    return (
-        <div className={styles.statPanel}>
-            <div className={styles.topicLabel}>{topic}</div>
-            <div className={styles.usedLabel}>{Math.round(used * 100)}%</div>
-            <div className={styles.correctLabel}>{Math.round(accuracy * 100)}%</div>
-        </div>
-    )
-}
-
-
-export const NormStatPanel = ({ topic, used, accuracy }) => {
-    return (
-        <div className={styles.statPanel} style={{ backgroundColor: "white" }}>
-            <div className={styles.topicLabelNorm}>{topic}</div>
-            <div className={styles.usedLabelNorm}>{Math.round(used * 100)}%</div>
-            <div className={styles.correctLabelNorm}>{Math.round(accuracy * 100)}%</div>
-        </div>
-    )
-}
 

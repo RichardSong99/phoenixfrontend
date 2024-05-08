@@ -2,7 +2,7 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SiteNavBar from './sitenavbar'; // Import SiteNavBar
+import SiteNavBar from './components/sitenavbar/sitenavbar'; // Import SiteNavBar
 import { UserProvider, } from './context/usercontext';
 import { QuestionProvider } from './context/questioncontext';
 import { DataProvider } from "./context/datacontext";

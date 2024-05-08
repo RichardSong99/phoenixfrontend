@@ -8,7 +8,7 @@ import styles from './checkbox.module.css'; // Import the CSS module
 import UpIcon from '../../assets/components/Up-icon.svg';
 import DownIcon from '../../assets/components/Down-icon.svg';
 import { CSSTransition } from 'react-transition-group';
-import { capitalizeFirstLetter } from "@/app/study/data/utility";
+import { capitalizeFirstLetter } from "@/app/data/utility";
 import { CriteriaElement } from "../criteriabox/criteriabox";
 import { MyProgressBar } from "../charts/charts";
 import { useData } from "@/app/context/datacontext";

@@ -5,11 +5,11 @@
 import React, { useState, useEffect, useContext, use } from 'react';
 import styles from './practice.module.css';
 import { getQuestions, fetchFullQuestionById } from '@/app/services/questionservice';
-import PageContent from './pagecontent';
-import { ansStatusData, difficultyData } from '../data/data'; // Import the data
+import PageContent from './browsecomponents/pagecontent';
+import { ansStatusData, difficultyData } from '../../data/data'; // Import the data
 import ParametersPanel from '../../components/filter/parameterspanel';
 import QuizStarter from '../../components/quizstarter/quizstarter';
-import PageNavigation from './pagenavigation';
+import PageNavigation from './browsecomponents/pagenavigation';
 import { DataContext, useData } from '@/app/context/datacontext';
 import { Header } from '../_archive/header/header';
 

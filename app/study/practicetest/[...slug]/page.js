@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { fetchTestByName, fetchTestByID, postTest } from "@/app/services/testservice";
 import { fetchTestRepresentation } from "@/app/services/parameterdataservice";
 import { initializeQuiz, fetchQuiz } from "@/app/services/quizservice";
-import { ActiveTestCommander } from "../../components/practicetest/activetestcommander";
+import { ActiveTestCommander } from "../../../components/practicetest/activetestcommander";
 
 export default function Page() {
     const pathname = usePathname(); // Update variable name

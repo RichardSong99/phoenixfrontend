@@ -5,10 +5,10 @@ import { StandardButton, NumberChoiceButtons } from './buttons/mybuttons';
 import {SiteNavBar, SideNavBar} from './navbars/navbar';
 import {CriteriaBox} from './criteriabox/criteriabox';
 import { SignUpOption } from './signup/signupoption';
-import { QuestionChoiceArea } from './question/question';
+import { QuestionChoiceArea } from './question/fullquestion/question';
 
-import { ObjectSideNav } from '../study/components/contentviewer/objectsidenav';
-import { ContentViewer } from '../study/components/contentviewer/contentviewer';
+import { ObjectSideNav } from './contentviewer/objectsidenav';
+import { ContentViewer } from './contentviewer/contentviewer';
 
 export default function ComponentTester() {
 

@@ -7,8 +7,8 @@ import DownIcon from '@/app/assets/components/Down-icon.svg';
 import Image from 'next/image';
 import { Switch } from '@/app/components/switch/switch';
 import { FilterChip } from './filtercomponents';
-import { capitalizeFirstLetter } from '@/app/study/data/utility';
-import { equalContainsArrays } from '@/app/study/data/utility';
+import { capitalizeFirstLetter } from '@/app/data/utility';
+import { equalContainsArrays } from '@/app/data/utility';
 import { useData } from '@/app/context/datacontext';
 
 export default function ParametersPanel({

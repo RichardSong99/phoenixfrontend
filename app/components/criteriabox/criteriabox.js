@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './criteriabox.module.css'
-import {colors} from '../../study/data/colors';
+import {colors} from '../../data/colors';
 
  export const   CriteriaBox = ({ name, elementArray, setActiveStatesArray }) => {
 

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import Head from 'next/head';
-import StudyNavBar from './studynavbar';
+import StudyNavBar from '../components/studynavbar/studynavbar';
 import { Loading } from '../components/loading/loading';
 
 const Layout = ({ children, title = 'Default Title' }) => {

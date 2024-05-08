@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { fetchTestUnderlyingByID } from '@/app/services/testservice';
-import { SelectionBar } from '../../components/selectionbar/selectionbar';
-import SummaryPanel from '../../components/summarypanel/summarypanel';
+import { SelectionBar } from '../../../components/selectionbar/selectionbar';
+import SummaryPanel from '../../../components/summarypanel/summarypanel';
 import styles from './reviewpracticetestslug.module.css';
 import { ProgressBar } from "react-bootstrap";
 import { NavBarContext } from '@/app/context/navbarcontext';

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import styles from './formcomponents.module.css';
-import Dropzone from '@/app/study/components/filehandlers/dropzone';
+import Dropzone from '@/app/components/filehandlers/dropzone';
 
 export const FormInput = ({ label, value, onChange, required }) => (
     <label>

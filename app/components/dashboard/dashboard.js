@@ -6,7 +6,7 @@ import { useUser } from '@/app/context/usercontext';
 import { Switch } from '../switch/switch';
 import { SecondaryButton, NumberChoiceButtons } from '../buttons/mybuttons';
 import { Dashboard } from '@mui/icons-material';
-import { displayNumber, safeAccess } from '@/app/study/data/utility';
+import { displayNumber, safeAccess } from '@/app/data/utility';
 import { ProgressBar } from 'react-bootstrap';
 import { Tabs, Tab, Card, CardBody, CardFooter, CardHeader, Progress, Divider } from "@nextui-org/react";
 

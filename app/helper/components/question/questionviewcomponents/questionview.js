@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styles from './questionview.module.css';
 import MainQuestionView from './mainquestionview';
 import { postEngagement } from '@/app/apiservices/engagementservice';
-import { ButtonNavPanel } from '@/app/helper/components/question/fullquestion/question';
-import renderMarkdownWithLaTeX from '../latexrender/markdownwlatex';
-import { calculateResult } from '../../data/questionhelpers';
+import { ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
+import renderMarkdownWithLaTeX from '../../latexrender/markdownwlatex';
+import { calculateResult } from '../../../data/questionhelpers';
 
 
 const QuestionView = ({ question, engagement, userResponseParam, markReviewParam, mode, showAnswer, handleReportUserResponse, handleReportMarkedReview, timeLeft }) => {

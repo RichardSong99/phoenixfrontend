@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './objectsidenav.module.css';
-import { StandardButton } from '@/app/helper/components/buttons/mybuttons';
+import { StandardButton } from '@/app/helper/components/basecomponents/buttons/mybuttons';
 import CorrectIcon from '@/app/assets/components/Correct.svg';
 import IncorrectIcon from '@/app/assets/components/Incorrect.svg';
 import Image from 'next/image';

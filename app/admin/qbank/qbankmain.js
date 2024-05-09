@@ -2,10 +2,10 @@
 
 import React, {useState} from 'react';
 import QBankForm from './qbankform';
-import QuestionView from '../../helper/components/questionviewcomponents/questionview';
+import QuestionView from '../../helper/components/question/questionviewcomponents/questionview';
 import QBankBase from './qbankbase';
 import styles from './qbankmain.module.css';
-import QuestionModal from '../../helper/components/questionviewcomponents/questionmodal';
+import QuestionModal from '../../helper/components/question/questionviewcomponents/questionmodal';
 
 const QBankMain = () => {
 

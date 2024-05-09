@@ -4,14 +4,14 @@ import styles from './questionlayout.module.css';
 import { parseLatexString } from '../../../helper/components/latexrender/latexrender';
 import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
 import { colors } from '../../../helper/data/colors';
-import QuestionView from '../../../helper/components/questionviewcomponents/questionview';
+import QuestionView from '../../../helper/components/question/questionviewcomponents/questionview';
 import { objectsAreEqual } from '@/app/apiservices/comparison';
 import { CSSTransition } from 'react-transition-group';
 import DownIcon from '@/app/assets/components/Down-icon.svg';
 import Image from 'next/image';
 import { capitalizeFirstLetter } from '../../../helper/data/utility';
 import { useUser } from '@/app/helper/context/usercontext';
-import { QuestionModal}  from '../../../helper/components/questionviewcomponents/questionmodal';
+import { QuestionModal}  from '../../../helper/components/question/questionviewcomponents/questionmodal';
 import { QuestionCard } from '../../../helper/components/question/questioncard/questioncard';
 import { useDisclosure } from '@nextui-org/react';
 

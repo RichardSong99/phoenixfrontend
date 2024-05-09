@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './questionview.module.css';
-import { parseLatexString } from '../latexrender/latexrender';
-import renderMarkdownWithLaTeX from '../latexrender/markdownwlatex';
+import { parseLatexString } from '../../latexrender/latexrender';
+import renderMarkdownWithLaTeX from '../../latexrender/markdownwlatex';
 import classNames from 'classnames';
-import { QuestionHeader, ButtonNavPanel } from '@/app/helper/components/question/fullquestion/question';
-import { QuestionChoiceArea } from '@/app/helper/components/question/fullquestion/question';
+import { QuestionHeader, ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
+import { QuestionChoiceArea } from '@/app/helper/components/question/questionpieces/questionpieces';
 
 const MainQuestionView = ({ question, handleChoiceClick, userResponse, handleInputChange, showAnswer, result, handleFlagButtonClick, markedReview, timeLeft }) => {
     const textareaClass = classNames({

@@ -1,11 +1,11 @@
 "use client"
 
 import React, {useState} from 'react';
-import { StandardButton, NumberChoiceButtons } from './buttons/mybuttons';
+import { StandardButton, NumberChoiceButtons } from './basecomponents/buttons/mybuttons';
 import {SiteNavBar, SideNavBar} from './navbars/navbar';
 import {CriteriaBox} from './criteriabox/criteriabox';
 import { SignUpOption } from './signup/signupoption';
-import { QuestionChoiceArea } from './question/fullquestion/question';
+import { QuestionChoiceArea } from './question/questionpieces/questionpieces';
 
 import { ObjectSideNav } from './contentviewer/objectsidenav';
 import { ContentViewer } from './contentviewer/contentviewer';

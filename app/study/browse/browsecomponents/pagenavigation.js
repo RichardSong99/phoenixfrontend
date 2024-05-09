@@ -1,5 +1,5 @@
 import React from 'react';
-import { RoundButton } from '@/app/helper/components/buttons/mybuttons';
+import { RoundButton } from '@/app/helper/components/basecomponents/buttons/mybuttons';
 import styles from './pagenavigation.module.css';
 
 const PageNavigation = ({ currentPage, lastPage, pageSelectHandler }) => {

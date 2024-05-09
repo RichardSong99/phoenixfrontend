@@ -4,7 +4,7 @@ import styles from './dashboard.module.css';
 import { DataContext, useData } from '@/app/helper/context/datacontext';
 import { useUser } from '@/app/helper/context/usercontext';
 import { Switch } from '../switch/switch';
-import { SecondaryButton, NumberChoiceButtons } from '../buttons/mybuttons';
+import { SecondaryButton, NumberChoiceButtons } from '../../../../helper/components/basecomponents/buttons/mybuttons';
 import { Dashboard } from '@mui/icons-material';
 import { displayNumber, safeAccess } from '@/app/helper/data/utility';
 import { ProgressBar } from 'react-bootstrap';

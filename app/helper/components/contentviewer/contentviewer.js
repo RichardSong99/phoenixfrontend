@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ObjectSideNav } from './objectsidenav';
 import { postVideoWatched } from '@/app/apiservices/videoengagementservice';
 import styles from './contentviewer.module.css';
-import QuestionView from '../questionviewcomponents/questionview';
+import QuestionView from '../question/questionviewcomponents/questionview';
 import VideoPlayer from '../videoplayer/videoplayer';
 import { getObjectList } from '../../data/objectlist';
 import { NavBarContext } from '@/app/helper/context/navbarcontext';

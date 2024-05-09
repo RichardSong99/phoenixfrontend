@@ -3,8 +3,8 @@ import GoogleIcon from '../../public/googleLogo.png';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { registerUser, loginUser } from '../services/userservice';
-import { useUser } from '../context/usercontext';
+import { registerUser, loginUser } from '../apiservices/userservice';
+import { useUser } from '../helper/context/usercontext';
 import {Input} from "@nextui-org/react";
 
 

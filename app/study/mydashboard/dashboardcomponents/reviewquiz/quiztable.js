@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState, useEffect, useContext } from 'react';
-import { NavBarContext } from '@/app/context/navbarcontext';
-import { getQuizzesForUser } from '@/app/services/quizservice';
-import { fetchQuizUnderlyingById } from '@/app/services/quizservice';
+import { NavBarContext } from '@/app/helper/context/navbarcontext';
+import { getQuizzesForUser } from '@/app/apiservices/quizservice';
+import { fetchQuizUnderlyingById } from '@/app/apiservices/quizservice';
 import { useRouter } from "next/navigation";
 import {
     Table,
@@ -18,7 +18,7 @@ import {
 } from "@nextui-org/react";
 
 import { QuizSummaryModal } from './quizsummarymodal';
-import { useData } from '@/app/context/datacontext';
+import { useData } from '@/app/helper/context/datacontext';
 
 export function QuizTable() {
 

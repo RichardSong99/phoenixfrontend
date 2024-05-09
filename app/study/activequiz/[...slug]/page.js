@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'; // Update import
 
-import { ContentViewer } from '../../../components/contentviewer/contentviewer';
-import { fetchQuizUnderlyingById } from '@/app/services/quizservice';
-import { createProcessedObjectList } from '../../../data/objectlist';
-import { fetchQuizData } from '../../../data/objectlist';
+import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
+import { fetchQuizUnderlyingById } from '@/app/apiservices/quizservice';
+import { createProcessedObjectList } from '../../../helper/data/objectlist';
+import { fetchQuizData } from '../../../helper/data/objectlist';
 
 export default function Page() {
     const router = useRouter(); // Update variable name

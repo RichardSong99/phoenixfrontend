@@ -1,12 +1,12 @@
 "use client"
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { fetchTestUnderlyingByID } from '@/app/services/testservice';
-import { SelectionBar } from '../../../components/selectionbar/selectionbar';
-import SummaryPanel from '../../../components/summarypanel/summarypanel';
+import { fetchTestUnderlyingByID } from '@/app/apiservices/testservice';
+import { SelectionBar } from '../../../helper/components/selectionbar/selectionbar';
+import SummaryPanel from '../../../helper/components/summarypanel/summarypanel';
 import styles from './reviewpracticetestslug.module.css';
 import { ProgressBar } from "react-bootstrap";
-import { NavBarContext } from '@/app/context/navbarcontext';
+import { NavBarContext } from '@/app/helper/context/navbarcontext';
 import { Card, CardHeader, CardBody, CardFooter, Progress, Spacer, Button } from '@nextui-org/react';
 
 

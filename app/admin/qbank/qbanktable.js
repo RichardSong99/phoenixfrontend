@@ -1,4 +1,4 @@
-import { DataContext } from '@/app/context/datacontext';
+import { DataContext } from '@/app/helper/context/datacontext';
 import React, { useContext } from 'react';
 import styles from './qbanktable.module.css';
 

@@ -1,18 +1,18 @@
 // QuestionGridLayout.js
 import React, { useState } from 'react';
 import styles from './questionlayout.module.css';
-import { parseLatexString } from '../../../components/latexrender/latexrender';
-import { CriteriaElement } from '@/app/components/criteriabox/criteriabox';
-import { colors } from '../../../data/colors';
-import QuestionView from '../../../components/questionviewcomponents/questionview';
-import { objectsAreEqual } from '@/app/services/comparison';
+import { parseLatexString } from '../../../helper/components/latexrender/latexrender';
+import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
+import { colors } from '../../../helper/data/colors';
+import QuestionView from '../../../helper/components/questionviewcomponents/questionview';
+import { objectsAreEqual } from '@/app/apiservices/comparison';
 import { CSSTransition } from 'react-transition-group';
 import DownIcon from '@/app/assets/components/Down-icon.svg';
 import Image from 'next/image';
-import { capitalizeFirstLetter } from '../../../data/utility';
-import { useUser } from '@/app/context/usercontext';
-import { QuestionModal}  from '../../../components/questionviewcomponents/questionmodal';
-import { QuestionCard } from '../../../components/question/questioncard/questioncard';
+import { capitalizeFirstLetter } from '../../../helper/data/utility';
+import { useUser } from '@/app/helper/context/usercontext';
+import { QuestionModal}  from '../../../helper/components/questionviewcomponents/questionmodal';
+import { QuestionCard } from '../../../helper/components/question/questioncard/questioncard';
 import { useDisclosure } from '@nextui-org/react';
 
 export function useQuestionSelection() {

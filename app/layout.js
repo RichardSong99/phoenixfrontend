@@ -2,13 +2,13 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SiteNavBar from './components/sitenavbar/sitenavbar'; // Import SiteNavBar
-import { UserProvider, } from './context/usercontext';
-import { QuestionProvider } from './context/questioncontext';
-import { DataProvider } from "./context/datacontext";
+import SiteNavBar from './helper/components/sitenavbar/sitenavbar'; // Import SiteNavBar
+import { UserProvider, } from './helper/context/usercontext';
+import { QuestionProvider } from './helper/context/questioncontext';
+import { DataProvider } from "./helper/context/datacontext";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavBarProvider } from "./context/navbarcontext";
-import { MyNextUIProvider } from "./context/mynextuiprovider";
+import { NavBarProvider } from "./helper/context/navbarcontext";
+import { MyNextUIProvider } from "./helper/context/mynextuiprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { fetchTestByName, fetchTestByID, postTest } from "@/app/services/testservice";
-import { fetchTestRepresentation } from "@/app/services/parameterdataservice";
-import { initializeQuiz, fetchQuiz } from "@/app/services/quizservice";
-import { ActiveTestCommander } from "../../../components/practicetest/activetestcommander";
+import { fetchTestByName, fetchTestByID, postTest } from "@/app/apiservices/testservice";
+import { fetchTestRepresentation } from "@/app/apiservices/parameterdataservice";
+import { initializeQuiz, fetchQuiz } from "@/app/apiservices/quizservice";
+import { ActiveTestCommander } from "../../../helper/components/practicetest/activetestcommander";
 
 export default function Page() {
     const pathname = usePathname(); // Update variable name

@@ -8,13 +8,13 @@ import { QuizTable } from './dashboardcomponents/reviewquiz/quiztable';
 import { PracticeTestPanel } from './dashboardcomponents/practicetest/practicetests';
 import { CreateQuizModal } from './dashboardcomponents/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
-import { DashboardContents } from '@/app/components/dashboard/dashboard';
-import { getQuestions } from '@/app/services/questionservice';
-import { QuestionCard } from '../../components/question/questioncard/questioncard';
-import { loadPracticeModules, loadLessonModules, goToModule } from '../../data/modulegetter';
+import { DashboardContents } from '@/app/helper/components/dashboard/dashboard';
+import { getQuestions } from '@/app/apiservices/questionservice';
+import { QuestionCard } from '../../helper/components/question/questioncard/questioncard';
+import { loadPracticeModules, loadLessonModules, goToModule } from '../../helper/data/modulegetter';
 import { ModuleCard } from './dashboardcomponents/modules/modulecard';
 import { useRouter } from 'next/navigation';
-import { QuestionModal } from '../../components/questionviewcomponents/questionmodal'; 
+import { QuestionModal } from '../../helper/components/questionviewcomponents/questionmodal'; 
 
 export default function Page() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();

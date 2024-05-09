@@ -4,13 +4,13 @@
 
 import React, { useState, useEffect, useContext, use } from 'react';
 import styles from './practice.module.css';
-import { getQuestions, fetchFullQuestionById } from '@/app/services/questionservice';
+import { getQuestions, fetchFullQuestionById } from '@/app/apiservices/questionservice';
 import PageContent from './browsecomponents/pagecontent';
-import { ansStatusData, difficultyData } from '../../data/data'; // Import the data
-import ParametersPanel from '../../components/filter/parameterspanel';
-import QuizStarter from '../../components/quizstarter/quizstarter';
+import { ansStatusData, difficultyData } from '../../helper/data/data'; // Import the data
+import ParametersPanel from '../../helper/components/filter/parameterspanel';
+import QuizStarter from '../../helper/components/quizstarter/quizstarter';
 import PageNavigation from './browsecomponents/pagenavigation';
-import { DataContext, useData } from '@/app/context/datacontext';
+import { DataContext, useData } from '@/app/helper/context/datacontext';
 import { Header } from '../_archive/header/header';
 
 

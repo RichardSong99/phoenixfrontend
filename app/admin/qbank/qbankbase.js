@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
-import QBankFilter from '../../components/questionbank/qbankfilter';
-import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '../../services/questionservice';
+import QBankFilter from '../../helper/components/questionbank/qbankfilter';
+import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '../../apiservices/questionservice';
 import styles from './qbankbase.module.css';
-import { QuestionContext } from '@/app/context/questioncontext';
-import { parseLatexString } from '../../components/latexrender/latexrender';
-import renderMarkdownWithLaTeX from '../../components/latexrender/markdownwlatex';
+import { QuestionContext } from '@/app/helper/context/questioncontext';
+import { parseLatexString } from '../../helper/components/latexrender/latexrender';
+import renderMarkdownWithLaTeX from '../../helper/components/latexrender/markdownwlatex';
 import PageNavigation from '../../study/browse/browsecomponents/pagenavigation';
 import QbankTable from './qbanktable';
-import { NumberChoiceButtons, SubjectButton } from '@/app/components/buttons/mybuttons';
+import { NumberChoiceButtons, SubjectButton } from '@/app/helper/components/buttons/mybuttons';
 
 const QBankBase = ({setIsModalOpen, setQuestion}) => {
 

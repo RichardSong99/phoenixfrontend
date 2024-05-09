@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import styles from './qbankform.module.css';
-import { uploadQuestion, updateQuestion } from '@/app/services/questionservice';
-import { QuestionContext } from '@/app/context/questioncontext';
-import Dropzone from '../../components/filehandlers/dropzone'
-import FileService from '@/app/services/fileservice';
-import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/components/form/formcomponents';
-import { difficultyData } from '../../data/data';
-import { useData } from '@/app/context/datacontext';
+import { uploadQuestion, updateQuestion } from '@/app/apiservices/questionservice';
+import { QuestionContext } from '@/app/helper/context/questioncontext';
+import Dropzone from '../../helper/components/filehandlers/dropzone'
+import FileService from '@/app/apiservices/fileservice';
+import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/helper/components/form/formcomponents';
+import { difficultyData } from '../../helper/data/data';
+import { useData } from '@/app/helper/context/datacontext';
 
 const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandler }) => {
 

@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
-import { ContentViewer } from '../../../components/contentviewer/contentviewer';
-import { fetchLessonData, updateLessonObjectList } from '../../../data/objectlist';
+import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
+import { fetchLessonData, updateLessonObjectList } from '../../../helper/data/objectlist';
 
 
 export default function Page() {

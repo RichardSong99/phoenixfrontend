@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useContext, use } from 'react';
 import styles from './practice.module.css';
-import { getQuestions, fetchFullQuestionById } from '@/app/apiservices/questionservice';
+import { getQuestions, fetchFullQuestionById } from '@/app/helper/apiservices/questionservice';
 import PageContent from './browsecomponents/pagecontent';
 import { ansStatusData, difficultyData } from '../../helper/data/data'; // Import the data
 import ParametersPanel from '../../helper/components/filter/parameterspanel';

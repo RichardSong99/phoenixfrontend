@@ -9,7 +9,7 @@ import { PracticeTestPanel } from './dashboardcomponents/practicetest/practicete
 import { CreateQuizModal } from './dashboardcomponents/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
 import { DashboardContents } from '@/app/study/mydashboard/dashboardcomponents/statspanel/statspanel';
-import { getQuestions } from '@/app/apiservices/questionservice';
+import { getQuestions } from '@/app/helper/apiservices/questionservice';
 import { QuestionCard } from '../../helper/components/question/questioncard/questioncard';
 import { loadPracticeModules, loadLessonModules, goToModule } from '../../helper/data/modulegetter';
 import { ModuleCard } from './dashboardcomponents/modules/modulecard';

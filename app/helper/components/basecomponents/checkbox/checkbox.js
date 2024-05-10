@@ -9,7 +9,7 @@ import UpIcon from '../../assets/components/Up-icon.svg';
 import DownIcon from '../../assets/components/Down-icon.svg';
 import { CSSTransition } from 'react-transition-group';
 import { capitalizeFirstLetter } from "@/app/helper/data/utility";
-import { CriteriaElement } from "../criteriabox/criteriabox";
+import { CriteriaElement } from "../../criteriabox/criteriabox";
 import { MyProgressBar } from "../charts/charts";
 import { useData } from "@/app/helper/context/datacontext";
 

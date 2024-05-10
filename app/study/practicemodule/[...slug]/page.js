@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
 import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
-import { fetchQuiz, initializeQuiz, addEngagementToQuiz } from '@/app/apiservices/quizservice';
-import { fetchPracticeModule } from '@/app/apiservices/parameterdataservice';
+import { fetchQuiz, initializeQuiz, addEngagementToQuiz } from '@/app/helper/apiservices/quizservice';
+import { fetchPracticeModule } from '@/app/helper/apiservices/parameterdataservice';
 import { fetchQuizData } from '../../../helper/data/objectlist';
 
 export default function Page() {

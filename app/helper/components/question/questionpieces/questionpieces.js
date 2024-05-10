@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import styles from './question.module.css'
+import styles from './questionpieces.module.css'
 import renderMarkdownWithLaTeX from '@/app/helper/components/latexrender/markdownwlatex';
 import { RoundButton } from '../../basecomponents/buttons/mybuttons';
-import FlaggedIcon from '@/app/assets/components/Flagged.svg';
-import UnflaggedIcon from '@/app/assets/components/Unflagged.svg';
+import FlaggedIcon from '@/app/helper/assets/components/Flagged.svg';
+import UnflaggedIcon from '@/app/helper/assets/components/Unflagged.svg';
 import Image from 'next/image';
 
 export const QuestionChoiceArea = ({ answerChoiceArray, correctAnswer, showAnswer, userAnswer, setUserAnswer }) => {

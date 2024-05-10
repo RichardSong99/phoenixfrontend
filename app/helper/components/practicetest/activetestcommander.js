@@ -1,14 +1,14 @@
 "use client"
 
 import React, { useState, useEffect, useContext } from "react";
-import { fetchQuizUnderlyingById } from "@/app/apiservices/quizservice";
+import { fetchQuizUnderlyingById } from "@/app/helper/apiservices/quizservice";
 import { createProcessedObjectList } from "../../data/objectlist";
 import { ContentViewer } from "../contentviewer/contentviewer";
 import { StartScreen } from "./startscreen";
 import { BreakScreen } from "./breakscreen";
 import { NavBarContext } from "@/app/helper/context/navbarcontext";
 import { useRouter } from "next/navigation";
-import { markTestCompleted } from "@/app/apiservices/testservice";
+import { markTestCompleted } from "@/app/helper/apiservices/testservice";
 
 export const ActiveTestCommander = ({ test }) => {
 

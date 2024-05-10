@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 
-import { fetchQuiz, fetchQuizUnderlyingById } from "@/app/apiservices/quizservice";
-import { fetchPracticeModule } from "@/app/apiservices/parameterdataservice";
-import { fetchLessonModule } from "@/app/apiservices/parameterdataservice";
-import { fetchVideosById } from "@/app/apiservices/videoservice";
+import { fetchQuiz, fetchQuizUnderlyingById } from "@/app/helper/apiservices/quizservice";
+import { fetchPracticeModule } from "@/app/helper/apiservices/parameterdataservice";
+import { fetchLessonModule } from "@/app/helper/apiservices/parameterdataservice";
+import { fetchVideosById } from "@/app/helper/apiservices/videoservice";
 
 
 

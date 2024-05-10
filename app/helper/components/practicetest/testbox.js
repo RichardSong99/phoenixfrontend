@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { fetchTestByName } from '@/app/apiservices/testservice';
+import { fetchTestByName } from '@/app/helper/apiservices/testservice';
 import styles from './testbox.module.css';
 
 export const TestBox = ({ testName, onStartTest, onReviewTest }) => {

@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { fetchTestByName, fetchTestByID, postTest } from "@/app/apiservices/testservice";
-import { fetchTestRepresentation } from "@/app/apiservices/parameterdataservice";
-import { initializeQuiz, fetchQuiz } from "@/app/apiservices/quizservice";
+import { fetchTestByName, fetchTestByID, postTest } from "@/app/helper/apiservices/testservice";
+import { fetchTestRepresentation } from "@/app/helper/apiservices/parameterdataservice";
+import { initializeQuiz, fetchQuiz } from "@/app/helper/apiservices/quizservice";
 import { ActiveTestCommander } from "../../../helper/components/practicetest/activetestcommander";
 
 export default function Page() {

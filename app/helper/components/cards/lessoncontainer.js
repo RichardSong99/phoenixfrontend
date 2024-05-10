@@ -1,6 +1,6 @@
 import React, { use, useState, useEffect } from "react";
 import { ProgressBar } from "react-bootstrap";
-import DownIcon from "@/app/assets/components/Down-icon.svg";
+import DownIcon from "@/app/helper/assets/components/Down-icon.svg";
 import Image from "next/image";
 import styles from "./lessoncontainer.module.css";
 import { StandardButton } from "@/app/helper/components/basecomponents/buttons/mybuttons";

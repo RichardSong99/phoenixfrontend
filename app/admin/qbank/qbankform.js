@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import styles from './qbankform.module.css';
-import { uploadQuestion, updateQuestion } from '@/app/apiservices/questionservice';
+import { uploadQuestion, updateQuestion } from '@/app/helper/apiservices/questionservice';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
 import Dropzone from '../../helper/components/basecomponents/filehandlers/dropzone'
-import FileService from '@/app/apiservices/fileservice';
+import FileService from '@/app/helper/apiservices/fileservice';
 import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../helper/data/data';
 import { useData } from '@/app/helper/context/datacontext';

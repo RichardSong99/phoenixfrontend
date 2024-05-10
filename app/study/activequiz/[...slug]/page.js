@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'; // Update import
 
 import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
-import { fetchQuizUnderlyingById } from '@/app/apiservices/quizservice';
+import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import { createProcessedObjectList } from '../../../helper/data/objectlist';
 import { fetchQuizData } from '../../../helper/data/objectlist';
 

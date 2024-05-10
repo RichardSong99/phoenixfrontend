@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './summarypanel.module.css';
 import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
-import FlaggedIcon from '@/app/assets/components/Flagged.svg';
-import UnflaggedIcon from '@/app/assets/components/Unflagged.svg';
+import FlaggedIcon from '@/app/helper/assets/components/Flagged.svg';
+import UnflaggedIcon from '@/app/helper/assets/components/Unflagged.svg';
 import Image from 'next/image';
-import CorrectIcon from '@/app/assets/components/Correct.svg';
-import IncorrectIcon from '@/app/assets/components/Incorrect.svg';
+import CorrectIcon from '@/app/helper/assets/components/Correct.svg';
+import IncorrectIcon from '@/app/helper/assets/components/Incorrect.svg';
 import { useRouter } from 'next/navigation'; // Update import
 import { createQueryString } from '../../data/utility';
 import {

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
 import styles from './parameterspanel.module.css';
-import { ViewToggle } from '../../study/_archive/viewtoggle';
-import UpIcon from '@/app/assets/components/Up-icon.svg';
-import DownIcon from '@/app/assets/components/Down-icon.svg';
+import UpIcon from '@/app/helper/assets/components/Up-icon.svg';
+import DownIcon from '@/app/helper/assets/components/Down-icon.svg';
 import Image from 'next/image';
-import { Switch } from '@/app/components/switch/switch';
 import { FilterChip } from './filtercomponents';
 import { capitalizeFirstLetter } from '@/app/helper/data/utility';
 import { equalContainsArrays } from '@/app/helper/data/utility';

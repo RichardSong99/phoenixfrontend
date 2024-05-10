@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import Lightning from '@/app/assets/components/Lightning.svg';
+import Lightning from '@/app/helper/assets/components/Lightning.svg';
 import Image from 'next/image';
 import styles from './mybuttons.module.css'
 

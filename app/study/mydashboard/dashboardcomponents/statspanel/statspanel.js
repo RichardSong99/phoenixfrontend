@@ -1,24 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { MyPieChart, MyBarChart } from '@/app/components/charts/charts';
-import styles from './dashboard.module.css';
 import { DataContext, useData } from '@/app/helper/context/datacontext';
 import { useUser } from '@/app/helper/context/usercontext';
-import { Switch } from '../switch/switch';
-import { SecondaryButton, NumberChoiceButtons } from '../../../../helper/components/basecomponents/buttons/mybuttons';
-import { Dashboard } from '@mui/icons-material';
-import { displayNumber, safeAccess } from '@/app/helper/data/utility';
-import { ProgressBar } from 'react-bootstrap';
+
 import { Tabs, Tab, Card, CardBody, CardFooter, CardHeader, Progress, Divider } from "@nextui-org/react";
-
-export const DashboardTile = ({ children }) => {
-    return (
-        <div className={styles.dashboardTile}>
-            {children}
-        </div>
-    )
-}
-
-
 
 function getColor(value) {
     //value from 0 to 1

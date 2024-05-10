@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import SummaryPanel from '../../../../helper/components/summarypanel/summarypanel';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
-import { fetchQuizUnderlyingById } from '@/app/apiservices/quizservice';
+import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import styles from './quizsummary.module.css';
 
 export function QuizSummary({ fullQuizData }) {

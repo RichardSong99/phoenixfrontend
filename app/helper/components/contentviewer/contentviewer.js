@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import Link from 'next/link';
 import { ObjectSideNav } from './objectsidenav';
-import { postVideoWatched } from '@/app/apiservices/videoengagementservice';
+import { postVideoWatched } from '@/app/helper/apiservices/videoengagementservice';
 import styles from './contentviewer.module.css';
 import QuestionView from '../question/questionviewcomponents/questionview';
 import VideoPlayer from '../videoplayer/videoplayer';
 import { getObjectList } from '../../data/objectlist';
 import { NavBarContext } from '@/app/helper/context/navbarcontext';
 import { handlePostEngagement } from '../../data/questionhelpers';
-import { addEngagementToQuiz } from '@/app/apiservices/quizservice';
+import { addEngagementToQuiz } from '@/app/helper/apiservices/quizservice';
 import { Button, ButtonGroup } from "@nextui-org/react";
 import {useRouter} from 'next/navigation';
 

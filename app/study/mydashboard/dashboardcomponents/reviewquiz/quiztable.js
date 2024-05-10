@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { NavBarContext } from '@/app/helper/context/navbarcontext';
-import { getQuizzesForUser } from '@/app/apiservices/quizservice';
-import { fetchQuizUnderlyingById } from '@/app/apiservices/quizservice';
+import { getQuizzesForUser } from '@/app/helper/apiservices/quizservice';
+import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import { useRouter } from "next/navigation";
 import {
     Table,

@@ -1,7 +1,7 @@
-import { fetchVideosById } from "@/app/apiservices/videoservice";
-import { fetchQuestionsById } from "@/app/apiservices/questionservice";
-import { fetchLessonModule } from "@/app/apiservices/parameterdataservice";
-import { fetchQuizUnderlyingById } from "@/app/apiservices/quizservice";
+import { fetchVideosById } from "@/app/helper/apiservices/videoservice";
+import { fetchQuestionsById } from "@/app/helper/apiservices/questionservice";
+import { fetchLessonModule } from "@/app/helper/apiservices/parameterdataservice";
+import { fetchQuizUnderlyingById } from "@/app/helper/apiservices/quizservice";
 
 export function createProcessedObjectList({
     type,

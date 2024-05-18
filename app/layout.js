@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavBarProvider } from "./helper/context/navbarcontext";
 import { MyNextUIProvider } from "./helper/context/mynextuiprovider";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
@@ -19,26 +20,28 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <MyNextUIProvider>
-        <UserProvider>
-          <DataProvider>
-            <QuestionProvider>
-              <NavBarProvider>
-                <body className={`${inter.className} bodyStyles`} style={{ position: "relative" }}>
-                  {/* Content */}
-                  {children}
+    <html>
+      <body>
+        <MyNextUIProvider>
+          <UserProvider>
+            <DataProvider>
+              <QuestionProvider>
+                <NavBarProvider>
+                  <body className={`${inter.className} bodyStyles`} style={{ position: "relative" }}>
+                    {/* Content */}
+                    {children}
 
-                  {/* Top Navbar */}
-                  {/* <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 1000 }}>
+                    {/* Top Navbar */}
+                    {/* <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 1000 }}>
                     <SiteNavBar />
                   </div> */}
-                </body>
-              </NavBarProvider>
-            </QuestionProvider>
-          </DataProvider>
-        </UserProvider>
-      </MyNextUIProvider>
+                  </body>
+                </NavBarProvider>
+              </QuestionProvider>
+            </DataProvider>
+          </UserProvider>
+        </MyNextUIProvider>
+      </body>
     </html>
   );
 }

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
 // import GoogleIcon from '../../public/googleLogo.png';
 // import Image from 'next/image';
@@ -5,12 +7,15 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { registerUser, loginUser } from '../../helper/apiservices/userservice';
 import { useUser } from '../../helper/context/usercontext';
-import {Button, Input, Checkbox, Link, Divider} from "@nextui-org/react";
-import {Icon} from "@iconify/react";
+import { Button, Input, Checkbox, Link, Divider } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 
 
-export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
+export default function LoginPanel() {
+    const router = useRouter();
+
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -22,20 +27,8 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
     const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-    const router = useRouter();
     const { setIsAuthenticated } = useUser();
 
-    useEffect(() => {
-        if (!isLoginMode) {
-            setUserExists(false);
-        }
-    }, [email, isLoginMode]);
-
-    useEffect(() => {
-        if (isLoginMode) {
-            setLoginFailed(false);
-        }
-    }, [email, password, isLoginMode]);
 
     useEffect(() => {
         if (loginSuccess) {
@@ -47,37 +40,37 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!isLoginMode) {
-            if (password !== repeatPassword) {
-                alert("Passwords do not match");
-                return;
-            }
-            if (password.length < 8) {
-                alert('Password should be at least 8 characters long');
-                return;
-            }
-
-            try {
-                const data = await registerUser(email, password);
-                Cookies.set('token', data.token);
-                setLoginSuccess(true);
-            } catch (error) {
-                console.log(error.message);
-                if (error.message === 'Email is already in use') {
-                    setUserExists(true);
-                }
-            }
-        } else {
-            try {
-                console.log(email, password);
-                const data = await loginUser(email, password);
-                Cookies.set('token', data.token);
-                setLoginSuccess(true);
-            } catch (error) {
-                setErrorMessage(error.message);
-                setLoginFailed(true);
-            }
+        try {
+            console.log(email, password);
+            const data = await loginUser(email, password);
+            Cookies.set('token', data.token);
+            setLoginSuccess(true);
+        } catch (error) {
+            setErrorMessage(error.message);
+            setLoginFailed(true);
         }
+
+        // if (!isLoginMode) {
+        //     if (password !== repeatPassword) {
+        //         alert("Passwords do not match");
+        //         return;
+        //     }
+        //     if (password.length < 8) {
+        //         alert('Password should be at least 8 characters long');
+        //         return;
+        //     }
+
+        //     try {
+        //         const data = await registerUser(email, password);
+        //         Cookies.set('token', data.token);
+        //         setLoginSuccess(true);
+        //     } catch (error) {
+        //         console.log(error.message);
+        //         if (error.message === 'Email is already in use') {
+        //             setUserExists(true);
+        //         }
+        //     }
+        // }
     };
 
     return (
@@ -124,7 +117,7 @@ export default function LoginPanel({ isLoginMode, setIsLoginMode }) {
                             Forgot password?
                         </Link>
                     </div>
-                    <Button color="primary" type="submit" onPress = {handleSubmit}>
+                    <Button color="primary" type="submit" >
                         Log In
                     </Button>
                 </form>

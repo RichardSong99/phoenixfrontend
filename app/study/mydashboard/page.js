@@ -5,7 +5,7 @@ import { Card, CardHeader, CardBody, CardFooter, Progress } from '@nextui-org/re
 import { Button } from '@nextui-org/react';
 import { Tabs, Tab } from '@nextui-org/react';
 import { QuizTable } from './dashboardcomponents/reviewquiz/quiztable';
-import { PracticeTestPanel } from './dashboardcomponents/practicetest/practicetests';
+import { PracticeTestPanel } from './dashboardcomponents/practicetest/practicetesttable';
 import { CreateQuizModal } from './dashboardcomponents/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
 import { DashboardContents } from '@/app/study/mydashboard/dashboardcomponents/statspanel/statspanel';

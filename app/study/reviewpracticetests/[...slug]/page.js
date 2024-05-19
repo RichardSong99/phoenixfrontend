@@ -8,7 +8,7 @@ import styles from './reviewpracticetestslug.module.css';
 import { ProgressBar } from "react-bootstrap";
 import { NavBarContext } from '@/app/helper/context/navbarcontext';
 import { Card, CardHeader, CardBody, CardFooter, Progress, Spacer, Button } from '@nextui-org/react';
-
+import { useData } from '@/app/helper/context/datacontext';
 
 export default function Page() {
     const pathname = usePathname(); // Update variable name
@@ -17,6 +17,7 @@ export default function Page() {
     const [activeTab, setActiveTab] = useState(0);
 
     const { setIsStudyNavBarVisible, setIsTopNavBarVisible } = useContext(NavBarContext);
+    const { testUnderlyingList } = useData();
 
     useEffect(() => {
         setIsStudyNavBarVisible(true);
@@ -51,17 +52,28 @@ export default function Page() {
 
     const loadTestObject = async () => {
         try {
-            const testObject = await fetchTestUnderlyingByID({ testID });
-            console.log("testObject", testObject);
-            setTestObject(testObject);
+            // Try to find the test in the list
+            console.log("testUnderlyingList in review", testUnderlyingList)
+            const foundTest = testUnderlyingList.find(item => item.Test.id === testID);
+            
+            if (foundTest) {
+                // If found, set the test object
+                setTestObject(foundTest);
+                console.log("found test in list")
+            } else {
+                // If not found, fetch the test by ID
+                const testObject = await fetchTestUnderlyingByID({ testID });
+                setTestObject(testObject);
+            }
         } catch (error) {
             console.log("error", error);
         }
-    }
+    };
+    
 
     useEffect(() => {
         loadTestObject();
-    }, []);
+    }, [testID, testUnderlyingList]);
 
     const handleTabChange = (tabNum) => {
         setActiveTab(tabNum);
@@ -81,9 +93,9 @@ export default function Page() {
                     <Card>
                         <CardBody>
                             <div className={styles.scaledScorePanel}>
-                                <ScoreTile title={"Overall Score"} score={testObject.totalScaled} range={"400 - 1600"} />
-                                <ScoreTile title={"Math"} score={testObject.mathScaled} range={"200 - 800"} />
-                                <ScoreTile title={"Reading"} score={testObject.readingScaled} range={"200 - 800"} />
+                                <ScoreTile title={"Overall Score"} score={testObject.TotalScaled} range={"400 - 1600"} />
+                                <ScoreTile title={"Math"} score={testObject.MathScaled} range={"200 - 800"} />
+                                <ScoreTile title={"Reading"} score={testObject.ReadingScaled} range={"200 - 800"} />
                             </div>
                         </CardBody>
                     </Card>
@@ -96,8 +108,8 @@ export default function Page() {
                                             <SubjectBar
                                                 key={index}
                                                 subject={topic}
-                                                correct={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Correct}
-                                                total={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Total}
+                                                correct={testObject?.TestStats?.Stats.find(item => item.Name === topic)?.Correct}
+                                                total={testObject?.TestStats?.Stats.find(item => item.Name === topic)?.Total}
                                             />
                                         )
                                     })}
@@ -109,8 +121,8 @@ export default function Page() {
                                             <SubjectBar
                                                 key={index}
                                                 subject={topic}
-                                                correct={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Correct}
-                                                total={testObject?.testStats?.Stats.find(item => item.Name === topic)?.Total}
+                                                correct={testObject?.TestStats?.Stats.find(item => item.Name === topic)?.Correct}
+                                                total={testObject?.TestStats?.Stats.find(item => item.Name === topic)?.Total}
                                             />
                                         )
                                     })}
@@ -133,8 +145,8 @@ export default function Page() {
 
 
                             <SummaryPanel
-                                questionEngagements={testObject.quizResults[activeTab].Questions}
-                                quizID={testObject?.quizResults[activeTab]?.Quiz?.id}
+                                questionEngagements={testObject.QuizResults[activeTab].Questions}
+                                quizID={testObject?.QuizResults[activeTab]?.Quiz?.id}
                             />
                         </CardBody>
                     </Card>

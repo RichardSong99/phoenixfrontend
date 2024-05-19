@@ -126,6 +126,32 @@ export async function getQuizzesForUser() {
     return data;
 }
 
+export async function fetchQuizzesUnderlyingForUser() {
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const response = await fetch(`${apiUrl}/quizzes/underlying`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
 
 export async function fetchQuiz({ quizID, quizName }) {
     let token;

@@ -24,13 +24,13 @@ export function QuizTable() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
-    const { getTopicList, quizUnderlyingList } = useData();
+    const { getTopicList, quizUnderlyingListQuizType } = useData();
 
     // const router = useRouter();
 
     const { setIsStudyNavBarVisible, setIsTopNavBarVisible } = useContext(NavBarContext);
     // const [quizIDList, setQuizIDList] = useState([]);
-    // const [quizUnderlyingList, setquizUnderlyingList] = useState([]);
+    // const [quizUnderlyingListQuizType, setquizUnderlyingListQuizType] = useState([]);
 
     useEffect(() => {
         setIsStudyNavBarVisible(true);
@@ -43,7 +43,7 @@ export function QuizTable() {
         //         let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
         //         setQuizIDList(quizIds);
         //         let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
-        //         setquizUnderlyingList(quizData);
+        //         setquizUnderlyingListQuizType(quizData);
         //     } catch (error) {
         //         console.log("Error fetching quizzes for user", error);
         //     }
@@ -91,8 +91,8 @@ export function QuizTable() {
                 </TableHeader>
                 <TableBody>
 
-                    {quizUnderlyingList && quizUnderlyingList.length !== 0 && (
-                        quizUnderlyingList.map((quiz, index) => (
+                    {quizUnderlyingListQuizType && quizUnderlyingListQuizType.length !== 0 && (
+                        quizUnderlyingListQuizType.map((quiz, index) => (
                             <TableRow key={index} onClick={() => handleQuizClick(quiz)}>
                                 <TableCell><Button color="success" variant = "bordered" size="sm" onClick={() => handleQuizClick(quiz)}>
                                     Review Quiz

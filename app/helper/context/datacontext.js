@@ -3,7 +3,8 @@ import { useUser } from './usercontext';
 
 import { getDataCube } from '../apiservices/datacubeservice';
 import { fetchTopicList } from '../apiservices/parameterdataservice';
-import { getQuizzesForUser, fetchQuizUnderlyingById } from '../apiservices/quizservice';
+import { getQuizzesForUser, fetchQuizUnderlyingById,  fetchQuizzesUnderlyingForUser} from '../apiservices/quizservice';
+import { fetchTestsUnderlyingForUser } from '../apiservices/testservice';
 
 // Create a new context
 export const DataContext = createContext();
@@ -17,6 +18,8 @@ export const DataProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
+    const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
+    const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
     const {isAuthenticated} = useUser();
 
@@ -41,12 +44,27 @@ export const DataProvider = ({ children }) => {
         }
     };
 
-    const fetchQuizUnderlyingList = async () => {
+    const loadQuizUnderlyingList = async () => {
         try {
-            let response = await getQuizzesForUser();
-            let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
-            let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
-            setQuizUnderlyingList(quizData);
+            // let response = await getQuizzesForUser();
+            // let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
+            // let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
+            // setQuizUnderlyingList(quizData);
+            var quizUnderlyingForUserResponse = await fetchQuizzesUnderlyingForUser()
+            setQuizUnderlyingList(quizUnderlyingForUserResponse);
+            setQuizUnderlyingListQuizType(quizUnderlyingForUserResponse.filter(quizObj => quizObj?.Quiz?.Type === "quiz"));
+
+        } catch (error) {
+            console.log("Error fetching quizzes for user", error);
+        }
+    }
+
+    const loadTestUnderlyingList = async () => {
+        try {
+            var testUnderlyingForUserResponse = await fetchTestsUnderlyingForUser()
+            console.log("testUnderlyingForUserResponse", testUnderlyingForUserResponse)
+            setTestUnderlyingList(testUnderlyingForUserResponse);
+
         } catch (error) {
             console.log("Error fetching quizzes for user", error);
         }
@@ -54,17 +72,21 @@ export const DataProvider = ({ children }) => {
 
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            return;
+        }
         fetchDataCube();
         initializeTopicList();
-        fetchQuizUnderlyingList();
+        loadQuizUnderlyingList();
+        loadTestUnderlyingList();
     }, [isAuthenticated]);
 
-    useEffect(() => {
-        if (datacube && mathTopics.length > 0 && readingTopics.length > 0) {
-            console.log(readingTopics, "readingTopics");
-            setLoading(false);
-        }
-    }, [datacube, mathTopics, readingTopics]);
+    // useEffect(() => {
+    //     if (datacube && mathTopics.length > 0 && readingTopics.length > 0) {
+    //         console.log(readingTopics, "readingTopics");
+    //         setLoading(false);
+    //     }
+    // }, [datacube, mathTopics, readingTopics]);
 
   
 
@@ -77,7 +99,7 @@ export const DataProvider = ({ children }) => {
     };
 
     return (
-        <DataContext.Provider value={{ loading, datacube, getTopicList, error, quizUnderlyingList, refetch: fetchDataCube }}>
+        <DataContext.Provider value={{ loading, datacube, getTopicList, error, quizUnderlyingList, refetch: fetchDataCube, quizUnderlyingListQuizType, testUnderlyingList }}>
             {children}
         </DataContext.Provider>
     );

@@ -147,3 +147,25 @@ export async function fetchTestUnderlyingByID({testID}){
     const data = await response.json();
     return data;
 }
+
+export async function fetchTestsUnderlyingForUser(){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+    const requestOptions = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    const response = await fetch(`${apiUrl}/tests/underlying`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch test underlying');
+    }
+    const data = await response.json();
+    return data;
+}

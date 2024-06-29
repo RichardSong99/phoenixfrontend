@@ -38,3 +38,42 @@ export function calculateResult({
     }
 }
 
+export const createNewQuestion = ({
+    prompt,
+    text,
+    answerType,
+    difficulty,
+    subject,
+    specificTopic,
+    answerChoices,
+    explanation,
+    accessOption,
+    correctAnswerMultiple,
+    correctAnswerFree,
+    uploadedImageUrls
+}) => {
+    const newQuestion = {
+        Prompt: prompt,
+        Text: text,
+        AnswerType: answerType,
+        Difficulty: difficulty,
+        Subject: subject,
+        Topic: specificTopic,
+        AnswerChoices: answerChoices,
+        Explanation: explanation,
+        AccessOption: accessOption
+    };
+
+    if (answerType === 'multipleChoice') {
+        newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
+    } else {
+        newQuestion.CorrectAnswerFree = correctAnswerFree;
+    }
+
+    newQuestion.Images = uploadedImageUrls.map((url, index) => ({
+        Filename: `IMG${index}`,
+        Url: url
+    }));
+
+    return newQuestion;
+}

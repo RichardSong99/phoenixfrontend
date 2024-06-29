@@ -7,7 +7,8 @@ import FileService from '@/app/helper/apiservices/fileservice';
 import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../helper/data/data';
 import { useData } from '@/app/helper/context/datacontext';
-import { Input, Button, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
+import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
 const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandler }) => {
 
@@ -135,6 +136,26 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
 
 
     useEffect(() => {
+        
+        if(question){
+            setPrompt(question.Prompt);
+            setText(question.Text);
+            setAnswerType(question.AnswerType);
+            setDifficulty(question.Difficulty);
+            setSubject(question.Subject);
+            setTopic(question.Topic);
+            setAnswerA(question.AnswerChoices[0]);
+            setAnswerB(question.AnswerChoices[1]);
+            setAnswerC(question.AnswerChoices[2]);
+            setAnswerD(question.AnswerChoices[3]);
+            setCorrectAnswerMultiple(question.CorrectAnswerMultiple);
+            setCorrectAnswerFree(question.CorrectAnswerFree);
+            setExplanation(question.Explanation);
+            setAccessOption(question.AccessOption);
+            setUploadedImageUrls(question.Images.map(image => image.Url));
+        }
+
+
         if (editQuestion) {
             setAnswerType(editQuestion.AnswerType);
             setDifficulty(editQuestion.Difficulty);
@@ -161,7 +182,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
             }
 
         }
-    }, [editQuestion]);
+    }, [editQuestion, question]);
 
     const clearForm = () => {
         setAnswerType('multipleChoice');
@@ -188,40 +209,53 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
     };
 
 
-    const createNewQuestion = () => {
+    // const createNewQuestion = () => {
 
-        console.log("speciifc topic", specificTopic);
+    //     console.log("speciifc topic", specificTopic);
 
-        const newQuestion = {
-            Prompt: prompt,
-            Text: text,
-            AnswerType: answerType,
-            Difficulty: difficulty,
-            Subject: subject,
-            Topic: specificTopic,
-            AnswerChoices: [answerA, answerB, answerC, answerD],
-            Explanation: explanation,
-            AccessOption: accessOption
-        };
+    //     const newQuestion = {
+    //         Prompt: prompt,
+    //         Text: text,
+    //         AnswerType: answerType,
+    //         Difficulty: difficulty,
+    //         Subject: subject,
+    //         Topic: specificTopic,
+    //         AnswerChoices: [answerA, answerB, answerC, answerD],
+    //         Explanation: explanation,
+    //         AccessOption: accessOption
+    //     };
 
-        if (answerType === 'multipleChoice') {
-            newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
-        } else {
-            newQuestion.CorrectAnswerFree = correctAnswerFree;
-        }
+    //     if (answerType === 'multipleChoice') {
+    //         newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
+    //     } else {
+    //         newQuestion.CorrectAnswerFree = correctAnswerFree;
+    //     }
 
-        newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-            Filename: `IMG${index}`,
-            Url: url
-        }));
+    //     newQuestion.Images = uploadedImageUrls.map((url, index) => ({
+    //         Filename: `IMG${index}`,
+    //         Url: url
+    //     }));
 
-        return newQuestion;
-    }
+    //     return newQuestion;
+    // }
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const newQuestion = createNewQuestion();
+        const newQuestion = createNewQuestion({
+            prompt,
+            text,
+            answerType,
+            difficulty,
+            subject,
+            specificTopic,
+            answerChoices: [answerA, answerB, answerC, answerD],
+            explanation,
+            accessOption,
+            correctAnswerMultiple,
+            correctAnswerFree,
+            uploadedImageUrls
+        });
 
         setQuestion(newQuestion);
 
@@ -229,7 +263,20 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
     }
 
     const handleUpload = async () => {
-        const newQuestion = createNewQuestion();
+        const newQuestion = createNewQuestion({
+            prompt,
+            text,
+            answerType,
+            difficulty,
+            subject,
+            specificTopic,
+            answerChoices: [answerA, answerB, answerC, answerD],
+            explanation,
+            accessOption,
+            correctAnswerMultiple,
+            correctAnswerFree,
+            uploadedImageUrls
+        });
 
         // post the question to the server
         try {
@@ -268,7 +315,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
                             {subject === 'reading' && (
                                 <Textarea label="Text / Passage" value={text} onChange={e => setText(e.target.value)} isRequired = {true} />
                             )}
-                            <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)}>
+                            <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
                                 {["multipleChoice", "freeResponse"].map(item => (
                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                 ))}
@@ -279,7 +326,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
                                     <Input label="Answer B" value={answerB} onChange={e => setAnswerB(e.target.value)} isRequired={true} />
                                     <Input label="Answer C" value={answerC} onChange={e => setAnswerC(e.target.value)} isRequired={true} />
                                     <Input label="Answer D" value={answerD} onChange={e => setAnswerD(e.target.value)} isRequired={true} />
-                                    <Select label="Correct Choice" value={correctAnswerMultiple} onChange={e => setCorrectAnswerMultiple(e.target.value)} isRequired={true}>
+                                    <Select label="Correct Choice" value={correctAnswerMultiple} onChange={e => setCorrectAnswerMultiple(e.target.value)} defaultSelectedKeys={[correctAnswerMultiple]} isRequired={true}>
                                         {["A", "B", "C", "D"].map((choice) => (
                                             <SelectItem key={choice} value={choice}>{choice}</SelectItem>
                                         ))}
@@ -291,30 +338,30 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
                             )}
                         </div>
                         <div className="space-y-4">
-                            <Select label="Difficulty Level" value={difficulty} onChange={e => setDifficulty(e.target.value)}>
+                            <Select label="Difficulty Level" value={difficulty} onChange={e => setDifficulty(e.target.value)} defaultSelectedKeys={[difficulty]}>
                                 {difficultyData.map(item => (
                                     <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
                                 ))}
                             </Select>
-                            <Select label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)}>
+                            <Select label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)} defaultSelectedKeys={[subject]}>
                                 {["math", "reading"].map(item => (
                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                 ))}
                             </Select>
-                            <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)}>
+                            <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} defaultSelectedKeys={[generalCategory]}>
                                 {topicsData.map(item => (
                                     <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
                                 ))}
                             </Select>
                             {generalCategory && (
-                                <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)}>
+                                <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} defaultSelectedKeys={[specificTopic]}>
                                     {topicsData.find(topic => topic.Name === generalCategory).Children.map(child => (
                                         <SelectItem key={child.Name} value={child.Name}>{child.Name}</SelectItem>
                                     ))}
                                 </Select>
                             )}
                             <Textarea label="Answer Explanation" value={explanation} onChange={e => setExplanation(e.target.value)} />
-                            <Select label="Access Option" value={accessOption} onChange={e => setAccessOption(e.target.value)}>
+                            <Select label="Access Option" value={accessOption} onChange={e => setAccessOption(e.target.value)} defaultSelectedKeys={[accessOption]}>
                                 {["free", "paid"].map(item => (
                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                 ))}
@@ -340,7 +387,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
 
 
 
-                    <div className={styles.horizontalBar} />  {/* Here is the horizontal bar */}
+                    <Divider />  {/* Here is the horizontal bar */}
                     <ImageUpload
                         onFileDrop={handleFileUpload}
                         handleFileUpload={handleFileUpload}

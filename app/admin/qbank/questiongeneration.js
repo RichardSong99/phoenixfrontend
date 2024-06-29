@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import AIPrompt from '@/app/helper/components/questionbank/ai/aiprompt';
-import { Slider, Select, SelectItem, Button } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from './qbankform';
 import { getGeneratedQuestions } from '@/app/helper/apiservices/questiongenerationservice';
+import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
 const QuestionGeneration = () => {
 
@@ -14,19 +15,10 @@ const QuestionGeneration = () => {
     const [numMedium, setNumMedium] = useState(1);
     const [numHard, setNumHard] = useState(1);
     const [questionResponseArray, setQuestionResponseArray] = useState([]);
+    const [questionArray, setQuestionArray] = useState([]);
 
     const { getTopicList, loading, datacube } = useData();
 
-
-    const handleChangeSubject = async (subject) => {
-        setSubject(subject);
-        const topicsData = await getTopicList(subject);
-        setTopicsData(topicsData);
-        if (topicsData && topicsData.length > 0) {
-            setGeneralCategory(topicsData[0].Name);
-            setSpecificTopic(topicsData[0].Children[0].Name);
-        }
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,16 +53,39 @@ const QuestionGeneration = () => {
             const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard });
             console.log("Generated Questions", data);
             setQuestionResponseArray(data);
+            for (let i = 0; i < data.length; i++) {
+                const question = createNewQuestion({
+                    prompt: data[i].prompt,
+                    text: '',
+                    answerType: 'multipleChoice',
+                    difficulty: data[i].difficulty,
+                    subject: "math",
+                    specificTopic: specificTopic,
+                    answerChoices: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
+                    explanation: data[i].explanation,
+                    accessOption: "free",
+                    correctAnswerMultiple: data[i].answer,
+                    correctAnswerFree: '',
+                    uploadedImageUrls: []
+                });
+                setQuestionArray((prev) => [...prev, question]);
+            }
         } catch (error) {
             console.error("Error generating questions", error);
         }
     }
-    
+
+    const handleRemoveQuestion = (index) => {
+        const newQuestionArray = [...questionArray];
+        newQuestionArray.splice(index, 1);
+        setQuestionArray(newQuestionArray);
+    }
+
 
     return (
         <div>
             {/* Your component code goes here */}
-            
+
             {/* <AIPrompt /> */}
 
             <div className="space-y-4">
@@ -130,7 +145,7 @@ const QuestionGeneration = () => {
                     onChangeEnd={(value) => handleChangeNumHard(value)}
                 />
 
-                <Button color="primary" onPress = {handleGenerateQuestions} >
+                <Button color="primary" onPress={handleGenerateQuestions} >
                     Generate
                 </Button>
 
@@ -138,8 +153,30 @@ const QuestionGeneration = () => {
 
             </div>
 
-            <QBankForm />
+            <Divider className="my-4" />
 
+
+            <div>
+                {questionArray.map((question, index) => (
+                    <div>
+                        <Card key={index} className="w-full">
+                            <CardHeader>
+                                <h4>Question {index + 1}</h4>
+                            </CardHeader>
+                            <CardBody>
+                                <QBankForm question={question} />
+                            </CardBody>
+                            <CardFooter>
+                            <Button color="danger" onPress = {() => handleRemoveQuestion(index)} >
+                                Remove
+                            </Button>
+                        </CardFooter>
+                        </Card>
+                        <Divider className="my-4" />
+                    </div>
+
+                ))}
+            </div>
 
         </div>
 

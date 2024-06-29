@@ -7,10 +7,11 @@ import FileService from '@/app/helper/apiservices/fileservice';
 import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../helper/data/data';
 import { useData } from '@/app/helper/context/datacontext';
+import { Input, Button, Select, SelectItem, Textarea } from '@nextui-org/react';
 
 const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandler }) => {
 
-    const {getTopicList, loading, datacube} = useData();
+    const { getTopicList, loading, datacube } = useData();
 
     const [answerType, setAnswerType] = useState('multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
@@ -41,11 +42,11 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
     const [isFocused, setIsFocused] = useState(false);
 
 
-    const handleChangeSubject = async(subject) => {
+    const handleChangeSubject = async (subject) => {
         setSubject(subject);
         const topicsData = await getTopicList(subject);
         setTopicsData(topicsData);
-        if (topicsData && topicsData.length > 0){
+        if (topicsData && topicsData.length > 0) {
             setGeneralCategory(topicsData[0].Name);
             setSpecificTopic(topicsData[0].Children[0].Name);
         }
@@ -60,19 +61,19 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
             });
         }
     };
-    
+
     useEffect(() => {
         const fetchData = async () => {
             const result = await getTopicList("math");
             setTopicsData(result);
-    
+
             if (result && result.length > 0) {
                 console.log("topicsData", result);
                 setGeneralCategory(result[0].Name);
                 setSpecificTopic(result[0].Children[0].Name);
             }
         };
-    
+
         fetchData();
     }, []);
 
@@ -202,34 +203,34 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
             Explanation: explanation,
             AccessOption: accessOption
         };
-    
+
         if (answerType === 'multipleChoice') {
             newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
         } else {
             newQuestion.CorrectAnswerFree = correctAnswerFree;
         }
-    
+
         newQuestion.Images = uploadedImageUrls.map((url, index) => ({
             Filename: `IMG${index}`,
             Url: url
         }));
-    
+
         return newQuestion;
     }
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
-    
+
         const newQuestion = createNewQuestion();
-    
+
         setQuestion(newQuestion);
-    
+
         setIsModalOpen(true);
     }
-    
+
     const handleUpload = async () => {
         const newQuestion = createNewQuestion();
-    
+
         // post the question to the server
         try {
             if (editQuestion) {
@@ -237,84 +238,120 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
                 await updateQuestion(editQuestion.id, newQuestion);
                 console.log('Question updated successfully');
                 alert('Question updated successfully');
-    
+
                 setEditQuestion(null);
-    
+
             } else {
                 // If editQuestion is null, create a new question
                 await uploadQuestion(newQuestion);
                 alert('Question uploaded successfully');
-    
+
                 console.log('Question uploaded successfully');
             }
         } catch (error) {
             console.error('Failed to upload question:', error);
         }
-    
+
         setQuestionsUpdated(!questionsUpdated);
     }
 
 
     return (
-        <div className={styles.container}>
-            {!loading && generalCategory!== "" && specificTopic!=="" &&
-            <div className={styles.qbankform}>
-                <h1>Input Question Details</h1>
-                <form onSubmit={handleSubmit} className={styles.gridForm}>
-                    <div>
-                        <TextAreaInput label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} required />
-                        {subject === 'reading' && (
-                            <TextAreaInput label="Text / Passage" value={text} onChange={e => setText(e.target.value)} required />)    
-                        }
-                        <SelectInput label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} options={["multipleChoice", "freeResponse"]} required />
-                        {answerType === 'multipleChoice' && (
-                            <>
-                                <TextAreaInput label="Answer A" value={answerA} onChange={e => setAnswerA(e.target.value)} required />
-                                <TextAreaInput label="Answer B" value={answerB} onChange={e => setAnswerB(e.target.value)} required />
-                                <TextAreaInput label="Answer C" value={answerC} onChange={e => setAnswerC(e.target.value)} required />
-                                <TextAreaInput label="Answer D" value={answerD} onChange={e => setAnswerD(e.target.value)} required />
-                                <SelectInput label="Correct Choice" value={correctAnswerMultiple} onChange={e => setCorrectAnswerMultiple(e.target.value)} options={["A", "B", "C", "D"]} required />
-                            </>
-                        )}
-                        {answerType === 'freeResponse' && (
-                            <FormInput label="Correct Answer" value={correctAnswerFree} onChange={e => setCorrectAnswerFree(e.target.value)} required />
-                        )}
-                    </div>
-                    <div>
-                        <SelectInput label="Difficulty Level" value={difficulty} onChange={e => setDifficulty(e.target.value)} options={difficultyData.map(item => item.Name)} required />
-                        <SelectInput label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)} options={["math", "reading"]} required />
+        <div >
+            <div>
+                <h3>Add question</h3>
+            </div>
+            {generalCategory !== "" && specificTopic !== "" &&
+                <div >
+                    <h1>Input Question Details</h1>
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                        <div className="space-y-4">
+                            <Input label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />
+                            {subject === 'reading' && (
+                                <Textarea label="Text / Passage" value={text} onChange={e => setText(e.target.value)} isRequired = {true} />
+                            )}
+                            <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)}>
+                                {["multipleChoice", "freeResponse"].map(item => (
+                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                ))}
+                            </Select>
+                            {answerType === 'multipleChoice' && (
+                                <>
+                                    <Input label="Answer A" value={answerA} onChange={e => setAnswerA(e.target.value)} isRequired={true} />
+                                    <Input label="Answer B" value={answerB} onChange={e => setAnswerB(e.target.value)} isRequired={true} />
+                                    <Input label="Answer C" value={answerC} onChange={e => setAnswerC(e.target.value)} isRequired={true} />
+                                    <Input label="Answer D" value={answerD} onChange={e => setAnswerD(e.target.value)} isRequired={true} />
+                                    <Select label="Correct Choice" value={correctAnswerMultiple} onChange={e => setCorrectAnswerMultiple(e.target.value)} isRequired={true}>
+                                        {["A", "B", "C", "D"].map((choice) => (
+                                            <SelectItem key={choice} value={choice}>{choice}</SelectItem>
+                                        ))}
+                                    </Select>
+                                </>
+                            )}
+                            {answerType === 'freeResponse' && (
+                                <Input label="Correct Answer" value={correctAnswerFree} onChange={e => setCorrectAnswerFree(e.target.value)} required />
+                            )}
+                        </div>
+                        <div className="space-y-4">
+                            <Select label="Difficulty Level" value={difficulty} onChange={e => setDifficulty(e.target.value)}>
+                                {difficultyData.map(item => (
+                                    <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
+                                ))}
+                            </Select>
+                            <Select label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)}>
+                                {["math", "reading"].map(item => (
+                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                ))}
+                            </Select>
+                            <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)}>
+                                {topicsData.map(item => (
+                                    <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
+                                ))}
+                            </Select>
+                            {generalCategory && (
+                                <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)}>
+                                    {topicsData.find(topic => topic.Name === generalCategory).Children.map(child => (
+                                        <SelectItem key={child.Name} value={child.Name}>{child.Name}</SelectItem>
+                                    ))}
+                                </Select>
+                            )}
+                            <Textarea label="Answer Explanation" value={explanation} onChange={e => setExplanation(e.target.value)} />
+                            <Select label="Access Option" value={accessOption} onChange={e => setAccessOption(e.target.value)}>
+                                {["free", "paid"].map(item => (
+                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="col-span-1 md:col-span-2 flex space-x-4">
+                            <Button type="submit">Render</Button>
+                            <Button
+                                onPress={handleUpload}
+                                disabled={
+                                    !difficulty ||
+                                    !specificTopic ||
+                                    !accessOption ||
+                                    (answerType === 'multipleChoice' && (!answerA || !answerB || !answerC || !answerD || !correctAnswerMultiple)) ||
+                                    (answerType === 'freeResponse' && !correctAnswerFree)
+                                }
+                            >
+                                {editQuestion ? 'Edit Question' : 'Upload'}
+                            </Button>
+                            <Button onPress={clearForm}>Clear Form</Button>
+                        </div>
+                    </form>
 
-                        <SelectInput label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} options={topicsData.map(topic => topic.Name)} required />
-                        <SelectInput label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} options={topicsData.find(topic => topic.Name === generalCategory).Children.map(child => child.Name)} required />
-                        <TextAreaInput label="Answer Explanation" value={explanation} onChange={e => setExplanation(e.target.value)} />
-                        <SelectInput label="Access Option" value={accessOption} onChange={e => setAccessOption(e.target.value)} options={["free", "paid"]} required />
-                    </div>
-                    <button type="submit">Render</button>
-                    <button
-                        type="button"
-                        onClick={handleUpload}
-                        disabled={
-                            !difficulty ||
-                            !specificTopic ||
-                            !accessOption ||
-                            (answerType === 'multipleChoice' && (!answerA || !answerB || !answerC || !answerD || !correctAnswerMultiple)) ||
-                            (answerType === 'freeResponse' && !correctAnswerFree)
-                        }
-                    >
-                        {editQuestion ? 'Edit Question' : 'Upload'}
-                    </button>
-                    <button onClick={clearForm}>Clear Form</button>
-                </form>
-                <div className={styles.horizontalBar} />  {/* Here is the horizontal bar */}
-                <ImageUpload
-                    onFileDrop={handleFileUpload}
-                    handleFileUpload={handleFileUpload}
-                    fileInputRef={fileInputRef}
-                    uploadedImageUrls={uploadedImageUrls}
-                    handleReplaceImage={handleReplaceImage}
-                    handleRemoveImage={handleRemoveImage}
-                />
-            </div>}
+
+
+                    <div className={styles.horizontalBar} />  {/* Here is the horizontal bar */}
+                    <ImageUpload
+                        onFileDrop={handleFileUpload}
+                        handleFileUpload={handleFileUpload}
+                        fileInputRef={fileInputRef}
+                        uploadedImageUrls={uploadedImageUrls}
+                        handleReplaceImage={handleReplaceImage}
+                        handleRemoveImage={handleRemoveImage}
+                    />
+                </div>}
         </div>
 
 

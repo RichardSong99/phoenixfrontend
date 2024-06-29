@@ -1,11 +1,12 @@
 "use client"
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import QBankForm from './qbankform';
 import QuestionView from '../../helper/components/question/questionviewcomponents/questionview';
 import QBankBase from './qbankbase';
 import styles from './qbankmain.module.css';
 import QuestionModal from '../../helper/components/question/questionviewcomponents/questionmodal';
+import { Tabs, Tab } from "@nextui-org/react";
 
 const QBankMain = () => {
 
@@ -13,7 +14,7 @@ const QBankMain = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork
 
-  
+
     const handleCloseModal = () => {
         setQuestion(null);
         setIsModalOpen(false);
@@ -25,23 +26,27 @@ const QBankMain = () => {
 
     return (
 
-        <div className = {styles.qbankmain}>
+        <div className="flex flex-col gap-y-4 p-4">
             {/* Your component code goes here */}
-            <QBankForm
-                question={question}
-                setQuestion={setQuestion}
-                setIsModalOpen={setIsModalOpen}
-                uploadQuestionHandler={uploadQuestionHandler}
-            />
 
-            {question && 
-            <QuestionModal isOpen={isModalOpen} onClose={handleCloseModal} question={question} mode = {mode} />
+            <Tabs  aria-label="Tabs variants">
+                <Tab key="database" title="Database">
+                    <QBankBase
+                        setQuestion={setQuestion}
+                        setIsModalOpen={setIsModalOpen}
+                    />
+                </Tab>
+                <Tab key="add" title="Add question" >
+                    <QBankForm
+                        setQuestion={setQuestion}
+                        setIsModalOpen={setIsModalOpen}
+                    />
+                </Tab>
+            </Tabs>
+
+            {question &&
+                <QuestionModal isOpen={isModalOpen} onClose={handleCloseModal} question={question} mode={mode} />
             }
-
-            <QBankBase 
-                setQuestion={setQuestion}
-                setIsModalOpen={setIsModalOpen}
-            />
 
         </div>
     );

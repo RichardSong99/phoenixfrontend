@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import QBankFilter from '../../helper/components/questionbank/qbankfilter';
-import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '../../apiservices/questionservice';
+import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '@/app/helper/apiservices/questionservice';
 import styles from './qbankbase.module.css';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
 import { parseLatexString } from '../../helper/components/latexrender/latexrender';
@@ -8,24 +8,35 @@ import renderMarkdownWithLaTeX from '../../helper/components/latexrender/markdow
 import PageNavigation from '../../study/browse/browsecomponents/pagenavigation';
 import QbankTable from './qbanktable';
 import { NumberChoiceButtons, SubjectButton } from '@/app/helper/components/basecomponents/buttons/mybuttons';
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    Input,
+    Button,
+    DropdownTrigger,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    Chip,
+    User,
+    Pagination,
+} from "@nextui-org/react";
 
-const QBankBase = ({setIsModalOpen, setQuestion}) => {
+const QBankBase = ({ setIsModalOpen, setQuestion }) => {
 
     const [questions, setQuestions] = useState([]);
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
-    const {editQuestion, setEditQuestion} = useContext(QuestionContext); // State for the question being edited
-    const [currentPage, setCurrentPage] = useState(1);
+    const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
+    const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
 
     const [activeSubjectButton, setActiveSubjectButton] = useState("Math"); // Default to 'Math'
     const [activeSubject, setActiveSubject] = useState("math"); // Default to 'Math'
-
-
-    
-
-    const pageSelectHandler = (page) => {
-        setCurrentPage(page);
-    }
+    const [filterValue, setFilterValue] = useState("");
 
     useEffect(() => {
         async function loadQuestions() {
@@ -36,11 +47,11 @@ const QBankBase = ({setIsModalOpen, setQuestion}) => {
                     omitted: true,
                     correct: true,
                     flagged: true,
-                    page: currentPage,
+                    page: page,
                     subject: activeSubject
                 });
                 setQuestions(data.data);
-                setCurrentPage(data.currentPage);
+                setPage(data.currentPage);
                 setLastPage(data.lastPage);
                 setIsFetching(false);
             } catch (error) {
@@ -49,7 +60,7 @@ const QBankBase = ({setIsModalOpen, setQuestion}) => {
         }
 
         loadQuestions();
-    }, [questionsUpdated, currentPage, activeSubject]);
+    }, [questionsUpdated, page, activeSubject]);
 
     const deleteQuestion = async (questionId) => {
         if (window.confirm('Are you sure you want to delete this question?')) {
@@ -68,76 +79,145 @@ const QBankBase = ({setIsModalOpen, setQuestion}) => {
         try {
             const question = await fetchFullQuestionById(questionId);
             setEditQuestion(question);
-        }catch(error){
+        } catch (error) {
             console.error('Could not fetch full question:', error);
         }
     }
-    
 
 
-    const viewQuestion =async  (questionId) => {
-        try{
-        const viewQuestion = await fetchFullQuestionById(questionId);
-        setQuestion(viewQuestion);
-        setIsModalOpen(true);
-        }catch(error){
+
+    const viewQuestion = async (questionId) => {
+        try {
+            const viewQuestion = await fetchFullQuestionById(questionId);
+            setQuestion(viewQuestion);
+            setIsModalOpen(true);
+        } catch (error) {
             console.error('Could not fetch full question:', error);
         }
-
     }
+
+    const onSearchChange = React.useCallback((value) => {
+        if (value) {
+            setFilterValue(value);
+            setPage(1);
+        } else {
+            setFilterValue("");
+        }
+    }, []);
 
     return (
-        <div>
+        <div className="flex flex-col gap-y-4">
             {/* Your component code goes here */}
             <div>
-                <h1>Question Bank Database</h1>
+                <h3>Question Bank Database</h3>
             </div>
 
-            <SubjectButton
-                activeSubject = {activeSubject}
-                handleSubjectChange = {setActiveSubject}
-            />
+            {/* <SubjectButton
+                activeSubject={activeSubject}
+                handleSubjectChange={setActiveSubject}
+            /> */}
 
-            <QBankFilter />
+            {/* <QBankFilter /> */}
 
-            <QbankTable/>
+            {/* <QbankTable/> */}
+            <div className="relative flex justify-start items-center gap-2">
+                <Input
+                    isClearable
+                    classNames={{
+                        base: "w-full sm:max-w-[44%]",
+                        inputWrapper: "border-1",
+                    }}
+                    placeholder="Search by name..."
+                    // size="sm"
+                    // startContent={<SearchIcon className="text-default-300" />}
+                    value={filterValue}
+                    variant="bordered"
+                    onClear={() => setFilterValue("")}
+                    onValueChange={onSearchChange}
+                />
 
-            <PageNavigation currentPage={currentPage} lastPage={lastPage} pageSelectHandler={pageSelectHandler} />
+
+                <Dropdown className="bg-background border-1 border-default-200">
+                    <DropdownTrigger className="hidden sm:flex">
+                        <Button
+                            // endContent={<ChevronDownIcon className="text-small" />}
+                            variant="flat"
+                        >
+                            Subject
+                        </Button>
+                    </DropdownTrigger>
+                </Dropdown>
 
 
+                <Dropdown className="bg-background border-1 border-default-200">
+                    <DropdownTrigger className="hidden sm:flex">
+                        <Button
+                            // endContent={<ChevronDownIcon className="text-small" />}
+                            variant="flat"
+                        >
+                            Topic
+                        </Button>
+                    </DropdownTrigger>
+                </Dropdown>
 
-            <div className={styles.questionsContainer}>
-                <table className={styles.questionTable}>
-                    <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>Prompt</th>
-                            <th>Topic</th>
-                            <th>Difficulty</th>
-                            <th>Access Option</th>
-                            <th>Answer Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {questions.map((question, index) => (
-                            <tr key={index}>
-                                <td>
+                <Dropdown className="bg-background border-1 border-default-200">
+                    <DropdownTrigger className="hidden sm:flex">
+                        <Button
+                            // endContent={<ChevronDownIcon className="text-small" />}
+                            variant="flat"
+                        >
+                            Difficulty
+                        </Button>
+                    </DropdownTrigger>
+                </Dropdown>
+
+                <Dropdown className="bg-background border-1 border-default-200">
+                    <DropdownTrigger className="hidden sm:flex">
+                        <Button
+                            // endContent={<ChevronDownIcon className="text-small" />}
+                            variant="flat"
+                        >
+                            Answer Type
+                        </Button>
+                    </DropdownTrigger>
+                </Dropdown>
+            </div>
+
+
+            {/* <PageNavigation currentPage={currentPage} lastPage={lastPage} pageSelectHandler={pageSelectHandler} /> */}
+            <Pagination color="primary" total={lastPage} initialPage={1} page={page} onChange={setPage} />
+
+
+            {/* <div className={styles.questionsContainer}> */}
+            <Table removeWrapper >
+                <TableHeader>
+                    <TableColumn>Action</TableColumn>
+                    <TableColumn>Prompt</TableColumn>
+                    <TableColumn>Topic</TableColumn>
+                    <TableColumn>Difficulty</TableColumn>
+                    <TableColumn>Access Option</TableColumn>
+                    <TableColumn>Answer Type</TableColumn>
+                </TableHeader>
+                <TableBody>
+                    {questions.map((question, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
                                 <button className={styles.deleteButton} onClick={() => deleteQuestion(question.id)}>Delete</button>
-                                    <button className={styles.button} onClick={() => handleEdit(question.id)}>Edit</button>
-                                    <button className={styles.button} onClick={() => viewQuestion(question.id)}>View</button>
+                                <button className={styles.button} onClick={() => handleEdit(question.id)}>Edit</button>
+                                <button className={styles.button} onClick={() => viewQuestion(question.id)}>View</button>
 
 
-                                </td>
-                                <td>{renderMarkdownWithLaTeX(question.Prompt)}</td>
-                                <td>{question.Topic}</td>
-                                <td>{question.Difficulty}</td>
-                                <td>{question.AccessOption}</td>
-                                <td>{question.AnswerType}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                            </TableCell>
+                            <TableCell>{renderMarkdownWithLaTeX(question.Prompt)}</TableCell>
+                            <TableCell>{question.Topic}</TableCell>
+                            <TableCell>{question.Difficulty}</TableCell>
+                            <TableCell>{question.AccessOption}</TableCell>
+                            <TableCell>{question.AnswerType}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            {/* </div> */}
 
 
         </div>

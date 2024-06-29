@@ -7,6 +7,7 @@ import QBankBase from './qbankbase';
 import styles from './qbankmain.module.css';
 import QuestionModal from '../../helper/components/question/questionviewcomponents/questionmodal';
 import { Tabs, Tab } from "@nextui-org/react";
+import QuestionGeneration from './questiongeneration';
 
 const QBankMain = () => {
 
@@ -37,10 +38,11 @@ const QBankMain = () => {
                     />
                 </Tab>
                 <Tab key="add" title="Add question" >
-                    <QBankForm
+                    {/* <QBankForm
                         setQuestion={setQuestion}
                         setIsModalOpen={setIsModalOpen}
-                    />
+                    /> */}
+                    <QuestionGeneration />
                 </Tab>
             </Tabs>
 

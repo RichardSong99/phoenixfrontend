@@ -258,12 +258,10 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
 
     return (
         <div >
-            <div>
-                <h3>Add question</h3>
-            </div>
+            
             {generalCategory !== "" && specificTopic !== "" &&
                 <div >
-                    <h1>Input Question Details</h1>
+                    <h4>Input Question Details</h4>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                         <div className="space-y-4">
                             <Input label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />

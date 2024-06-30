@@ -1,10 +1,7 @@
 import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
-import styles from './qbankform.module.css';
 import { uploadQuestion, updateQuestion } from '@/app/helper/apiservices/questionservice';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
-import Dropzone from '../../helper/components/basecomponents/filehandlers/dropzone'
-import FileService from '@/app/helper/apiservices/fileservice';
-import { TextAreaInput, FormInput, ImageUpload, SelectInput } from '@/app/helper/components/form/formcomponents';
+import { ImageUpload } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../helper/data/data';
 import { useData } from '@/app/helper/context/datacontext';
 import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
@@ -29,10 +26,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
     const [accessOption, setAccessOption] = useState('free');
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
     const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
-    const [imageCounter, setImageCounter] = useState(1);
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
-    const fileInputRef = useRef();
-    const [replaceIndex, setReplaceIndex] = useState(null);
     const [topicsData, setTopicsData] = useState([]);
     const [subject, setSubject] = useState('math');
 
@@ -53,15 +47,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
         }
     }
 
-    const handleRemoveImage = (index) => {
-        if (window.confirm('Are you sure you want to remove ths image?')) {
-            setUploadedImageUrls((prevUrls) => {
-                const newUrls = [...prevUrls];
-                newUrls.splice(index, 1);
-                return newUrls;
-            });
-        }
-    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,58 +64,8 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
         fetchData();
     }, []);
 
-    const handleReplaceImage = async (index) => {
-        // Store the index of the image to replace
-        setReplaceIndex(index);
 
-        // Trigger the file upload logic
-        fileInputRef.current.click();
-    };
 
-    // Add this function to handle file upload
-    const handleFileUpload = async (input) => {
-        let file;
-        if (input && input.target) {
-            // Called from file input's onChange event
-            file = input.target.files[0];
-        } else {
-            // Called from Dropzone with a file
-            file = input;
-        }
-
-        console.log(file);
-
-        // Name the image
-        const imageName = `IMG${imageCounter}`;
-
-        // Increment imageCounter
-        setImageCounter(imageCounter + 1);
-
-        try {
-            const url = await FileService.uploadFile(file);
-            console.log(`File uploaded successfully. URL: ${url}`);
-
-            if (replaceIndex !== null) {
-                // Replace the image URL at the given index
-                setUploadedImageUrls((prevUrls) => {
-                    const newUrls = [...prevUrls];
-                    newUrls[replaceIndex] = url;
-                    return newUrls;
-                });
-
-                // Reset replaceIndex
-                setReplaceIndex(null);
-            } else {
-                // Add the new image URL to the array
-                setUploadedImageUrls([...uploadedImageUrls, url]);
-            }
-
-            return url;
-        } catch (error) {
-            console.error('File upload failed:', error);
-            // Handle the error
-        }
-    };
 
 
 
@@ -207,37 +143,6 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
         setEditQuestion(null);
 
     };
-
-
-    // const createNewQuestion = () => {
-
-    //     console.log("speciifc topic", specificTopic);
-
-    //     const newQuestion = {
-    //         Prompt: prompt,
-    //         Text: text,
-    //         AnswerType: answerType,
-    //         Difficulty: difficulty,
-    //         Subject: subject,
-    //         Topic: specificTopic,
-    //         AnswerChoices: [answerA, answerB, answerC, answerD],
-    //         Explanation: explanation,
-    //         AccessOption: accessOption
-    //     };
-
-    //     if (answerType === 'multipleChoice') {
-    //         newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
-    //     } else {
-    //         newQuestion.CorrectAnswerFree = correctAnswerFree;
-    //     }
-
-    //     newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-    //         Filename: `IMG${index}`,
-    //         Url: url
-    //     }));
-
-    //     return newQuestion;
-    // }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -389,12 +294,8 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
 
                     <Divider />  {/* Here is the horizontal bar */}
                     <ImageUpload
-                        onFileDrop={handleFileUpload}
-                        handleFileUpload={handleFileUpload}
-                        fileInputRef={fileInputRef}
                         uploadedImageUrls={uploadedImageUrls}
-                        handleReplaceImage={handleReplaceImage}
-                        handleRemoveImage={handleRemoveImage}
+                        setUploadedImageUrls={setUploadedImageUrls}
                     />
                 </div>}
         </div>

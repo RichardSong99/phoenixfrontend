@@ -21,3 +21,23 @@ export async function getGeneratedQuestions({ topic, numEasy, numMedium, numHard
     const data = await response.json();
     return data;
 }
+
+export async function visionAITester({images}) {
+
+    if(!images || images.length === 0) {
+        throw new Error('No images provided');
+    }
+
+    const image = images[0];
+    const formData = new FormData();
+    formData.append('file', image.file);
+
+    const requestOptions = {
+        method: 'POST',
+        body: formData
+    };
+
+    const response = await fetch(`${apiUrl}/imgtest`, requestOptions);
+    const data = await response.json();
+    return data;
+}

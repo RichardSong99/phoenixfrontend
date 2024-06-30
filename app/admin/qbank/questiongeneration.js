@@ -3,8 +3,9 @@ import AIPrompt from '@/app/helper/components/questionbank/ai/aiprompt';
 import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from './qbankform';
-import { getGeneratedQuestions } from '@/app/helper/apiservices/questiongenerationservice';
+import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
+import { ImageUpload } from '@/app/helper/components/form/formcomponents';
 
 const QuestionGeneration = () => {
 
@@ -16,6 +17,7 @@ const QuestionGeneration = () => {
     const [numHard, setNumHard] = useState(1);
     const [questionResponseArray, setQuestionResponseArray] = useState([]);
     const [questionArray, setQuestionArray] = useState([]);
+    const [images, setImages] = useState([]);
 
     const { getTopicList, loading, datacube } = useData();
 
@@ -81,6 +83,21 @@ const QuestionGeneration = () => {
         setQuestionArray(newQuestionArray);
     }
 
+    const updateImages = (newImages) => {
+        setImages(newImages);
+    }
+
+    const imageAITester = async () => {
+        console.log("Image AI Tester", images)
+
+        try{
+            const data = await visionAITester({images});
+            console.log("Image AI Tester", data);
+        }catch(error){
+            console.error("Error testing images", error);
+        }
+    }
+
 
     return (
         <div>
@@ -106,7 +123,8 @@ const QuestionGeneration = () => {
                         </Select>
                     )}
                 </div>
-
+                
+                <ImageUpload onChangeLocalImages={updateImages}/>
 
 
                 <Slider
@@ -147,6 +165,10 @@ const QuestionGeneration = () => {
 
                 <Button color="primary" onPress={handleGenerateQuestions} >
                     Generate
+                </Button>
+
+                <Button color="success" onPress={imageAITester} >
+                    Image Tester
                 </Button>
 
 

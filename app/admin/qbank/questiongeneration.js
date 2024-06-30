@@ -167,15 +167,31 @@ const QuestionGeneration = () => {
                                 <QBankForm question={question} />
                             </CardBody>
                             <CardFooter>
-                            <Button color="danger" onPress = {() => handleRemoveQuestion(index)} >
-                                Remove
-                            </Button>
-                        </CardFooter>
+                                <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
+                                    Remove
+                                </Button>
+                            </CardFooter>
                         </Card>
                         <Divider className="my-4" />
                     </div>
 
                 ))}
+
+                {questionArray.length == 0 && (
+                    <Card key={0} className="w-full">
+                        <CardHeader>
+                            <h4>Question {1}</h4>
+                        </CardHeader>
+                        <CardBody>
+                            <QBankForm />
+                        </CardBody>
+                        <CardFooter>
+                            <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
+                                Remove
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                )}
             </div>
 
         </div>

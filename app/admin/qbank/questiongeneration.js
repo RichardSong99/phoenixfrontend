@@ -52,7 +52,7 @@ const QuestionGeneration = () => {
     const handleGenerateQuestions = async () => {
         console.log("Generate Questions");
         try {
-            const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard });
+            const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard, images });
             console.log("Generated Questions", data);
             setQuestionResponseArray(data);
             for (let i = 0; i < data.length; i++) {

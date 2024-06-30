@@ -1,6 +1,6 @@
 const apiUrl = process.env.NEXT_PUBLIC_AI_URL;
 
-export async function getGeneratedQuestions({ topic, numEasy, numMedium, numHard }) {
+export async function getGeneratedQuestions({ topic, numEasy, numMedium, numHard, images }) {
     // Build query parameters string
     const queryParams = new URLSearchParams({
         topic,
@@ -9,11 +9,17 @@ export async function getGeneratedQuestions({ topic, numEasy, numMedium, numHard
         numHard
     }).toString();
 
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+    const formData = new FormData();
+
+    if (images && images.length > 0) {
+        for (let image of images) {
+            formData.append('files', image.file);
         }
+    }
+
+    const requestOptions = {
+        method: 'POST',
+        body: formData
     };
 
     // Append query parameters to the URL

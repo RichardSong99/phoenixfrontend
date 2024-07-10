@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { UserProvider, } from "./context/usercontext";
-import { QuestionProvider } from "./context/questioncontext";
+import { UserProvider, } from "./helper/context/usercontext";
+import { QuestionProvider } from "./helper/context/questioncontext";
 
 export default function Home() {
 

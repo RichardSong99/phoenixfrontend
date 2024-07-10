@@ -4,17 +4,17 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardBody, CardFooter, Progress } from '@nextui-org/react';
 import { Button } from '@nextui-org/react';
 import { Tabs, Tab } from '@nextui-org/react';
-import { QuizTable } from '../dashboardcomponents/quiztable';
-import { PracticeTestPanel } from '../dashboardcomponents/practicetests';
-import { CreateQuizModal } from '../dashboardcomponents/createquiz';
+import { QuizTable } from './dashboardcomponents/reviewquiz/quiztable';
+import { PracticeTestPanel } from './dashboardcomponents/practicetest/practicetesttable';
+import { CreateQuizModal } from './dashboardcomponents/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
-import { DashboardContents } from '@/app/components/dashboard/dashboard';
-import { getQuestions } from '@/app/services/questionservice';
-import { QuestionCard } from '../browse/questioncard';
-import { loadPracticeModules, loadLessonModules, goToModule } from '../data/modulegetter';
-import { ModuleCard } from '../dashboardcomponents/modulecard';
+import { DashboardContents } from '@/app/study/mydashboard/dashboardcomponents/statspanel/statspanel';
+import { getQuestions } from '@/app/helper/apiservices/questionservice';
+import { QuestionCard } from '../../helper/components/question/questioncard/questioncard';
+import { loadPracticeModules, loadLessonModules, goToModule } from '../../helper/data/modulegetter';
+import { ModuleCard } from './dashboardcomponents/modules/modulecard';
 import { useRouter } from 'next/navigation';
-import { QuestionModal } from '../components/questionviewcomponents/questionmodal'; 
+import { QuestionModal } from '../../helper/components/question/questionviewcomponents/questionmodal'; 
 
 export default function Page() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();

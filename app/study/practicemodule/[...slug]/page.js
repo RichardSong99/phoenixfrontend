@@ -1,10 +1,10 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
-import { ContentViewer } from '../../components/contentviewer/contentviewer';
-import { fetchQuiz, initializeQuiz, addEngagementToQuiz } from '@/app/services/quizservice';
-import { fetchPracticeModule } from '@/app/services/parameterdataservice';
-import { fetchQuizData } from '../../data/objectlist';
+import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
+import { fetchQuiz, initializeQuiz, addEngagementToQuiz } from '@/app/helper/apiservices/quizservice';
+import { fetchPracticeModule } from '@/app/helper/apiservices/parameterdataservice';
+import { fetchQuizData } from '../../../helper/data/objectlist';
 
 export default function Page() {
 

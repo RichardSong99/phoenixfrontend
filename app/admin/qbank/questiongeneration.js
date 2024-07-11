@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AIPrompt from '@/app/helper/components/questionbank/ai/aiprompt';
-import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from './qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
@@ -20,6 +20,8 @@ const QuestionGeneration = () => {
     const [images, setImages] = useState([]);
 
     const { getTopicList, loading, datacube } = useData();
+
+    const [generationLoading, setGenerationLoading] = useState(false);
 
 
     useEffect(() => {
@@ -52,6 +54,7 @@ const QuestionGeneration = () => {
     const handleGenerateQuestions = async () => {
         console.log("Generate Questions");
         try {
+            setGenerationLoading(true);
             const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard, images });
             console.log("Generated Questions", data);
             setQuestionResponseArray(data);
@@ -72,8 +75,12 @@ const QuestionGeneration = () => {
                 });
                 setQuestionArray((prev) => [...prev, question]);
             }
+
+            setGenerationLoading(false);
+            
         } catch (error) {
             console.error("Error generating questions", error);
+            setGenerationLoading(false);
         }
     }
 
@@ -163,9 +170,16 @@ const QuestionGeneration = () => {
                     onChangeEnd={(value) => handleChangeNumHard(value)}
                 />
 
+                <div className="flex items-center space-x-4">
                 <Button color="primary" onPress={handleGenerateQuestions} >
                     Generate
                 </Button>
+
+                {generationLoading && (
+                    <Spinner color="primary" />
+                )}
+
+                </div>
 
                 {/* <Button color="success" onPress={imageAITester} >
                     Image Tester
@@ -186,7 +200,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm question={question} setQuestion={setQuestion}/>
+                                <QBankForm question={question} />
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

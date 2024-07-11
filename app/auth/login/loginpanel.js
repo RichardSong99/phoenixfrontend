@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { registerUser, loginUser } from '../../helper/apiservices/userservice';
 import { useUser } from '../../helper/context/usercontext';
-import { Button, Input, Checkbox, Link, Divider } from "@nextui-org/react";
+import { Button, Input, Checkbox, Link, Divider, Spinner } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 
@@ -23,6 +23,7 @@ export default function LoginPanel() {
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [userExists, setUserExists] = useState(false);
     const [loginFailed, setLoginFailed] = useState(false);
+    const [loginLoading, setLoginLoading] = useState(false);
 
     const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -41,36 +42,19 @@ export default function LoginPanel() {
         event.preventDefault();
 
         try {
+            setLoginLoading(true);
             console.log(email, password);
             const data = await loginUser(email, password);
             Cookies.set('token', data.token);
             setLoginSuccess(true);
+            setLoginLoading(false);
         } catch (error) {
             setErrorMessage(error.message);
             setLoginFailed(true);
+            setLoginLoading(false);
         }
 
-        // if (!isLoginMode) {
-        //     if (password !== repeatPassword) {
-        //         alert("Passwords do not match");
-        //         return;
-        //     }
-        //     if (password.length < 8) {
-        //         alert('Password should be at least 8 characters long');
-        //         return;
-        //     }
 
-        //     try {
-        //         const data = await registerUser(email, password);
-        //         Cookies.set('token', data.token);
-        //         setLoginSuccess(true);
-        //     } catch (error) {
-        //         console.log(error.message);
-        //         if (error.message === 'Email is already in use') {
-        //             setUserExists(true);
-        //         }
-        //     }
-        // }
     };
 
     return (
@@ -119,6 +103,7 @@ export default function LoginPanel() {
                     </div>
                     <Button color="primary" type="submit" >
                         Log In
+                        {loginLoading && <Spinner />}
                     </Button>
                 </form>
                 <div className="flex items-center gap-4 py-2">

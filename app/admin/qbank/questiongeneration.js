@@ -186,7 +186,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm question={question} />
+                                <QBankForm question={question} setQuestion={setQuestion}/>
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

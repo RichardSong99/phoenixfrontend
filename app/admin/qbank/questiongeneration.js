@@ -167,9 +167,9 @@ const QuestionGeneration = () => {
                     Generate
                 </Button>
 
-                <Button color="success" onPress={imageAITester} >
+                {/* <Button color="success" onPress={imageAITester} >
                     Image Tester
-                </Button>
+                </Button> */}
 
 
 

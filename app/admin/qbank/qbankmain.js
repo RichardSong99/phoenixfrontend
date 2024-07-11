@@ -1,23 +1,23 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import QBankForm from './qbankform';
 import QuestionView from '../../helper/components/question/questionviewcomponents/questionview';
 import QBankBase from './qbankbase';
 import styles from './qbankmain.module.css';
-import QuestionModal from '../../helper/components/question/questionviewcomponents/questionmodal';
+import { QuestionModal } from '@/app/helper/components/question/questionviewcomponents/questionmodal';
 import { Tabs, Tab } from "@nextui-org/react";
 import QuestionGeneration from './questiongeneration';
+import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QBankMain = () => {
 
     const [question, setQuestion] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork
-
+    const { activeViewQuestion, setActiveViewQuestion, isOpen, onOpen, onOpenChange } = useContext(QuestionContext); // State for the question being viewed
 
     const handleCloseModal = () => {
-        setQuestion(null);
+        setActiveViewQuestion(null);
         setIsModalOpen(false);
     }
 
@@ -32,22 +32,16 @@ const QBankMain = () => {
 
             <Tabs  aria-label="Tabs variants">
                 <Tab key="database" title="Database">
-                    <QBankBase
-                        setQuestion={setQuestion}
-                        setIsModalOpen={setIsModalOpen}
-                    />
+                    <QBankBase/>
                 </Tab>
                 <Tab key="add" title="Add question" >
-                    {/* <QBankForm
-                        setQuestion={setQuestion}
-                        setIsModalOpen={setIsModalOpen}
-                    /> */}
+                 
                     <QuestionGeneration />
                 </Tab>
             </Tabs>
 
-            {question &&
-                <QuestionModal isOpen={isModalOpen} onClose={handleCloseModal} question={question} mode={mode} />
+            {activeViewQuestion &&
+                <QuestionModal isOpen={isOpen} onOpenChange = {onOpenChange} question={activeViewQuestion} mode={mode} />
             }
 
         </div>

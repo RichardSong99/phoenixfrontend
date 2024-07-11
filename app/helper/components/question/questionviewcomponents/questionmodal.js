@@ -8,7 +8,7 @@ import { fetchEngagementByID } from '@/app/helper/apiservices/engagementservice'
 import { fetchEngagementByQuestionID } from '@/app/helper/apiservices/engagementservice';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 
-export const QuestionModal = ({ isOpen, onOpen, onOpenChange, question, mode }) => {
+export const QuestionModal = ({ isOpen, onOpenChange, question, mode }) => {
 
     const [userResponse, setUserResponse] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
@@ -28,6 +28,9 @@ export const QuestionModal = ({ isOpen, onOpen, onOpenChange, question, mode }) 
     }
 
     useEffect(() => {
+
+        console.log("question shown in modal", question)
+
         if (question) {
             const initializeView = async () => {
                 try {

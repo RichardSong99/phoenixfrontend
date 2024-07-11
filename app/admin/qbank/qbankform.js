@@ -7,7 +7,7 @@ import { useData } from '@/app/helper/context/datacontext';
 import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
-const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandler }) => {
+const QBankForm = ({ question, setQuestion, uploadQuestionHandler }) => {
 
     const { getTopicList, loading, datacube } = useData();
 
@@ -26,6 +26,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
     const [accessOption, setAccessOption] = useState('free');
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
     const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
+    const { activeViewQuestion, setActiveViewQuestion } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [topicsData, setTopicsData] = useState([]);
     const [subject, setSubject] = useState('math');
@@ -63,12 +64,6 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
 
         fetchData();
     }, []);
-
-
-
-
-
-
 
 
     useEffect(() => {
@@ -163,8 +158,7 @@ const QBankForm = ({ question, setQuestion, setIsModalOpen, uploadQuestionHandle
         });
 
         setQuestion(newQuestion);
-
-        setIsModalOpen(true);
+        setActiveViewQuestion(newQuestion);
     }
 
     const handleUpload = async () => {

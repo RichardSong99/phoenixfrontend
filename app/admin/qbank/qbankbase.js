@@ -26,11 +26,13 @@ import {
     Pagination,
 } from "@nextui-org/react";
 
-const QBankBase = ({ setIsModalOpen, setQuestion }) => {
+const QBankBase = () => {
 
     const [questions, setQuestions] = useState([]);
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
     const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
+    const { activeViewQuestion, setActiveViewQuestion, onOpen } = useContext(QuestionContext); // State for the question being viewed
+
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
 
@@ -89,8 +91,8 @@ const QBankBase = ({ setIsModalOpen, setQuestion }) => {
     const viewQuestion = async (questionId) => {
         try {
             const viewQuestion = await fetchFullQuestionById(questionId);
-            setQuestion(viewQuestion);
-            setIsModalOpen(true);
+            setActiveViewQuestion(viewQuestion);
+            onOpen();
         } catch (error) {
             console.error('Could not fetch full question:', error);
         }
@@ -202,11 +204,13 @@ const QBankBase = ({ setIsModalOpen, setQuestion }) => {
                     {questions.map((question, index) => (
                         <TableRow key={index}>
                             <TableCell>
-                                <button className={styles.deleteButton} onClick={() => deleteQuestion(question.id)}>Delete</button>
-                                <button className={styles.button} onClick={() => handleEdit(question.id)}>Edit</button>
-                                <button className={styles.button} onClick={() => viewQuestion(question.id)}>View</button>
+                                <div className="flex space-x-2">
 
+                                    <Button color="danger" onClick={() => deleteQuestion(question.id)}>Delete</Button>
+                                    <Button color="secondary" onClick={() => handleEdit(question.id)}>Edit</Button>
+                                    <Button color="primary" onClick={() => viewQuestion(question.id)}>View</Button>
 
+                                </div>
                             </TableCell>
                             <TableCell>{renderMarkdownWithLaTeX(question.Prompt)}</TableCell>
                             <TableCell>{question.Topic}</TableCell>

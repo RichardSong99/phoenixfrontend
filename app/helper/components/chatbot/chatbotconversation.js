@@ -4,24 +4,22 @@ import {userMessages, assistantMessages} from "./messages";
 
 import MessageCard from "./message-card";
 
+const updateMessages = () => {
+  messages.push(
+    {
+      role: "user",
+      message: userMessages[userMessages.length - 1],
+    },
+    {
+      role: "assistant",
+      message: assistantMessages[assistantMessages.length - 1],
+    }
+  );
+}
+
 export default function Component() {
   const messages = [
-    {
-      role: "user",
-      message: userMessages[0],
-    },
-    {
-      role: "assistant",
-      message: assistantMessages[0],
-    },
-    {
-      role: "user",
-      message: userMessages[1],
-    },
-    {
-      role: "assistant",
-      message: assistantMessages[1],
-    },
+    
   ];
 
   return (

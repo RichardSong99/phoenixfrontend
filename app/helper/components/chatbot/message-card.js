@@ -39,8 +39,8 @@ const MessageCard = React.forwardRef(
       <p>
         Something went wrong, if the issue persists please contact us through our help center
         at&nbsp;
-        <Link href="mailto:support@acmeai.com" size="sm">
-          support@acmeai.com
+        <Link href="mailto:songrichard99@gmail.com" size="sm">
+          songrichard99@gmail.com
         </Link>
       </p>
     );

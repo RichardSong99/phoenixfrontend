@@ -26,7 +26,9 @@ import {
     Checkbox,
     Divider,
     Accordion,
-    AccordionItem
+    AccordionItem,
+    RadioGroup,
+    Radio
 } from "@nextui-org/react";
 
 import { useUser } from '@/app/helper/context/usercontext';
@@ -378,7 +380,35 @@ const QBankViewer = () => {
 
             <Accordion isCompact variant="shadow">
                 <AccordionItem title="Filter by Topic">
+
+
                     <div className="flex row gap-2 p-2">
+
+                        <div className="flex col gap-2  ">
+                            <Button color="primary" variant="ghost">Reset filters</Button>
+                            <Button color="primary" variant="ghost">Review mode</Button>
+                            <Button color="primary" variant="ghost">Unanswered questions</Button>
+
+                        </div>
+
+                        <Divider orientation='horizontal' />
+
+                        <RadioGroup
+                            label="Sort  by"
+                            orientation="horizontal"
+                        >
+                            <Radio value="buenos-aires">Time entered</Radio>
+                            <Radio value="sydney">Time attempted</Radio>
+                            <Radio value="san-francisco">Topic</Radio>
+                            <Radio value="london">Difficulty</Radio>
+                            <Radio value="london">Answer status</Radio>
+
+                        </RadioGroup>
+
+                        <Divider orientation='horizontal' />
+
+
+
                         <div className="flex col gap-5  ">
                             <CustomCheckboxThick value="Algebra">All</CustomCheckboxThick>
 
@@ -387,13 +417,13 @@ const QBankViewer = () => {
                             <CheckboxGroup
                                 className="gap-1 "
                                 orientation="horizontal"
-                                // value={algebraSelectedTopics}
-                                // onChange={setAlgebraSelectedTopics}
+                            // value={algebraSelectedTopics}
+                            // onChange={setAlgebraSelectedTopics}
                             >
                                 <CustomCheckbox value="easy">Easy</CustomCheckbox>
                                 <CustomCheckbox value="medium">Medium</CustomCheckbox>
                                 <CustomCheckbox value="hard">Hard</CustomCheckbox>
-                               
+
                             </CheckboxGroup>
 
                         </div>
@@ -408,12 +438,12 @@ const QBankViewer = () => {
                             <CheckboxGroup
                                 className="gap-1 "
                                 orientation="horizontal"
-                                // value={algebraSelectedTopics}
-                                // onChange={setAlgebraSelectedTopics}
+                            // value={algebraSelectedTopics}
+                            // onChange={setAlgebraSelectedTopics}
                             >
                                 <CustomCheckbox value="easy">Multiple Choice</CustomCheckbox>
                                 <CustomCheckbox value="medium">Free Response</CustomCheckbox>
-                               
+
                             </CheckboxGroup>
 
                         </div>
@@ -428,15 +458,15 @@ const QBankViewer = () => {
                             <CheckboxGroup
                                 className="gap-1 "
                                 orientation="horizontal"
-                                // value={algebraSelectedTopics}
-                                // onChange={setAlgebraSelectedTopics}
+                            // value={algebraSelectedTopics}
+                            // onChange={setAlgebraSelectedTopics}
                             >
                                 <CustomCheckbox value="easy">Unattempted</CustomCheckbox>
                                 <CustomCheckbox value="medium">Correct</CustomCheckbox>
                                 <CustomCheckbox value="medium">Incorrect</CustomCheckbox>
                                 <CustomCheckbox value="medium">Omitted</CustomCheckbox>
 
-                               
+
                             </CheckboxGroup>
 
                         </div>

@@ -12,7 +12,7 @@ import { addEngagementToQuiz } from '@/app/helper/apiservices/quizservice';
 import { Button, ButtonGroup } from "@nextui-org/react";
 import {useRouter} from 'next/navigation';
 import ChatbotConversation from '../chatbot/chatbotconversation';
-import ChatbotPrompt from '../chatbot/chatbotprompt';
+import ChatbotPrompt from '../chatbot/chatbotprompt.js';
 
 export function ContentViewer({
     groupName,
@@ -256,7 +256,9 @@ export function ContentViewer({
                                 )}
                             </div>
                         </div>
+                        
                     </main>
+                    
                     <footer className="flex items-center h-14 border-t gap-4">
                         <BottomNavPanel
                             type={objectList[activeObjectIndex].type}
@@ -273,6 +275,10 @@ export function ContentViewer({
                         />
 
                     </footer>
+                </div>
+                <div className="chatbot">
+                    <ChatbotConversation></ChatbotConversation>
+                    <ChatbotPrompt></ChatbotPrompt>
                 </div>
             </div>
         </div>

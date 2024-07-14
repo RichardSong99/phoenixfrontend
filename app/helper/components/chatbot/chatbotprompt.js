@@ -8,7 +8,7 @@ import {cn} from "./cn";
 
 import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
 
-import ChatbotPromptInput from "./prompt-input";
+import PromptInput from "./prompt-input";
 
 import { updateMessages } from "./messages"
 

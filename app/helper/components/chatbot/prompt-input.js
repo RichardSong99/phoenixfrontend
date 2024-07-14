@@ -5,7 +5,7 @@ import {Textarea} from "@nextui-org/react";
 
 import {cn} from "./cn";
 
-const ChatbotPromptInput = React.forwardRef(({classNames = {}, ...props}, ref) => {
+const PromptInput = React.forwardRef(({classNames = {}, ...props}, ref) => {
   return (
     <Textarea
       ref={ref}
@@ -25,6 +25,6 @@ const ChatbotPromptInput = React.forwardRef(({classNames = {}, ...props}, ref) =
   );
 });
 
-export default ChatbotPromptInput;
+export default PromptInput;
 
 PromptInput.displayName = "PromptInput";

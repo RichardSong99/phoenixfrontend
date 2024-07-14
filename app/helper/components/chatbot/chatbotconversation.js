@@ -4,24 +4,37 @@ import {userMessages, assistantMessages} from "./messages";
 
 import MessageCard from "./message-card";
 
+import styles from "./ChatbotConversation.module.css"
+
 export default function ChatbotConversation() {
-  const [messages, updateMessages] = useState([]);
-  const updateThread = () => {
+  // const [messages, updateMessages] = useState([]);
+  // const updateThread = () => {
 
-    updateMessages(messages => [...messages, 
-      {
-        role: "user",
-        message: userMessages[userMessages.length - 1],
-      },
-    ]);
+  //   updateMessages(messages => [...messages, 
+  //     {
+  //       role: "user",
+  //       message: userMessages[userMessages.length - 1],
+  //     },
+  //   ]);
 
-    updateMessages(messages => [...messages, 
-      {
-        role: "assistant",
-        message: assistantMessages[assistantMessages.length - 1],
-      }
-    ]);
-  }
+  //   updateMessages(messages => [...messages, 
+  //     {
+  //       role: "assistant",
+  //       message: assistantMessages[assistantMessages.length - 1],
+  //     }
+  //   ]);
+  // }
+
+  const messages = [
+    {
+      role: "user",
+      message: "test",
+    },
+    {
+      role: "assistant",
+      message: "ok",
+    }
+  ];
 
   return (
     <div className="flex flex-col gap-4 px-1">

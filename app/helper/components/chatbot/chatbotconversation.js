@@ -1,26 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {userMessages, assistantMessages} from "./messages";
 
 import MessageCard from "./message-card";
 
-const updateMessages = () => {
-  messages.push(
-    {
-      role: "user",
-      message: userMessages[userMessages.length - 1],
-    },
-    {
-      role: "assistant",
-      message: assistantMessages[assistantMessages.length - 1],
-    }
-  );
-}
+export default function ChatbotConversation() {
+  const [messages, updateMessages] = useState([]);
+  const updateThread = () => {
 
-export default function Component() {
-  const messages = [
-    
-  ];
+    updateMessages(messages => [...messages, 
+      {
+        role: "user",
+        message: userMessages[userMessages.length - 1],
+      },
+    ]);
+
+    updateMessages(messages => [...messages, 
+      {
+        role: "assistant",
+        message: assistantMessages[assistantMessages.length - 1],
+      }
+    ]);
+  }
 
   return (
     <div className="flex flex-col gap-4 px-1">

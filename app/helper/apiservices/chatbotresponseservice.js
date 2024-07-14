@@ -1,6 +1,6 @@
 const apiUrl = process.env.NEXT_PUBLIC_AI_URL;
 
-export async function getChatBotResponse(user_message){
+export async function getChatbotResponse(user_message){
     // query parameters
     const queryParams = new URLSearchParams({user_message}).toString();
 
@@ -15,6 +15,6 @@ export async function getChatBotResponse(user_message){
 
     // retrieve the response
     const response = await fetch(`${apiUrl}/chatbot?${queryParams}`, requestOptions);
-    const data = await response.json();
+    const data = response;
     return data;
 }

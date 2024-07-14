@@ -6,9 +6,13 @@ import {Icon} from "@iconify/react";
 
 import {cn} from "./cn";
 
-import PromptInput from "./prompt-input";
+import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
 
-export default function Component() {
+import ChatbotPromptInput from "./prompt-input";
+
+import { updateMessages } from "./messages"
+
+export default function ChatbotPrompt() {
   const initialImages = [
     "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/nextui-cover1.png",
     "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/nextui-cover2.png",
@@ -16,14 +20,24 @@ export default function Component() {
   ];
 
   const ideas = [
-    "Create a blog post about NextUI",
-    "Give me 10 ideas for my next blog post",
-    "Compare NextUI with other UI libraries",
-    "Write a text message to my friend",
+    "Give me a hint",
+    "Give me the solution",
   ];
 
   const [prompt, setPrompt] = React.useState("");
   const [images, setImages] = React.useState(initialImages);
+
+  // chatbot response variable
+  const [response, setResponse] = React.useState("");
+  const [user_message, setUserMessage] = React.useState("");
+
+  const handleResponse = async () => {
+    const textarea = document.getElementById("prompt");
+    setUserMessage(textarea.value);
+    const data = await getChatbotResponse(user_message);
+    setResponse(data)
+    updateMessages(user_message, response);
+  }
 
   const onRemoveImage = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
@@ -72,6 +86,7 @@ export default function Component() {
           ))}
         </div>
         <PromptInput
+          id="prompt"
           classNames={{
             inputWrapper: "!bg-transparent shadow-none",
             innerWrapper: "relative",
@@ -94,6 +109,7 @@ export default function Component() {
                     radius="lg"
                     size="sm"
                     variant="solid"
+                    onPress={handleResponse}
                   >
                     <Icon
                       className={cn(

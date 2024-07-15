@@ -8,10 +8,8 @@ import { getQuestions, fetchFullQuestionById } from '@/app/helper/apiservices/qu
 import PageContent from './browsecomponents/pagecontent';
 import { ansStatusData, difficultyData } from '../../helper/data/data'; // Import the data
 import ParametersPanel from '../../helper/components/filter/parameterspanel';
-import QuizStarter from '../../helper/components/quizstarter/quizstarter';
 import PageNavigation from './browsecomponents/pagenavigation';
 import { DataContext, useData } from '@/app/helper/context/datacontext';
-import { Header } from '../_archive/header/header';
 
 
 const PracticePage = () => {

@@ -7,17 +7,12 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export async function getQuestions({
     selectedTopics = [],
     selectedDifficulties = [],
-    unattempted = false,
-    incorrect = false,
-    omitted = false,
-    correct = false,
-    flagged = false,
-    subject = '',
+    selectedAnswerStatuses = [],
+    selectedAnswerTypes = [],
     page = 1,
     pageSize = 10,
-    sortDifficulty,
-    sortTopic,
-    sortAttemptTime
+    sortOption = '',
+    sortDirection = 'asc',
 }) {
     let token;
     try {
@@ -40,24 +35,19 @@ export async function getQuestions({
         queryParams.append('difficulty', selectedDifficulties.join(','));
     }
 
+    if (selectedAnswerStatuses.length > 0) {
+        queryParams.append('answerStatus', selectedAnswerStatuses.join(','));
+    }
+
+    if (selectedAnswerTypes.length > 0) {
+        queryParams.append('answerType', selectedAnswerTypes.join(','));
+    }
+
     queryParams.append('subject', subject);
-    queryParams.append('unattempted', unattempted);
-    queryParams.append('incorrect', incorrect);
-    queryParams.append('omitted', omitted);
-    queryParams.append('correct', correct);
-    queryParams.append('flagged', flagged);
     queryParams.append('page', page);
     queryParams.append('pageSize', pageSize);
-
-    if (sortDifficulty) {
-        queryParams.append('sortDifficulty', sortDifficulty);
-    }
-    if (sortTopic) {
-        queryParams.append('sortTopic', sortTopic);
-    }
-    if (sortAttemptTime) {
-        queryParams.append('sortAttemptTime', sortAttemptTime);
-    }
+    queryParams.append('sortOption', sortOption);
+    queryParams.append('sortDirection', sortDirection);
     
     console.log('queryParams', queryParams.toString());
 

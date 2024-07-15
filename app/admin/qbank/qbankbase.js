@@ -1,13 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import QBankFilter from '../../helper/components/questionbank/qbankfilter';
 import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '@/app/helper/apiservices/questionservice';
-import styles from './qbankbase.module.css';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
-import { parseLatexString } from '../../helper/components/latexrender/latexrender';
 import renderMarkdownWithLaTeX from '../../helper/components/latexrender/markdownwlatex';
-import PageNavigation from '../../study/browse/browsecomponents/pagenavigation';
-import QbankTable from './qbanktable';
-import { NumberChoiceButtons, SubjectButton } from '@/app/helper/components/basecomponents/buttons/mybuttons';
+
 import {
     Table,
     TableHeader,
@@ -24,6 +19,8 @@ import {
     Chip,
     User,
     Pagination,
+    CheckboxGroup,
+    Checkbox
 } from "@nextui-org/react";
 
 const QBankBase = () => {
@@ -39,6 +36,15 @@ const QBankBase = () => {
     const [activeSubjectButton, setActiveSubjectButton] = useState("Math"); // Default to 'Math'
     const [activeSubject, setActiveSubject] = useState("math"); // Default to 'Math'
     const [filterValue, setFilterValue] = useState("");
+
+    const [selectedDifficulties, setSelectedDifficulties] = useState(new Set(['easy', 'medium', 'hard', 'extreme']));
+
+    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
+
+    const selectedValue = React.useMemo(
+        () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+        [selectedKeys]
+    );
 
     useEffect(() => {
         async function loadQuestions() {
@@ -138,19 +144,6 @@ const QBankBase = () => {
                     onValueChange={onSearchChange}
                 />
 
-
-                <Dropdown className="bg-background border-1 border-default-200">
-                    <DropdownTrigger className="hidden sm:flex">
-                        <Button
-                            // endContent={<ChevronDownIcon className="text-small" />}
-                            variant="flat"
-                        >
-                            Subject
-                        </Button>
-                    </DropdownTrigger>
-                </Dropdown>
-
-
                 <Dropdown className="bg-background border-1 border-default-200">
                     <DropdownTrigger className="hidden sm:flex">
                         <Button
@@ -160,6 +153,8 @@ const QBankBase = () => {
                             Topic
                         </Button>
                     </DropdownTrigger>
+
+
                 </Dropdown>
 
                 <Dropdown className="bg-background border-1 border-default-200">
@@ -171,6 +166,45 @@ const QBankBase = () => {
                             Difficulty
                         </Button>
                     </DropdownTrigger>
+
+                    <DropdownMenu aria-label="Static Actions"
+                        closeOnSelect={false}
+                        disallowEmptySelection
+                        selectedKeys={selectedDifficulties}
+                        onSelect={(selected) => setSelectedDifficulties(selected)}
+                    >
+                        <DropdownItem key="easy">Easy</DropdownItem>
+                        <DropdownItem key="medium">Medium</DropdownItem>
+                        <DropdownItem key="hard">Hard</DropdownItem>
+                        <DropdownItem key="extreme">Extreme</DropdownItem>
+
+                    </DropdownMenu>
+                </Dropdown>
+
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button
+                            variant="bordered"
+                            className="capitalize"
+                        >
+                            {selectedValue}
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        aria-label="Multiple selection example"
+                        variant="flat"
+                        closeOnSelect={false}
+                        disallowEmptySelection
+                        selectionMode="multiple"
+                        selectedKeys={selectedKeys}
+                        onSelectionChange={setSelectedKeys}
+                    >
+                        <DropdownItem key="text">Text</DropdownItem>
+                        <DropdownItem key="number">Number</DropdownItem>
+                        <DropdownItem key="date">Date</DropdownItem>
+                        <DropdownItem key="single_date">Single Date</DropdownItem>
+                        <DropdownItem key="iteration">Iteration</DropdownItem>
+                    </DropdownMenu>
                 </Dropdown>
 
                 <Dropdown className="bg-background border-1 border-default-200">
@@ -182,6 +216,26 @@ const QBankBase = () => {
                             Answer Type
                         </Button>
                     </DropdownTrigger>
+                </Dropdown>
+
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button>
+                            Checkbox
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu>
+                        {/* <CheckboxGroup
+                            label="Select cities"
+                            defaultValue={["buenos-aires", "london"]}
+                        >
+                            <Checkbox value="buenos-aires">Buenos Aires</Checkbox>
+                            <Checkbox value="sydney">Sydney</Checkbox>
+                            <Checkbox value="san-francisco">San Francisco</Checkbox>
+                            <Checkbox value="london">London</Checkbox>
+                            <Checkbox value="tokyo">Tokyo</Checkbox>
+                        </CheckboxGroup> */}
+                    </DropdownMenu>
                 </Dropdown>
             </div>
 

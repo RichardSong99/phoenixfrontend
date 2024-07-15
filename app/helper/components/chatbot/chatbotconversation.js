@@ -2,35 +2,26 @@ import React, { useState } from "react";
 
 import MessageCard from "./message-card";
 
-export function updateMessages(user_message, assistant_message) {
-  // push the user message to the list of user messages
-  messages.push(
-    {
-      role: "user",
-      message: user_message,
-    }
-  );
+// export function updateMessages(user_message, assistant_message) {
+//   // push the user message to the list of user messages
+//   messages.push(
+//     {
+//       role: "user",
+//       message: user_message,
+//     }
+//   );
 
-  // push the assistant response to the list of assistant messages
-  messages.push(
-    {
-      role: "assistant",
-      message: assistant_message,
-    }
-  );
-}
+//   // push the assistant response to the list of assistant messages
+//   messages.push(
+//     {
+//       role: "assistant",
+//       message: assistant_message,
+//     }
+//   );
+// }
 
-export default function ChatbotConversation() {
-  const messages = [
-    {
-      role: "user",
-      message: "test",
-    },
-    {
-      role: "assistant",
-      message: "ok",
-    }
-  ];
+export default function ChatbotConversation({messages}) {
+
 
   return (
     <div className="flex flex-col gap-4 px-1">

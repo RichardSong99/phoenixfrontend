@@ -76,7 +76,7 @@ const QBankViewer = () => {
     useEffect(() => {
 
         loadQuestions();
-    }, [questionsUpdated, page, activeSubject]);
+    }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject]);
 
     const deleteQuestion = async (questionId) => {
         if (window.confirm('Are you sure you want to delete this question?')) {

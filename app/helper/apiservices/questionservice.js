@@ -11,8 +11,8 @@ export async function getQuestions({
     selectedAnswerTypes = [],
     page = 1,
     pageSize = 10,
-    sortOption = '',
-    sortDirection = 'asc',
+    sortOption = 'attemptTime',
+    sortDirection = 1,
 }) {
     let token;
     try {
@@ -43,7 +43,7 @@ export async function getQuestions({
         queryParams.append('answerType', selectedAnswerTypes.join(','));
     }
 
-    queryParams.append('subject', subject);
+    // queryParams.append('subject', subject);
     queryParams.append('page', page);
     queryParams.append('pageSize', pageSize);
     queryParams.append('sortOption', sortOption);
@@ -61,14 +61,7 @@ export async function getQuestions({
     return data;
 }
 
-// export const fetchMaskedQuestions = async () => {
-//     const response = await fetch(`${apiUrl}/questions/masked`);
-//     if (!response.ok) {
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//     }
 
-//     return await response.json();
-// };
 
 export const fetchFullQuestionById = async (questionId) => {
     const token = Cookies.get('token');

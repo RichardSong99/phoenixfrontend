@@ -276,7 +276,9 @@ export function ContentViewer({
 
                     </footer>
                 </div>
-                <Chatbot></Chatbot>
+                <Chatbot
+                    question={objectList[activeObjectIndex].questionData.Question}
+                ></Chatbot>
             </div>
         </div>
 

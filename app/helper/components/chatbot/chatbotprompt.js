@@ -10,7 +10,7 @@ import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
 
 import PromptInput from "./prompt-input";
 
-import { updateMessages } from "./messages"
+import { updateMessages } from "./chatbotconversation"
 
 export default function ChatbotPrompt() {
   const initialImages = [
@@ -35,7 +35,7 @@ export default function ChatbotPrompt() {
     const textarea = document.getElementById("prompt");
     setUserMessage(textarea.value);
     const data = await getChatbotResponse(user_message);
-    setResponse(data)
+    setResponse(data);
     updateMessages(user_message, response);
   }
 
@@ -94,11 +94,6 @@ export default function ChatbotPrompt() {
           }}
           endContent={
             <div className="absolute right-0 flex h-full flex-col items-end justify-between gap-2">
-              <Tooltip showArrow content="Speak">
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <Icon className="text-default-500" icon="solar:microphone-3-linear" width={20} />
-                </Button>
-              </Tooltip>
               <div className="flex items-end gap-2">
                 <p className="py-1 text-tiny text-default-400">{prompt.length}/2000</p>
                 <Tooltip showArrow content="Send message">

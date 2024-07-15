@@ -13,6 +13,7 @@ import { Button, ButtonGroup } from "@nextui-org/react";
 import {useRouter} from 'next/navigation';
 import ChatbotConversation from '../chatbot/chatbotconversation';
 import ChatbotPrompt from '../chatbot/chatbotprompt.js';
+import Chatbot from '../chatbot/chatbot';
 
 export function ContentViewer({
     groupName,
@@ -256,7 +257,6 @@ export function ContentViewer({
                                 )}
                             </div>
                         </div>
-                        
                     </main>
                     
                     <footer className="flex items-center h-14 border-t gap-4">
@@ -276,10 +276,7 @@ export function ContentViewer({
 
                     </footer>
                 </div>
-                <div className="chatbot">
-                    <ChatbotConversation></ChatbotConversation>
-                    <ChatbotPrompt></ChatbotPrompt>
-                </div>
+                <Chatbot></Chatbot>
             </div>
         </div>
 

@@ -1,30 +1,26 @@
 import React, { useState } from "react";
 
-import {userMessages, assistantMessages} from "./messages";
-
 import MessageCard from "./message-card";
 
-import styles from "./ChatbotConversation.module.css"
+export function updateMessages(user_message, assistant_message) {
+  // push the user message to the list of user messages
+  messages.push(
+    {
+      role: "user",
+      message: user_message,
+    }
+  );
+
+  // push the assistant response to the list of assistant messages
+  messages.push(
+    {
+      role: "assistant",
+      message: assistant_message,
+    }
+  );
+}
 
 export default function ChatbotConversation() {
-  // const [messages, updateMessages] = useState([]);
-  // const updateThread = () => {
-
-  //   updateMessages(messages => [...messages, 
-  //     {
-  //       role: "user",
-  //       message: userMessages[userMessages.length - 1],
-  //     },
-  //   ]);
-
-  //   updateMessages(messages => [...messages, 
-  //     {
-  //       role: "assistant",
-  //       message: assistantMessages[assistantMessages.length - 1],
-  //     }
-  //   ]);
-  // }
-
   const messages = [
     {
       role: "user",

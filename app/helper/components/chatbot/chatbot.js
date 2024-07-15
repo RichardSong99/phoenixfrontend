@@ -45,14 +45,12 @@ export default function Chatbot(question) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (user_message.trim()) {
+        if (user_message) {
             updateUserMessages({ user_message: user_message });
             const message = user_message;
             setUserMessage('');
             const response = await getChatbotResponse(message);
             updateAssistantMessages({ assistant_message: response});
-        } else {
-            updateMessages({ user_message: "", assistant_message: "Message failed."})
         }
     };
 

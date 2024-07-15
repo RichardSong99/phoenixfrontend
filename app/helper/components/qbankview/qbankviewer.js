@@ -49,14 +49,17 @@ const QBankViewer = () => {
     const { isAuthenticated } = useUser();
     const [filterValue, setFilterValue] = useState("");
 
+    const {selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection} = useContext(QuestionContext);
+
     async function loadQuestions() {
         try {
             const data = await getQuestions({
-                unattempted: true,
-                incorrect: true,
-                omitted: true,
-                correct: true,
-                flagged: true,
+                selectedTopics: selectedTopics,
+                selectedDifficulties: selectedDifficulties,
+                selectedAnswerStatuses: selectedAnswerStatuses,
+                selectedAnswerTypes: selectedAnswerTypes,
+                sortOption: sortOption,
+                sortDirection: sortDirection,
                 page: page,
                 subject: activeSubject
             });
@@ -68,7 +71,6 @@ const QBankViewer = () => {
             console.error('Could not fetch questions:', error);
         }
     }
-
 
 
     useEffect(() => {
@@ -126,12 +128,7 @@ const QBankViewer = () => {
                 <h3>Question Bank Database</h3>
             </div>
 
-            {/* <SubjectButton
-                activeSubject={activeSubject}
-                handleSubjectChange={setActiveSubject}
-            /> */}
 
-            {/* <QBankFilter /> */}
 
             {/* <QbankTable/> */}
             <div className="relative flex justify-start items-center gap-2">

@@ -7,13 +7,13 @@ import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
 export default function Chatbot(question) {
 
     const [messages, setMessages] = useState([
-        {
-            role: "user",
-            message: "test",
-        },
+        // {
+        //     role: "user",
+        //     message: "test",
+        // },
         {
             role: "assistant",
-            message: "ok",
+            message: "How can I help you today?",
         }
     ]);
 

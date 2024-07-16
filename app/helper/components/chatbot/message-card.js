@@ -12,14 +12,11 @@ const MessageCard = React.forwardRef(
     {
       avatar,
       message,
-      showFeedback,
       attempts = 1,
       currentAttempt = 1,
       status,
       onMessageCopy,
       onAttemptChange,
-      onFeedback,
-      onAttemptFeedback,
       className,
       messageClassName,
       ...props
@@ -39,8 +36,8 @@ const MessageCard = React.forwardRef(
       <p>
         Something went wrong, if the issue persists please contact us through our help center
         at&nbsp;
-        <Link href="mailto:support@acmeai.com" size="sm">
-          support@acmeai.com
+        <Link href="mailto:songrichard99@gmail.com" size="sm">
+          songrichard99@gmail.com
         </Link>
       </p>
     );
@@ -71,24 +68,6 @@ const MessageCard = React.forwardRef(
       onMessageCopy?.(valueToCopy);
     }, [copy, message, onMessageCopy]);
 
-    const handleFeedback = React.useCallback(
-      (liked) => {
-        setFeedback(liked ? "like" : "dislike");
-
-        onFeedback?.(liked ? "like" : "dislike");
-      },
-      [onFeedback],
-    );
-
-    const handleAttemptFeedback = React.useCallback(
-      (feedback) => {
-        setAttemptFeedback(feedback);
-
-        onAttemptFeedback?.(feedback);
-      },
-      [onAttemptFeedback],
-    );
-
     return (
       <div {...props} ref={ref} className={cn("flex gap-3", className)}>
         <div className="relative flex-none">
@@ -114,125 +93,7 @@ const MessageCard = React.forwardRef(
             <div ref={messageRef} className={"pr-20 text-small"}>
               {hasFailed ? failedMessage : message}
             </div>
-            {showFeedback && !hasFailed && (
-              <div className="absolute right-2 top-2 flex rounded-full bg-content2 shadow-small">
-                <Button isIconOnly radius="full" size="sm" variant="light" onPress={handleCopy}>
-                  {copied ? (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:check" />
-                  ) : (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:copy" />
-                  )}
-                </Button>
-                <Button
-                  isIconOnly
-                  radius="full"
-                  size="sm"
-                  variant="light"
-                  onPress={() => handleFeedback(true)}
-                >
-                  {feedback === "like" ? (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-up-fill" />
-                  ) : (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-up" />
-                  )}
-                </Button>
-                <Button
-                  isIconOnly
-                  radius="full"
-                  size="sm"
-                  variant="light"
-                  onPress={() => handleFeedback(false)}
-                >
-                  {feedback === "dislike" ? (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-down-fill" />
-                  ) : (
-                    <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-down" />
-                  )}
-                </Button>
-              </div>
-            )}
-
-            {attempts > 1 && !hasFailed && (
-              <div className="flex w-full items-center justify-end">
-                <button
-                  onClick={() => onAttemptChange?.(currentAttempt > 1 ? currentAttempt - 1 : 1)}
-                >
-                  <Icon
-                    className="cursor-pointer text-default-400 hover:text-default-500"
-                    icon="gravity-ui:circle-arrow-left"
-                  />
-                </button>
-                <button
-                  onClick={() =>
-                    onAttemptChange?.(currentAttempt < attempts ? currentAttempt + 1 : attempts)
-                  }
-                >
-                  <Icon
-                    className="cursor-pointer text-default-400 hover:text-default-500"
-                    icon="gravity-ui:circle-arrow-right"
-                  />
-                </button>
-                <p className="px-1 text-tiny font-medium text-default-500">
-                  {currentAttempt}/{attempts}
-                </p>
-              </div>
-            )}
           </div>
-          {showFeedback && attempts > 1 && (
-            <div className="flex items-center justify-between rounded-medium border-small border-default-100 px-4 py-3 shadow-small">
-              <p className="text-small text-default-600">Was this response better or worse?</p>
-              <div className="flex gap-1">
-                <Tooltip content="Better">
-                  <Button
-                    isIconOnly
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                    onPress={() => handleAttemptFeedback("like")}
-                  >
-                    {attemptFeedback === "like" ? (
-                      <Icon className="text-lg text-primary" icon="gravity-ui:thumbs-up-fill" />
-                    ) : (
-                      <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-up" />
-                    )}
-                  </Button>
-                </Tooltip>
-                <Tooltip content="Worse">
-                  <Button
-                    isIconOnly
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                    onPress={() => handleAttemptFeedback("dislike")}
-                  >
-                    {attemptFeedback === "dislike" ? (
-                      <Icon
-                        className="text-lg text-default-600"
-                        icon="gravity-ui:thumbs-down-fill"
-                      />
-                    ) : (
-                      <Icon className="text-lg text-default-600" icon="gravity-ui:thumbs-down" />
-                    )}
-                  </Button>
-                </Tooltip>
-                <Tooltip content="Same">
-                  <Button
-                    isIconOnly
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                    onPress={() => handleAttemptFeedback("same")}
-                  >
-                    {attemptFeedback === "same" ? (
-                      <Icon className="text-lg text-danger" icon="gravity-ui:face-sad" />
-                    ) : (
-                      <Icon className="text-lg text-default-600" icon="gravity-ui:face-sad" />
-                    )}
-                  </Button>
-                </Tooltip>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     );

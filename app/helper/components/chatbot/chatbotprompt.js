@@ -1,18 +1,17 @@
 "use client";
 
 import React from "react";
-import {Button, Tooltip, Image, Badge, ScrollShadow} from "@nextui-org/react";
-import {Icon} from "@iconify/react";
+import { Button, Tooltip, Image, Badge, ScrollShadow } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import {cn} from "./cn";
+import { cn } from "./cn";
 
 import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
 
-import ChatbotPromptInput from "./prompt-input";
+import PromptInput from "./prompt-input";
 
-import { updateMessages } from "./messages"
 
-export default function ChatbotPrompt() {
+export default function ChatbotPrompt({ updateMessages }) {
   const initialImages = [
     "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/nextui-cover1.png",
     "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/nextui-cover2.png",
@@ -28,15 +27,13 @@ export default function ChatbotPrompt() {
   const [images, setImages] = React.useState(initialImages);
 
   // chatbot response variable
-  const [response, setResponse] = React.useState("");
-  const [user_message, setUserMessage] = React.useState("");
 
   const handleResponse = async () => {
-    const textarea = document.getElementById("prompt");
-    setUserMessage(textarea.value);
-    const data = await getChatbotResponse(user_message);
-    setResponse(data)
-    updateMessages(user_message, response);
+    // const user_message_textarea = document.getElementById("prompt").value;
+    console.log("prompt", prompt)
+    // const data = await getChatbotResponse(user_message);
+    const data = "This is a response from the chatbot."
+    updateMessages({ user_message: prompt, assistant_message: data });
   }
 
   const onRemoveImage = (index) => {
@@ -94,11 +91,6 @@ export default function ChatbotPrompt() {
           }}
           endContent={
             <div className="absolute right-0 flex h-full flex-col items-end justify-between gap-2">
-              <Tooltip showArrow content="Speak">
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <Icon className="text-default-500" icon="solar:microphone-3-linear" width={20} />
-                </Button>
-              </Tooltip>
               <div className="flex items-end gap-2">
                 <p className="py-1 text-tiny text-default-400">{prompt.length}/2000</p>
                 <Tooltip showArrow content="Send message">

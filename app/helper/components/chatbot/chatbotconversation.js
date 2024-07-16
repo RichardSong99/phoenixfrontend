@@ -1,28 +1,27 @@
-import React from "react";
-
-import {userMessages, assistantMessages} from "./messages";
+import React, { useState } from "react";
 
 import MessageCard from "./message-card";
 
-export default function Component() {
-  const messages = [
-    {
-      role: "user",
-      message: userMessages[0],
-    },
-    {
-      role: "assistant",
-      message: assistantMessages[0],
-    },
-    {
-      role: "user",
-      message: userMessages[1],
-    },
-    {
-      role: "assistant",
-      message: assistantMessages[1],
-    },
-  ];
+// export function updateMessages(user_message, assistant_message) {
+//   // push the user message to the list of user messages
+//   messages.push(
+//     {
+//       role: "user",
+//       message: user_message,
+//     }
+//   );
+
+//   // push the assistant response to the list of assistant messages
+//   messages.push(
+//     {
+//       role: "assistant",
+//       message: assistant_message,
+//     }
+//   );
+// }
+
+export default function ChatbotConversation({messages}) {
+
 
   return (
     <div className="flex flex-col gap-4 px-1">

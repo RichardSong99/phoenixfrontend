@@ -195,18 +195,18 @@ const QBankViewer = () => {
 
                                 </div>
                             </TableCell>
-                            <TableCell>{renderMarkdownWithLaTeX(question.Prompt)}</TableCell>
-                            <TableCell>{question.Topic}</TableCell>
+                            <TableCell>{renderMarkdownWithLaTeX(question.question.prompt)}</TableCell>
+                            <TableCell>{question.question.topic}</TableCell>
                             <TableCell><Chip color={
-                                question.Difficulty === 'easy' ? 'success' : question.Difficulty === 'medium' ? 'warning' : 'danger'
-                            }>{question.Difficulty}</Chip></TableCell>
-                            <TableCell>{question.AccessOption}</TableCell>
-                            <TableCell>{question.AnswerType}</TableCell>
+                                question.question.difficulty === 'easy' ? 'success' : question.question.difficulty === 'medium' ? 'warning' : 'danger'
+                            }>{question.question.difficulty}</Chip></TableCell>
+                            <TableCell>{question.question.access_option}</TableCell>
+                            <TableCell>{question.question.answer_type}</TableCell>
                             <TableCell><Chip
                                 color={
-                                    question.Status === 'correct' ? 'success' : question.Status === 'incorrect' ? 'danger' : question.Status === 'omitted' ? 'warning' : 'default'
+                                    question.status === 'correct' ? 'success' : question.status === 'incorrect' ? 'danger' : question.status === 'omitted' ? 'warning' : 'default'
                                 }>
-                                {isAuthenticated ? question.Status : "Unattempted"}</Chip></TableCell>
+                                {isAuthenticated ? question.status : "Unattempted"}</Chip></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

@@ -7,7 +7,7 @@ import { useData } from '@/app/helper/context/datacontext';
 import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
-const QBankForm = ({ question }) => {
+const QBankForm = ({ inputQuestion, mode }) => {
 
     const { getTopicList, loading, datacube } = useData();
 
@@ -25,8 +25,7 @@ const QBankForm = ({ question }) => {
     const [explanation, setExplanation] = useState('');
     const [accessOption, setAccessOption] = useState('free');
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
-    const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
-    const { activeViewQuestion, setActiveViewQuestion, onOpen } = useContext(QuestionContext); // State for the question being viewed
+    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [topicsData, setTopicsData] = useState([]);
     const [subject, setSubject] = useState('math');
@@ -48,72 +47,34 @@ const QBankForm = ({ question }) => {
         }
     }
 
+    const refreshCategoryAndTopic = async () => {
+        const result = await getTopicList("math");
+        setTopicsData(result);
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getTopicList("math");
-            setTopicsData(result);
-
-            if (result && result.length > 0) {
-                console.log("topicsData", result);
-                setGeneralCategory(result[0].Name);
-                setSpecificTopic(result[0].Children[0].Name);
-            }
-        };
-
-        fetchData();
-    }, [question]);
-
-
-    useEffect(() => {
-        
-        if(question){
-            setPrompt(question.Prompt);
-            setText(question.Text);
-            setAnswerType(question.AnswerType);
-            setDifficulty(question.Difficulty);
-            setSubject(question.Subject);
-            setTopic(question.Topic);
-            setAnswerA(question.AnswerChoices[0]);
-            setAnswerB(question.AnswerChoices[1]);
-            setAnswerC(question.AnswerChoices[2]);
-            setAnswerD(question.AnswerChoices[3]);
-            setCorrectAnswerMultiple(question.CorrectAnswerMultiple);
-            setCorrectAnswerFree(question.CorrectAnswerFree);
-            setExplanation(question.Explanation);
-            setAccessOption(question.AccessOption);
-            setUploadedImageUrls(question.Images.map(image => image.Url));
+        if (result && result.length > 0) {
+            console.log("topicsData", result);
+            setGeneralCategory(result[0].Name);
+            setSpecificTopic(result[0].Children[0].Name);
         }
+    };
 
-
-        if (editQuestion) {
-            setAnswerType(editQuestion.AnswerType);
-            setDifficulty(editQuestion.Difficulty);
-            setSubject(editQuestion.Subject);
-            setTopic(editQuestion.Topic);
-            setPrompt(editQuestion.Prompt);
-            setText(editQuestion.Text);
-            if (editQuestion.AnswerType === 'multipleChoice') {
-                setAnswerA(editQuestion.AnswerChoices[0]);
-                setAnswerB(editQuestion.AnswerChoices[1]);
-                setAnswerC(editQuestion.AnswerChoices[2]);
-                setAnswerD(editQuestion.AnswerChoices[3]);
-                setCorrectAnswerMultiple(editQuestion.CorrectAnswerMultiple);
-
-            }
-            setCorrectAnswerFree(editQuestion.CorrectAnswerFree);
-            setExplanation(editQuestion.Explanation);
-            setAccessOption(editQuestion.AccessOption);
-
-            // Add the image data
-            if (editQuestion.Images) {
-                const imageUrls = editQuestion.Images.map(image => image.Url);
-                setUploadedImageUrls(imageUrls);
-            }
-
-        }
-    }, [editQuestion, question]);
+    const setFormFields = (question) => {
+        if (question.Prompt !== undefined && question.Prompt !== null) setPrompt(question.Prompt);
+        if (question.Text !== undefined && question.Text !== null) setText(question.Text);
+        if (question.AnswerType !== undefined && question.AnswerType !== null) setAnswerType(question.AnswerType);
+        if (question.Difficulty !== undefined && question.Difficulty !== null) setDifficulty(question.Difficulty);
+        if (question.Subject !== undefined && question.Subject !== null) setSubject(question.Subject);
+        if (question.Topic !== undefined && question.Topic !== null) setTopic(question.Topic);
+        if (question.AnswerChoices !== undefined && question.AnswerChoices[0] !== undefined && question.AnswerChoices[0] !== null) setAnswerA(question.AnswerChoices[0]);
+        if (question.AnswerChoices !== undefined && question.AnswerChoices[1] !== undefined && question.AnswerChoices[1] !== null) setAnswerB(question.AnswerChoices[1]);
+        if (question.AnswerChoices !== undefined && question.AnswerChoices[2] !== undefined && question.AnswerChoices[2] !== null) setAnswerC(question.AnswerChoices[2]);
+        if (question.AnswerChoices !== undefined && question.AnswerChoices[3] !== undefined && question.AnswerChoices[3] !== null) setAnswerD(question.AnswerChoices[3]);
+        if (question.CorrectAnswerMultiple !== undefined && question.CorrectAnswerMultiple !== null) setCorrectAnswerMultiple(question.CorrectAnswerMultiple);
+        if (question.CorrectAnswerFree !== undefined && question.CorrectAnswerFree !== null) setCorrectAnswerFree(question.CorrectAnswerFree);
+        if (question.Explanation !== undefined && question.Explanation !== null) setExplanation(question.Explanation);
+        if (question.AccessOption !== undefined && question.AccessOption !== null) setAccessOption(question.AccessOption);
+        if (question.Images !== undefined && question.Images !== null) setUploadedImageUrls(question.Images.map(image => image.Url));
+    }
 
     const clearForm = () => {
         setAnswerType('multipleChoice');
@@ -134,11 +95,23 @@ const QBankForm = ({ question }) => {
         setSpecificTopic(topicsData[0].Children[0].Name);
         setReplaceIndex(null);
         setUploadedImageUrls([]);
-
-        setEditQuestion(null);
-
     };
 
+    useEffect(() => {
+
+        refreshCategoryAndTopic();
+
+        if(inputQuestion){
+            setFormFields(inputQuestion);
+        }
+
+    }, [inputQuestion]);
+
+
+
+
+
+    // renders question
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -157,11 +130,10 @@ const QBankForm = ({ question }) => {
             uploadedImageUrls
         });
 
-        // setQuestion(newQuestion);
-
         setActiveViewQuestion(newQuestion);
         onOpen();
     }
+
 
     const handleUpload = async () => {
         const newQuestion = createNewQuestion({
@@ -181,19 +153,18 @@ const QBankForm = ({ question }) => {
 
         // post the question to the server
         try {
-            if (editQuestion) {
+            if (mode === MODEEDIT) {
                 // If editQuestion is not null, update the question
-                await updateQuestion(editQuestion.id, newQuestion);
+                await updateQuestion(inputQuestion.id, newQuestion);
                 console.log('Question updated successfully');
                 alert('Question updated successfully');
 
                 setEditQuestion(null);
 
-            } else {
+            } else if(mode === MODENEW) {
                 // If editQuestion is null, create a new question
                 await uploadQuestion(newQuestion);
                 alert('Question uploaded successfully');
-
                 console.log('Question uploaded successfully');
             }
         } catch (error) {
@@ -206,7 +177,7 @@ const QBankForm = ({ question }) => {
 
     return (
         <div >
-            
+
             {generalCategory !== "" && specificTopic !== "" &&
                 <div >
                     <h4>Input Question Details</h4>
@@ -214,7 +185,7 @@ const QBankForm = ({ question }) => {
                         <div className="space-y-4">
                             <Input label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />
                             {subject === 'reading' && (
-                                <Textarea label="Text / Passage" value={text} onChange={e => setText(e.target.value)} isRequired = {true} />
+                                <Textarea label="Text / Passage" value={text} onChange={e => setText(e.target.value)} isRequired={true} />
                             )}
                             <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
                                 {["multipleChoice", "freeResponse"].map(item => (
@@ -280,7 +251,7 @@ const QBankForm = ({ question }) => {
                                     (answerType === 'freeResponse' && !correctAnswerFree)
                                 }
                             >
-                                {editQuestion ? 'Edit Question' : 'Upload'}
+                                {mode === MODEEDIT ? 'Save Question' : 'Upload'}
                             </Button>
                             <Button onPress={clearForm}>Clear Form</Button>
                         </div>

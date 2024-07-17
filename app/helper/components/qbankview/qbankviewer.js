@@ -5,6 +5,7 @@ import { parseLatexString } from '../latexrender/latexrender';
 import renderMarkdownWithLaTeX from '../latexrender/markdownwlatex';
 import { ChevronDownIcon } from '../../assets/components/ChevronDownIcon';
 import { QuestionModal } from '@/app/helper/components/question/questionviewcomponents/questionmodal';
+import { QBankFormModal } from '@/app/admin/qbank/qbankformmodal';
 
 import QuestionFilterSort from '../filter/questionfiltersort';
 import {
@@ -39,13 +40,11 @@ const QBankViewer = () => {
 
     const [questions, setQuestions] = useState([]);
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
-    const { editQuestion, setEditQuestion } = useContext(QuestionContext); // State for the question being edited
-    const { activeViewQuestion, setActiveViewQuestion, onOpen } = useContext(QuestionContext); // State for the question being viewed
 
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
+    const [isFetching, setIsFetching] = useState(true);
 
-    const [activeSubjectButton, setActiveSubjectButton] = useState("Math"); // Default to 'Math'
     const [activeSubject, setActiveSubject] = useState("math"); // Default to 'Math'
 
     const { isAuthenticated } = useUser();
@@ -53,10 +52,7 @@ const QBankViewer = () => {
 
     const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork]
 
-    const { selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, viewQuestionModal, activeViewEngagement, isOpen, onOpenChange } = useContext(QuestionContext);
-
-
-
+    const { activeViewQuestion, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, viewQuestionModal, activeViewEngagement, isOpen, onOpenChange, isFormOpen, onFormOpen, onFormOpenChange, editQuestion, setEditQuestion, MODEEDIT, MODENEW } = useContext(QuestionContext);
 
     async function loadQuestions() {
         try {
@@ -81,7 +77,6 @@ const QBankViewer = () => {
 
 
     useEffect(() => {
-
         loadQuestions();
     }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject]);
 
@@ -99,14 +94,17 @@ const QBankViewer = () => {
     }
 
     const handleEdit = async (questionId) => {
+
+        console.log("handleEdit question ID", questionId);
+
         try {
             const question = await fetchFullQuestionById(questionId);
             setEditQuestion(question);
+            onFormOpen();
         } catch (error) {
             console.error('Could not fetch full question:', error);
         }
     }
-
 
     const onSearchChange = React.useCallback((value) => {
         if (value) {
@@ -157,13 +155,6 @@ const QBankViewer = () => {
 
             </div>
 
-
-
-
-
-
-
-
             {/* <PageNavigation currentPage={currentPage} lastPage={lastPage} pageSelectHandler={pageSelectHandler} /> */}
             <Pagination total={lastPage} initialPage={page} onChange={(page) => setPage(page)} showControls />
 
@@ -188,7 +179,7 @@ const QBankViewer = () => {
                                 <div className="flex space-x-2">
 
                                     <Button color="danger" onClick={() => deleteQuestion(question.id)}>Delete</Button>
-                                    <Button color="secondary" onClick={() => handleEdit(question.id)}>Edit</Button>
+                                    <Button color="secondary" onClick={() => handleEdit(question?.question?._id)}>Edit</Button>
                                     <Button color="primary" onClick={() => viewQuestionModal({questionId: question?.question?._id, engagement: question?.question?.engagements[0]?._id})}>View</Button>
 
                                 </div>
@@ -220,6 +211,8 @@ const QBankViewer = () => {
             {activeViewQuestion &&
                 <QuestionModal isOpen={isOpen} onOpenChange = {onOpenChange} question={activeViewQuestion} initialEngagement = {activeViewEngagement} mode={mode} />
             }
+
+            {editQuestion && <QBankFormModal isOpen={isFormOpen} onOpenChange={onFormOpenChange} question={editQuestion} mode = {MODEEDIT}/>}
 
         </div >
 

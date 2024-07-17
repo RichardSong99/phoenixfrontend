@@ -13,6 +13,8 @@ export const QuestionProvider = ({ children }) => {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+    const { isOpen: isFormOpen, onOpen: onFormOpen, onOpenChange: onFormOpenChange } = useDisclosure();
+
     // filter and sort parameters
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [selectedDifficulties, setSelectedDifficulties] = useState([]);
@@ -21,8 +23,11 @@ export const QuestionProvider = ({ children }) => {
     const [sortOption, setSortOption] = useState("");
     const [sortDirection, setSortDirection] = useState("asc");
 
+    const MODEEDIT = "edit";
+    const MODENEW = "new";
 
-    const viewQuestionModal = async ({ questionId, engagementId }) => {
+
+    const viewQuestionModal = async ({ questionId, engagementId = null }) => {
 
         try {
             const fetchedQuestion = await fetchFullQuestionById(questionId);
@@ -77,7 +82,13 @@ export const QuestionProvider = ({ children }) => {
             sortDirection,
             setSortDirection,
             viewQuestionModal,
-            activeViewEngagement
+            activeViewEngagement,
+            MODEEDIT,
+            MODENEW,
+            isFormOpen,
+            onFormOpen,
+            onFormOpenChange
+            
         }}>
             {children}
         </QuestionContext.Provider>

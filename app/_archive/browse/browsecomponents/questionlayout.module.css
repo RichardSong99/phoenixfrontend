@@ -1,0 +1,171 @@
+.questionsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    /* padding: 20px; */
+    align-items: stretch; /* Change this line */
+    margin-bottom: 20px; /* Add this line */
+}
+
+.questionCard {
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: auto; /* Add this line */
+    gap: 5px;
+    
+}
+
+.questionCard p {
+    color: #333;
+    margin-top: 0;
+    max-height: 50px;
+    overflow: auto;
+    font-size: 12px;
+
+}
+
+
+
+.questionInLine {
+    grid-column: 1 / -1; /* This makes the item span the full width of the grid */
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
+    max-height: 1000px; /* This should be larger than the actual height of the content */
+    opacity: 1;
+    /* margin-bottom: 40px; */
+}
+
+.questionInLine.collapsed{
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+}
+
+
+.selectedQuestionCard {
+    position: relative; /* Add relative positioning */
+    background-color: #E2F0FD; /* A warm, inviting background color */
+    border: 1px solid #1387F2; /* A matching border color */
+    box-shadow: 0px 4px 4px 0px #73B8F7;
+}
+
+.selectedQuestionCard h3 {
+    color: #ff6f00; /* A bolder, attention-grabbing color for the title */
+}
+
+.paidBadge {
+    position: absolute; 
+    background-color: var(--orange1);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    top: 10px;
+    right: 10px;
+}
+
+/* practice.module.css */
+.viewButton {
+    background-color: var(--primary-color); /* Blue background color */
+    color: #fff; /* White text color */
+    padding: 5px 20px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor style on hover */
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.viewButton:hover {
+    background-color: var(--color4); /* Darker blue on hover */
+}
+
+.subscribeButton {
+    background-color: var(--orange1); /* Orange background color for subscribe button */
+    color: #fff; /* White text color */
+    padding: 5px 20px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor style on hover */
+    margin-top: 10px;
+    font-weight: 600;
+
+
+}
+
+.subscribeButton:hover {
+    background-color: #e78e0e; /* Darker orange on hover */
+}
+
+
+
+/* questionlayout.module.css */
+/* questionlayout.module.css */
+/* questionlayout.module.css */
+.questionsTable {
+    width: 100%; /* Adjust to desired width */
+    border-collapse: collapse;
+    margin: 20px auto; /* Auto margins for horizontal centering */
+}
+
+.questionsTable td {
+    height: 50px; /* Set a fixed height */
+    vertical-align: middle;
+
+    border-top: 1px solid #ddd;
+    padding: 8px;
+    font-size: 13px;
+}
+
+.questionsTable th {
+    font-size: 14px;
+
+    text-align: left;
+    background-color: #E2F0FD;
+    color: #001947;
+    padding: 8px;
+
+}
+
+/* questionlayout.module.css */
+.questionsTable th:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+}
+
+.questionsTable th:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+}
+
+.questionsTable tr:first-child td {
+    border-top: none;
+}
+
+/* questionlayout.module.css */
+.cellContent {
+    height: 60px; /* Set a fixed height */
+    overflow: auto; /* Make the content scrollable if it overflows */
+}
+
+.downIcon{
+    cursor: pointer;
+}
+
+.hideQuestionText{
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #001947
+}

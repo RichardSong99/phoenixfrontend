@@ -1,0 +1,10 @@
+.dropzone {
+    height: 30px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 2cqmax; /* This will make the dropzone rounded */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;    
+  }

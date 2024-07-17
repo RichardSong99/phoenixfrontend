@@ -1,0 +1,59 @@
+.parametersPanel {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #1C5990;
+    background-color: white;
+}
+
+.criteriaContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.criteriaSection {
+    margin-bottom: 10px;
+}
+
+.divider {
+    border: 0;
+    border-top: 2px solid #1C5990;
+    margin: 10px auto;
+    width: 100%; /* Adjust this to change the width of the divider */
+}
+
+.criteriaSection h2 {
+    font-size: 13px; /* Adjust this to change the size of the text */
+    color: #73B8F7; /* Adjust this to change the color of the text */
+    font-weight: 600; /* Makes the text weight normal */
+    margin-bottom: 10px; /* Adds some space below the text */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sortSelect {
+    padding: 10px;
+    border: 1px solid #73B8F7;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #73B8F7;
+    outline: none;
+    cursor: pointer;
+}
+
+.expandableSection {
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
+    max-height: 1000px; /* This should be larger than the actual height of the content */
+    opacity: 1;
+    padding: 10px; /* Or whatever your actual padding is */
+}
+
+.expandableSection.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+}

@@ -1,6 +1,6 @@
 import styles from './questioncard.module.css';
 import { parseLatexString } from '../../latexrender/latexrender';
-import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
+import { CriteriaElement } from '@/app/_archive/criteriabox/criteriabox';
 import { objectsAreEqual } from '@/app/helper/apiservices/comparison';
 import { capitalizeFirstLetter } from '../../../data/utility';
 import { useUser } from '@/app/helper/context/usercontext';

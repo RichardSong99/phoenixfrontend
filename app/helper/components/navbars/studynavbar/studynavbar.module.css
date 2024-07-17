@@ -1,0 +1,94 @@
+/* studynavbar.module.css */
+
+.studyNavbar {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding-top: 20px;
+    overflow: hidden; /* Ensure rounded corners are applied correctly */
+    z-index: 1000; /* Ensure the navbar stays on top of other content */
+    transition: width 0.3s ease; /* Add transition for smooth width change */
+    border-right: 1px solid #e5e5e5;
+}
+
+.navGroup {
+    margin-bottom: 20px;
+}
+
+.navItem {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #363636;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.activeNavItem {
+    background-color: #3083ff;
+    color: white;
+}
+
+.navItem:hover {
+    background-color: #c3eeff;
+    color: #008cff;
+}
+
+
+
+.footer {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid #646464;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #363636;
+    font-size: 14px;
+}
+
+.username {
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.username:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.popup {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+}
+
+.popup a {
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.popup a:hover {
+    background-color: #f5f5f5;
+}

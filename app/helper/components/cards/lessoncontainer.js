@@ -3,7 +3,7 @@ import { ProgressBar } from "react-bootstrap";
 import DownIcon from "@/app/helper/assets/components/Down-icon.svg";
 import Image from "next/image";
 import styles from "./lessoncontainer.module.css";
-import { StandardButton } from "@/app/helper/components/basecomponents/buttons/mybuttons";
+import { StandardButton } from "@/app/_archive/buttons/mybuttons";
 // import { fetchTopicContentList } from "@/app/services/parameterdataservice";
 // import { fetchVideosById } from "@/app/services/videoservice";
 // import { fetchQuestionsById } from "@/app/services/questionservice";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from './quizstarter.module.css';
-import { NumberChoiceButtons, StandardButton } from "@/app/helper/components/basecomponents/buttons/mybuttons";
+import { NumberChoiceButtons, StandardButton } from "@/app/_archive/buttons/mybuttons";
 
 export const QuizStarter = ({ activeNumQuestions, setActiveNumQuestions, numQuestionsAvailable, handleStartQuiz }) => {
 

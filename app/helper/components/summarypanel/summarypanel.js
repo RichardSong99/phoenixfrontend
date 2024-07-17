@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './summarypanel.module.css';
-import { CriteriaElement } from '@/app/helper/components/criteriabox/criteriabox';
+import { CriteriaElement } from '@/app/_archive/criteriabox/criteriabox';
 import FlaggedIcon from '@/app/helper/assets/components/Flagged.svg';
 import UnflaggedIcon from '@/app/helper/assets/components/Unflagged.svg';
 import Image from 'next/image';

@@ -1,5 +1,5 @@
 import React from 'react';
-import QBankMain from './qbankmain';
+import QBankMain from '../../_archive/qbankmain';
 
 const QBank = () => {
     return (

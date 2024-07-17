@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { fetchTestUnderlyingByID } from '@/app/helper/apiservices/testservice';
-import { SelectionBar } from '../../../helper/components/basecomponents/selectionbar/selectionbar';
+import { SelectionBar } from '../../../_archive/selectionbar/selectionbar';
 import SummaryPanel from '../../../helper/components/summarypanel/summarypanel';
 import styles from './reviewpracticetestslug.module.css';
 import { ProgressBar } from "react-bootstrap";

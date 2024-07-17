@@ -8,47 +8,44 @@ import { fetchEngagementByID } from '@/app/helper/apiservices/engagementservice'
 import { fetchEngagementByQuestionID } from '@/app/helper/apiservices/engagementservice';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 
-export const QuestionModal = ({ isOpen, onOpenChange, question, mode }) => {
+export const QuestionModal = ({ isOpen, onOpenChange, question, initialEngagement, mode }) => {
 
     const [userResponse, setUserResponse] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [engagement, setEngagement] = useState(null);
+    const [engagement, setEngagement] = useState(initialEngagement);
 
     const handleReportUserResponse = (userAnswer) => {
         setUserResponse(userAnswer);
     };
 
     const handleSubmitAnswer = async () => {
-        // let response = await handlePostEngagement({question: question, userResponse: userResponse, mode: mode});
-        // const engagementID = response.id;
-        // response = await fetchEngagementByID({engagementID: engagementID});
-        // console.log("response after fetchEngagementByID", response);
-        // setEngagement(response);
         setShowAnswer(true);
     }
+
+    const initializeView = async () => {
+        try {
+            const fetchedEngagement = await fetchEngagementByQuestionID({ questionID: question.id });
+            console.log("engagement", engagement);
+            setEngagement(fetchedEngagement);
+            setShowAnswer(true);
+        } catch (error) {
+            console.error("Error:", error);
+            setUserResponse(null);
+            setEngagement(null);
+            setShowAnswer(false);
+        }
+    };
 
     useEffect(() => {
 
         console.log("question shown in modal", question)
 
         if (question) {
-            const initializeView = async () => {
-                try {
-                    const engagement = await fetchEngagementByQuestionID({ questionID: question.id });
-                    console.log("engagement", engagement);
-                    setEngagement(engagement);
-                    setShowAnswer(true);
-                } catch (error) {
-                    console.error("Error:", error);
-                    setUserResponse(null);
-                    setEngagement(null);
-                    setShowAnswer(false);
-                }
-            };
-
-            initializeView();
+            if (!engagement) {
+                initializeView();
+            }
         }
-    }, [question]); // Assuming you want to run this effect when `question` changes
+    }, [question, engagement]); // Assuming you want to run this effect when `question` changes
 
     return (
         <Modal

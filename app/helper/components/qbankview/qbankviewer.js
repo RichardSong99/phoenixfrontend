@@ -4,6 +4,8 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 import { parseLatexString } from '../latexrender/latexrender';
 import renderMarkdownWithLaTeX from '../latexrender/markdownwlatex';
 import { ChevronDownIcon } from '../../assets/components/ChevronDownIcon';
+import { QuestionModal } from '@/app/helper/components/question/questionviewcomponents/questionmodal';
+
 import QuestionFilterSort from '../filter/questionfiltersort';
 import {
     Table,
@@ -31,7 +33,7 @@ import {
 } from "@nextui-org/react";
 
 import { useUser } from '@/app/helper/context/usercontext';
-import { useData } from '@/app/helper/context/datacontext';
+import { formatDate } from '../../data/utility';
 
 const QBankViewer = () => {
 
@@ -49,7 +51,12 @@ const QBankViewer = () => {
     const { isAuthenticated } = useUser();
     const [filterValue, setFilterValue] = useState("");
 
-    const {selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection} = useContext(QuestionContext);
+    const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork]
+
+    const { selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, viewQuestionModal, activeViewEngagement, isOpen, onOpenChange } = useContext(QuestionContext);
+
+
+
 
     async function loadQuestions() {
         try {
@@ -101,17 +108,6 @@ const QBankViewer = () => {
     }
 
 
-
-    const viewQuestion = async (questionId) => {
-        try {
-            const viewQuestion = await fetchFullQuestionById(questionId);
-            setActiveViewQuestion(viewQuestion);
-            onOpen();
-        } catch (error) {
-            console.error('Could not fetch full question:', error);
-        }
-    }
-
     const onSearchChange = React.useCallback((value) => {
         if (value) {
             setFilterValue(value);
@@ -151,7 +147,7 @@ const QBankViewer = () => {
                     <DropdownTrigger>
                         <Button color="primary" iconRight={<ChevronDownIcon />}> Filter & Sort </Button>
                     </DropdownTrigger>
-                    <DropdownMenu closeOnSelect = {false} variant = "light">
+                    <DropdownMenu closeOnSelect={false} variant="light">
                         <DropdownItem>
                             <QuestionFilterSort />
                         </DropdownItem>
@@ -182,6 +178,8 @@ const QBankViewer = () => {
                     <TableColumn>Access Option</TableColumn>
                     <TableColumn>Answer Type</TableColumn>
                     <TableColumn>Status</TableColumn>
+                    <TableColumn>Date Answered</TableColumn>
+
                 </TableHeader>
                 <TableBody>
                     {questions.map((question, index) => (
@@ -191,7 +189,7 @@ const QBankViewer = () => {
 
                                     <Button color="danger" onClick={() => deleteQuestion(question.id)}>Delete</Button>
                                     <Button color="secondary" onClick={() => handleEdit(question.id)}>Edit</Button>
-                                    <Button color="primary" onClick={() => viewQuestion(question.id)}>View</Button>
+                                    <Button color="primary" onClick={() => viewQuestionModal({questionId: question?.question?._id, engagement: question?.question?.engagements[0]?._id})}>View</Button>
 
                                 </div>
                             </TableCell>
@@ -207,12 +205,21 @@ const QBankViewer = () => {
                                     question.status === 'correct' ? 'success' : question.status === 'incorrect' ? 'danger' : question.status === 'omitted' ? 'warning' : 'default'
                                 }>
                                 {isAuthenticated ? question.status : "Unattempted"}</Chip></TableCell>
+                            <TableCell>
+                                {question.question.engagements[0]?.attempt_time && (
+                                    <div>{formatDate(question.question.engagements[0].attempt_time)}</div>
+                                )}                            
+                                </TableCell>
                         </TableRow>
+
                     ))}
                 </TableBody>
             </Table>
             {/* </div> */}
 
+            {activeViewQuestion &&
+                <QuestionModal isOpen={isOpen} onOpenChange = {onOpenChange} question={activeViewQuestion} initialEngagement = {activeViewEngagement} mode={mode} />
+            }
 
         </div >
 

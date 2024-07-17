@@ -7,7 +7,7 @@ import { useData } from '@/app/helper/context/datacontext';
 import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
-const QBankForm = ({ question, uploadQuestionHandler }) => {
+const QBankForm = ({ question }) => {
 
     const { getTopicList, loading, datacube } = useData();
 

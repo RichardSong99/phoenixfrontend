@@ -9,7 +9,7 @@ import { Button, Card, CardHeader, CardBody, CardFooter } from '@nextui-org/reac
 import Image from 'next/image';
 
 import styles from './formcomponents.module.css';
-import Dropzone from '@/app/helper/components/basecomponents/filehandlers/dropzone';
+// import Dropzone from '@/app/helper/components/form/dropzone';
 
 export const FormInput = ({ label, value, onChange, required }) => (
     <label>

@@ -38,17 +38,17 @@ const QuestionFilterSort = () => {
     const [allAnswerTypesSelected, setAllAnswerTypesSelected] = useState(true);
     const [allAnswerStatusesSelected, setAllAnswerStatusesSelected] = useState(true);
 
-    const { selectedDifficulties, setSelectedDifficulties, selectedAnswerTypes, setSelectedAnswerTypes, selectedAnswerStatuses, setSelectedAnswerStatuses, selectedTopics, setSelectedTopics } = useContext(QuestionContext);
+    const { selectedDifficulties, setSelectedDifficulties, selectedAnswerTypes, setSelectedAnswerTypes, selectedAnswerStatuses, setSelectedAnswerStatuses, selectedTopics, setSelectedTopics, SORTDATEANSWERED, SORTDATECREATED, SORTDATELASTEDITED, sortOption, setSortOption } = useContext(QuestionContext);
 
     const handleCheckAll = ({
-        allChoices, 
+        allChoices,
         allChoicesSelected,
         selectedChoices,
         setSelectedChoices,
         required = false
     }) => {
-        if(allChoicesSelected) {
-            if(! required) {
+        if (allChoicesSelected) {
+            if (!required) {
                 setSelectedChoices([]);
             }
         } else {
@@ -117,12 +117,11 @@ const QuestionFilterSort = () => {
 
             <Divider orientation='horizontal' />
 
-            <RadioGroup label="Sort by" orientation="horizontal">
-                <Radio value="buenos-aires">Time entered</Radio>
-                <Radio value="sydney">Time attempted</Radio>
-                <Radio value="san-francisco">Topic</Radio>
-                <Radio value="london">Difficulty</Radio>
-                <Radio value="lx">Answer status</Radio>
+            <RadioGroup label="Sort by" orientation="horizontal" value = {sortOption} onValueChange={setSortOption}>
+                <Radio value={SORTDATECREATED}>Time created</Radio>
+                <Radio value={SORTDATELASTEDITED}>Time last edited</Radio>
+                <Radio value={SORTDATEANSWERED}>Time attempted</Radio>
+
             </RadioGroup>
 
             <Divider orientation='horizontal' />

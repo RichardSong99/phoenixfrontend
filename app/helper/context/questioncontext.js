@@ -15,16 +15,22 @@ export const QuestionProvider = ({ children }) => {
 
     const { isOpen: isFormOpen, onOpen: onFormOpen, onOpenChange: onFormOpenChange } = useDisclosure();
 
+    const MODEEDIT = "edit";
+    const MODENEW = "new";
+
+    const SORTDATEANSWERED = "attemptTime"
+    const SORTDATECREATED = "createdTime"
+    const SORTDATELASTEDITED = "lastEditedTime"
+
     // filter and sort parameters
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [selectedDifficulties, setSelectedDifficulties] = useState([]);
     const [selectedAnswerStatuses, setSelectedAnswerStatuses] = useState([]);
     const [selectedAnswerTypes, setSelectedAnswerTypes] = useState([]); // ["MC", "TF", "FIB", "SA", "ESSAY"]
-    const [sortOption, setSortOption] = useState("");
+    const [sortOption, setSortOption] = useState(SORTDATEANSWERED);
     const [sortDirection, setSortDirection] = useState("asc");
 
-    const MODEEDIT = "edit";
-    const MODENEW = "new";
+
 
 
     const viewQuestionModal = async ({ questionId, engagementId = null }) => {
@@ -87,7 +93,10 @@ export const QuestionProvider = ({ children }) => {
             MODENEW,
             isFormOpen,
             onFormOpen,
-            onFormOpenChange
+            onFormOpenChange,
+            SORTDATEANSWERED,
+            SORTDATECREATED,
+            SORTDATELASTEDITED
             
         }}>
             {children}

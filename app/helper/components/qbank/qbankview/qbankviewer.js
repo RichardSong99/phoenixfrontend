@@ -170,6 +170,8 @@ const QBankViewer = () => {
                     <TableColumn>Answer Type</TableColumn>
                     <TableColumn>Status</TableColumn>
                     <TableColumn>Date Answered</TableColumn>
+                    <TableColumn>Date Created</TableColumn>
+                    <TableColumn>Date Last Edited</TableColumn>
 
                 </TableHeader>
                 <TableBody>
@@ -178,9 +180,9 @@ const QBankViewer = () => {
                             <TableCell>
                                 <div className="flex space-x-2">
 
-                                    <Button color="danger" onClick={() => deleteQuestion(question.id)}>Delete</Button>
+                                    <Button color="danger" onClick={() => deleteQuestion(question?.question?._id)}>Delete</Button>
                                     <Button color="secondary" onClick={() => handleEdit(question?.question?._id)}>Edit</Button>
-                                    <Button color="primary" onClick={() => viewQuestionModal({questionId: question?.question?._id, engagement: question?.question?.engagements[0]?._id})}>View</Button>
+                                    <Button color="primary" onClick={() => viewQuestionModal({ questionId: question?.question?._id, engagement: question?.question?.engagements[0]?._id })}>View</Button>
 
                                 </div>
                             </TableCell>
@@ -199,8 +201,14 @@ const QBankViewer = () => {
                             <TableCell>
                                 {question.question.engagements[0]?.attempt_time && (
                                     <div>{formatDate(question.question.engagements[0].attempt_time)}</div>
-                                )}                            
-                                </TableCell>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {formatDate(question?.question?.creation_date)}
+                            </TableCell>
+                            <TableCell>
+                                {formatDate(question?.question?.last_edited_date)}
+                            </TableCell>
                         </TableRow>
 
                     ))}
@@ -209,10 +217,10 @@ const QBankViewer = () => {
             {/* </div> */}
 
             {activeViewQuestion &&
-                <QuestionModal isOpen={isOpen} onOpenChange = {onOpenChange} question={activeViewQuestion} initialEngagement = {activeViewEngagement} mode={mode} />
+                <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} question={activeViewQuestion} initialEngagement={activeViewEngagement} mode={mode} />
             }
 
-            {editQuestion && <QBankFormModal isOpen={isFormOpen} onOpenChange={onFormOpenChange} question={editQuestion} mode = {MODEEDIT}/>}
+            {editQuestion && <QBankFormModal isOpen={isFormOpen} onOpenChange={onFormOpenChange} question={editQuestion} mode={MODEEDIT} />}
 
         </div >
 

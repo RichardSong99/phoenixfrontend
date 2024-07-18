@@ -1,5 +1,5 @@
 import React from 'react';
-import Checkmark from '../../assets/components/Checkmark.svg';
+// import Checkmark from '../../assets/components/Checkmark.svg';
 import Image from 'next/image';
 import styles from './filtercomponents.module.css';
 

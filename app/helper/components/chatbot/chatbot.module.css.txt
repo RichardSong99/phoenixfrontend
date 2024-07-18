@@ -1,7 +1,4 @@
 .chatbot {
-    height: 500px;
-    background-color: black;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
 }

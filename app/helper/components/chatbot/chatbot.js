@@ -1,30 +1,33 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { getChatbotResponse } from "../../apiservices/chatbotresponseservice";
+import {Button} from "@nextui-org/react";
 
-export default function Chatbot(question) {
+export default function Chatbot({question}) {
+    const messagesEndRef = useRef(null);
 
     const [messages, setMessages] = useState([
+        // {
+        //     role: "user",
+        //     message: "test",
+        // },
         {
-            role: "user",
-            message: "test",
-        },
-        {
-            role: "assistant",
-            message: "ok",
+            role: "Assistant",
+            message: "How can I help you?",
         }
     ]);
 
     const [user_message, setUserMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const updateUserMessages = ({ user_message }) => {
        
         setMessages((messages) => [
             ...messages,
             {
-                role: "user",
+                role: "User",
                 message: user_message,
             },
         ]);
@@ -36,7 +39,7 @@ export default function Chatbot(question) {
         setMessages((messages) => [
             ...messages,
             {
-                role: "assistant",
+                role: "Assistant",
                 message: assistant_message,
             }
         ]);
@@ -46,11 +49,46 @@ export default function Chatbot(question) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (user_message) {
+            setLoading(true);
             updateUserMessages({ user_message: user_message });
             const message = user_message;
             setUserMessage('');
-            const response = await getChatbotResponse(message);
+            try{
+                const response = await getChatbotResponse(message, question.Prompt, question.AnswerChoices, question.CorrectAnswerMultiple, question.AnswerType);
+                updateAssistantMessages({ assistant_message: response});
+            } catch(e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    const handleHint = async (event) => {
+        setLoading(true);
+        updateUserMessages({ user_message: "Give me a hint." });
+        try{
+            const message = "Give me a hint.";
+            const response = await getChatbotResponse(message, question.Prompt, question.AnswerChoices, question.CorrectAnswerMultiple, question.AnswerType);
             updateAssistantMessages({ assistant_message: response});
+        } catch(e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSolution = async (event) => {
+        setLoading(true);
+        updateUserMessages({ user_message: "Explain this problem to me." });
+        try{
+            const message = "Explain this problem to me.";
+            const response = await getChatbotResponse(message, question.Prompt, question.AnswerChoices, question.CorrectAnswerMultiple, question.AnswerType);
+            updateAssistantMessages({ assistant_message: response});
+        } catch(e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,14 +98,36 @@ export default function Chatbot(question) {
         }
     };
 
+    useEffect(() => {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
     return (
-        <div className="bg-orange h-[700px] w-[200px] relative right-[4%] top-[6%]" style={{ overflowY: 'auto'}}>
-            <div className="flex-1 bg-black h-[500px] flex flex-col justify-end text-white p-[5px]">
-                {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.role}`}>
-                        <strong>{msg.role}: </strong>{msg.message}
-                    </div>
-                ))}
+        <div className="w-[325px] bg-orange h-[800px] relative right-[2%] top-[6%] overflow-y-auto">
+            <div className="h-[550px] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300">
+                <div className="w-full flex flex-col justify-end">
+                    {messages.map((msg, index) => (
+                        <div key={index} className={`message ${msg.role}`}>
+                            <strong>{msg.role}: </strong>{msg.message}
+                        </div>
+                    ))}
+                </div>
+                <div ref={messagesEndRef} />
+            </div>
+            <br></br>
+            <div className="flex justify-between">
+                <Button
+                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
+                    onClick={handleHint}
+                >
+                    Give me a hint
+                </Button>
+                <Button 
+                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
+                    onClick={handleSolution}
+                >
+                    Give me the solution
+                </Button>
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
                 <textarea
@@ -77,9 +137,37 @@ export default function Chatbot(question) {
                     onKeyDown={enterKey}
                     placeholder="Type your message to our assistant."
                 />
-                <button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded">
-                    Send
-                </button>
+                {loading ? <Button
+                                isLoading
+                                className="rounded text-white bg-blue-500 mt-2 p-2"
+                                spinner={
+                                    <svg
+                                    className="animate-spin h-5 w-5 text-current"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    />
+                                    <path
+                                        className="opacity-75"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                        fill="currentColor"
+                                    />
+                                    </svg>
+                                }
+                            >
+                                Generating
+                            </Button>
+                        :   <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded">
+                            Send
+                            </Button>}
             </form>
         </div>
     );

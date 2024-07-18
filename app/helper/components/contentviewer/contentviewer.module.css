@@ -94,10 +94,3 @@
     color: #B3B3B3;
     cursor: not-allowed;
 }
-
-.chatbot { 
-    height: 100px;
-    width: 100px;
-    background-color: black;
-    z-index: 1000;
-}

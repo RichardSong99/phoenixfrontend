@@ -47,16 +47,7 @@ const QBankForm = ({ inputQuestion, mode }) => {
         }
     }
 
-    const refreshCategoryAndTopic = async () => {
-        const result = await getTopicList("math");
-        setTopicsData(result);
 
-        if (result && result.length > 0) {
-            console.log("topicsData", result);
-            setGeneralCategory(result[0].Name);
-            setSpecificTopic(result[0].Children[0].Name);
-        }
-    };
 
     const setFormFields = (question) => {
         if (question.Prompt !== undefined && question.Prompt !== null) setPrompt(question.Prompt);
@@ -99,13 +90,24 @@ const QBankForm = ({ inputQuestion, mode }) => {
 
     useEffect(() => {
 
+        const refreshCategoryAndTopic = async () => {
+            const result = await getTopicList("math");
+            setTopicsData(result);
+    
+            if (result && result.length > 0) {
+                console.log("topicsData", result);
+                setGeneralCategory(result[0].Name);
+                setSpecificTopic(result[0].Children[0].Name);
+            }
+        };
+
         refreshCategoryAndTopic();
 
         if(inputQuestion){
             setFormFields(inputQuestion);
         }
 
-    }, [inputQuestion]);
+    }, [inputQuestion, getTopicList]);
 
     // renders question
     const handleSubmit = (event) => {

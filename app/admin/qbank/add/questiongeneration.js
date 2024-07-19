@@ -9,9 +9,11 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
-    const [topicsData, setTopicsData] = useState([]);
-    const [generalCategory, setGeneralCategory] = useState("");
-    const [specificTopic, setSpecificTopic] = useState("");
+    const { getTopicList, loading, datacube } = useData();
+
+    const [topicsData, setTopicsData] = useState(getTopicList("math"));
+    const [generalCategory, setGeneralCategory] = useState(getTopicList("math")[0].Name);
+    const [specificTopic, setSpecificTopic] = useState(getTopicList("math")[0].Children[0].Name);
     const [numEasy, setNumEasy] = useState(1);
     const [numMedium, setNumMedium] = useState(1);
     const [numHard, setNumHard] = useState(1);
@@ -19,27 +21,10 @@ const QuestionGeneration = () => {
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
 
-    const { getTopicList, loading, datacube } = useData();
 
     const [generationLoading, setGenerationLoading] = useState(false);
 
     const { MODENEW } = useContext(QuestionContext);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getTopicList("math");
-            setTopicsData(result);
-
-            if (result && result.length > 0) {
-                console.log("topicsData", result);
-                setGeneralCategory(result[0].Name);
-                setSpecificTopic(result[0].Children[0].Name);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     const handleChangeNumEasy = (value) => {
         setNumEasy(value);
@@ -196,7 +181,7 @@ const QuestionGeneration = () => {
 
             <div>
                 {questionArray.map((question, index) => (
-                    <div>
+                    <div key = {index}>
                         <Card key={index} className="w-full">
                             <CardHeader>
                                 <h4>Question {index + 1}</h4>

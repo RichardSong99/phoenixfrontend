@@ -151,6 +151,8 @@ const QBankForm = ({ inputQuestion, mode }) => {
             uploadedImageUrls
         });
 
+        console.log('newQuestion', newQuestion);
+
         // post the question to the server
         try {
             if (mode === MODEEDIT) {
@@ -178,7 +180,6 @@ const QBankForm = ({ inputQuestion, mode }) => {
     return (
         <div >
 
-            {generalCategory !== "" && specificTopic !== "" &&
                 <div >
                     <h4>Input Question Details</h4>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
@@ -264,7 +265,7 @@ const QBankForm = ({ inputQuestion, mode }) => {
                         uploadedImageUrls={uploadedImageUrls}
                         setUploadedImageUrls={setUploadedImageUrls}
                     />
-                </div>}
+                </div>
         </div>
 
 

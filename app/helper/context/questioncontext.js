@@ -22,13 +22,16 @@ export const QuestionProvider = ({ children }) => {
     const SORTDATECREATED = "createdTime"
     const SORTDATELASTEDITED = "lastEditedTime"
 
+    const SORTASCENDING = 1;
+    const SORTDESCENDING = -1;
+
     // filter and sort parameters
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [selectedDifficulties, setSelectedDifficulties] = useState([]);
     const [selectedAnswerStatuses, setSelectedAnswerStatuses] = useState([]);
     const [selectedAnswerTypes, setSelectedAnswerTypes] = useState([]); // ["MC", "TF", "FIB", "SA", "ESSAY"]
     const [sortOption, setSortOption] = useState(SORTDATEANSWERED);
-    const [sortDirection, setSortDirection] = useState("asc");
+    const [sortDirection, setSortDirection] = useState(SORTDESCENDING);
 
 
 
@@ -96,7 +99,9 @@ export const QuestionProvider = ({ children }) => {
             onFormOpenChange,
             SORTDATEANSWERED,
             SORTDATECREATED,
-            SORTDATELASTEDITED
+            SORTDATELASTEDITED,
+            SORTASCENDING,
+            SORTDESCENDING
             
         }}>
             {children}

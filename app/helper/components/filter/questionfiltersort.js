@@ -38,7 +38,7 @@ const QuestionFilterSort = () => {
     const [allAnswerTypesSelected, setAllAnswerTypesSelected] = useState(true);
     const [allAnswerStatusesSelected, setAllAnswerStatusesSelected] = useState(true);
 
-    const { selectedDifficulties, setSelectedDifficulties, selectedAnswerTypes, setSelectedAnswerTypes, selectedAnswerStatuses, setSelectedAnswerStatuses, selectedTopics, setSelectedTopics, SORTDATEANSWERED, SORTDATECREATED, SORTDATELASTEDITED, sortOption, setSortOption } = useContext(QuestionContext);
+    const { selectedDifficulties, setSelectedDifficulties, selectedAnswerTypes, setSelectedAnswerTypes, selectedAnswerStatuses, setSelectedAnswerStatuses, selectedTopics, setSelectedTopics, SORTDATEANSWERED, SORTDATECREATED, SORTDATELASTEDITED, sortOption, setSortOption, sortDirection, setSortDirection, SORTASCENDING, SORTDESCENDING } = useContext(QuestionContext);
 
     const handleCheckAll = ({
         allChoices,
@@ -116,13 +116,20 @@ const QuestionFilterSort = () => {
             </div>
 
             <Divider orientation='horizontal' />
+            <div className="flex col gap-20">
 
-            <RadioGroup label="Sort by" orientation="horizontal" value = {sortOption} onValueChange={setSortOption}>
-                <Radio value={SORTDATECREATED}>Time created</Radio>
-                <Radio value={SORTDATELASTEDITED}>Time last edited</Radio>
-                <Radio value={SORTDATEANSWERED}>Time attempted</Radio>
+                <RadioGroup label="Sort by" orientation="horizontal" value={sortOption} onValueChange={setSortOption}>
+                    <Radio value={SORTDATECREATED}>Time created</Radio>
+                    <Radio value={SORTDATELASTEDITED}>Time last edited</Radio>
+                    <Radio value={SORTDATEANSWERED}>Time attempted</Radio>
 
-            </RadioGroup>
+                </RadioGroup>
+
+                <RadioGroup label="Sort by" orientation="horizontal" value={sortDirection} onValueChange={setSortDirection}>
+                    <Radio value={SORTDESCENDING}>Descending</Radio>
+                    <Radio value={SORTASCENDING}>Ascending</Radio>
+                </RadioGroup>
+            </div>
 
             <Divider orientation='horizontal' />
 

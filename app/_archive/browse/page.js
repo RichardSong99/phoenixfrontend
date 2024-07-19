@@ -7,7 +7,7 @@ import styles from './practice.module.css';
 import { getQuestions, fetchFullQuestionById } from '@/app/helper/apiservices/questionservice';
 import PageContent from './browsecomponents/pagecontent';
 import { ansStatusData, difficultyData } from '../../helper/data/data'; // Import the data
-import ParametersPanel from '../../_archive/parameterspanel';
+import ParametersPanel from '../parameterspanel';
 import PageNavigation from './browsecomponents/pagenavigation';
 import { DataContext, useData } from '@/app/helper/context/datacontext';
 

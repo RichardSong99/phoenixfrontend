@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import AIPrompt from '@/app/helper/components/questionbank/ai/aiprompt';
+import React, { useState, useEffect, useContext } from 'react';
 import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { ImageUpload } from '@/app/helper/components/form/formcomponents';
+import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
@@ -22,6 +22,8 @@ const QuestionGeneration = () => {
     const { getTopicList, loading, datacube } = useData();
 
     const [generationLoading, setGenerationLoading] = useState(false);
+
+    const { MODENEW } = useContext(QuestionContext);
 
 
     useEffect(() => {
@@ -200,7 +202,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm question={question} />
+                                <QBankForm inputQuestion={question} mode = {MODENEW}/>
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
@@ -219,7 +221,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm />
+                            <QBankForm mode = {MODENEW} />
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

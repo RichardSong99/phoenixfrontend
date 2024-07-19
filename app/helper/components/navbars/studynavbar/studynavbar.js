@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from "@nextui-org/react";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User } from "@nextui-org/react";
-import { CreateQuizModal } from '../../../../study/mydashboard/dashboardcomponents/createquiz/createquiz';
+import { CreateQuizModal } from '../../../../_archive/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
 import { IoMdHome } from "react-icons/io";
 import { IoIosSearch } from "react-icons/io";

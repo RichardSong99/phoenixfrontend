@@ -2,16 +2,16 @@
 
 
 import React, { useState, useEffect, useContext, use } from 'react';
-import styles from '../practice.module.css';
+// import styles from '../practice.module.css';
 import { getQuestions, fetchFullQuestionById } from '@/app/helper/apiservices/questionservice';
-import { ansStatusData, difficultyData } from '../../../../helper/data/data'; // Import the data
-import ParametersPanel from '../../../../_archive/parameterspanel';
-import { QuizStarter } from '../../../../helper/components/quizstarter/quizstarter';
+import { ansStatusData, difficultyData } from '../../helper/data/data'; // Import the data
+import ParametersPanel from '../parameterspanel';
+import { QuizStarter } from '../../helper/components/quizstarter/quizstarter';
 import { DataContext, useData } from '@/app/helper/context/datacontext';
 
 import { initializeQuiz } from '@/app/helper/apiservices/quizservice';
 import { useRouter } from 'next/navigation';
-import { createQueryString } from '../../../../helper/data/utility';
+import { createQueryString } from '../../helper/data/utility';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 
 

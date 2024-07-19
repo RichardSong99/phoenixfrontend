@@ -28,29 +28,7 @@ export function QuizTable() {
 
     // const router = useRouter();
 
-    const { setIsStudyNavBarVisible, setIsTopNavBarVisible } = useContext(NavBarContext);
-    // const [quizIDList, setQuizIDList] = useState([]);
-    // const [quizUnderlyingListQuizType, setquizUnderlyingListQuizType] = useState([]);
 
-    useEffect(() => {
-        setIsStudyNavBarVisible(true);
-        setIsTopNavBarVisible(true);
-
-        // fetch quiz list
-        // const fetchQuizzes = async () => {
-        //     try {
-        //         let response = await getQuizzesForUser();
-        //         let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
-        //         setQuizIDList(quizIds);
-        //         let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
-        //         setquizUnderlyingListQuizType(quizData);
-        //     } catch (error) {
-        //         console.log("Error fetching quizzes for user", error);
-        //     }
-        // };
-
-        // fetchQuizzes();
-    }, []);
 
     const handleQuizClick = (quiz) => {
         // router.push(`/study/myquizzes/${quizID}`);
@@ -90,18 +68,19 @@ export function QuizTable() {
                     <TableColumn>Date</TableColumn>
                 </TableHeader>
                 <TableBody>
+             
 
                     {quizUnderlyingListQuizType && quizUnderlyingListQuizType.length !== 0 && (
-                        quizUnderlyingListQuizType.map((quiz, index) => (
-                            <TableRow key={index} onClick={() => handleQuizClick(quiz)}>
-                                <TableCell><Button color="success" variant = "bordered" size="sm" onClick={() => handleQuizClick(quiz)}>
+                        quizUnderlyingListQuizType.map((quizUnderlying, index) => (
+                            <TableRow key={index} onClick={() => handleQuizClick(quizUnderlying)}>
+                                <TableCell><Button color="success" variant = "bordered" size="sm" onClick={() => handleQuizClick(quizUnderlying)}>
                                     Review Quiz
                                 </Button></TableCell>
                                 <TableCell>{`Quiz ${index + 1}`}</TableCell>
 
                                 <TableCell className = "flex flex-row gap-2">
                                     {(() => {
-                                        const allParentNames = quiz.Questions.flatMap(question => {
+                                        const allParentNames = quizUnderlying.Questions.flatMap(question => {
                                             const questionTopics = question.Question.Topic;
                                             const mathParentNames = filterParentNames(getTopicList("math"), questionTopics);
                                             const readingParentNames = filterParentNames(getTopicList("reading"), questionTopics);
@@ -115,8 +94,8 @@ export function QuizTable() {
                                     })()}
                                 </TableCell>
                                 {/* <TableCell>{quiz?.NumTotal}</TableCell> */}
-                                <TableCell>{quiz?.NumCorrect + ' / ' + quiz?.NumTotal}</TableCell>
-                                <TableCell>{new Date(quiz?.Quiz?.AttemptTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>
+                                <TableCell>{quizUnderlying?.NumCorrect + ' / ' + quizUnderlying?.NumTotal}</TableCell>
+                                <TableCell>{new Date(quizUnderlying?.Quiz?.AttemptTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>
                             </TableRow>
                         ))
                     )}

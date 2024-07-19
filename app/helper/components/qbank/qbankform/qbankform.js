@@ -107,10 +107,6 @@ const QBankForm = ({ inputQuestion, mode }) => {
 
     }, [inputQuestion]);
 
-
-
-
-
     // renders question
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -133,7 +129,6 @@ const QBankForm = ({ inputQuestion, mode }) => {
         setActiveViewQuestion(newQuestion);
         onOpen();
     }
-
 
     const handleUpload = async () => {
         const newQuestion = createNewQuestion({

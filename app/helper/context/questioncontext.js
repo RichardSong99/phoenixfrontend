@@ -33,7 +33,31 @@ export const QuestionProvider = ({ children }) => {
     const [sortOption, setSortOption] = useState(SORTDATEANSWERED);
     const [sortDirection, setSortDirection] = useState(SORTDESCENDING);
 
+    const handleDeleteQuestion = async (questionId) => {
+        if (window.confirm('Are you sure you want to delete this question?')) {
+            // Your delete logic goes here
+            try {
+                await deleteQuestionService(questionId);
+                setQuestionsUpdated(!questionsUpdated);
+            } catch (error) {
+                console.error('Could not delete question:', error);
+            }
 
+        }
+    }
+
+    const handleEditQuestion = async (questionId) => {
+
+        console.log("handleEdit question ID", questionId);
+
+        try {
+            const question = await fetchFullQuestionById(questionId);
+            setEditQuestion(question);
+            onFormOpen();
+        } catch (error) {
+            console.error('Could not fetch full question:', error);
+        }
+    }
 
 
     const viewQuestionModal = async ({ questionId, engagementId = null }) => {
@@ -101,7 +125,9 @@ export const QuestionProvider = ({ children }) => {
             SORTDATECREATED,
             SORTDATELASTEDITED,
             SORTASCENDING,
-            SORTDESCENDING
+            SORTDESCENDING,
+            handleDeleteQuestion,
+            handleEditQuestion
             
         }}>
             {children}

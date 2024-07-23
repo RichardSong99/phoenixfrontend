@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '@/app/helper/apiservices/questionservice';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
-import { parseLatexString } from '../../latexrender/latexrender';
-import renderMarkdownWithLaTeX from '../../latexrender/markdownwlatex';
 import { ChevronDownIcon } from '../../../assets/components/ChevronDownIcon';
 import QBankTable from './qbanktable';
 
@@ -111,9 +109,9 @@ const QBankViewer = () => {
     return (
         <div className="flex flex-col gap-y-4 p-2">
             {/* Your component code goes here */}
-            <div>
+            {/* <div>
                 <h3>Question Bank Database</h3>
-            </div>
+            </div> */}
 
 
 

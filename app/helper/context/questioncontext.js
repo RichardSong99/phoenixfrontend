@@ -33,6 +33,8 @@ export const QuestionProvider = ({ children }) => {
     const [sortOption, setSortOption] = useState(SORTDATEANSWERED);
     const [sortDirection, setSortDirection] = useState(SORTDESCENDING);
 
+    //====================================================================================================
+
     const handleDeleteQuestion = async (questionId) => {
         if (window.confirm('Are you sure you want to delete this question?')) {
             // Your delete logic goes here
@@ -58,7 +60,6 @@ export const QuestionProvider = ({ children }) => {
             console.error('Could not fetch full question:', error);
         }
     }
-
 
     const viewQuestionModal = async ({ questionId, engagementId = null }) => {
 
@@ -90,6 +91,7 @@ export const QuestionProvider = ({ children }) => {
 
         onOpen();
     }
+
 
     return (
         <QuestionContext.Provider value={{
@@ -127,7 +129,7 @@ export const QuestionProvider = ({ children }) => {
             SORTASCENDING,
             SORTDESCENDING,
             handleDeleteQuestion,
-            handleEditQuestion
+            handleEditQuestion,
             
         }}>
             {children}

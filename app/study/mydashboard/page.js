@@ -13,6 +13,9 @@ import {
 import { useRouter } from 'next/navigation';
 
 import { QuizTable } from "./dashboardcomponents/reviewquiz/quiztable";
+import QBankViewer from "@/app/helper/components/qbank/qbankview/qbankviewer";
+import TopicModules from "./dashboardcomponents/topicmodules/topicmodules";
+import { Topic } from "@mui/icons-material";
 
 export default function MyDashboard() {
 
@@ -58,7 +61,9 @@ export default function MyDashboard() {
               </div>
           </div>
         </CardHeader>
-        <CardBody></CardBody>
+        <CardBody>
+            <TopicModules />
+        </CardBody>
       </Card>
 
       <Card>
@@ -72,6 +77,20 @@ export default function MyDashboard() {
         </CardHeader>
         <CardBody>
           <QuizTable />
+        </CardBody>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row w-full justify-between items-center">
+            <div>
+              <h5 className="font-bold text-large">Question Bank</h5>
+            </div>
+            {/* <Button color = "primary">Review all</Button> */}
+          </div>
+        </CardHeader>
+        <CardBody>
+          <QBankViewer />
         </CardBody>
       </Card>
     </div>

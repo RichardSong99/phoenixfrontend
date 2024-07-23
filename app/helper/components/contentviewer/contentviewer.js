@@ -49,10 +49,7 @@ export function ContentViewer({
     console.log("activeObjectIndex", activeObjectIndex);
     console.log("objectList", objectList);
 
-    useEffect(() => {
-        setIsStudyNavBarVisible(false);
-        setIsTopNavBarVisible(false);
-    }, []);
+
 
     useEffect(() => {
         document.documentElement.style.overflow = 'hidden';
@@ -129,18 +126,7 @@ export function ContentViewer({
         }
     }
 
-    // // set the show answer state
-    // useEffect(() => {
-    //     if (objectList[activeObjectIndex].type === "question") {
-    //         if (objectList[activeObjectIndex].questionData.Engagement !== null) {
-    //             console.log("show answer true");
-    //             setShowAnswer(true);
-    //         } else {
-    //             console.log("show answer false");
-    //             setShowAnswer(false);
-    //         }
-    //     }
-    // }, [activeObjectIndex]);
+
 
     const handleSelectObject = ({ index }) => {
         setActiveObjectIndex(index);
@@ -219,6 +205,9 @@ export function ContentViewer({
                             numOmitted={numOmitted}
                             numUnattempted={numUnattempted}
                             label={groupName}
+
+
+
                             userResponseArray={userResponseArray}
                             markReviewArray={markReviewArray}
                             reviewMode={reviewMode}
@@ -280,74 +269,6 @@ export function ContentViewer({
             </div>
         </div>
 
-
-        // <div className="w-full h-screen flex flex-col">
-        // <div className="h-12 bg-gray-800 text-white text-center font-bold shadow-md flex items-center justify-center">
-        //   {objectList[activeObjectIndex].title}
-        // </div>
-        // <div className="flex-1 flex flex-row w-full">
-
-        //   <ObjectSideNav
-        //     objectList={objectList}
-        //     activeObjectIndex={activeObjectIndex}
-        //     handleObjectClick={handleSelectObject}
-        //     handleClose={handleClose}
-        //     mode={mode}
-        //     numTotal={numTotal}
-        //     numCompleted={numCompleted}
-        //     percentCompleted={percentCompleted}
-        //     numCorrect={numCorrect}
-        //     percentCorrect={percentCorrect}
-        //     numIncorrect={numIncorrect}
-        //     numOmitted={numOmitted}
-        //     numUnattempted={numUnattempted}
-        //     label={groupName}
-        //     userResponseArray={userResponseArray}
-        //     markReviewArray={markReviewArray}
-        //     reviewMode={reviewMode}
-        //   />
-
-        //   <div className="flex flex-col w-full flex-grow justify-center items-center">
-        //   <div className="flex flex-col h-full overflow-y-auto p-10 flex-grow">
-        //       {objectList[activeObjectIndex].type === "question" ? (
-        //         <QuestionView
-        //           question={objectList[activeObjectIndex].questionData.Question}
-        //           engagement={objectList[activeObjectIndex].questionData.Engagement}
-        //           userResponseParam={userResponseArray[activeObjectIndex]}
-        //           markReviewParam={markReviewArray[activeObjectIndex]}
-        //           mode={mode}
-        //           showAnswer={showAnswer}
-        //           handleReportUserResponse={handleReportUserResponse}
-        //           timeLeft={timeLeft}
-        //           handleReportMarkedReview={handleReportMarkedReview}
-        //         />
-        //       ) : objectList[activeObjectIndex].type === "video" ? (
-        //         <VideoPlayer
-        //           videoId={objectList[activeObjectIndex].videoData.VideoID}
-        //           handleVideoEnd={handleMarkVideoComplete}
-        //         />
-        //       ) : (
-        //         <div>Content</div>
-        //       )}
-        //     </div>
-
-        //     <div className="w-full fixed bottom-0">
-        //       <BottomNavPanel
-        //         type={objectList[activeObjectIndex].type}
-        //         handleSubmitAnswer={handleSubmitAnswer}
-        //         handleMarkVideoComplete={handleMarkVideoComplete}
-        //         handleBack={handleBack}
-        //         handleNext={handleNext}
-        //         mode={mode}
-        //         handleFinish={handleCompleteModule}
-        //         handlePause={handlePause}
-        //         isPaused={isPaused}
-        //         submitButtonEnabled={submitButtonEnabled}
-        //       />
-        //     </div>
-        //   </div>
-        // </div>
-        // </div>
 
     )
 }

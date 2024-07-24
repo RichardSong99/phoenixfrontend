@@ -15,8 +15,10 @@ export async function initializeQuiz ({questionIDs, quizName, quizType}) {
         console.error('Could not get token:', error);
     }
 
-    let requestData = {
-        QuestionIDList: questionIDs,
+    let requestData = {}
+    
+    if (!questionIDs) {
+        requestData.QuestionIDList = questionIDs;
     }
 
     if (quizName) {
@@ -189,6 +191,34 @@ export async function fetchQuiz({ quizID, quizName }) {
     }
 
     // console.log("response", response);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
+export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngagementIDs){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({QEIDArray: questionEngagementIDs}),
+    };
+
+    const response = await fetch(`${apiUrl}/quiz/${quizID}`, requestOptions);
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

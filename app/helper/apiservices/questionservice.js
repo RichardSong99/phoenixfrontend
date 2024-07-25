@@ -71,7 +71,7 @@ export const fetchFullQuestionById = async (questionId) => {
         }
     };
 
-    const response = await fetch(`${apiUrl}/questions/${questionId}`, requestOptions);
+    const response = await fetch(`${apiUrl}/question/${questionId}`, requestOptions);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }

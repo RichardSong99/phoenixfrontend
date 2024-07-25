@@ -1,9 +1,18 @@
-import React, { createContext, useState, useRef } from 'react';
-import { postEngagements } from '@/app/helper/apiservices/engagementservice';
-import { useDisclosure } from '@nextui-org/react';
-import { fetchEngagementByQuestionID, fetchEngagementByID, updateEngagement, fetchEngagementsByID } from '@/app/helper/apiservices/engagementservice';
-import { fetchFullQuestionById } from '../apiservices/questionservice';
-import { updateQuizWithQuestionEngagementIDs, initializeQuiz, fetchQuiz } from '../apiservices/quizservice';
+import React, { createContext, useState, useRef } from "react";
+import { postEngagements } from "@/app/helper/apiservices/engagementservice";
+import { useDisclosure } from "@nextui-org/react";
+import {
+    fetchEngagementByQuestionID,
+    fetchEngagementByID,
+    updateEngagement,
+    fetchEngagementsByID,
+} from "@/app/helper/apiservices/engagementservice";
+import { fetchFullQuestionById, fetchQuestionsById } from "../apiservices/questionservice";
+import {
+    updateQuizWithQuestionEngagementIDs,
+    initializeQuiz,
+    fetchQuiz,
+} from "../apiservices/quizservice";
 
 export const QuestionContext = createContext();
 
@@ -15,17 +24,22 @@ export const QuestionProvider = ({ children }) => {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const { isOpen: isFormOpen, onOpen: onFormOpen, onOpenChange: onFormOpenChange } = useDisclosure();
+    const {
+        isOpen: isFormOpen,
+        onOpen: onFormOpen,
+        onOpenChange: onFormOpenChange,
+    } = useDisclosure();
 
     const MODEEDIT = "edit";
     const MODENEW = "new";
 
-    const SORTDATEANSWERED = "attemptTime"
-    const SORTDATECREATED = "createdTime"
-    const SORTDATELASTEDITED = "lastEditedTime"
+    const SORTDATEANSWERED = "attemptTime";
+    const SORTDATECREATED = "createdTime";
+    const SORTDATELASTEDITED = "lastEditedTime";
 
     const SORTASCENDING = 1;
     const SORTDESCENDING = -1;
+
 
     // filter and sort parameters
     const [selectedTopics, setSelectedTopics] = useState([]);
@@ -38,20 +52,18 @@ export const QuestionProvider = ({ children }) => {
     //====================================================================================================
 
     const handleDeleteQuestion = async (questionId) => {
-        if (window.confirm('Are you sure you want to delete this question?')) {
+        if (window.confirm("Are you sure you want to delete this question?")) {
             // Your delete logic goes here
             try {
                 await deleteQuestionService(questionId);
                 setQuestionsUpdated(!questionsUpdated);
             } catch (error) {
-                console.error('Could not delete question:', error);
+                console.error("Could not delete question:", error);
             }
-
         }
-    }
+    };
 
     const handleEditQuestion = async (questionId) => {
-
         console.log("handleEdit question ID", questionId);
 
         try {
@@ -59,40 +71,55 @@ export const QuestionProvider = ({ children }) => {
             setEditQuestion(question);
             onFormOpen();
         } catch (error) {
-            console.error('Could not fetch full question:', error);
+            console.error("Could not fetch full question:", error);
         }
-    }
+    };
 
-    const viewQuestionModal = async ({ questionId, engagementId = null }) => {
+    const viewQuestionModal = async ({ questionId = null, engagementId = null }) => {
 
-        try {
-            const fetchedQuestion = await fetchFullQuestionById(questionId);
-            setActiveViewQuestion(fetchedQuestion);
-
+        if (questionId) {
             if (engagementId) {
-                try {
-                    const fetchedEngagement = await fetchEngagementByID({ engagementID: engagementId });
-                    setActiveViewEngagement(fetchedEngagement);
-                } catch (error) {
-                    setActiveViewEngagement(null);
-                }
+                setupReviewIndividualMode(questionId, engagementId);
             } else {
-                try {
-                    const fetchedEngagement = await fetchEngagementByQuestionID({ questionID: questionId });
-                    setActiveViewEngagement(fetchedEngagement);
-                } catch (error) {
-                    setActiveViewEngagement(null);
-                }
+                setupActiveIndividualMode(questionId);
             }
-
-        } catch (error) {
-            // setActiveViewQuestion(null);
         }
-        console.log("activeViewQuestion", activeViewQuestion);
-        console.log("activeViewEngagement", activeViewEngagement);
+
 
         onOpen();
-    }
+        // try {
+        //     const fetchedQuestion = await fetchFullQuestionById(questionId);
+        //     setActiveViewQuestion(fetchedQuestion);
+
+        //     if (engagementId) {
+        //         try {
+        //             const fetchedEngagement = await fetchEngagementByID({
+        //                 engagementID: engagementId,
+        //             });
+        //             setActiveViewEngagement(fetchedEngagement);
+
+        //             setupReviewIndividualMode(questionId, engagementId);
+        //             onOpen();
+        //             return;
+
+        //         } catch (error) {
+        //             console.error('Failed to fetch engagement by ID:', error);
+        //             setActiveViewEngagement(null);
+        //         }
+        //     } else {
+        //         setActiveViewEngagement(null);
+        //     }
+        // } catch (error) {
+        //     console.error('Failed to fetch question:', error);
+        //     setActiveViewQuestion(null);
+        //     setActiveViewEngagement(null);
+        // }
+
+        // console.log("activeViewQuestion", activeViewQuestion);
+        // console.log("activeViewEngagement", activeViewEngagement);
+
+    };
+
 
     //=============================================
 
@@ -110,10 +137,13 @@ export const QuestionProvider = ({ children }) => {
     // Quiz methods and states ==> for active quiz
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
     const [questionIDArray, setQuestionIDArray] = useState([]);
+    const [questionData, setQuestionData] = useState({});
+
     const [userResponseData, setUserResponseData] = useState({});
 
     // engagementIDs
     const [engagementIDData, setEngagementIDData] = useState({});
+    const [engagementData, setEngagementData] = useState({});
 
     // initialize as false for all questions
     const [isFlaggedData, setIsFlaggedData] = useState({});
@@ -125,13 +155,11 @@ export const QuestionProvider = ({ children }) => {
     const [startTime, setStartTime] = useState(Date.now());
     const timerRef = useRef(null);
 
-
-
     const setupActiveIndividualMode = async (questionID) => {
         QEIDCombos = convertToQEIDComboArray([questionID]);
 
         initializeEngagementStates(QEIDCombos);
-    }
+    };
 
     const setupActiveQuizMode = async (questionIDs) => {
         const QEIDCombos = convertToQEIDComboArray(questionIDs);
@@ -141,60 +169,94 @@ export const QuestionProvider = ({ children }) => {
             const response = await initializeQuiz({});
             setQuizID(response.quizID);
         } catch (error) {
-            console.error('Could not initialize quiz:', error);
+            console.error("Could not initialize quiz:", error);
         }
 
         initializeEngagementStates(QEIDCombos);
-    }
+    };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
         const QEIDCombos = [{ QuestionID: questionID, EngagementID: engagementID }];
 
         initializeEngagementStates(QEIDCombos);
-    }
+    };
 
     const setupReviewQuizMode = async (quizID) => {
-
         var QEIDCombos = [];
-        
-        // fetch the quiz 
+
+        // fetch the quiz
         try {
-            const response = await fetchQuiz({quizID: quizID});
+            const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
             QEIDCombos = response.QuestionEngagementIDCombos;
         } catch (error) {
-            console.error('Could not fetch quiz:', error);
+            console.error("Could not fetch quiz:", error);
         }
-        
+
         initializeEngagementStates(QEIDCombos);
-    }
+    };
 
     const convertToQEIDComboArray = (questionIDs) => {
-        return questionIDs.map(questionID => {
+        return questionIDs.map((questionID) => {
             return { QuestionID: questionID, EngagementID: null };
         });
-    }
+    };
 
-    const initializeEngagementStates = (QEIDCombos) => {
+    const initializeEngagementStates = async (QEIDCombos) => {
         // ================== Initialize user response, flag status, star status, time spent ==================
 
         // the QEIDCombos is an array of {QuestionID, EngagementID} objects
-        const questionIDs = QEIDCombos.map(QEIDCombo => QEIDCombo.QuestionID);
+        const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.QuestionID);
         setQuestionIDArray(questionIDs);
+
+        // fetch the questions for the questionIDs, then populate the questionData object
+        const newQuestionData = {};
+        try {
+            const response = await fetchQuestionsById({ questionIdList: questionIDs });
+            response.forEach((question) => {
+                newQuestionData[question.id] = question;
+            });
+        } catch (error) {
+            console.error("Could not fetch questions by ID:", error);
+        }
+
+        setQuestionData(newQuestionData);
 
         // populate the engagementIDData object
         const newEngagementIDData = {};
-        QEIDCombos.forEach(QEIDCombo => {
+        QEIDCombos.forEach((QEIDCombo) => {
             newEngagementIDData[QEIDCombo.QuestionID] = QEIDCombo.EngagementID;
         });
         setEngagementIDData(newEngagementIDData);
 
+
+        // fetch the engagements for the questionIDs, if they exist
+        const newEngagementData = {};
+        // loop through the engagementIDData and fetch the engagements, if they exist
+        for (const questionID in newEngagementIDData) {
+            if (newEngagementIDData[questionID]) {
+                try {
+                    const response = await fetchEngagementByID({
+                        engagementID: newEngagementIDData[questionID],
+                    });
+                    newEngagementData[questionID] = response;
+                } catch (error) {
+                    console.error("Could not fetch engagement by ID:", error);
+                }
+            }
+        }
+
+
         // for each questionID, the initial user response is null
         const newUserResponseData = {};
-        questionIDs.forEach(questionID => {
+        questionIDs.forEach((questionID) => {
             // Check if newEngagementIDData and the corresponding entry for questionID exist
-            if (newEngagementIDData[questionID] && newEngagementIDData[questionID].UserAnswer) {
-                newUserResponseData[questionID] = newEngagementIDData[questionID].UserAnswer;
+            if (
+                newEngagementIDData[questionID] &&
+                newEngagementIDData[questionID].UserAnswer
+            ) {
+                newUserResponseData[questionID] =
+                    newEngagementIDData[questionID].UserAnswer;
             } else {
                 newUserResponseData[questionID] = null;
             }
@@ -203,8 +265,11 @@ export const QuestionProvider = ({ children }) => {
 
         // for each questionID, the initial flag status is false
         const newIsFlaggedData = {};
-        questionIDs.forEach(questionID => {
-            if(newEngagementIDData[questionID] && newEngagementIDData[questionID].Flagged){
+        questionIDs.forEach((questionID) => {
+            if (
+                newEngagementIDData[questionID] &&
+                newEngagementIDData[questionID].Flagged
+            ) {
                 newIsFlaggedData[questionID] = newEngagementIDData[questionID].Flagged;
             } else {
                 newIsFlaggedData[questionID] = false;
@@ -215,8 +280,11 @@ export const QuestionProvider = ({ children }) => {
 
         // for each questionID, the initial star status is false
         const newIsStarredData = {};
-        questionIDs.forEach(questionID => {
-            if(newEngagementIDData[questionID] && newEngagementIDData[questionID].Starred){
+        questionIDs.forEach((questionID) => {
+            if (
+                newEngagementIDData[questionID] &&
+                newEngagementIDData[questionID].Starred
+            ) {
                 newIsStarredData[questionID] = newEngagementIDData[questionID].Starred;
             } else {
                 newIsStarredData[questionID] = false;
@@ -227,10 +295,14 @@ export const QuestionProvider = ({ children }) => {
 
         // for each questionID, the initial review status is false
         const newWasReviewedData = {};
-        questionIDs.forEach(questionID => {
-            if(newEngagementIDData[questionID] && newEngagementIDData[questionID].Reviewed){
-                newWasReviewedData[questionID] = newEngagementIDData[questionID].Reviewed;
-            }else{
+        questionIDs.forEach((questionID) => {
+            if (
+                newEngagementIDData[questionID] &&
+                newEngagementIDData[questionID].Reviewed
+            ) {
+                newWasReviewedData[questionID] =
+                    newEngagementIDData[questionID].Reviewed;
+            } else {
                 newWasReviewedData[questionID] = false;
             }
         });
@@ -239,10 +311,13 @@ export const QuestionProvider = ({ children }) => {
 
         // for each questionID, the initial time spent is zero
         const newTimeSpentData = {};
-        questionIDs.forEach(questionID => {
-            if(newEngagementIDData[questionID] && newEngagementIDData[questionID].Duration){
+        questionIDs.forEach((questionID) => {
+            if (
+                newEngagementIDData[questionID] &&
+                newEngagementIDData[questionID].Duration
+            ) {
                 newTimeSpentData[questionID] = newEngagementIDData[questionID].Duration;
-            }else{
+            } else {
                 newTimeSpentData[questionID] = 0;
             }
         });
@@ -250,29 +325,27 @@ export const QuestionProvider = ({ children }) => {
         setTimeSpentData(newTimeSpentData);
 
         setStartTime(Date.now());
-    }
+    };
 
     const handleNextQuestion = () => {
         if (activeQuestionIndex < questionIDArray.length - 1) {
             setActiveQuestionIndex(activeQuestionIndex + 1);
         }
-    }
+    };
 
     const handlePreviousQuestion = () => {
         if (activeQuestionIndex > 0) {
             setActiveQuestionIndex(activeQuestionIndex - 1);
         }
-    }
+    };
 
     const jumpToQuestion = (index) => {
         if (index >= 0 && index < questionIDArray.length) {
             setActiveQuestionIndex(index);
         }
-    }
+    };
 
-
-
-    const handleFlagQuestion = async ({ questionID, engagementID }) => {
+    const handleFlagQuestion = async (questionID) => {
         if (activeReviewMode === ACTIVEMODE) {
             // flip the flag status for the question for which questionID is passed
             const newIsFlaggedData = { ...isFlaggedData };
@@ -286,16 +359,18 @@ export const QuestionProvider = ({ children }) => {
             setIsFlaggedData(newIsFlaggedData);
             // update the engagement with the new flag status
             try {
-                await updateEngagement({ engagementID: engagementID, update: { Flagged: newIsFlaggedData[questionID] } });
+                await updateEngagement({
+                    engagementID: engagementIDData[questionID],
+                    update: { Flagged: newIsFlaggedData[questionID] },
+                });
             } catch (error) {
-                console.error('Could not update engagement:', error);
+                console.error("Could not update engagement:", error);
             }
             return;
         }
+    };
 
-    }
-
-    const handleStarQuestion = async ({ questionID, engagementID }) => {
+    const handleStarQuestion = async (questionID) => {
         if (activeReviewMode === ACTIVEMODE) {
             // flip the star status for the question for which questionID is passed
             const newIsStarredData = { ...isStarredData };
@@ -309,13 +384,16 @@ export const QuestionProvider = ({ children }) => {
             setIsStarredData(newIsStarredData);
             // update the engagement with the new star status
             try {
-                await updateEngagement({ engagementID: engagementID, update: { Starred: newIsStarredData[questionID] } });
+                await updateEngagement({
+                    engagementID: engagementIDData[questionID],
+                    update: { Starred: newIsStarredData[questionID] },
+                });
             } catch (error) {
-                console.error('Could not update engagement:', error);
+                console.error("Could not update engagement:", error);
             }
             return;
         }
-    }
+    };
 
     const handleReportUserResponse = (response, questionID) => {
         if (activeReviewMode === ACTIVEMODE) {
@@ -324,7 +402,7 @@ export const QuestionProvider = ({ children }) => {
             setUserResponseData(newUserResponseData);
             return;
         }
-    }
+    };
 
     const handleUpdateTimeSpentData = (questionID) => {
         if (activeReviewMode === ACTIVEMODE) {
@@ -339,11 +417,10 @@ export const QuestionProvider = ({ children }) => {
             setStartTime(currentTime);
             return;
         }
-    }
+    };
 
-    const handleMarkReviewQuestion = async ({ questionID, engagementID }) => {
+    const handleMarkReviewQuestion = async (questionID) => {
         if (activeReviewMode === REVIEWMODE) {
-
             // flip the review status for the question for which questionID is passed
             const newWasReviewedData = { ...wasReviewedData };
             newWasReviewedData[questionID] = !newWasReviewedData[questionID];
@@ -351,21 +428,24 @@ export const QuestionProvider = ({ children }) => {
 
             // update the engagement with the new review status
             try {
-                await updateEngagement({ engagementID: engagementID, update: { Reviewed: newWasReviewedData[questionID] } });
+                await updateEngagement({
+                    engagementID: engagementIDData[questionID],
+                    update: { Reviewed: newWasReviewedData[questionID] },
+                });
             } catch (error) {
-                console.error('Could not update engagement:', error);
+                console.error("Could not update engagement:", error);
             }
             return;
         }
-    }
+    };
 
     const handleSubmitEngagements = async () => {
-        if(activeReviewMode === ACTIVEMODE){
-            const engagementData = [];
+        if (activeReviewMode === ACTIVEMODE) {
+            const engagementsArray = [];
             let questionEngagementIDs = [];
 
-            questionIDArray.forEach(questionID => {
-                engagementData.push({
+            questionIDArray.forEach((questionID) => {
+                engagementsArray.push({
                     QuestionID: questionID,
                     UserAnswer: userResponseData[questionID],
                     Flagged: isFlaggedData[questionID],
@@ -375,86 +455,89 @@ export const QuestionProvider = ({ children }) => {
             });
 
             try {
-                const response = await postEngagements(engagementData);
+                const response = await postEngagements(engagementsArray);
                 questionEngagementIDs = response.questionEngagementIDs;
 
                 if (indquizMode === QUIZMODE) {
-                    await updateQuizWithQuestionEngagementIDs(quizID, questionEngagementIDs);
+                    await updateQuizWithQuestionEngagementIDs(
+                        quizID,
+                        questionEngagementIDs
+                    );
                 }
-
             } catch (error) {
-                console.error('Could not submit engagements:', error);
+                console.error("Could not submit engagements:", error);
             }
         }
-    }
-
+    };
 
     return (
-        <QuestionContext.Provider value={{
-            questionsUpdated,
-            setQuestionsUpdated,
-            editQuestion,
-            setEditQuestion,
-            activeViewQuestion,
-            setActiveViewQuestion,
-            isOpen,
-            onOpen,
-            onOpenChange,
-            selectedTopics,
-            setSelectedTopics,
-            selectedDifficulties,
-            setSelectedDifficulties,
-            selectedAnswerStatuses,
-            setSelectedAnswerStatuses,
-            selectedAnswerTypes,
-            setSelectedAnswerTypes,
-            sortOption,
-            setSortOption,
-            sortDirection,
-            setSortDirection,
-            viewQuestionModal,
-            activeViewEngagement,
-            MODEEDIT,
-            MODENEW,
-            isFormOpen,
-            onFormOpen,
-            onFormOpenChange,
-            SORTDATEANSWERED,
-            SORTDATECREATED,
-            SORTDATELASTEDITED,
-            SORTASCENDING,
-            SORTDESCENDING,
-            handleDeleteQuestion,
-            handleEditQuestion,
+        <QuestionContext.Provider
+            value={{
+                questionsUpdated,
+                setQuestionsUpdated,
+                editQuestion,
+                setEditQuestion,
+                activeViewQuestion,
+                setActiveViewQuestion,
+                isOpen,
+                onOpen,
+                onOpenChange,
+                selectedTopics,
+                setSelectedTopics,
+                selectedDifficulties,
+                setSelectedDifficulties,
+                selectedAnswerStatuses,
+                setSelectedAnswerStatuses,
+                selectedAnswerTypes,
+                setSelectedAnswerTypes,
+                sortOption,
+                setSortOption,
+                sortDirection,
+                setSortDirection,
+                viewQuestionModal,
+                activeViewEngagement,
+                MODEEDIT,
+                MODENEW,
+                isFormOpen,
+                onFormOpen,
+                onFormOpenChange,
+                SORTDATEANSWERED,
+                SORTDATECREATED,
+                SORTDATELASTEDITED,
+                SORTASCENDING,
+                SORTDESCENDING,
+                handleDeleteQuestion,
+                handleEditQuestion,
 
-            // Quiz states and methods
-            quizID, 
-            indquizMode,
-            activeReviewMode,
-            activeQuestionIndex,
-            questionIDArray,
-            userResponseData,
-            engagementIDData,
-            isFlaggedData,
-            isStarredData,
-            wasReviewedData,
-            timeSpentData,
-            startTime,
-            setupActiveIndividualMode,
-            setupActiveQuizMode,
-            setupReviewIndividualMode,
-            setupReviewQuizMode,
-            handleNextQuestion,
-            handlePreviousQuestion,
-            jumpToQuestion,
-            handleFlagQuestion,
-            handleStarQuestion,
-            handleReportUserResponse,
-            handleUpdateTimeSpentData,
-            handleMarkReviewQuestion,
-            handleSubmitEngagements,
-
-        }}>
+                // Quiz states and methods
+                quizID,
+                indquizMode,
+                activeReviewMode,
+                activeQuestionIndex,
+                questionIDArray,
+                questionData,
+                userResponseData,
+                engagementIDData,
+                isFlaggedData,
+                isStarredData,
+                wasReviewedData,
+                timeSpentData,
+                startTime,
+                setupActiveIndividualMode,
+                setupActiveQuizMode,
+                setupReviewIndividualMode,
+                setupReviewQuizMode,
+                handleNextQuestion,
+                handlePreviousQuestion,
+                jumpToQuestion,
+                handleFlagQuestion,
+                handleStarQuestion,
+                handleReportUserResponse,
+                handleUpdateTimeSpentData,
+                handleMarkReviewQuestion,
+                handleSubmitEngagements,
+            }}
+        >
             {children}
         </QuestionContext.Provider>
     );

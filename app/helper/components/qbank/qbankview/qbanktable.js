@@ -83,7 +83,7 @@ const QBankTable = ({ questionEngagementCombos }) => {
                     onClick={() =>
                       viewQuestionModal({
                         questionId: questionEngagement?.Question?.id,
-                        engagement: questionEngagement?.Engagement?.id,
+                        engagementId: questionEngagement?.Engagement?.id,
                       })
                     }
                   >
@@ -158,7 +158,7 @@ const QBankTable = ({ questionEngagementCombos }) => {
                 />
               </TableCell>
               <TableCell>
-              <Icon icon="ic:round-star" width="32 " height="32"  style={{color: "#F5A524"}} />
+                <Icon icon="ic:round-star" width="32 " height="32" style={{ color: "#F5A524" }} />
 
               </TableCell>
             </TableRow>
@@ -171,8 +171,6 @@ const QBankTable = ({ questionEngagementCombos }) => {
         <QuestionModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          question={activeViewQuestion}
-          initialEngagement={activeViewEngagement}
           mode="practice"
         />
       )}

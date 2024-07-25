@@ -83,12 +83,9 @@ export const QuestionProvider = ({ children }) => {
             } else {
                 setupActiveIndividualMode(questionId);
             }
+
+            onOpen();
         }
-
-
-        onOpen();
-
-
     };
 
 
@@ -230,17 +227,17 @@ export const QuestionProvider = ({ children }) => {
             }
         }
 
+        setEngagementData(newEngagementData);
+
 
         // for each questionID, the initial user response is null
         const newUserResponseData = {};
         questionIDs.forEach((questionID) => {
             // Check if newEngagementIDData and the corresponding entry for questionID exist
             if (
-                newEngagementIDData[questionID] &&
-                newEngagementIDData[questionID].UserAnswer
+                newEngagementData[questionID] && newEngagementData[questionID].UserAnswer
             ) {
-                newUserResponseData[questionID] =
-                    newEngagementIDData[questionID].UserAnswer;
+                newUserResponseData[questionID] = newEngagementData[questionID].UserAnswer;
             } else {
                 newUserResponseData[questionID] = null;
             }
@@ -251,10 +248,10 @@ export const QuestionProvider = ({ children }) => {
         const newIsFlaggedData = {};
         questionIDs.forEach((questionID) => {
             if (
-                newEngagementIDData[questionID] &&
-                newEngagementIDData[questionID].Flagged
+                newEngagementData[questionID] &&
+                newEngagementData[questionID].Flagged
             ) {
-                newIsFlaggedData[questionID] = newEngagementIDData[questionID].Flagged;
+                newIsFlaggedData[questionID] = newEngagementData[questionID].Flagged;
             } else {
                 newIsFlaggedData[questionID] = false;
             }
@@ -266,10 +263,10 @@ export const QuestionProvider = ({ children }) => {
         const newIsStarredData = {};
         questionIDs.forEach((questionID) => {
             if (
-                newEngagementIDData[questionID] &&
-                newEngagementIDData[questionID].Starred
+                newEngagementData[questionID] &&
+                newEngagementData[questionID].Starred
             ) {
-                newIsStarredData[questionID] = newEngagementIDData[questionID].Starred;
+                newIsStarredData[questionID] = newEngagementData[questionID].Starred;
             } else {
                 newIsStarredData[questionID] = false;
             }
@@ -281,11 +278,9 @@ export const QuestionProvider = ({ children }) => {
         const newWasReviewedData = {};
         questionIDs.forEach((questionID) => {
             if (
-                newEngagementIDData[questionID] &&
-                newEngagementIDData[questionID].Reviewed
+                newEngagementData[questionID] && newEngagementData[questionID].Reviewed
             ) {
-                newWasReviewedData[questionID] =
-                    newEngagementIDData[questionID].Reviewed;
+                newWasReviewedData[questionID] = newEngagementData[questionID].Reviewed;
             } else {
                 newWasReviewedData[questionID] = false;
             }
@@ -296,11 +291,8 @@ export const QuestionProvider = ({ children }) => {
         // for each questionID, the initial time spent is zero
         const newTimeSpentData = {};
         questionIDs.forEach((questionID) => {
-            if (
-                newEngagementIDData[questionID] &&
-                newEngagementIDData[questionID].Duration
-            ) {
-                newTimeSpentData[questionID] = newEngagementIDData[questionID].Duration;
+            if (newEngagementData[questionID] && newEngagementData[questionID].Duration) {
+                newTimeSpentData[questionID] = newEngagementData[questionID].Duration;
             } else {
                 newTimeSpentData[questionID] = 0;
             }
@@ -432,6 +424,7 @@ export const QuestionProvider = ({ children }) => {
                 engagementsArray.push({
                     QuestionID: questionID,
                     UserAnswer: userResponseData[questionID],
+                    // add the Result (correct, incorrectt, etc. )
                     Flagged: isFlaggedData[questionID],
                     Starred: isStarredData[questionID],
                     Duration: timeSpentData[questionID],

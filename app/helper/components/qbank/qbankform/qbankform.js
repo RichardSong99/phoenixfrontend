@@ -47,16 +47,7 @@ const QBankForm = ({ inputQuestion, mode }) => {
         }
     }
 
-    const refreshCategoryAndTopic = async () => {
-        const result = await getTopicList("math");
-        setTopicsData(result);
 
-        if (result && result.length > 0) {
-            console.log("topicsData", result);
-            setGeneralCategory(result[0].Name);
-            setSpecificTopic(result[0].Children[0].Name);
-        }
-    };
 
     const setFormFields = (question) => {
         if (question.Prompt !== undefined && question.Prompt !== null) setPrompt(question.Prompt);
@@ -99,17 +90,24 @@ const QBankForm = ({ inputQuestion, mode }) => {
 
     useEffect(() => {
 
+        const refreshCategoryAndTopic = async () => {
+            const result = await getTopicList("math");
+            setTopicsData(result);
+    
+            if (result && result.length > 0) {
+                console.log("topicsData", result);
+                setGeneralCategory(result[0].Name);
+                setSpecificTopic(result[0].Children[0].Name);
+            }
+        };
+
         refreshCategoryAndTopic();
 
         if(inputQuestion){
             setFormFields(inputQuestion);
         }
 
-    }, [inputQuestion]);
-
-
-
-
+    }, [inputQuestion, getTopicList]);
 
     // renders question
     const handleSubmit = (event) => {
@@ -134,7 +132,6 @@ const QBankForm = ({ inputQuestion, mode }) => {
         onOpen();
     }
 
-
     const handleUpload = async () => {
         const newQuestion = createNewQuestion({
             prompt,
@@ -150,6 +147,8 @@ const QBankForm = ({ inputQuestion, mode }) => {
             correctAnswerFree,
             uploadedImageUrls
         });
+
+        console.log('newQuestion', newQuestion);
 
         // post the question to the server
         try {
@@ -178,7 +177,6 @@ const QBankForm = ({ inputQuestion, mode }) => {
     return (
         <div >
 
-            {generalCategory !== "" && specificTopic !== "" &&
                 <div >
                     <h4>Input Question Details</h4>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
@@ -264,7 +262,7 @@ const QBankForm = ({ inputQuestion, mode }) => {
                         uploadedImageUrls={uploadedImageUrls}
                         setUploadedImageUrls={setUploadedImageUrls}
                     />
-                </div>}
+                </div>
         </div>
 
 

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import SummaryPanel from '../../../../helper/components/summarypanel/summarypanel';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
-import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import styles from './quizsummary.module.css';
+import QBankTable from '@/app/helper/components/qbank/qbankview/qbanktable';
 
 export function QuizSummary({ fullQuizData }) {
 
@@ -24,10 +24,8 @@ export function QuizSummary({ fullQuizData }) {
                         <StatTile label={"Time Per Question"} value={"0:00"} />
                     </div>
 
-                    {fullQuizData?.Questions && <SummaryPanel
-                        questionEngagements={fullQuizData?.Questions}
-                        quizID={fullQuizData?.Quiz?.id}
-                    />}
+                    {fullQuizData?.Questions && <QBankTable questionEngagementCombos={fullQuizData?.Questions} />}
+                  
                 </div>
             </div>
 

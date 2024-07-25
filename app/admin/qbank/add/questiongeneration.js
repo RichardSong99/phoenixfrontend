@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import AIPrompt from '@/app/helper/components/questionbank/ai/aiprompt';
+import React, { useState, useEffect, useContext } from 'react';
 import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { ImageUpload } from '@/app/helper/components/form/formcomponents';
+import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
-    const [topicsData, setTopicsData] = useState([]);
-    const [generalCategory, setGeneralCategory] = useState("");
-    const [specificTopic, setSpecificTopic] = useState("");
+    const { getTopicList, loading, datacube } = useData();
+
+    const [topicsData, setTopicsData] = useState(getTopicList("math"));
+    const [generalCategory, setGeneralCategory] = useState(getTopicList("math")[0].Name);
+    const [specificTopic, setSpecificTopic] = useState(getTopicList("math")[0].Children[0].Name);
     const [numEasy, setNumEasy] = useState(1);
     const [numMedium, setNumMedium] = useState(1);
     const [numHard, setNumHard] = useState(1);
@@ -19,25 +21,10 @@ const QuestionGeneration = () => {
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
 
-    const { getTopicList, loading, datacube } = useData();
 
     const [generationLoading, setGenerationLoading] = useState(false);
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getTopicList("math");
-            setTopicsData(result);
-
-            if (result && result.length > 0) {
-                console.log("topicsData", result);
-                setGeneralCategory(result[0].Name);
-                setSpecificTopic(result[0].Children[0].Name);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const { MODENEW } = useContext(QuestionContext);
 
     const handleChangeNumEasy = (value) => {
         setNumEasy(value);
@@ -194,13 +181,13 @@ const QuestionGeneration = () => {
 
             <div>
                 {questionArray.map((question, index) => (
-                    <div>
+                    <div key = {index}>
                         <Card key={index} className="w-full">
                             <CardHeader>
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm question={question} />
+                                <QBankForm inputQuestion={question} mode = {MODENEW}/>
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
@@ -219,7 +206,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm />
+                            <QBankForm mode = {MODENEW} />
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

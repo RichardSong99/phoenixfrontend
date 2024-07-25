@@ -5,12 +5,14 @@ const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loginToggle, setLoginToggle] = useState(false);
 
     useEffect(() => {
         const checkUser = async () => {
             try {
                 await confirmUser();
                 setIsAuthenticated(true);
+                setLoginToggle(!loginToggle)
             } catch (error) {
                 console.error('Failed to confirm user:', error);
             }
@@ -20,7 +22,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginToggle }}>
             {children}
         </UserContext.Provider>
     );

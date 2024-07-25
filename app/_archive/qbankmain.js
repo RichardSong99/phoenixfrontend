@@ -16,14 +16,6 @@ const QBankMain = () => {
     const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork
     const { activeViewQuestion, setActiveViewQuestion, isOpen, onOpen, onOpenChange } = useContext(QuestionContext); // State for the question being viewed
 
-    const handleCloseModal = () => {
-        setActiveViewQuestion(null);
-        setIsModalOpen(false);
-    }
-
-    const uploadQuestionHandler = () => {
-        console.log('question', question);
-    }
 
     return (
 

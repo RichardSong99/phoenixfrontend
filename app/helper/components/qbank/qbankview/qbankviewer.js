@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '@/app/helper/apiservices/questionservice';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
-import { parseLatexString } from '../../latexrender/latexrender';
-import renderMarkdownWithLaTeX from '../../latexrender/markdownwlatex';
 import { ChevronDownIcon } from '../../../assets/components/ChevronDownIcon';
-import { QuestionModal } from '@/app/helper/components/question/questionviewcomponents/questionmodal';
-import { QBankFormModal } from '@/app/helper/components/qbank/qbankform/qbankformmodal';
+import QBankTable from './qbanktable';
 
 import QuestionFilterSort from '../../filter/questionfiltersort';
 import {
@@ -33,13 +30,10 @@ import {
     Radio
 } from "@nextui-org/react";
 
-import { useUser } from '@/app/helper/context/usercontext';
-import { formatDate } from '../../../data/utility';
 
 const QBankViewer = () => {
 
     const [questions, setQuestions] = useState([]);
-    const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
 
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
@@ -47,64 +41,60 @@ const QBankViewer = () => {
 
     const [activeSubject, setActiveSubject] = useState("math"); // Default to 'Math'
 
-    const { isAuthenticated } = useUser();
     const [filterValue, setFilterValue] = useState("");
 
-    const [mode, setMode] = useState('practice'); // [practice, review, test, checkwork]
 
-    const { activeViewQuestion, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, viewQuestionModal, activeViewEngagement, isOpen, onOpenChange, isFormOpen, onFormOpen, onFormOpenChange, editQuestion, setEditQuestion, MODEEDIT, MODENEW } = useContext(QuestionContext);
+    const { 
+        selectedTopics, 
+        selectedDifficulties, 
+        selectedAnswerStatuses, 
+        selectedAnswerTypes, 
+        sortOption, 
+        sortDirection, 
+        viewQuestionModal, 
+        activeViewEngagement, 
+        isOpen, 
+        onOpenChange, 
+        isFormOpen, 
+        onFormOpen, 
+        onFormOpenChange, 
+        editQuestion, 
+        setEditQuestion, 
+        MODEEDIT, 
+        MODENEW,
+        questionsUpdated,
+        setQuestionsUpdated 
+    } = useContext(QuestionContext);
 
-    async function loadQuestions() {
-        try {
-            const data = await getQuestions({
-                selectedTopics: selectedTopics,
-                selectedDifficulties: selectedDifficulties,
-                selectedAnswerStatuses: selectedAnswerStatuses,
-                selectedAnswerTypes: selectedAnswerTypes,
-                sortOption: sortOption,
-                sortDirection: sortDirection,
-                page: page,
-                subject: activeSubject
-            });
-            setQuestions(data.data);
-            setPage(data.currentPage);
-            setLastPage(data.lastPage);
-            setIsFetching(false);
-        } catch (error) {
-            console.error('Could not fetch questions:', error);
-        }
-    }
+
 
 
     useEffect(() => {
+        async function loadQuestions() {
+            try {
+                const data = await getQuestions({
+                    selectedTopics: selectedTopics,
+                    selectedDifficulties: selectedDifficulties,
+                    selectedAnswerStatuses: selectedAnswerStatuses,
+                    selectedAnswerTypes: selectedAnswerTypes,
+                    sortOption: sortOption,
+                    sortDirection: sortDirection,
+                    page: page,
+                    subject: activeSubject
+                });
+                setQuestions(data.data);
+                setPage(data.currentPage);
+                setLastPage(data.lastPage);
+                setIsFetching(false);
+            } catch (error) {
+                console.error('Could not fetch questions:', error);
+            }
+        }
+
         loadQuestions();
     }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject]);
 
-    const deleteQuestion = async (questionId) => {
-        if (window.confirm('Are you sure you want to delete this question?')) {
-            // Your delete logic goes here
-            try {
-                await deleteQuestionService(questionId);
-                setQuestionsUpdated(!questionsUpdated);
-            } catch (error) {
-                console.error('Could not delete question:', error);
-            }
 
-        }
-    }
-
-    const handleEdit = async (questionId) => {
-
-        console.log("handleEdit question ID", questionId);
-
-        try {
-            const question = await fetchFullQuestionById(questionId);
-            setEditQuestion(question);
-            onFormOpen();
-        } catch (error) {
-            console.error('Could not fetch full question:', error);
-        }
-    }
 
     const onSearchChange = React.useCallback((value) => {
         if (value) {
@@ -118,9 +108,9 @@ const QBankViewer = () => {
     return (
         <div className="flex flex-col gap-y-4 p-2">
             {/* Your component code goes here */}
-            <div>
+            {/* <div>
                 <h3>Question Bank Database</h3>
-            </div>
+            </div> */}
 
 
 
@@ -155,72 +145,10 @@ const QBankViewer = () => {
 
             </div>
 
-            {/* <PageNavigation currentPage={currentPage} lastPage={lastPage} pageSelectHandler={pageSelectHandler} /> */}
             <Pagination total={lastPage} initialPage={page} onChange={(page) => setPage(page)} showControls />
 
 
-            {/* <div className={styles.questionsContainer}> */}
-            <Table removeWrapper >
-                <TableHeader>
-                    <TableColumn>Action</TableColumn>
-                    <TableColumn>Prompt</TableColumn>
-                    <TableColumn>Topic</TableColumn>
-                    <TableColumn>Difficulty</TableColumn>
-                    <TableColumn>Access Option</TableColumn>
-                    <TableColumn>Answer Type</TableColumn>
-                    <TableColumn>Status</TableColumn>
-                    <TableColumn>Date Answered</TableColumn>
-                    <TableColumn>Date Created</TableColumn>
-                    <TableColumn>Date Last Edited</TableColumn>
-
-                </TableHeader>
-                <TableBody>
-                    {questions.map((question, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
-                                <div className="flex space-x-2">
-
-                                    <Button color="danger" onClick={() => deleteQuestion(question?.question?._id)}>Delete</Button>
-                                    <Button color="secondary" onClick={() => handleEdit(question?.question?._id)}>Edit</Button>
-                                    <Button color="primary" onClick={() => viewQuestionModal({ questionId: question?.question?._id, engagement: question?.question?.engagements[0]?._id })}>View</Button>
-
-                                </div>
-                            </TableCell>
-                            <TableCell>{renderMarkdownWithLaTeX(question.question.prompt)}</TableCell>
-                            <TableCell>{question.question.topic}</TableCell>
-                            <TableCell><Chip color={
-                                question.question.difficulty === 'easy' ? 'success' : question.question.difficulty === 'medium' ? 'warning' : 'danger'
-                            }>{question.question.difficulty}</Chip></TableCell>
-                            <TableCell>{question.question.access_option}</TableCell>
-                            <TableCell>{question.question.answer_type}</TableCell>
-                            <TableCell><Chip
-                                color={
-                                    question.status === 'correct' ? 'success' : question.status === 'incorrect' ? 'danger' : question.status === 'omitted' ? 'warning' : 'default'
-                                }>
-                                {isAuthenticated ? question.status : "Unattempted"}</Chip></TableCell>
-                            <TableCell>
-                                {question.question.engagements[0]?.attempt_time && (
-                                    <div>{formatDate(question.question.engagements[0].attempt_time)}</div>
-                                )}
-                            </TableCell>
-                            <TableCell>
-                                {formatDate(question?.question?.creation_date)}
-                            </TableCell>
-                            <TableCell>
-                                {formatDate(question?.question?.last_edited_date)}
-                            </TableCell>
-                        </TableRow>
-
-                    ))}
-                </TableBody>
-            </Table>
-            {/* </div> */}
-
-            {activeViewQuestion &&
-                <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} question={activeViewQuestion} initialEngagement={activeViewEngagement} mode={mode} />
-            }
-
-            {editQuestion && <QBankFormModal isOpen={isFormOpen} onOpenChange={onFormOpenChange} question={editQuestion} mode={MODEEDIT} />}
+            <QBankTable questionEngagementCombos = {questions} />
 
         </div >
 

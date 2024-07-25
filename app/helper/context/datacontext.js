@@ -21,7 +21,7 @@ export const DataProvider = ({ children }) => {
     const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
     const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
-    const {isAuthenticated} = useUser();
+    const {isAuthenticated, loginToggle} = useUser();
 
     const fetchDataCube = async () => {
         try {
@@ -79,14 +79,7 @@ export const DataProvider = ({ children }) => {
         initializeTopicList();
         loadQuizUnderlyingList();
         loadTestUnderlyingList();
-    }, [isAuthenticated]);
-
-    // useEffect(() => {
-    //     if (datacube && mathTopics.length > 0 && readingTopics.length > 0) {
-    //         console.log(readingTopics, "readingTopics");
-    //         setLoading(false);
-    //     }
-    // }, [datacube, mathTopics, readingTopics]);
+    }, [isAuthenticated, loginToggle]);
 
   
 

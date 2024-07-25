@@ -1,82 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import styles from './questionview.module.css';
-import MainQuestionView from './mainquestionview';
-import { postEngagement } from '@/app/helper/apiservices/engagementservice';
-import { ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
-import renderMarkdownWithLaTeX from '../../latexrender/markdownwlatex';
-import { calculateResult } from '../../../data/questionhelpers';
+import React, { useState, useEffect, useContext } from "react";
+import styles from "./questionview.module.css";
+// import MainQuestionView from "./mainquestionview";
+import renderMarkdownWithLaTeX from "../../latexrender/markdownwlatex";
+import { QuestionContext } from "@/app/helper/context/questioncontext";
+import classNames from 'classnames';
+import { QuestionHeader, ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
+import { QuestionChoiceArea } from '@/app/helper/components/question/questionpieces/questionpieces';
 
+const QuestionView = ({
+    question,
+    userResponse,
+    isFlagged,
+    isStarred,
+    wasReviewed,
+    timeElapsed,
+    activeReviewMode,
+}) => {
+    const {
+        handleFlagQuestion,
+        handleStarQuestion,
+        handleReviewQuestion,
+        handleReportUserResponse,
+        handleMarkReviewQuestion,
+    } = useContext(QuestionContext);
 
-const QuestionView = ({ question, engagement, userResponseParam, markReviewParam, mode, showAnswer, handleReportUserResponse, handleReportMarkedReview, timeLeft }) => {
-    const [markedReview, setMarkedReview] = useState(false);
-    const [userResponse, setUserResponse] = useState(null);
-    const [result, setResult] = useState(false);
-
-    const handleFlagButtonClick = () => {
-        setMarkedReview(prevFlagged => !prevFlagged);
-    };
-    
-    useEffect(() => {
-        if( typeof handleReportMarkedReview === 'function' ){
-            handleReportMarkedReview(markedReview);
-        }
-    }, [markedReview]);
 
     const handleInputChange = (userFreeAnswer) => {
-        setUserResponse(userFreeAnswer);
-        handleReportUserResponse(userFreeAnswer);
+        handleReportUserResponse(userFreeAnswer, question.id);
     };
 
     const handleChoiceClick = (choiceLetter) => {
-        setUserResponse(choiceLetter);
-        handleReportUserResponse(choiceLetter);
+        handleReportUserResponse(choiceLetter, question.id);
     };
 
-
-    useEffect(() => {
-        if (engagement) {
-            setUserResponse(engagement.UserAnswer);
-            setResult(calculateResult({question: question, userResponse: engagement.UserAnswer}));
-        } else if(userResponseParam){
-            setUserResponse(userResponseParam);
-            setResult(calculateResult({question: question, userResponse: userResponseParam}));
-        } else {
-            setUserResponse(null);
-            setResult(false);
-        }
-
-        if (engagement) {
-            setMarkedReview(engagement.Flagged);
-        } else {
-            setMarkedReview(markReviewParam);
-        }
-
-    }, [question, engagement, userResponseParam, markReviewParam]);
-
+    const textareaClass = classNames({
+        [styles.questionTextArea]: !showAnswer,
+        [styles.questionTextAreaShowAnswerCorrect]: showAnswer && result,
+        [styles.questionTextAreaShowAnswerIncorrect]: showAnswer && !result,
+    });
 
     return (
         <div className={styles.questionView}>
-            <MainQuestionView
-                question={question}
-                userResponse={userResponse}
-                setUserResponse={setUserResponse}
-                handleInputChange={handleInputChange}
-                handleChoiceClick={handleChoiceClick}
-                markedReview={markedReview}
-                handleFlagButtonClick={handleFlagButtonClick}
-                showAnswer={showAnswer}
-                result={result}
-                timeLeft={timeLeft}
-            />
+            <div className={styles.questionPanel}>
+                <QuestionHeader
+                    handleFlagButtonClick={() => handleFlagQuestion(question.id)}
+                    questionFlagged={isFlagged}
+                    // fix this one -- we should be showing time counting up as well
+                    timeLeft={timeLeft}
+                />
 
+                <div className={styles.questionContentContainer}>
+                    {
+                        question.Text && question.Text !== "" && <div className={styles.questionTextContainer}>
+                            {renderMarkdownWithLaTeX(question.Text)}
+                        </div>
+                    }
 
+                    <div className={styles.questionRHS}>
+                        <div className={styles.questionPrompt}>
+                            {question.Images && question.Images[0] &&
+                                <img src={question.Images[0].Url} alt="Question" className={styles.image} />}
+
+                            {renderMarkdownWithLaTeX(question.Prompt)}
+                        </div>
+                        <div className={styles.responseArea}>
+                            {question.AnswerType === 'freeResponse' ? (
+                                <textarea
+                                    className={textareaClass}
+                                    rows="1"
+                                    maxLength="6"
+                                    value={userResponse || ''}
+                                    placeholder="Enter your response here..."
+                                    onChange={(event) => {
+                                        // Remove all characters that are not digits, a negative sign, or a period
+                                        event.target.value = event.target.value.replace(/[^0-9.-]/g, '');
+
+                                        // If there's more than one negative sign, remove all occurrences
+                                        if ((event.target.value.match(/-/g) || []).length > 1) {
+                                            event.target.value = event.target.value.replace(/-/g, '');
+                                        }
+
+                                        // If there's more than one decimal point, remove all but the first
+                                        if ((event.target.value.match(/\./g) || []).length > 1) {
+                                            event.target.value = event.target.value.replace(/(?!^)\./g, '');
+                                        }
+
+                                        // If the negative sign is not at the beginning, move it to the beginning
+                                        if (event.target.value.indexOf('-') > 0) {
+                                            event.target.value = '-' + event.target.value.replace(/-/g, '');
+                                        }
+
+                                        handleInputChange(event.target.value);
+                                    }}
+                                    disabled={showAnswer}
+                                />
+                            ) : (
+                                <QuestionChoiceArea
+                                    answerChoiceArray={question.AnswerChoices}
+                                    correctAnswer={question.CorrectAnswerMultiple}
+                                    showAnswer={showAnswer}
+                                    userAnswer={userResponse}
+                                    setUserAnswer={handleChoiceClick}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {showAnswer && (
                 <div className={styles.answersection}>
                     <div>
-                        {question.AnswerType === 'freeResponse' ? (
+                        {question.AnswerType === "freeResponse" ? (
                             <div>
-                                <p>Correct Answer: <span>{renderMarkdownWithLaTeX(`$${question.CorrectAnswerFree}$`)}</span></p>
+                                <p>
+                                    Correct Answer:{" "}
+                                    <span>
+                                        {renderMarkdownWithLaTeX(`$${question.CorrectAnswerFree}$`)}
+                                    </span>
+                                </p>
                             </div>
                         ) : (
                             <div>
@@ -85,9 +127,7 @@ const QuestionView = ({ question, engagement, userResponseParam, markReviewParam
                         )}
                     </div>
 
-                    <div>
-                        {renderMarkdownWithLaTeX(question.Explanation)}
-                    </div>
+                    <div>{renderMarkdownWithLaTeX(question.Explanation)}</div>
                 </div>
             )}
         </div>

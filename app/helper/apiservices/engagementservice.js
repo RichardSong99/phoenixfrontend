@@ -109,6 +109,35 @@ export async function fetchEngagementByID({engagementID}){
     return data;
 }
 
+export async function fetchEngagementsByID({engagementIDArray}){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const queryParams = engagementIDArray.map(id => `engagementIDArray=${id}`).join('&');
+
+    const response = await fetch(`${apiUrl}/engagements?engagementIDArray=${queryParams}`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+
+}
+
 export async function fetchEngagementByQuestionID({questionID}){
     let token;
     try {
@@ -133,4 +162,29 @@ export async function fetchEngagementByQuestionID({questionID}){
     const data = await response.json();
 
     return data;
+}
+
+export async function updateEngagement({engagementID, update}){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(update),
+    };
+
+    const response = await fetch(`${apiUrl}/engagement/${engagementID}`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
 }

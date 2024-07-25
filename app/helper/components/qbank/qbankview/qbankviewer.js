@@ -45,7 +45,6 @@ const QBankViewer = () => {
 
 
     const { 
-        activeViewQuestion, 
         selectedTopics, 
         selectedDifficulties, 
         selectedAnswerStatuses, 

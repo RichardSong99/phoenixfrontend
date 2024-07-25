@@ -87,36 +87,7 @@ export const QuestionProvider = ({ children }) => {
 
 
         onOpen();
-        // try {
-        //     const fetchedQuestion = await fetchFullQuestionById(questionId);
-        //     setActiveViewQuestion(fetchedQuestion);
 
-        //     if (engagementId) {
-        //         try {
-        //             const fetchedEngagement = await fetchEngagementByID({
-        //                 engagementID: engagementId,
-        //             });
-        //             setActiveViewEngagement(fetchedEngagement);
-
-        //             setupReviewIndividualMode(questionId, engagementId);
-        //             onOpen();
-        //             return;
-
-        //         } catch (error) {
-        //             console.error('Failed to fetch engagement by ID:', error);
-        //             setActiveViewEngagement(null);
-        //         }
-        //     } else {
-        //         setActiveViewEngagement(null);
-        //     }
-        // } catch (error) {
-        //     console.error('Failed to fetch question:', error);
-        //     setActiveViewQuestion(null);
-        //     setActiveViewEngagement(null);
-        // }
-
-        // console.log("activeViewQuestion", activeViewQuestion);
-        // console.log("activeViewEngagement", activeViewEngagement);
 
     };
 
@@ -158,25 +129,35 @@ export const QuestionProvider = ({ children }) => {
     const setupActiveIndividualMode = async (questionID) => {
         QEIDCombos = convertToQEIDComboArray([questionID]);
 
+        setActiveReviewMode(ACTIVEMODE);
+        setIndQuizMode(INDIVIDUALMODE);
+
         initializeEngagementStates(QEIDCombos);
     };
 
-    const setupActiveQuizMode = async (questionIDs) => {
-        const QEIDCombos = convertToQEIDComboArray(questionIDs);
+    const setupActiveQuizMode = async (quizID) => {
+        var QEIDCombos = [];
 
-        // Initialize the quiz, set the quizID ========================================
+        // fetch the quiz
         try {
-            const response = await initializeQuiz({});
-            setQuizID(response.quizID);
+            const response = await fetchQuiz({ quizID: quizID });
+            setQuizID(quizID);
+            QEIDCombos = response.QuestionEngagementIDCombos;
         } catch (error) {
-            console.error("Could not initialize quiz:", error);
+            console.error("Could not fetch quiz:", error);
         }
+
+        setActiveReviewMode(ACTIVEMODE);
+        setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
         const QEIDCombos = [{ QuestionID: questionID, EngagementID: engagementID }];
+
+        setActiveReviewMode(REVIEWMODE);
+        setIndQuizMode(INDIVIDUALMODE);
 
         initializeEngagementStates(QEIDCombos);
     };
@@ -192,6 +173,9 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }
+
+        setActiveReviewMode(REVIEWMODE);
+        setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
     };

@@ -1,5 +1,5 @@
 // components/QuestionModal.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import QuestionView from './questionview';
 import styles from './questionmodal.module.css'; // Import the CSS file
 import { CheckAnswerButton } from '@/app/helper/components/question/questionpieces/questionpieces';
@@ -19,7 +19,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
         isFlaggedData,
         isStarredData,
         wasReviewedData,
-        timeElapsedData,
+        timeSpentData,
         activeReviewMode
     } = useContext(QuestionContext);
 
@@ -50,7 +50,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
                             isFlagged={isFlaggedData[questionIDArray[activeQuestionIndex]]}
                             isStarred={isStarredData[questionIDArray[activeQuestionIndex]]}
                             wasReviewed={wasReviewedData[questionIDArray[activeQuestionIndex]]}
-                            timeElapsed={timeElapsedData[questionIDArray[activeQuestionIndex]]}
+                            timeElapsed={timeSpentData[questionIDArray[activeQuestionIndex]]}
                             activeReviewMode={activeReviewMode}
                         />}
                     </>

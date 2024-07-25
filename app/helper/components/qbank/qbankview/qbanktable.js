@@ -167,13 +167,13 @@ const QBankTable = ({ questionEngagementCombos }) => {
       </Table>
       {/* </div> */}
 
-      {activeViewQuestion && (
+      
         <QuestionModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           mode="practice"
         />
-      )}
+      
 
       {editQuestion && (
         <QBankFormModal

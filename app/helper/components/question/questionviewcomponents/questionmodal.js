@@ -44,7 +44,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
                             activeReviewMode={mode}
                         />}
 
-                        {!pendingQuestion && <QuestionView
+                        {!pendingQuestion && questionData[questionIDArray[activeQuestionIndex]]&& <QuestionView
                             question={questionData[questionIDArray[activeQuestionIndex]]}
                             userResponse={userResponseData[questionIDArray[activeQuestionIndex]]}
                             isFlagged={isFlaggedData[questionIDArray[activeQuestionIndex]]}

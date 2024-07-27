@@ -51,7 +51,6 @@ const QBankViewer = () => {
         selectedAnswerTypes, 
         sortOption, 
         sortDirection, 
-        viewQuestionModal, 
         activeViewEngagement, 
         isOpen, 
         onOpenChange, 

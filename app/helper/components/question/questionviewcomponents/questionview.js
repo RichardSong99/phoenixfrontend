@@ -33,6 +33,8 @@ const QuestionView = ({
         handleReportUserResponse(choiceLetter, question.id);
     };
 
+    const showAnswer = false; 
+
     const textareaClass = classNames({
         [styles.questionTextArea]: !showAnswer,
         [styles.questionTextAreaShowAnswerCorrect]: showAnswer && result,
@@ -46,7 +48,7 @@ const QuestionView = ({
                     handleFlagButtonClick={() => handleFlagQuestion(question.id)}
                     questionFlagged={isFlagged}
                     // fix this one -- we should be showing time counting up as well
-                    timeLeft={timeLeft}
+                    timeLeft={timeElapsed}
                 />
 
                 <div className={styles.questionContentContainer}>

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'; // Update import
 
@@ -15,9 +15,6 @@ export default function Page() {
     const search = searchParams.get('review');
 
     console.log(search, "search")
-
-
-    const [objectList, setObjectList] = useState(null);
 
     const handleClose = () => {
         router.push(`/study/myquizzes/`);
@@ -37,13 +34,13 @@ export default function Page() {
     }, []);
     
     return (
-        <>{objectList && 
+        <>
         <ContentViewer
             groupName={"Quiz"}
             mode={"quiz"}
             handleClose={handleClose}
 
-        />}
+        />
         </>
     );
 }

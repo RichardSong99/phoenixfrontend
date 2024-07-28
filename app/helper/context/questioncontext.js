@@ -13,6 +13,7 @@ import {
     initializeQuiz,
     fetchQuiz,
 } from "../apiservices/quizservice";
+import {getResult} from "../apiservices/quizservice";
 
 export const QuestionContext = createContext();
 
@@ -167,6 +168,7 @@ export const QuestionProvider = ({ children }) => {
             const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
             QEIDCombos = response.QuestionEngagementIDCombos;
+            console.log("QEIDCombos", QEIDCombos);
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }
@@ -424,7 +426,7 @@ export const QuestionProvider = ({ children }) => {
                 engagementsArray.push({
                     QuestionID: questionID,
                     UserAnswer: userResponseData[questionID],
-                    // add the Result (correct, incorrectt, etc. )
+                    Result: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
                     Flagged: isFlaggedData[questionID],
                     Starred: isStarredData[questionID],
                     Duration: timeSpentData[questionID],

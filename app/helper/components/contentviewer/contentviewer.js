@@ -18,22 +18,22 @@ import { QuestionContext } from '../../context/questioncontext';
 export function ContentViewer({
     groupName,
     mode,
-    activeIndex,
+    // activeIndex,
     handleClose,
-    objectList,
-    numTotal,
-    numCompleted,
-    percentCompleted,
-    numCorrect,
-    percentCorrect,
-    numIncorrect,
-    numOmitted,
-    numUnattempted,
-    refreshObjectList,
-    quizID,
-    onNext,
-    timeLimit,
-    reviewMode
+    // objectList,
+    // numTotal,
+    // numCompleted,
+    // percentCompleted,
+    // numCorrect,
+    // percentCorrect,
+    // numIncorrect,
+    // numOmitted,
+    // numUnattempted,
+    // refreshObjectList,
+    // quizID,
+    // onNext,
+    // timeLimit,
+    // reviewMode
 }) {
     const router = useRouter();
 
@@ -71,23 +71,6 @@ export function ContentViewer({
         router.back();
     }
 
-    // const handleCompleteModule = async () => {
-    //     for (let i = 0; i < objectList.length; i++) {
-    //         if (objectList[i].type === "question" && objectList[i].questionData.Engagement === null) {
-    //             let response = await handlePostEngagement({ question: objectList[i].questionData.Question, userResponse: userResponseArray[i], mode: mode });
-    //             console.log("response inside handleSubmitAnswer", response);
-    //             const engagementID = response.id;
-    //             response = await addEngagementToQuiz({ quizID: quizID, engagementID: engagementID });
-    //         }
-    //     }
-    //     if(mode === "quiz") {
-    //         router.push(`/study/mydashboard`);
-    //     } else if (mode === "test") {
-    //         onNext();
-    //     }
-    // }
-
-
     return (
 
         <div className="flex flex-col h-screen w-full overflow-hidden" style={{ overflowY: "hidden" }}>
@@ -100,7 +83,7 @@ export function ContentViewer({
             <div className="flex-1 flex overflow-hidden">
                 <nav className="flex flex-col w-72 border-r">
                     <div className="flex-1 flex flex-col overflow-y-auto">
-                        <ObjectSideNav
+                        {/* <ObjectSideNav
                             objectList={objectList}
                             activeObjectIndex={activeObjectIndex}
                             handleObjectClick={handleSelectObject}
@@ -121,7 +104,7 @@ export function ContentViewer({
                             userResponseArray={userResponseArray}
                             markReviewArray={markReviewArray}
                             reviewMode={reviewMode}
-                        />
+                        /> */}
                     </div>
 
                 </nav>
@@ -159,7 +142,6 @@ export function ContentViewer({
                     
                     <footer className="flex items-center h-14 border-t gap-4">
                         <BottomNavPanel
-                            type={objectList[activeObjectIndex].type}
                             handleSubmitAnswer={handleSubmitAnswer}
                             handleMarkVideoComplete={handleMarkVideoComplete}
                             handleBack={handleBack}
@@ -194,7 +176,6 @@ export const BottomNavPanel = ({
     handleFinish,
     handlePause,
     isPaused,
-    type,
     mode,
     submitButtonEnabled,
     finishSectionButtonDisabled
@@ -202,10 +183,10 @@ export const BottomNavPanel = ({
     return (
         <div className="flex flex-row w-full justify-between p-3 "            >
             <div className={styles.nextPrevGroup}>
-                {type === "question" && mode !== "test" && <Button color="primary" onClick={() => handleSubmitAnswer()} isDisabled={!submitButtonEnabled}> Submit Answer </Button>}
-                {type === "question" && ["test", "quiz"].includes(mode) && <Button isDisabled = {finishSectionButtonDisabled} color="warning" onClick={() => handleFinish()} > Finish Section </Button>}
-                {type === "question" && mode === "test" && <Button color="warning" onClick={() => handlePause()} > {isPaused ? "Unpause Timer" : "Pause Timer"}</Button>}
-                {type === "video" && <Button color="primary" variant="bordered" onClick={() => handleMarkVideoComplete()} > Mark as Complete </Button>}
+                {mode !== "test" && <Button color="primary" onClick={() => handleSubmitAnswer()} isDisabled={!submitButtonEnabled}> Submit Answer </Button>}
+                { ["test", "quiz"].includes(mode) && <Button isDisabled = {finishSectionButtonDisabled} color="warning" onClick={() => handleFinish()} > Finish Section </Button>}
+                { mode === "test" && <Button color="warning" onClick={() => handlePause()} > {isPaused ? "Unpause Timer" : "Pause Timer"}</Button>}
+                { <Button color="primary" variant="bordered" onClick={() => handleMarkVideoComplete()} > Mark as Complete </Button>}
             </div>
             <ButtonGroup color="primary" variant="bordered">
                 <Button onClick={() => handleBack()}>Back</Button>

@@ -4,7 +4,7 @@ export async function handlePostEngagement({
     question, userResponse, mode
 }){
     try{
-        const result = calculateResult({ question, userResponse });
+        const result = calculateResultHelper({ question, userResponse });
 
         const engagement = {
             QuestionID: question.id,
@@ -22,7 +22,14 @@ export async function handlePostEngagement({
     }
 }
 
-export function calculateResult({
+export function getResult({ question, userResponse }) {
+    if (userResponse === undefined || userResponse === null) {
+        return 'omitted';
+    }
+    return calculateResultHelper({ question, userResponse }) ? 'correct' : 'incorrect';
+}
+
+export function calculateResultHelper({
     question, userResponse
 }){
     try{

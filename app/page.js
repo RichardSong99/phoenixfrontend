@@ -16,8 +16,7 @@ export default function Home() {
 
         <ContentViewer
           review={false}
-          quizID={'65ed336b2859e9955324fc80'}
-          quizName={'Linear equations in 1 variable'}
+          quizID={'65f1c63d8e57129b0f22a041'}
         />
       </QuestionProvider>
     </UserProvider>

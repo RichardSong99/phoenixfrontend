@@ -318,9 +318,12 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const jumpToQuestion = (index) => {
-        if (index >= 0 && index < questionIDArray.length) {
-            setActiveQuestionIndex(index);
-        }
+        // console.log("jumping to question", index);
+        // if (index >= 0 && index < questionIDArray.length) {
+        //     console.log("jumping to question inside if", index);
+        //     setActiveQuestionIndex(index);
+        // }
+        setActiveQuestionIndex(index);
     };
 
     const handleFlagQuestion = async (questionID) => {
@@ -426,7 +429,7 @@ export const QuestionProvider = ({ children }) => {
                 engagementsArray.push({
                     QuestionID: questionID,
                     UserAnswer: userResponseData[questionID],
-                    Result: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
+                    Status: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
                     Flagged: isFlaggedData[questionID],
                     Starred: isStarredData[questionID],
                     Duration: timeSpentData[questionID],
@@ -497,6 +500,7 @@ export const QuestionProvider = ({ children }) => {
                 questionData,
                 userResponseData,
                 engagementIDData,
+                engagementData,
                 isFlaggedData,
                 isStarredData,
                 wasReviewedData,

@@ -40,11 +40,11 @@ export default function QuestionNavBar({ review, questions, quizName }) {
 
     return (
         <div className='h-[90%] w-[250px] bg-appleGray6 relative top-[40px] left-[50px] flex flex-col justify-between items-center pt-[25px] pb-[50px] rounded-[25px] shadow-custom'>
-            <h5 className='w-[80%] h-[101px] text-center flex justify-center items-center bg-white h-[60px] rounded-[20px] shadow-custom'>
+            <h7 className='w-[100%] h-[101px] text-center flex justify-center items-center bg-white h-[60px] shadow-custom font-bold'>
                 <div>
                     {quizName}
                 </div>
-            </h5>
+            </h7>
             <div className='w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray5 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px]'>
                 <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px] shadow-custom'></div>
                 <p className='pt-[15px] ml-[-6px]'>Current</p>
@@ -67,7 +67,7 @@ export default function QuestionNavBar({ review, questions, quizName }) {
                         onClick={() => handleKeyChange(index)}
                     >
                         {checkFlagged(index) ?
-                            <div className='relative top-[-15px] left-[-10px] mb-[-25px]'>
+                            <div className='relative top-[-15px] right-[-20px] mb-[-25px]'>
                                 <svg className='h-[25px] w-[25px] fill-appleRed' xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3z"></path></svg>
                             </div>
                         : null}

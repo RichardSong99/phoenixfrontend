@@ -426,7 +426,7 @@ export const QuestionProvider = ({ children }) => {
                 engagementsArray.push({
                     QuestionID: questionID,
                     UserAnswer: userResponseData[questionID],
-                    Result: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
+                    Status: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
                     Flagged: isFlaggedData[questionID],
                     Starred: isStarredData[questionID],
                     Duration: timeSpentData[questionID],

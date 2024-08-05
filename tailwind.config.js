@@ -21,6 +21,7 @@ const config = {
         appleGray6: '#F2F2F7',
         appleGray6Dark: '#1C1C1E',
         appleBlue: '#007AFF',
+        appleYellow: '#FFCC00',
         appleRed: '#FF3B30',
       },
       boxShadow: {

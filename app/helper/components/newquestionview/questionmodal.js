@@ -4,10 +4,18 @@ import QuestionHeader from './questionheader';
 import AnswerBox from './answerbox';
 import Chatbot from '../chatbot/chatbot';
 
-export default function QuestionModal({ mode, review, question }) {
+export default function QuestionModal({ mode, review, quizName, combos }) {
     return (
-        <div className='bg-gray-200 w-[1005px] h-[90%] relative top-[40px] left-[80px]'>
-            <p>question modal</p>
+        <div 
+            className='bg-appleGray6 shadow-custom rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px]' style={{width: 'calc(100% - 350px)'}}
+        >
+            <QuestionHeader
+                quizName={quizName}
+            />
+            <AnswerBox />
+            <QuestionView 
+                combos={combos}
+            />
             {review ? <Chatbot /> : null}
         </div>
     )

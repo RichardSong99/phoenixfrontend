@@ -7,9 +7,11 @@ import { fetchQuiz } from '../../apiservices/quizservice';
 export default function ContentViewer({ review, quizID }) {
     const [questions, setQuestions] = useState([]);
     const [quizName, setQuizName] = useState("");
+    const [combos, setCombos] = useState([]);
 
     const handleFetchQuizData = async () => {
         const response = await fetchQuiz({ quizID });
+        setCombos(response.QuestionEngagementIDCombos);
         setQuestions(response.QuestionEngagementIDCombos);
         setQuizName(response.Name);
     }
@@ -19,7 +21,7 @@ export default function ContentViewer({ review, quizID }) {
     }, []);
 
     return (
-        <div className='custom-font'>
+        <div className='custom-font w-screen h-screen'>
             <style jsx>{`
                 @font-face {
                     font-family: 'SF Pro Display';
@@ -37,11 +39,12 @@ export default function ContentViewer({ review, quizID }) {
                     <QuestionNavBar 
                         review={review}
                         questions={questions}
-                        quizName={quizName}
                     />
                     <QuestionModal 
                         mode={"quiz"}
                         review={review}
+                        quizName={quizName}
+                        combos={combos}
                     />
                 </div>
             }

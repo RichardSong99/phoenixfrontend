@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./questionview.module.css";
-// import MainQuestionView from "./mainquestionview";
 import renderMarkdownWithLaTeX from "../../latexrender/markdownwlatex";
 import { QuestionContext } from "@/app/helper/context/questioncontext";
 import classNames from 'classnames';
-import { QuestionHeader, ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
-import { QuestionChoiceArea } from '@/app/helper/components/question/questionpieces/questionpieces';
+// import { QuestionHeader, ButtonNavPanel } from '@/app/helper/components/question/questionpieces/questionpieces';
+// import { QuestionChoiceArea } from '@/app/helper/components/question/questionpieces/questionpieces';
 
 const QuestionView = ({
     question,
@@ -44,12 +43,12 @@ const QuestionView = ({
     return (
         <div className={styles.questionView}>
             <div className={styles.questionPanel}>
-                <QuestionHeader
+                {/* <QuestionHeader
                     handleFlagButtonClick={() => handleFlagQuestion(question.id)}
                     questionFlagged={isFlagged}
                     // fix this one -- we should be showing time counting up as well
                     timeLeft={timeElapsed}
-                />
+                /> */}
 
                 <div className={styles.questionContentContainer}>
                     {
@@ -97,13 +96,14 @@ const QuestionView = ({
                                     disabled={showAnswer}
                                 />
                             ) : (
-                                <QuestionChoiceArea
-                                    answerChoiceArray={question.AnswerChoices}
-                                    correctAnswer={question.CorrectAnswerMultiple}
-                                    showAnswer={showAnswer}
-                                    userAnswer={userResponse}
-                                    setUserAnswer={handleChoiceClick}
-                                />
+                                <div>Question choice area</div>
+                                // <QuestionChoiceArea
+                                //     answerChoiceArray={question.AnswerChoices}
+                                //     correctAnswer={question.CorrectAnswerMultiple}
+                                //     showAnswer={showAnswer}
+                                //     userAnswer={userResponse}
+                                //     setUserAnswer={handleChoiceClick}
+                                // />
                             )}
                         </div>
                     </div>

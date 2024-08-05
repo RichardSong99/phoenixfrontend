@@ -1,9 +1,7 @@
 "use client"
 
 import React, {useState} from 'react';
-import { StandardButton, NumberChoiceButtons } from '../../_archive/buttons/mybuttons';
 import {SiteNavBar, SideNavBar} from './navbars/navbar';
-import {CriteriaBox} from '../../_archive/criteriabox/criteriabox';
 import { SignUpOption } from './signup/signupoption';
 import { QuestionChoiceArea } from './question/questionpieces/questionpieces';
 

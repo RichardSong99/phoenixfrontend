@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from './quizstarter.module.css';
-import { NumberChoiceButtons, StandardButton } from "@/app/_archive/buttons/mybuttons";
 
 export const QuizStarter = ({ activeNumQuestions, setActiveNumQuestions, numQuestionsAvailable, handleStartQuiz }) => {
 
@@ -15,11 +14,11 @@ export const QuizStarter = ({ activeNumQuestions, setActiveNumQuestions, numQues
         <div className={styles.container}>
             <div className={styles.numberQuestionsWrapper}>
 
-                <NumberChoiceButtons
+                {/* <NumberChoiceButtons
                     buttonTextArray={[5, 10, 15, 20]}
                     activeButton={activeNumQuestions}
                     handleButtonClick={handleButtonClick}
-                />
+                /> */}
                 <span className={styles.text}>Choose number of questions for quiz</span>
 
             </div>

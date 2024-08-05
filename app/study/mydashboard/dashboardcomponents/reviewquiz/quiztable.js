@@ -24,7 +24,7 @@ export function QuizTable() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
-    const { getTopicList, quizUnderlyingListQuizType } = useData();
+    const { mathTopicMapping, quizUnderlyingListQuizType } = useData();
 
     // const router = useRouter();
 
@@ -81,10 +81,10 @@ export function QuizTable() {
                                 <TableCell className = "flex flex-row gap-2">
                                     {(() => {
                                         const allParentNames = quizUnderlying.Questions.flatMap(question => {
-                                            const questionTopics = question.Question.Topic;
-                                            const mathParentNames = filterParentNames(getTopicList("math"), questionTopics);
-                                            const readingParentNames = filterParentNames(getTopicList("reading"), questionTopics);
-                                            return [...mathParentNames, ...readingParentNames];
+                                            // get the category that corresponds to the topic indicated by question.Question.Topic, in the mathTopicMapping
+                                            const topicObject = mathTopicMapping.find(item => item.topic === question.Question.Topic);
+                                            const category = topicObject? topicObject.category : null;
+                                            return category;
                                         });
                                         console.log(allParentNames, "allParentNames")
                                         const uniqueParentNames = Array.from(new Set(allParentNames));

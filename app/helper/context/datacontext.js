@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useUser } from './usercontext';
 
-import { getDataCube } from '../apiservices/datacubeservice';
+// import { getDataCube } from '../apiservices/datacubeservice';
 import { fetchTopicList } from '../apiservices/parameterdataservice';
 import { getQuizzesForUser, fetchQuizUnderlyingById,  fetchQuizzesUnderlyingForUser} from '../apiservices/quizservice';
 import { fetchTestsUnderlyingForUser } from '../apiservices/testservice';
+import { getTopicListSummary } from '../apiservices/dataservice';
 
 // Create a new context
 export const DataContext = createContext();
@@ -12,44 +13,53 @@ export const DataContext = createContext();
 export const useData = () => useContext(DataContext);
 
 export const DataProvider = ({ children }) => {
-    const [datacube, setDatacube] = useState(null);
-    const [mathTopics, setMathTopics] = useState([]);
-    const [readingTopics, setReadingTopics] = useState([]);
+
+    const {isAuthenticated, loginToggle, user} = useUser();
+
+
+    const [topicSummaryList, setTopicSummaryList] = useState(null);
+    const [userData, setUserData] = useState(null);
+
+    const mathTopicMapping = [
+        { topic: "Linear equations in 1 variable", category: "Algebra" },
+        { topic: "Linear equations in 2 variables", category: "Algebra" },
+        { topic: "Linear functions", category: "Algebra" },
+        { topic: "Systems of 2 linear equations in 2 variables", category: "Algebra" },
+        { topic: "Linear inequalities in 1 or 2 variables", category: "Algebra" },
+        { topic: "Equivalent expressions", category: "Advanced math" },
+        { topic: "Nonlinear equations in 1 variable", category: "Advanced math" },
+        { topic: "System of equations in 2 variables", category: "Advanced math" },
+        { topic: "Nonlinear functions", category: "Advanced math" },
+        { topic: "Ratios, rates, proportional relationships, and units", category: "Problem solving and data analysis" },
+        { topic: "Percentages", category: "Problem solving and data analysis" },
+        { topic: "One-variable data: distributions and measures of center and spread", category: "Problem solving and data analysis" },
+        { topic: "Two-variable data: models and scatterplots", category: "Problem solving and data analysis" },
+        { topic: "Probability and conditional probability", category: "Problem solving and data analysis" },
+        { topic: "Inference from sample statistics and margin of error", category: "Problem solving and data analysis" },
+        { topic: "Evaluating statistical claims: observational studies and experiments", category: "Problem solving and data analysis" },
+        { topic: "Area and volume formulas", category: "Geometry and trigonometry" },
+        { topic: "Lines, angles, and triangles", category: "Geometry and trigonometry" },
+        { topic: "Right triangles and trigonometry", category: "Geometry and trigonometry" },
+        { topic: "Circles", category: "Geometry and trigonometry" }
+    ];
+
+    const getTopicsByCategory = (category) => {
+        return mathTopicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
+    }
+
+    const getCategoryList = () => {
+        return Array.from(new Set(mathTopicMapping.map(topicObj => topicObj.category)));
+    }
+
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
     const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
     const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
-    const {isAuthenticated, loginToggle} = useUser();
 
-    const fetchDataCube = async () => {
-        try {
-            const data = await getDataCube({compute:true});
-            setDatacube(data);
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-    const initializeTopicList = async () => {
-        try {
-            const mathTopics = await fetchTopicList({subject: 'math'});
-            const readingTopics = await fetchTopicList({subject:'reading'});
-            setMathTopics(mathTopics);
-            setReadingTopics(readingTopics);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
 
     const loadQuizUnderlyingList = async () => {
         try {
-            // let response = await getQuizzesForUser();
-            // let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
-            // let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
-            // setQuizUnderlyingList(quizData);
             var quizUnderlyingForUserResponse = await fetchQuizzesUnderlyingForUser()
             setQuizUnderlyingList(quizUnderlyingForUserResponse);
             setQuizUnderlyingListQuizType(quizUnderlyingForUserResponse.filter(quizObj => quizObj?.Quiz?.Type === "quiz"));
@@ -70,29 +80,26 @@ export const DataProvider = ({ children }) => {
         }
     }
 
+    const loadTopicSummaryList = async () => {
+        try {
+            const topicListSummaryResponse = await getTopicListSummary(user.id);
+            setTopicSummaryList(topicListSummaryResponse);
+        } catch (error) {
+            console.log("Error fetching topic list summary", error);
+        }
+    }
 
     useEffect(() => {
         if (!isAuthenticated) {
             return;
         }
-        fetchDataCube();
-        initializeTopicList();
         loadQuizUnderlyingList();
         loadTestUnderlyingList();
-    }, [isAuthenticated, loginToggle]);
-
-  
-
-    const getTopicList = (subject = 'math') => {
-        if (subject === 'math') {
-            return mathTopics;
-        } else {
-            return readingTopics;
-        }
-    };
+        loadTopicSummaryList();
+    }, [isAuthenticated]);
 
     return (
-        <DataContext.Provider value={{ loading, datacube, getTopicList, error, quizUnderlyingList, refetch: fetchDataCube, quizUnderlyingListQuizType, testUnderlyingList }}>
+        <DataContext.Provider value={{ loading, quizUnderlyingList, quizUnderlyingListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList }}>
             {children}
         </DataContext.Provider>
     );

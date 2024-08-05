@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styles from './objectsidenav.module.css';
-import { StandardButton } from '@/app/_archive/buttons/mybuttons';
 import CorrectIcon from '@/app/helper/assets/components/Correct.svg';
 import IncorrectIcon from '@/app/helper/assets/components/Incorrect.svg';
 import Image from 'next/image';
 import { ProgressBar } from "react-bootstrap";
 import FlaggedIcon from '@/app/helper/assets/components/Flagged.svg';
-import { CriteriaElement } from '@/app/_archive/criteriabox/criteriabox';
 import { Chip } from "@nextui-org/react";
 
 

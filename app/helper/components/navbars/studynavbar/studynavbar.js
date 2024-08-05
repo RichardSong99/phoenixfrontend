@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from "@nextui-org/react";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User } from "@nextui-org/react";
-import { CreateQuizModal } from '../../../../_archive/createquiz/createquiz';
 import { useDisclosure } from '@nextui-org/react';
 import { IoMdHome } from "react-icons/io";
 import { IoIosSearch } from "react-icons/io";
@@ -47,10 +46,10 @@ const StudyNavBar = () => {
     return (
         <>
 
-            <CreateQuizModal
+            {/* <CreateQuizModal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
-            />
+            /> */}
 
             <div className={styles.studyNavbar}>
                 <div className='flex flex-col p-3 gap-2 mt-4'>

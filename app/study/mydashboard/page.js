@@ -16,7 +16,6 @@ import { QuizTable } from "./dashboardcomponents/reviewquiz/quiztable";
 import QBankViewer from "@/app/helper/components/qbank/qbankview/qbankviewer";
 import TopicModules from "./dashboardcomponents/topicmodules/topicmodules";
 import { Topic } from "@mui/icons-material";
-import { GamifiedPanel } from "@/app/helper/components/gamification/gamifiedpanel";
 
 export default function MyDashboard() {
 

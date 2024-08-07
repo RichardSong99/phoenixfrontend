@@ -4,7 +4,7 @@ import QuestionNavBar from './questionnavbar';
 import QuestionModal from './questionmodal';
 import { fetchQuiz } from '../../apiservices/quizservice';
 
-export default function ContentViewer({ review, quizID }) {
+export default function ContentViewer({ review, quizID, question }) {
     const [questions, setQuestions] = useState([]);
     const [quizName, setQuizName] = useState("");
     const [combos, setCombos] = useState([]);
@@ -44,7 +44,7 @@ export default function ContentViewer({ review, quizID }) {
                         mode={"quiz"}
                         review={review}
                         quizName={quizName}
-                        combos={combos}
+                        quizID={quizID}
                     />
                 </div>
             }

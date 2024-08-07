@@ -103,8 +103,8 @@ export default function Chatbot({question}) {
     }, [messages]);
 
     return (
-        <div className="w-[325px] bg-orange h-[800px] relative right-[2%] top-[6%] overflow-y-auto">
-            <div className="h-[550px] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300">
+        <div className="w-[325px] bg-orange h-[550px] relative right-[2%] top-[6%] overflow-y-auto bg-appleGray6 p-[10px] rounded-[20px] shadow-custom">
+            <div className="h-[250px] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white shadow-custom">
                 <div className="w-full flex flex-col justify-end">
                     {messages.map((msg, index) => (
                         <div key={index} className={`message ${msg.role}`}>
@@ -117,13 +117,13 @@ export default function Chatbot({question}) {
             <br></br>
             <div className="flex justify-between">
                 <Button
-                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
+                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom"
                     onClick={handleHint}
                 >
                     Give me a hint
                 </Button>
                 <Button 
-                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
+                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom"
                     onClick={handleSolution}
                 >
                     Give me the solution
@@ -131,7 +131,7 @@ export default function Chatbot({question}) {
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
                 <textarea
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded shadow-custom resize-none"
                     value={user_message}
                     onChange={(e) => setUserMessage(e.target.value)}
                     onKeyDown={enterKey}
@@ -139,7 +139,7 @@ export default function Chatbot({question}) {
                 />
                 {loading ? <Button
                                 isLoading
-                                className="rounded text-white bg-blue-500 mt-2 p-2"
+                                className="rounded text-white bg-blue-500 mt-2 p-2 shadow-custom"
                                 spinner={
                                     <svg
                                     className="animate-spin h-5 w-5 text-current"
@@ -165,7 +165,7 @@ export default function Chatbot({question}) {
                             >
                                 Generating
                             </Button>
-                        :   <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded">
+                        :   <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded shadow-custom">
                             Send
                             </Button>}
             </form>

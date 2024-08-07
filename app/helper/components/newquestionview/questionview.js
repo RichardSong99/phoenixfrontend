@@ -1,17 +1,38 @@
 import { QuestionContext } from '../../context/questioncontext';
-import React, { use, useState, useEffect, useContext } from 'react';
+import React, { use, useState, useEffect, useContext, useRef } from 'react';
 import { Button, Avatar } from "@nextui-org/react";
+import Draggable from 'react-draggable';
+import Chatbot from '../chatbot/chatbot';
 
-export default function QuestionView({ review, combos }) {
+export default function QuestionView({ review, mode, quizID, question }) {
     const [selectedChoice, setSelectedChoice] = useState(null);
     const [crossedOut, setCrossedOut] = useState([]);
     const [crossOutMode, setCrossOutMode] = useState(false);
+    const [isChatBotVisible, setChatBotVisible] = useState(false);
+    const [isCalculatorVisible, setCalculatorVisible] = useState(false);
+    const [isReferenceVisible, setReferenceVisible] = useState(false);
+    const calculatorRef = useRef(null);
 
     const{
         activeQuestionIndex,
         questionData,
-        // initializeEngagementStates,
+        setupActiveIndividualMode,
+        setupActiveQuizMode,
+        setupReviewIndividualMode,
+        setupReviewQuizMode,
     } = useContext(QuestionContext);
+
+    const toggleChatBot = () => {
+        setChatBotVisible(!isChatBotVisible);
+    };
+
+    const toggleCalculator = () => {
+        setCalculatorVisible(!isCalculatorVisible);
+    };
+
+    const toggleReference = () => {
+        setReferenceVisible(!isReferenceVisible);
+    };
 
     const changeCrossOutMode = () => {
         setCrossOutMode(!crossOutMode);
@@ -35,9 +56,74 @@ export default function QuestionView({ review, combos }) {
         }
     };
 
-    // useEffect(() => {
-    //     initializeEngagementStates(combos);
-    // }, []);
+    const ChatbotIcon = () => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        >
+          <path d="M17.753 14a2.25 2.25 0 0 1 2.25 2.25v.904A3.75 3.75 0 0 1 18.696 20c-1.565 1.344-3.806 2-6.696 2s-5.128-.656-6.69-2a3.75 3.75 0 0 1-1.306-2.843v-.908A2.25 2.25 0 0 1 6.254 14zM11.9 2.006L12 2a.75.75 0 0 1 .743.648l.007.102l-.001.749h3.5a2.25 2.25 0 0 1 2.25 2.25v4.505a2.25 2.25 0 0 1-2.25 2.25h-8.5a2.25 2.25 0 0 1-2.25-2.25V5.75A2.25 2.25 0 0 1 7.75 3.5l3.5-.001V2.75a.75.75 0 0 1 .649-.743L12 2zM9.749 6.5a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498m4.493 0a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498"></path>
+        </svg>
+    );
+
+    const CalculatorIcon = () => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        >
+            <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 2v4h10V4zm0 6v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z"></path>
+        </svg>
+    );
+
+    const ReferenceIcon = () => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        >
+            <path d="M13 9V3.5L18.5 9M6 2c-1.11 0-2 .89-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+        </svg>
+    );
+
+    useEffect(() => {
+        if(review){
+            if(mode === 'single'){
+                setupReviewIndividualMode();
+            } else {
+                setupReviewQuizMode(quizID);
+            }
+        } else {
+            if(mode === 'single'){
+                setupActiveIndividualMode();
+            } else {
+                setupActiveQuizMode(quizID);
+            }
+        }
+        console.log(questionData);
+    }, []);
+
+    useEffect(() => {
+        if (isCalculatorVisible) {
+            if (!document.getElementById('desmos-script')) {
+                const script = document.createElement('script');
+                script.src = "https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6";
+                script.id = 'desmos-script';
+                script.async = true;
+                script.onload = () => {
+                    const elt = document.getElementById('calculator');
+                    if (elt) {
+                        calculatorRef.current = Desmos.GraphingCalculator(elt);
+                    }
+                };
+                document.body.appendChild(script);
+            } else {
+                const elt = document.getElementById('calculator');
+                if (elt) {
+                    calculatorRef.current = Desmos.GraphingCalculator(elt);
+                }
+            }
+        } else {
+            if (calculatorRef.current) {
+                calculatorRef.current.destroy();
+                calculatorRef.current = null;
+            }
+        }
+    }, [isCalculatorVisible]);
 
     return (
         <div className='mt-[20px] w-[100%] h-[515px] flex justify-center items-center'>
@@ -123,6 +209,62 @@ export default function QuestionView({ review, combos }) {
                                 ${!crossedOut.includes('D') ? 'transparent' : 'relative top-[-34px] w-[420px] h-[2px] bg-black mb-[-2px] pointer-events-none'}`}
                         ></div>
                     </div>
+                    <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
+                        <div>
+                            <Avatar
+                                classNames={{
+                                    icon: "h-[30px] w-[30px] fill-white",
+                                    base: "bg-appleBlue",
+                                }}
+                                icon={<ReferenceIcon/>}
+                                onClick={toggleReference}
+                            />
+                        </div>
+                        <div>
+                            <Avatar
+                                classNames={{
+                                    icon: "h-[30px] w-[30px] fill-white",
+                                    base: "bg-appleBlue",
+                                }}
+                                icon={<CalculatorIcon/>}
+                                onClick={toggleCalculator}
+                            />
+                        </div>
+                        <div>
+                            <Avatar
+                                classNames={{
+                                    icon: "h-[30px] w-[30px] fill-white",
+                                    base: "bg-appleBlue",
+                                }}
+                                icon={<ChatbotIcon/>}
+                                onClick={toggleChatBot}
+                            />
+                        </div>
+                    </div>
+                    {isChatBotVisible &&
+                        <Draggable className='bg-black'>
+                            <div className='absolute top-0 left-0 cursor-move'>
+                                <Chatbot />
+                            </div>
+                        </Draggable>
+                    }
+                    {isCalculatorVisible &&
+                        <Draggable className='bg-black'>
+                            <div className='absolute top-0 left-0 cursor-move'>
+                                <div id="calculator" className="invisible absolute bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
+                                </div>
+                            </div>
+                        </Draggable>
+                    }
+                    {isChatBotVisible &&
+                        <Draggable className='bg-black'>
+                            <div className='absolute top-0 left-0 cursor-move'>
+                                <div id="reference" className="invisible absolute bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
+                                    <img src="./sat_reference_sheet.jpg"></img>
+                                </div>
+                            </div>
+                        </Draggable>
+                    }
                 </div>
             </div>
         </div>

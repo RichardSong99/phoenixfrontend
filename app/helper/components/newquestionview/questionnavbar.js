@@ -9,11 +9,10 @@ export default function QuestionNavBar({ review, questions }) {
         jumpToQuestion,
         handleNextQuestion,
         handlePreviousQuestion,
-        // isFlaggedData,
+        isFlaggedData,
     } = useContext(QuestionContext);
 
     /* test cases, will implement QuestionContext and delete these */
-    const isFlaggedData = [false, false, true, false, false];
     const [isAnswered, setIsAnswered] = useState([true, false, false, true, false]);
 
     const checkSelected = (index) => {

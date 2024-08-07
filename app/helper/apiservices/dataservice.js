@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-const apiUrl = process.env.NEXT_PUBLIC_DATA_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getTopicListSummary(user_id) {
     let token;

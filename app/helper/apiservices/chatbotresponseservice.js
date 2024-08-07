@@ -1,4 +1,4 @@
-const apiUrl = process.env.NEXT_PUBLIC_AI_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getChatbotResponse(user_message, prompt, answer_choices, answer, type){
     // query parameters

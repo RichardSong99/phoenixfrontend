@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getTopicListSummary(user_id) {
+export async function getTopicListSummary() {
     let token;
     try {
         token = Cookies.get('token');
@@ -10,7 +10,15 @@ export async function getTopicListSummary(user_id) {
         console.error('Could not get token:', error);
     }
 
-    const response = await fetch(`${apiUrl}/get_user_topic_summary?user_id=${encodeURIComponent(user_id)}&token=${encodeURIComponent(token)}`);
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const response = await fetch(`${apiUrl}/get_user_topic_summary`, requestOptions);
     const data = await response.json();
     return data;
 }

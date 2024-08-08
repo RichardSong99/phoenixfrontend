@@ -116,7 +116,7 @@ export function ContentViewer({
                     {/* <header className="flex h-16 items-center border-b px-4 md:px-6">
                         
                     </header> */}
-                    <main className="flex-1 flex flex-col min-h-0 overflow-auto">
+                    <div className="flex-1 flex flex-col min-h-0 overflow-auto">
                         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                             <div className="flex-1 flex flex-col min-h-0 overflow-y-auto py-6 md:py-8 px-4 md:px-6  items-center" style={{ overflowY: 'scroll', marginTop: '20px' }}>
                                 {/* {objectList[activeObjectIndex].type === "question" ? ( */}
@@ -132,7 +132,7 @@ export function ContentViewer({
                                 />
                             </div>
                         </div>
-                    </main>
+                    </div>
 
                     <footer className="flex items-center h-14 border-t gap-4">
                         <div className="flex flex-row w-full justify-between p-3 "            >

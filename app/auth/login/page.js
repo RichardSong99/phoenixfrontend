@@ -9,11 +9,11 @@ export default function Login() {
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   return (
-    <main>
+    <div>
       <LoginPanel 
         isLoginMode = {isLoginMode}
         setIsLoginMode = {setIsLoginMode}
       />
-    </main>
+    </div>
   );
 }

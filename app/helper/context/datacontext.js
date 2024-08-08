@@ -43,6 +43,11 @@ export const DataProvider = ({ children }) => {
         { topic: "Circles", category: "Geometry and trigonometry" }
     ];
 
+    const [loading, setLoading] = useState(true);
+    const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
+    const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
+    const [testUnderlyingList, setTestUnderlyingList] = useState([]);
+
     const getTopicsByCategory = (category) => {
         return mathTopicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
     }
@@ -51,12 +56,21 @@ export const DataProvider = ({ children }) => {
         return Array.from(new Set(mathTopicMapping.map(topicObj => topicObj.category)));
     }
 
-    const [loading, setLoading] = useState(true);
-    const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
-    const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
-    const [testUnderlyingList, setTestUnderlyingList] = useState([]);
+        // Create a lookup map for topic order
+    const topicOrderLookup = mathTopicMapping.reduce((acc, item, index) => {
+        acc[item.topic] = index;
+        return acc;
+    }, {});
+
+    const sortTopicSummaryList = (list) => {
+        return list.sort((a, b) => topicOrderLookup[a.topic] - topicOrderLookup[b.topic]);
+    }
 
 
+    const filterTopicSummaryList = (list, category) => {
+        console.log("filterTopicSummaryList", list, category)
+        return list.filter(item => item.category === category);
+    }
 
     const loadQuizUnderlyingList = async () => {
         try {
@@ -82,8 +96,8 @@ export const DataProvider = ({ children }) => {
 
     const loadTopicSummaryList = async () => {
         try {
-            const topicListSummaryResponse = await getTopicListSummary(user.id);
-            setTopicSummaryList(topicListSummaryResponse);
+            const topicListSummaryResponse = await getTopicListSummary();
+            setTopicSummaryList(sortTopicSummaryList(topicListSummaryResponse));
         } catch (error) {
             console.log("Error fetching topic list summary", error);
         }
@@ -91,15 +105,16 @@ export const DataProvider = ({ children }) => {
 
     useEffect(() => {
         if (!isAuthenticated) {
+            console.log("User is not authenticated");
             return;
         }
-        loadQuizUnderlyingList();
-        loadTestUnderlyingList();
+        // loadQuizUnderlyingList();
+        // loadTestUnderlyingList();
         loadTopicSummaryList();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, loginToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizUnderlyingList, quizUnderlyingListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList }}>
+        <DataContext.Provider value={{ loading, quizUnderlyingList, quizUnderlyingListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList }}>
             {children}
         </DataContext.Provider>
     );

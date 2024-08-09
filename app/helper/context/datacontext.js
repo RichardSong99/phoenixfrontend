@@ -44,8 +44,8 @@ export const DataProvider = ({ children }) => {
     ];
 
     const [loading, setLoading] = useState(true);
-    const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
-    const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
+    const [quizList, setQuizList] = useState([]);
+    const [quizListQuizType, setQuizListQuizType] = useState([]);
     const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
     const getTopicsByCategory = (category) => {
@@ -72,11 +72,11 @@ export const DataProvider = ({ children }) => {
         return list.filter(item => item.category === category);
     }
 
-    const loadQuizUnderlyingList = async () => {
+    const loadQuizList = async () => {
         try {
-            var quizUnderlyingForUserResponse = await fetchQuizzesUnderlyingForUser()
-            setQuizUnderlyingList(quizUnderlyingForUserResponse);
-            setQuizUnderlyingListQuizType(quizUnderlyingForUserResponse.filter(quizObj => quizObj?.Quiz?.Type === "quiz"));
+            var response = await getQuizzesForUser()
+            setQuizList(response);
+            setQuizListQuizType(response.filter(quizObj => quizObj?.type === "quiz"));
 
         } catch (error) {
             console.log("Error fetching quizzes for user", error);
@@ -108,13 +108,13 @@ export const DataProvider = ({ children }) => {
             console.log("User is not authenticated");
             return;
         }
-        // loadQuizUnderlyingList();
+        loadQuizList();
         // loadTestUnderlyingList();
         loadTopicSummaryList();
     }, [isAuthenticated, loginToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizUnderlyingList, quizUnderlyingListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList }}>
             {children}
         </DataContext.Provider>
     );

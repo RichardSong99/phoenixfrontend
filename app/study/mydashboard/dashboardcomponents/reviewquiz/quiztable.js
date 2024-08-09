@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { NavBarContext } from '@/app/helper/context/navbarcontext';
-import { getQuizzesForUser } from '@/app/helper/apiservices/quizservice';
+import { fetchQuizStats, fetchQECombos } from '@/app/helper/apiservices/quizservice';
 import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import { useRouter } from "next/navigation";
 import {
@@ -14,7 +14,8 @@ import {
     TableCell,
     Button,
     useDisclosure,
-    Chip
+    Chip,
+    Progress
 } from "@nextui-org/react";
 
 import { QuizSummaryModal } from './quizsummarymodal';
@@ -24,7 +25,7 @@ export function QuizTable() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
-    const { mathTopicMapping, quizUnderlyingListQuizType } = useData();
+    const { mathTopicMapping, quizListQuizType } = useData();
 
     // const router = useRouter();
 
@@ -51,56 +52,77 @@ export function QuizTable() {
     };
 
 
+    const [quizData, setQuizData] = useState([]);
 
+    useEffect(() => {
+        const fetchQuizData = async () => {
+            const data = await Promise.all(
+                quizListQuizType.map(async (quiz) => {
+                    try {
+                        const quizStats = await fetchQuizStats(quiz?.id);
+                        const quizQECombos = await fetchQECombos(quiz?.id);
+                        const uniqueTopicNames = Array.from(new Set(quizQECombos.question_engagement_combos.map(qeCombo => qeCombo.question.topic)));
+                        
+                        console.log("quiz stats", quizStats);
+                        console.log("quiz qe combos", quizQECombos);
+                        console.log("unique topic names", uniqueTopicNames);
+                        
+                        return {
+                            quiz,
+                            quizStats,
+                            uniqueTopicNames,
+                        };
+
+                        
+                    } catch (error) {
+                        console.log("Error fetching quiz data", error);
+                        return null;
+                    }
+                })
+            );
+            setQuizData(data.filter(item => item !== null));
+        };
+
+        fetchQuizData();
+    }, [quizListQuizType]);
 
     return (
         <div >
             <QuizSummaryModal isOpen={isOpen} onOpenChange={onOpenChange} fullQuizData={activeQuiz} />
 
 
-            <Table removeWrapper aria-label="Example static collection table" >
+            <Table removeWrapper aria-label="Example static collection table">
                 <TableHeader>
                     <TableColumn>Review Quiz</TableColumn>
                     <TableColumn>Quiz Name</TableColumn>
                     <TableColumn>Topics</TableColumn>
-                    {/* <TableColumn>Questions</TableColumn> */}
-                    <TableColumn>Score</TableColumn>
+                    <TableColumn width = "300">Score</TableColumn>
                     <TableColumn>Date</TableColumn>
                 </TableHeader>
                 <TableBody>
-             
-
-                    {quizUnderlyingListQuizType && quizUnderlyingListQuizType.length !== 0 && (
-                        quizUnderlyingListQuizType.map((quizUnderlying, index) => (
-                            <TableRow key={index} onClick={() => handleQuizClick(quizUnderlying)}>
-                                <TableCell><Button color="success" variant = "bordered" size="sm" onClick={() => handleQuizClick(quizUnderlying)}>
+                    {quizData.map((item, index) => (
+                        <TableRow key={index} onClick={() => handleQuizClick(item.quiz)}>
+                            <TableCell>
+                                <Button color="success" variant="bordered" size="sm" onClick={() => handleQuizClick(item.quiz)}>
                                     Review Quiz
-                                </Button></TableCell>
-                                <TableCell>{`Quiz ${index + 1}`}</TableCell>
+                                </Button>
+                            </TableCell>
+                            <TableCell>{`Quiz ${index + 1}`}</TableCell>
 
-                                <TableCell className = "flex flex-row gap-2">
-                                    {(() => {
-                                        const allParentNames = quizUnderlying.Questions.flatMap(question => {
-                                            // get the category that corresponds to the topic indicated by question.Question.Topic, in the mathTopicMapping
-                                            const topicObject = mathTopicMapping.find(item => item.topic === question.Question.Topic);
-                                            const category = topicObject? topicObject.category : null;
-                                            return category;
-                                        });
-                                        console.log(allParentNames, "allParentNames")
-                                        const uniqueParentNames = Array.from(new Set(allParentNames));
-                                        return uniqueParentNames.map((parentName, index) => (
-                                            <Chip variant="flat" key={index} size="sm" color = "primary">{parentName}</Chip>
-                                        ));
-                                    })()}
-                                </TableCell>
-                                {/* <TableCell>{quiz?.NumTotal}</TableCell> */}
-                                <TableCell>{quizUnderlying?.NumCorrect + ' / ' + quizUnderlying?.NumTotal}</TableCell>
-                                <TableCell>{new Date(quizUnderlying?.Quiz?.AttemptTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>
-                            </TableRow>
-                        ))
-                    )}
+                            <TableCell className="flex flex-row gap-2">
+                                {item.uniqueTopicNames.map((topic, index) => (
+                                    <Chip variant="flat" key={index} size="sm" color="primary">{topic}</Chip>
+                                ))}
+                            </TableCell>
+
+                            <TableCell>
+                                <Progress size = "sm" label={`Score: ${item.quizStats.total_correct} / ${item.quizStats.total_questions}`} value={item.quizStats.accuracy * 100} />
+                            </TableCell>
+
+                            <TableCell>{new Date(item.quiz?.attempt_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
-
             </Table>
         </div>
     );

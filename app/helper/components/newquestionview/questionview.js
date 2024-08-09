@@ -9,22 +9,21 @@ import { fetchFullQuestionById } from '../../apiservices/questionservice';
 import { parseLatexString } from '../latexrender/latexrender';
 
 export default function QuestionView({ review, mode, quizID, topic }) {
-    const [selectedChoice, setSelectedChoice] = useState(null);
     const [crossedOut, setCrossedOut] = useState([]);
     const [crossOutMode, setCrossOutMode] = useState(false);
     const [isChatBotVisible, setChatBotVisible] = useState(false);
     const [isCalculatorVisible, setCalculatorVisible] = useState(false);
     const [isReferenceVisible, setReferenceVisible] = useState(false);
     const calculatorRef = useRef(null);
+    const answerChoices = ['A', 'B', 'C', 'D'];
 
     const{
         activeQuestionIndex,
         questionData,
         questionIDArray,
-        setupActiveIndividualMode,
-        setupActiveQuizMode,
-        setupReviewIndividualMode,
-        setupReviewQuizMode,
+        userResponseData,
+        handleReportUserResponse,
+        activeReviewMode,
     } = useContext(QuestionContext);
 
     /* for testing, will delete later */
@@ -50,14 +49,14 @@ export default function QuestionView({ review, mode, quizID, topic }) {
     const handleSelect = (choice) => {
         if(!crossOutMode){
             if(!crossedOut.includes(choice)){
-                setSelectedChoice(choice);
+                handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
             }
         } else {
             if (crossedOut.includes(choice)) {
                 setCrossedOut(crossedOut.filter(item => item !== choice));
             } else {
-                if(selectedChoice === choice){
-                    setSelectedChoice(null);
+                if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
+                    handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
                 }
                 setCrossedOut([...crossedOut, choice]);
             }
@@ -132,6 +131,10 @@ export default function QuestionView({ review, mode, quizID, topic }) {
         }
     }, [isCalculatorVisible]);
 
+    if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
+        return <div>Loading...</div>; // or return null, or a loading spinner if you prefer
+    }
+
     return (
         <div className='mt-[20px] w-[100%] h-[82%] flex justify-center items-center'>
             <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
@@ -152,71 +155,55 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                         </div>
                     </div>
                     <div className='h-[450px] w-full flex flex-col gap-y-[8px] justify-center items-center'>
-                        <p className='w-[400px]'>Select one of the following: </p>
-                        <Button 
-                            className={`w-[400px] h-[50px] border-[2px] rounded-[25px] shadow-custom
-                                ${selectedChoice === 'A' && !crossedOut.includes('A') ? 'bg-appleBlue text-white bg-opacity-70' : 'bg-white text-appleBlue border-appleBlue'}`}
-                            onClick={() => handleSelect('A')}
-                        >
-                            <Avatar
-                                className={`h-[30px] w-[30px] relative left-[-115px] border-[2px]
-                                    ${selectedChoice === 'A' && !crossedOut.includes('A') ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
-                                name="A"
-                            />
-                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[0])}
-                        </Button>
-                        <div
-                            className={` 
-                                ${!crossedOut.includes('A') ? 'transparent' : 'relative top-[-34px] w-[420px] h-[2px] bg-black mb-[-2px] pointer-events-none'}`}
-                        ></div>
-                        <Button 
-                            className={`w-[400px] h-[50px] border-[2px] rounded-[25px] shadow-custom
-                                ${selectedChoice === 'B' ? 'bg-appleBlue text-white bg-opacity-70' : 'bg-white text-appleBlue border-appleBlue'}`}
-                            onClick={() => handleSelect('B')}
-                        >
-                            <Avatar
-                                className={`h-[30px] w-[30px] relative left-[-115px] text-white border-[2px] border-appleGray6 bg-appleBlue
-                                    ${selectedChoice === 'B' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
-                                name="B"
-                            />
-                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[1])}
-                        </Button>
-                        <div
-                            className={` 
-                                ${!crossedOut.includes('B') ? 'transparent' : 'relative top-[-34px] w-[420px] h-[2px] bg-black mb-[-2px] pointer-events-none'}`}
-                        ></div>
-                        <Button 
-                            className={`w-[400px] h-[50px] border-[2px] rounded-[25px] shadow-custom
-                                ${selectedChoice === 'C' ? 'bg-appleBlue text-white bg-opacity-70' : 'bg-white text-appleBlue border-appleBlue'}`}
-                            onClick={() => handleSelect('C')}
-                        >
-                            <Avatar
-                                className={`h-[30px] w-[30px] relative left-[-115px] text-white border-[2px] border-appleGray6 bg-appleBlue 
-                                    ${selectedChoice === 'C' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
-                                name="C"
-                            />
-                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[2])}
-                        </Button>
-                        <div
-                            className={` 
-                                ${!crossedOut.includes('C') ? 'transparent' : 'relative top-[-34px] w-[420px] h-[2px] bg-black mb-[-2px] pointer-events-none'}`}
-                        ></div>
-                        <Button 
-                            className={`w-[400px] h-[50px] border-[2px] rounded-[25px] shadow-custom
-                                ${selectedChoice === 'D' ? 'bg-appleBlue text-white bg-opacity-70' : 'bg-white text-appleBlue border-appleBlue'}`}
-                            onClick={() => handleSelect('D')}
-                        >
-                            <Avatar
-                                className={`h-[30px] w-[30px] relative left-[-115px] text-white border-[2px] border-appleGray6 bg-appleBlue
-                                    ${selectedChoice === 'D' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
-                                name="D"
-                            />
-                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[3])}
-                        </Button>
-                        <div
-                            className={` 
-                                ${!crossedOut.includes('D') ? 'transparent' : 'relative top-[-34px] w-[420px] h-[2px] bg-black mb-[-2px] pointer-events-none'}`}
-                        ></div>
+                        <p className=''>Select one of the following: </p>
+                        {activeReviewMode !== "review" ? (
+                            answerChoices.map((choice, index) => (
+                                <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                    <Button 
+                                        className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                            ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'border-[2px] border-appleBlue bg-white' : 'bg-white border-appleGray5'}`}
+                                        onClick={() => handleSelect(choice)}
+                                    >
+                                        <Avatar
+                                            className={`h-[30px] w-[30px] border-[2px]
+                                                ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'text-white border-appleGray6 bg-appleBlue' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
+                                            name={choice}
+                                        />
+                                        <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
+                                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                        </div>
+                                    </Button>
+                                    {crossedOut.includes(choice) && (
+                                        <div
+                                            className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                        ></div>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            answerChoices.map((choice, index) => (
+                                <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                    <Button 
+                                        className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                            ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'bg-appleGreen text-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
+                                    >
+                                        <Avatar
+                                            className={`h-[30px] w-[30px] border-[2px]
+                                                ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-white bg-appleGreen' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
+                                            name={choice}
+                                        />
+                                        <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
+                                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                        </div>
+                                    </Button>
+                                    {crossedOut.includes(choice) && (
+                                        <div
+                                            className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                        ></div>
+                                    )}
+                                </div>
+                            ))
+                        )}
                     </div>
                     <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                         <div className='cursor-pointer'>

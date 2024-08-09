@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef } from "react";
+import React, { createContext, useState, useRef, useEffect } from "react";
 import { postEngagements } from "@/app/helper/apiservices/engagementservice";
 import { useDisclosure } from "@nextui-org/react";
 import {
@@ -126,6 +126,7 @@ export const QuestionProvider = ({ children }) => {
 
     // new questionview components
     const [continueTimer, setContinueTimer] = useState(true);
+    const [totalSeconds, setTotalSeconds] = useState(0);
 
     const changeTimer = () => {
         setContinueTimer(!continueTimer);
@@ -407,6 +408,21 @@ export const QuestionProvider = ({ children }) => {
         }
     };
 
+    useEffect(() => {
+        handleUpdateTimeSpentData(questionIDArray[activeQuestionIndex]);
+    }, [activeQuestionIndex]);
+
+    const updateTotalTimer = () => {
+        if (activeReviewMode !== ACTIVEMODE && continueTimer) {
+            const interval = setInterval(() => {
+                setTotalSeconds(prevSeconds => prevSeconds + 1);
+            }, 1000);
+    
+            return interval;
+        }
+        return null;
+    };
+
     const handleMarkReviewQuestion = async (questionID) => {
         if (activeReviewMode === REVIEWMODE) {
             // flip the review status for the question for which questionID is passed
@@ -514,7 +530,9 @@ export const QuestionProvider = ({ children }) => {
                 timeSpentData,
                 startTime,
                 continueTimer,
+                totalSeconds,
                 changeTimer,
+                updateTotalTimer,
                 setupActiveIndividualMode,
                 setupActiveQuizMode,
                 setupReviewIndividualMode,

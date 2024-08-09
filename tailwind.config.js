@@ -23,6 +23,7 @@ const config = {
         appleBlue: '#007AFF',
         appleYellow: '#FFCC00',
         appleRed: '#FF3B30',
+        appleGreen: '#34C759',
       },
       boxShadow: {
         custom: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',

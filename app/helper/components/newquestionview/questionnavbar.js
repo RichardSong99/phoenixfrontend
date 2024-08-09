@@ -13,10 +13,9 @@ export default function QuestionNavBar() {
         isFlaggedData,
         handleSubmitEngagements,
         activeReviewMode,
+        userResponseData,
+        handleUpdateTimeSpentData,
     } = useContext(QuestionContext);
-
-    /* test cases, will implement QuestionContext and delete these */
-    const [isAnswered, setIsAnswered] = useState([true, false, false, true, false]);
 
     const checkSelected = (index) => {
         return index === activeQuestionIndex;
@@ -27,7 +26,7 @@ export default function QuestionNavBar() {
     }
 
     const checkAnswered = (index) => {
-        return isAnswered[index];
+        return userResponseData[questionIDArray[index]] === null;
     }
 
     const handleKeyChange = (index) => {
@@ -59,7 +58,7 @@ export default function QuestionNavBar() {
                                 key={index}
                                 className={`h-[40px] w-[40px] text-center text-appleBlue cursor-pointer rounded-[12px] pt-[5px]
                                     ${checkSelected(index) ? 'transform scale-[1.05] bg-appleBlue text-white border-[2px] border-appleGray3' : 'bg-white text-appleGray1 border-[2px] border-appleGray5'}
-                                    ${!checkAnswered(index) ? 'border-[3px] border-dashed border-appleGray4' : 'pt-[7px]'}
+                                    ${checkAnswered(index) ? 'border-[3px] border-dashed border-appleGray4' : 'pt-[7px]'}
                                 `}
                                 style={{ transition: 'transform 0.3s ease-in-out' }}
                                 onClick={() => handleKeyChange(index)}
@@ -89,7 +88,7 @@ export default function QuestionNavBar() {
                         Next
                     </Button>
                 </div>
-                {activeReviewMode === "review" ? 
+                {activeReviewMode === "active" ? 
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
                         <Button
                             className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'
@@ -97,7 +96,7 @@ export default function QuestionNavBar() {
                         >
                             Submit Quiz
                         </Button>
-                    </div> : null
+                    </div> : <div className='h-[100px]'></div>
                 }
             </div>
         </div>

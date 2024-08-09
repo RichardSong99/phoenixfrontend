@@ -23,7 +23,7 @@ import { useData } from "@/app/helper/context/datacontext";
 
 const TopicModules = () => {
   const { mathTopicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList } = useData();
-  const [selected, setSelected] = useState("All");
+  const [selected, setSelected] = useState("Algebra");
 
   // Fallback to an empty array if topicSummaryList is undefined, null, or not an array
   const [displayTopicSummaryList, setDisplayTopicSummaryList] = useState(Array.isArray(topicSummaryList) ? topicSummaryList : []);

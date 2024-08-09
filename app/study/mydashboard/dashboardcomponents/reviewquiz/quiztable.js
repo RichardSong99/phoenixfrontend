@@ -5,6 +5,7 @@ import { NavBarContext } from '@/app/helper/context/navbarcontext';
 import { fetchQuizStats, fetchQECombos } from '@/app/helper/apiservices/quizservice';
 import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import { useRouter } from "next/navigation";
+import { QuestionContext } from '@/app/helper/context/questioncontext';
 import {
     Table,
     TableHeader,
@@ -23,18 +24,20 @@ import { useData } from '@/app/helper/context/datacontext';
 
 export function QuizTable() {
 
+    const{
+        setupReviewQuizMode,
+    } = useContext(QuestionContext);
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
     const { mathTopicMapping, quizListQuizType } = useData();
 
-    // const router = useRouter();
+    const router = useRouter();
 
 
 
     const handleQuizClick = (quiz) => {
-        // router.push(`/study/myquizzes/${quizID}`);
-        onOpenChange(true);
-        setActiveQuiz(quiz);
+        router.push(`/study/activequiz?quizid=${quiz.id}&review=true`);
         console.log(quiz, "quiz")
     }
 

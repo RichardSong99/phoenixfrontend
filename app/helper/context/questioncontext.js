@@ -197,6 +197,7 @@ export const QuestionProvider = ({ children }) => {
         // the QEIDCombos is an array of {QuestionID, EngagementID} objects
         const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.question_id);
         setQuestionIDArray(questionIDs);
+        console.log("qeIDCombos", QEIDCombos);
 
         // fetch the questions for the questionIDs, then populate the questionData object
         const newQuestionData = {};
@@ -311,8 +312,8 @@ export const QuestionProvider = ({ children }) => {
         setStartTime(Date.now());
     };
 
-    const handleNextQuestion = (max) => {
-        if (activeQuestionIndex < max - 1) {
+    const handleNextQuestion = () => {
+        if (activeQuestionIndex < questionIDArray.length - 1) {
             setActiveQuestionIndex(activeQuestionIndex + 1);
         }
     };

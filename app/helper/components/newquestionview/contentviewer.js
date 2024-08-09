@@ -4,22 +4,21 @@ import QuestionNavBar from './questionnavbar';
 import QuestionModalInterior from './questionmodalinterior';
 import { fetchQuiz } from '../../apiservices/quizservice';
 
-export default function ContentViewer({ review, quizID, question }) {
-    const [questions, setQuestions] = useState([]);
-    const [quizName, setQuizName] = useState("");
+export default function ContentViewer({ quizID }) {
+    // const [quizName, setQuizName] = useState("");
 
-    const handleFetchQuizData = async () => {
-        const response = await fetchQuiz({ quizID });
-        setQuestions(response.QuestionEngagementIDCombos);
-        setQuizName(response.Name);
-    }
+    // const handleFetchQuizData = async () => {
+    //     const response = await fetchQuiz({ quizID });
+    //     setQuestions(response.QuestionEngagementIDCombos);
+    //     setQuizName(response.Name);
+    // }
 
-    useEffect(() => {
-        handleFetchQuizData();
-    }, []);
+    // useEffect(() => {
+    //     handleFetchQuizData();
+    // }, []);
 
     return (
-        <div className='custom-font w-screen h-screen'>
+        <div className='custom-font w-screen h-screen bg-appleGray6'>
             <style jsx>{`
                 @font-face {
                     font-family: 'SF Pro Display';
@@ -32,20 +31,15 @@ export default function ContentViewer({ review, quizID, question }) {
                     font-family: 'SF Pro Display', sans-serif;
                 }
             `}</style>
-            {questions && quizName &&
-                <div className='w-screen h-screen flex flex-row'>
-                    <QuestionNavBar 
-                        review={review}
-                        questions={questions}
-                    />
-                    <QuestionModalInterior 
-                        mode={"quiz"}
-                        review={review}
-                        quizName={quizName}
-                        quizID={quizID}
-                    />
-                </div>
-            }
+            <div className='w-screen h-screen flex flex-row'>
+                <QuestionNavBar 
+                />
+                <QuestionModalInterior 
+                    mode={"quiz"}
+                    quizName={"Default Quiz"}
+                    quizID={quizID}
+                />
+            </div>
         </div>
     )
 }

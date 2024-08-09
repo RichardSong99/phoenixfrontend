@@ -4,15 +4,16 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'; // Update import
 
-import { ContentViewer } from '../../../helper/components/contentviewer/contentviewer';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
+import ContentViewer from '@/app/helper/components/newquestionview/contentviewer';
 
 export default function Page() {
     const router = useRouter(); // Update variable name
     const pathname = usePathname(); // Update variable name
     const searchParams = useSearchParams(); // Update variable name
-    const [quizID, activeIndex] = pathname.split('/').slice(-2).map(part => decodeURI(part));
+    // const [quizID, activeIndex] = pathname.split('/').slice(-2).map(part => decodeURI(part));
     const search = searchParams.get('review');
+    const quizID = searchParams.get('quizid');
 
     console.log(search, "search")
 
@@ -35,12 +36,8 @@ export default function Page() {
     
     return (
         <>
-        <ContentViewer
-            groupName={"Quiz"}
-            mode={"quiz"}
-            handleClose={handleClose}
-
-        />
+            <ContentViewer
+            />
         </>
     );
 }

@@ -29,9 +29,9 @@ export default function QuestionHeader({ mode, review, quizName }) {
     const seconds = totalSeconds % 60;
 
     return (
-        <div className='bg-white w-full h-[75px] shadow-custom'>
+        <div className='w-full h-[75px] border-b-[2px] border-appleGray6'>
             <div className='w-full h-full flex flex-row justify-between'>
-                <div id='question-actions' className='flex flex-row items-center pl-[5px] h-full w-[75px]'>
+                <div id='question-actions' className='flex flex-col items-center pl-[5px] h-full w-[75px]'>
                     <div className='cursor-pointer' onClick={() => handleFlagQuestion(activeQuestionIndex)}>
                         { !isFlaggedData[activeQuestionIndex] ?
                         <svg

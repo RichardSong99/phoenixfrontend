@@ -134,7 +134,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
 
     return (
         <div className='mt-[20px] w-[100%] h-[82%] flex justify-center items-center'>
-            <div className='bg-white h-full w-[98%] rounded shadow-custom flex flex-row justify-between pt-[20px]'>
+            <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
                 <div className='w-[50%] h-[80%] flex flex-col justify-center items-center'>
                     {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                 </div>

@@ -6,7 +6,7 @@ import AnswerBox from './answerbox';
 export default function QuestionModalInterior({ mode, quizName, question, quizID }) {
     return (
         <div 
-            className='bg-appleGray6 shadow-custom rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px]' style={{width: 'calc(100% - 350px)'}}
+            className='shadow-custom bg-white rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px]' style={{width: 'calc(100% - 350px)'}}
         >
             <QuestionHeader
                 quizName={quizName}

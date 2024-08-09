@@ -1,11 +1,7 @@
 // components/QuestionModal.js
 import React, { useEffect, useState, useContext } from 'react';
 import QuestionView from './questionview';
-import styles from './questionmodal.module.css'; // Import the CSS file
-import { CheckAnswerButton } from '@/app/helper/components/question/questionpieces/questionpieces';
-import { handlePostEngagement } from '../../../data/questionhelpers';
-import { fetchEngagementByID } from '@/app/helper/apiservices/engagementservice';
-import { fetchEngagementByQuestionID } from '@/app/helper/apiservices/engagementservice';
+
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 import { QuestionContext } from '@/app/helper/context/questioncontext';
 

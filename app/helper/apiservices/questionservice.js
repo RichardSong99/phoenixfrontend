@@ -202,24 +202,22 @@ export async function fetchQuestionsById({
     questionIdList
 }) {
     let token;
-    try{
+    try {
         token = Cookies.get('token');
     } catch (error) {
         console.error('Could not get token:', error);
     }
+
     const requestOptions = {
+        method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ids: questionIdList })
     };
 
-    // questionIdList is an array, add each element to the params with ids = "xxx" format
-    let params = "";
-    for (let i = 0; i < questionIdList.length; i++) {
-        params += `ids=${questionIdList[i]}&`;
-    }
-    
-    const response = await fetch(`${apiUrl}/questionsbyid?${params}`, requestOptions);
+    const response = await fetch(`${apiUrl}/getquestions`, requestOptions);
 
     if (!response.ok) {
         throw new Error('Failed to fetch question data');

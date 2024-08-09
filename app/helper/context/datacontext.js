@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useUser } from './usercontext';
 
-import { getDataCube } from '../apiservices/datacubeservice';
+// import { getDataCube } from '../apiservices/datacubeservice';
 import { fetchTopicList } from '../apiservices/parameterdataservice';
 import { getQuizzesForUser, fetchQuizUnderlyingById,  fetchQuizzesUnderlyingForUser} from '../apiservices/quizservice';
 import { fetchTestsUnderlyingForUser } from '../apiservices/testservice';
+import { getTopicListSummary } from '../apiservices/dataservice';
 
 // Create a new context
 export const DataContext = createContext();
@@ -12,47 +13,70 @@ export const DataContext = createContext();
 export const useData = () => useContext(DataContext);
 
 export const DataProvider = ({ children }) => {
-    const [datacube, setDatacube] = useState(null);
-    const [mathTopics, setMathTopics] = useState([]);
-    const [readingTopics, setReadingTopics] = useState([]);
+
+    const {isAuthenticated, loginToggle, user} = useUser();
+
+
+    const [topicSummaryList, setTopicSummaryList] = useState(null);
+    const [userData, setUserData] = useState(null);
+
+    const mathTopicMapping = [
+        { topic: "Linear equations in 1 variable", category: "Algebra" },
+        { topic: "Linear equations in 2 variables", category: "Algebra" },
+        { topic: "Linear functions", category: "Algebra" },
+        { topic: "Systems of 2 linear equations in 2 variables", category: "Algebra" },
+        { topic: "Linear inequalities in 1 or 2 variables", category: "Algebra" },
+        { topic: "Equivalent expressions", category: "Advanced math" },
+        { topic: "Nonlinear equations in 1 variable", category: "Advanced math" },
+        { topic: "System of equations in 2 variables", category: "Advanced math" },
+        { topic: "Nonlinear functions", category: "Advanced math" },
+        { topic: "Ratios, rates, proportional relationships, and units", category: "Problem solving and data analysis" },
+        { topic: "Percentages", category: "Problem solving and data analysis" },
+        { topic: "One-variable data: distributions and measures of center and spread", category: "Problem solving and data analysis" },
+        { topic: "Two-variable data: models and scatterplots", category: "Problem solving and data analysis" },
+        { topic: "Probability and conditional probability", category: "Problem solving and data analysis" },
+        { topic: "Inference from sample statistics and margin of error", category: "Problem solving and data analysis" },
+        { topic: "Evaluating statistical claims: observational studies and experiments", category: "Problem solving and data analysis" },
+        { topic: "Area and volume formulas", category: "Geometry and trigonometry" },
+        { topic: "Lines, angles, and triangles", category: "Geometry and trigonometry" },
+        { topic: "Right triangles and trigonometry", category: "Geometry and trigonometry" },
+        { topic: "Circles", category: "Geometry and trigonometry" }
+    ];
+
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [quizUnderlyingList, setQuizUnderlyingList] = useState([]);
-    const [quizUnderlyingListQuizType, setQuizUnderlyingListQuizType] = useState([]);
+    const [quizList, setQuizList] = useState([]);
+    const [quizListQuizType, setQuizListQuizType] = useState([]);
     const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
-    const {isAuthenticated, loginToggle} = useUser();
+    const getTopicsByCategory = (category) => {
+        return mathTopicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
+    }
 
-    const fetchDataCube = async () => {
-        try {
-            const data = await getDataCube({compute:true});
-            setDatacube(data);
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
+    const getCategoryList = () => {
+        return Array.from(new Set(mathTopicMapping.map(topicObj => topicObj.category)));
+    }
 
-    const initializeTopicList = async () => {
-        try {
-            const mathTopics = await fetchTopicList({subject: 'math'});
-            const readingTopics = await fetchTopicList({subject:'reading'});
-            setMathTopics(mathTopics);
-            setReadingTopics(readingTopics);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
+        // Create a lookup map for topic order
+    const topicOrderLookup = mathTopicMapping.reduce((acc, item, index) => {
+        acc[item.topic] = index;
+        return acc;
+    }, {});
 
-    const loadQuizUnderlyingList = async () => {
+    const sortTopicSummaryList = (list) => {
+        return list.sort((a, b) => topicOrderLookup[a.topic] - topicOrderLookup[b.topic]);
+    }
+
+
+    const filterTopicSummaryList = (list, category) => {
+        console.log("filterTopicSummaryList", list, category)
+        return list.filter(item => item.category === category);
+    }
+
+    const loadQuizList = async () => {
         try {
-            // let response = await getQuizzesForUser();
-            // let quizIds = response.filter(quiz => quiz.Type === "quiz").map(quiz => quiz.id);
-            // let quizData = await Promise.all(quizIds.map(quizID => fetchQuizUnderlyingById({ quizID: quizID })));
-            // setQuizUnderlyingList(quizData);
-            var quizUnderlyingForUserResponse = await fetchQuizzesUnderlyingForUser()
-            setQuizUnderlyingList(quizUnderlyingForUserResponse);
-            setQuizUnderlyingListQuizType(quizUnderlyingForUserResponse.filter(quizObj => quizObj?.Quiz?.Type === "quiz"));
+            var response = await getQuizzesForUser()
+            setQuizList(response);
+            setQuizListQuizType(response.filter(quizObj => quizObj?.type === "quiz"));
 
         } catch (error) {
             console.log("Error fetching quizzes for user", error);
@@ -70,29 +94,27 @@ export const DataProvider = ({ children }) => {
         }
     }
 
+    const loadTopicSummaryList = async () => {
+        try {
+            const topicListSummaryResponse = await getTopicListSummary();
+            setTopicSummaryList(sortTopicSummaryList(topicListSummaryResponse));
+        } catch (error) {
+            console.log("Error fetching topic list summary", error);
+        }
+    }
 
     useEffect(() => {
         if (!isAuthenticated) {
+            console.log("User is not authenticated");
             return;
         }
-        fetchDataCube();
-        initializeTopicList();
-        loadQuizUnderlyingList();
-        loadTestUnderlyingList();
+        loadQuizList();
+        // loadTestUnderlyingList();
+        loadTopicSummaryList();
     }, [isAuthenticated, loginToggle]);
 
-  
-
-    const getTopicList = (subject = 'math') => {
-        if (subject === 'math') {
-            return mathTopics;
-        } else {
-            return readingTopics;
-        }
-    };
-
     return (
-        <DataContext.Provider value={{ loading, datacube, getTopicList, error, quizUnderlyingList, refetch: fetchDataCube, quizUnderlyingListQuizType, testUnderlyingList }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList }}>
             {children}
         </DataContext.Provider>
     );

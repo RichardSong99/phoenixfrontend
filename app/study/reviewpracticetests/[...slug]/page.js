@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { fetchTestUnderlyingByID } from '@/app/helper/apiservices/testservice';
-import { SelectionBar } from '../../../_archive/selectionbar/selectionbar';
 import SummaryPanel from '../../../helper/components/summarypanel/summarypanel';
 import styles from './reviewpracticetestslug.module.css';
 import { ProgressBar } from "react-bootstrap";
@@ -132,11 +131,11 @@ export default function Page() {
                     </Card>
                     <Card>
                         <CardBody>
-                            <SelectionBar
+                            {/* <SelectionBar
                                 tabList={moduleNameMapping.map(item => item.name)}
                                 activeTab={activeTab}
                                 handleTabChange={handleTabChange}
-                            />
+                            /> */}
 
                             <Spacer y={4} />
 
@@ -144,10 +143,10 @@ export default function Page() {
 
 
 
-                            <SummaryPanel
+                            {/* <SummaryPanel
                                 questionEngagements={testObject.QuizResults[activeTab].Questions}
                                 quizID={testObject?.QuizResults[activeTab]?.Quiz?.id}
-                            />
+                            /> */}
                         </CardBody>
                     </Card>
 

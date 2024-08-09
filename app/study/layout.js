@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import Head from 'next/head';
 import StudyNavBar from '../helper/components/navbars/studynavbar/studynavbar';
-import { Loading } from '../_archive/loading/loading';
 
 const Layout = ({ children, title = 'Default Title' }) => {
     return (
@@ -12,7 +11,7 @@ const Layout = ({ children, title = 'Default Title' }) => {
             <main style={{ display: 'flex', height: "100vh" }}>
                 <StudyNavBar style={{ position: 'fixed', top: 0, left: 0, bottom: 0, width: "250px" }} />
                 <div style={{ flex: 1, width: "100%", height: "100vh", overflowY: "auto" }}>
-                    <Suspense fallback={<Loading />}>
+                    <Suspense >
                         {children}
                     </Suspense>
                 </div>

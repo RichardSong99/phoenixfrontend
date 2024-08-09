@@ -9,11 +9,10 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
-    const { getTopicList, loading, datacube } = useData();
+    const { mathTopicMapping, loading, datacube, getCategoryList } = useData();
 
-    const [topicsData, setTopicsData] = useState(getTopicList("math"));
-    const [generalCategory, setGeneralCategory] = useState(getTopicList("math")[0].Name);
-    const [specificTopic, setSpecificTopic] = useState(getTopicList("math")[0].Children[0].Name);
+    const [generalCategory, setGeneralCategory] = useState(mathTopicMapping[0].category);
+    const [specificTopic, setSpecificTopic] = useState(mathTopicMapping[0].topic);
     const [numEasy, setNumEasy] = useState(1);
     const [numMedium, setNumMedium] = useState(1);
     const [numHard, setNumHard] = useState(1);
@@ -105,14 +104,14 @@ const QuestionGeneration = () => {
 
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} className="max-w-xs">
-                        {topicsData.map(item => (
-                            <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
+                        {getCategoryList.map(item => (
+                            <SelectItem key={item} value={item}>{item}</SelectItem>
                         ))}
                     </Select>
                     {generalCategory && (
                         <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} className="max-w-xs">
-                            {topicsData.find(topic => topic.Name === generalCategory).Children.map(child => (
-                                <SelectItem key={child.Name} value={child.Name}>{child.Name}</SelectItem>
+                            {getTopicsByCategory(generalCategory).map(topic => (
+                                <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                             ))}
                         </Select>
                     )}

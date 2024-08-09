@@ -13,7 +13,7 @@ import {
     initializeQuiz,
     fetchQuiz,
 } from "../apiservices/quizservice";
-import {getResult} from "../apiservices/quizservice";
+import { getResult } from "../data/questionhelpers";
 
 export const QuestionContext = createContext();
 

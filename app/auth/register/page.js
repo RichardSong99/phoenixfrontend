@@ -9,11 +9,11 @@ export default function Register() {
   const [isLoginMode, setIsLoginMode] = useState(false);
 
   return (
-    <main>
+    <div>
       <LoginPanel 
         isLoginMode = {isLoginMode}
         setIsLoginMode = {setIsLoginMode}
       />
-    </main>
+    </div>
   );
 }

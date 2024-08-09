@@ -117,33 +117,7 @@ export async function getQuizzesForUser() {
         },
     };
 
-    const response = await fetch(`${apiUrl}/quizzes`, requestOptions);
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return data;
-}
-
-export async function fetchQuizzesUnderlyingForUser() {
-    let token;
-    try {
-        token = Cookies.get('token');
-    } catch (error) {
-        console.error('Could not get token:', error);
-    }
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-    };
-
-    const response = await fetch(`${apiUrl}/quizzes/underlying`, requestOptions);
+    const response = await fetch(`${apiUrl}/quizzes/user`, requestOptions);
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -219,6 +193,60 @@ export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngage
     };
 
     const response = await fetch(`${apiUrl}/quiz/${quizID}`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
+export async function fetchQuizStats(quizID){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const response = await fetch(`${apiUrl}/quiz/stats/${quizID}`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
+export async function fetchQECombos(quizID){
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const response = await fetch(`${apiUrl}/quiz/qecombos/${quizID}`, requestOptions);
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

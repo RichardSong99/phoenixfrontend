@@ -9,7 +9,7 @@ import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 
 const QBankForm = ({ inputQuestion, mode }) => {
 
-    const { getTopicList, loading, datacube } = useData();
+    const { mathTopicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
     const [answerType, setAnswerType] = useState('multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
@@ -27,25 +27,13 @@ const QBankForm = ({ inputQuestion, mode }) => {
     const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
     const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
-    const [topicsData, setTopicsData] = useState([]);
     const [subject, setSubject] = useState('math');
 
-    const [generalCategory, setGeneralCategory] = useState("");
-    const [specificTopic, setSpecificTopic] = useState("");
+    const [generalCategory, setGeneralCategory] = useState(mathTopicMapping[0].category);
+    const [specificTopic, setSpecificTopic] = useState(mathTopicMapping[0].topic);
 
 
     const [isFocused, setIsFocused] = useState(false);
-
-
-    const handleChangeSubject = async (subject) => {
-        setSubject(subject);
-        const topicsData = await getTopicList(subject);
-        setTopicsData(topicsData);
-        if (topicsData && topicsData.length > 0) {
-            setGeneralCategory(topicsData[0].Name);
-            setSpecificTopic(topicsData[0].Children[0].Name);
-        }
-    }
 
 
 
@@ -82,8 +70,8 @@ const QBankForm = ({ inputQuestion, mode }) => {
         setCorrectAnswerFree('');
         setExplanation('');
         setAccessOption('free');
-        setGeneralCategory(topicsData[0].Name);
-        setSpecificTopic(topicsData[0].Children[0].Name);
+        setGeneralCategory(mathTopicMapping[0].category);
+        setSpecificTopic(mathTopicMapping[0].topic);
         setReplaceIndex(null);
         setUploadedImageUrls([]);
     };
@@ -91,14 +79,11 @@ const QBankForm = ({ inputQuestion, mode }) => {
     useEffect(() => {
 
         const refreshCategoryAndTopic = async () => {
-            const result = await getTopicList("math");
-            setTopicsData(result);
+
     
-            if (result && result.length > 0) {
-                console.log("topicsData", result);
-                setGeneralCategory(result[0].Name);
-                setSpecificTopic(result[0].Children[0].Name);
-            }
+            setGeneralCategory(mathTopicMapping[0].category);
+            setSpecificTopic(mathTopicMapping[0].topic);
+            
         };
 
         refreshCategoryAndTopic();
@@ -107,7 +92,7 @@ const QBankForm = ({ inputQuestion, mode }) => {
             setFormFields(inputQuestion);
         }
 
-    }, [inputQuestion, getTopicList]);
+    }, [inputQuestion]);
 
     // renders question
     const handleSubmit = (event) => {
@@ -219,14 +204,14 @@ const QBankForm = ({ inputQuestion, mode }) => {
                                 ))}
                             </Select>
                             <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} defaultSelectedKeys={[generalCategory]}>
-                                {topicsData.map(item => (
-                                    <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
+                                {getCategoryList().map(item => (
+                                    <SelectItem key={item} value={item}>{item}</SelectItem>
                                 ))}
                             </Select>
                             {generalCategory && (
                                 <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} defaultSelectedKeys={[specificTopic]}>
-                                    {topicsData.find(topic => topic.Name === generalCategory).Children.map(child => (
-                                        <SelectItem key={child.Name} value={child.Name}>{child.Name}</SelectItem>
+                                    {getTopicsByCategory(generalCategory).map(topic => (
+                                        <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                                     ))}
                                 </Select>
                             )}

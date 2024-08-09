@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import SummaryPanel from '../../../../helper/components/summarypanel/summarypanel';
 import { useRouter, usePathname } from 'next/navigation'; // Update import
 import styles from './quizsummary.module.css';
 import QBankTable from '@/app/helper/components/qbank/qbankview/qbanktable';

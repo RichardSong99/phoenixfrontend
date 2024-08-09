@@ -144,7 +144,7 @@ const QBankViewer = () => {
 
             </div>
 
-            <Pagination total={lastPage} initialPage={page} onChange={(page) => setPage(page)} showControls />
+            <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />
 
 
             <QBankTable questionEngagementCombos = {questions} />

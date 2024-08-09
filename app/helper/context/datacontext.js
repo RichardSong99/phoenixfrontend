@@ -20,6 +20,11 @@ export const DataProvider = ({ children }) => {
     const [topicSummaryList, setTopicSummaryList] = useState(null);
     const [userData, setUserData] = useState(null);
 
+    const [algebraGraphData, setAlgebraGraphData] = useState(null);
+    const [advancedMathGraphData, setAdvancedMathGraphData] = useState(null);
+    const [problemSolvingData, setProblemSolvingData] = useState(null);
+    const [geometryTrigonometryData, setGeometryTrigonometryData] = useState(null);
+
     const mathTopicMapping = [
         { topic: "Linear equations in 1 variable", category: "Algebra" },
         { topic: "Linear equations in 2 variables", category: "Algebra" },
@@ -66,10 +71,12 @@ export const DataProvider = ({ children }) => {
         return list.sort((a, b) => topicOrderLookup[a.topic] - topicOrderLookup[b.topic]);
     }
 
+    const filterTopicSummaryList = ( category) => {
+        return topicSummaryList.filter(item => item.category === category);
+    }
 
-    const filterTopicSummaryList = (list, category) => {
-        console.log("filterTopicSummaryList", list, category)
-        return list.filter(item => item.category === category);
+    const getTopicSummaryElement = (topic) => {
+        return topicSummaryList.find(item => item.topic === topic);
     }
 
     const loadQuizList = async () => {
@@ -98,6 +105,9 @@ export const DataProvider = ({ children }) => {
         try {
             const topicListSummaryResponse = await getTopicListSummary();
             setTopicSummaryList(sortTopicSummaryList(topicListSummaryResponse));
+
+
+
         } catch (error) {
             console.log("Error fetching topic list summary", error);
         }
@@ -114,7 +124,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList, getTopicSummaryElement }}>
             {children}
         </DataContext.Provider>
     );

@@ -124,6 +124,13 @@ export const QuestionProvider = ({ children }) => {
     const [startTime, setStartTime] = useState(Date.now());
     const timerRef = useRef(null);
 
+    // new questionview components
+    const [continueTimer, setContinueTimer] = useState(true);
+
+    const changeTimer = () => {
+        setContinueTimer(!continueTimer);
+    }
+
     const setupActiveIndividualMode = async (questionID) => {
         QEIDCombos = convertToQEIDComboArray([questionID]);
 
@@ -168,7 +175,6 @@ export const QuestionProvider = ({ children }) => {
             const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
             QEIDCombos = response.QuestionEngagementIDCombos;
-            console.log("QEIDCombos", QEIDCombos);
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }
@@ -305,8 +311,8 @@ export const QuestionProvider = ({ children }) => {
         setStartTime(Date.now());
     };
 
-    const handleNextQuestion = () => {
-        if (activeQuestionIndex < questionIDArray.length - 1) {
+    const handleNextQuestion = (max) => {
+        if (activeQuestionIndex < max - 1) {
             setActiveQuestionIndex(activeQuestionIndex + 1);
         }
     };
@@ -506,6 +512,8 @@ export const QuestionProvider = ({ children }) => {
                 wasReviewedData,
                 timeSpentData,
                 startTime,
+                continueTimer,
+                changeTimer,
                 setupActiveIndividualMode,
                 setupActiveQuizMode,
                 setupReviewIndividualMode,

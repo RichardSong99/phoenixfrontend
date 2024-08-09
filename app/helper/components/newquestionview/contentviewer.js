@@ -4,7 +4,7 @@ import QuestionNavBar from './questionnavbar';
 import QuestionModal from './questionmodal';
 import { fetchQuiz } from '../../apiservices/quizservice';
 
-export default function ContentViewer({ review, quizID }) {
+export default function ContentViewer({ review, quizID, question }) {
     const [questions, setQuestions] = useState([]);
     const [quizName, setQuizName] = useState("");
 
@@ -19,7 +19,7 @@ export default function ContentViewer({ review, quizID }) {
     }, []);
 
     return (
-        <div className='custom-font'>
+        <div className='custom-font w-screen h-screen'>
             <style jsx>{`
                 @font-face {
                     font-family: 'SF Pro Display';
@@ -37,11 +37,12 @@ export default function ContentViewer({ review, quizID }) {
                     <QuestionNavBar 
                         review={review}
                         questions={questions}
-                        quizName={quizName}
                     />
                     <QuestionModal 
                         mode={"quiz"}
                         review={review}
+                        quizName={quizName}
+                        quizID={quizID}
                     />
                 </div>
             }

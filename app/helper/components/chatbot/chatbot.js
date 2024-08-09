@@ -103,8 +103,8 @@ export default function Chatbot({question}) {
     }, [messages]);
 
     return (
-        <div className="w-[325px] bg-orange h-[800px] relative right-[2%] top-[6%] overflow-y-auto">
-            <div className="h-[550px] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300">
+        <div className="w-[325px] bg-orange h-[550px] relative right-[2%] top-[6%] overflow-y-auto bg-appleGray6 p-[10px] rounded-[15px] shadow-custom flex flex-col justify-between">
+            <div className="h-[60%] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white shadow-custom">
                 <div className="w-full flex flex-col justify-end">
                     {messages.map((msg, index) => (
                         <div key={index} className={`message ${msg.role}`}>
@@ -114,61 +114,62 @@ export default function Chatbot({question}) {
                 </div>
                 <div ref={messagesEndRef} />
             </div>
-            <br></br>
-            <div className="flex justify-between">
-                <Button
-                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
-                    onClick={handleHint}
-                >
-                    Give me a hint
-                </Button>
-                <Button 
-                    className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white"
-                    onClick={handleSolution}
-                >
-                    Give me the solution
-                </Button>
+            <div>
+                <div className="flex justify-between">
+                    <Button
+                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom"
+                        onClick={handleHint}
+                    >
+                        Give me a hint
+                    </Button>
+                    <Button 
+                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom"
+                        onClick={handleSolution}
+                    >
+                        Give me the solution
+                    </Button>
+                </div>
+                <form onSubmit={handleSubmit} className="mt-4">
+                    <textarea
+                        className="w-full p-2 border border-gray-300 rounded shadow-custom resize-none"
+                        value={user_message}
+                        onChange={(e) => setUserMessage(e.target.value)}
+                        onKeyDown={enterKey}
+                        placeholder="Type your message to our assistant."
+                    />
+                    {loading ? <Button
+                                    isLoading
+                                    className="rounded text-white bg-blue-500 mt-2 p-2 shadow-custom"
+                                    spinner={
+                                        <svg
+                                        className="animate-spin h-5 w-5 text-current"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        />
+                                        <path
+                                            className="opacity-75"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                            fill="currentColor"
+                                        />
+                                        </svg>
+                                    }
+                                >
+                                    Generating
+                                </Button>
+                            :   <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded shadow-custom">
+                                Send
+                                </Button>}
+                </form>
             </div>
-            <form onSubmit={handleSubmit} className="mt-4">
-                <textarea
-                    className="w-full p-2 border border-gray-300 rounded"
-                    value={user_message}
-                    onChange={(e) => setUserMessage(e.target.value)}
-                    onKeyDown={enterKey}
-                    placeholder="Type your message to our assistant."
-                />
-                {loading ? <Button
-                                isLoading
-                                className="rounded text-white bg-blue-500 mt-2 p-2"
-                                spinner={
-                                    <svg
-                                    className="animate-spin h-5 w-5 text-current"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                    <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                    />
-                                    <path
-                                        className="opacity-75"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                        fill="currentColor"
-                                    />
-                                    </svg>
-                                }
-                            >
-                                Generating
-                            </Button>
-                        :   <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded">
-                            Send
-                            </Button>}
-            </form>
         </div>
     );
 }

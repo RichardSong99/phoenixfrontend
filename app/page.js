@@ -15,7 +15,6 @@ export default function Home() {
       <QuestionProvider>
 
         <ContentViewer
-          review={false}
           mode={"quiz"}
           quizID={'65f1c63d8e57129b0f22a041'}
         />

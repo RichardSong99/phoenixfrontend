@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { QuestionContext } from '../../context/questioncontext';
 import QuestionNavBar from './questionnavbar';
-import QuestionModal from './questionmodal';
+import QuestionModalInterior from './questionmodalinterior';
 import { fetchQuiz } from '../../apiservices/quizservice';
 
 export default function ContentViewer({ review, quizID, question }) {
@@ -38,7 +38,7 @@ export default function ContentViewer({ review, quizID, question }) {
                         review={review}
                         questions={questions}
                     />
-                    <QuestionModal 
+                    <QuestionModalInterior 
                         mode={"quiz"}
                         review={review}
                         quizName={quizName}

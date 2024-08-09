@@ -19,7 +19,8 @@ export default function QuestionView({ review, mode, quizID, topic }) {
 
     const{
         activeQuestionIndex,
-        // questionData,
+        questionData,
+        questionIDArray,
         setupActiveIndividualMode,
         setupActiveQuizMode,
         setupReviewIndividualMode,
@@ -27,7 +28,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
     } = useContext(QuestionContext);
 
     /* for testing, will delete later */
-    const [questionData, setQuestionData] = useState({});
+    // const [questionData, setQuestionData] = useState({});
 
     const toggleChatBot = () => {
         setChatBotVisible(!isChatBotVisible);
@@ -87,34 +88,21 @@ export default function QuestionView({ review, mode, quizID, topic }) {
         </svg>
     );
 
-    useEffect(() => {
-        const setupModes = async () => {
-            if (review) {
-                if (mode === 'single') {
-                    await setupReviewIndividualMode();
-                } else {
-                    await setupReviewQuizMode(quizID);
-                }
-            } else {
-                if (mode === 'single') {
-                    await setupActiveIndividualMode();
-                } else {
-                    await setupActiveQuizMode(quizID);
-                }
-            }
-            const quiz = await fetchQuiz({ quizID });
-            const loadedQuestionData = {};
+    // useEffect(() => {
+    //     const setupData = async () => {
+    //         const quiz = await fetchQuiz({ quizID });
+    //         const loadedQuestionData = {};
 
-            for (let i = 0; i < quiz.QuestionEngagementIDCombos.length; i++) {
-                const question = await fetchFullQuestionById(quiz.QuestionEngagementIDCombos[i].QuestionID);
-                loadedQuestionData[i] = question;
-            }
+    //         for (let i = 0; i < quiz.QuestionEngagementIDCombos.length; i++) {
+    //             const question = await fetchFullQuestionById(quiz.QuestionEngagementIDCombos[i].QuestionID);
+    //             loadedQuestionData[i] = question;
+    //         }
 
-            setQuestionData(loadedQuestionData);
-            console.log(loadedQuestionData);
-        };
-        setupModes();
-    }, []);
+    //         setQuestionData(loadedQuestionData);
+    //         console.log(loadedQuestionData);
+    //     };
+    //     setupData();
+    // }, []);
 
     useEffect(() => {
         if (isCalculatorVisible) {
@@ -148,7 +136,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
         <div className='mt-[20px] w-[100%] h-[82%] flex justify-center items-center'>
             <div className='bg-white h-full w-[98%] rounded shadow-custom flex flex-row justify-between pt-[20px]'>
                 <div className='w-[50%] h-[80%] flex flex-col justify-center items-center'>
-                    {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].Prompt)}
+                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                 </div>
                 <div className='h-[95%] w-[2px] bg-appleGray1 opacity-[10%] rounded'></div>
                 <div className='w-[50%] flex flex-col justify-between'>
@@ -175,7 +163,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                     ${selectedChoice === 'A' && !crossedOut.includes('A') ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="A"
                             />
-                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[0])}
+                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[0])}
                         </Button>
                         <div
                             className={` 
@@ -191,7 +179,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                     ${selectedChoice === 'B' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="B"
                             />
-                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[1])}
+                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[1])}
                         </Button>
                         <div
                             className={` 
@@ -207,7 +195,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                     ${selectedChoice === 'C' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="C"
                             />
-                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[2])}
+                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[2])}
                         </Button>
                         <div
                             className={` 
@@ -223,7 +211,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                     ${selectedChoice === 'D' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="D"
                             />
-                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[3])}
+                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[3])}
                         </Button>
                         <div
                             className={` 

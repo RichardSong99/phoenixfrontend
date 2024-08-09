@@ -1,11 +1,11 @@
 // components/QuestionModal.js
 import React, { useEffect, useState, useContext } from 'react';
 import QuestionView from './questionview';
-
+import QuestionModalInterior from '../../newquestionview/questionmodalinterior';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, RadioGroup, Radio } from "@nextui-org/react";
 import { QuestionContext } from '@/app/helper/context/questioncontext';
 
-export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) => {
+export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode, review }) => {
 
     const {
         activeQuestionIndex,
@@ -31,7 +31,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
             <ModalContent style={{ padding: '10px' }}>
                 <ModalBody>
                     <>
-                        {pendingQuestion && <QuestionView
+                        {/* {pendingQuestion && <QuestionView
                             question={pendingQuestion}
                             userResponse={null}
                             isFlagged={false}
@@ -39,9 +39,13 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
                             wasReviewed={false}
                             timeElapsed={0}
                             activeReviewMode={mode}
+                        />} */}
+
+                        {!pendingQuestion && <QuestionModalInterior
+                            mode={'single'}
                         />}
 
-                        {!pendingQuestion && questionData[questionIDArray[activeQuestionIndex]] && <QuestionView
+                        {/* {!pendingQuestion && questionData[questionIDArray[activeQuestionIndex]] && <QuestionView
                             question={questionData[questionIDArray[activeQuestionIndex]]}
                             userResponse={userResponseData[questionIDArray[activeQuestionIndex]]}
                             isFlagged={isFlaggedData[questionIDArray[activeQuestionIndex]]}
@@ -49,7 +53,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode }) =
                             wasReviewed={wasReviewedData[questionIDArray[activeQuestionIndex]]}
                             timeElapsed={timeSpentData[questionIDArray[activeQuestionIndex]]}
                             activeReviewMode={activeReviewMode}
-                        />}
+                        />} */}
                     </>
                 </ModalBody>
                 <ModalFooter>

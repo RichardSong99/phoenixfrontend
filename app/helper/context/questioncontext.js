@@ -147,7 +147,7 @@ export const QuestionProvider = ({ children }) => {
         try {
             const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
-            QEIDCombos = response.QuestionEngagementIDCombos;
+            QEIDCombos = response.question_engagement_id_combos;
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }
@@ -159,7 +159,7 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
-        const QEIDCombos = [{ QuestionID: questionID, EngagementID: engagementID }];
+        const QEIDCombos = [{ question_id: questionID, engagement_id: engagementID }];
 
         setActiveReviewMode(REVIEWMODE);
         setIndQuizMode(INDIVIDUALMODE);
@@ -174,7 +174,7 @@ export const QuestionProvider = ({ children }) => {
         try {
             const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
-            QEIDCombos = response.QuestionEngagementIDCombos;
+            QEIDCombos = response.question_engagement_id_combos;
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }
@@ -187,7 +187,7 @@ export const QuestionProvider = ({ children }) => {
 
     const convertToQEIDComboArray = (questionIDs) => {
         return questionIDs.map((questionID) => {
-            return { QuestionID: questionID, EngagementID: null };
+            return { question_id: questionID, EngagementID: null };
         });
     };
 
@@ -195,7 +195,7 @@ export const QuestionProvider = ({ children }) => {
         // ================== Initialize user response, flag status, star status, time spent ==================
 
         // the QEIDCombos is an array of {QuestionID, EngagementID} objects
-        const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.QuestionID);
+        const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.question_id);
         setQuestionIDArray(questionIDs);
 
         // fetch the questions for the questionIDs, then populate the questionData object
@@ -208,13 +208,13 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not fetch questions by ID:", error);
         }
-
+        console.log("newQuestionData", newQuestionData);
         setQuestionData(newQuestionData);
 
         // populate the engagementIDData object
         const newEngagementIDData = {};
         QEIDCombos.forEach((QEIDCombo) => {
-            newEngagementIDData[QEIDCombo.QuestionID] = QEIDCombo.EngagementID;
+            newEngagementIDData[QEIDCombo.question_id] = QEIDCombo.engagement_id;
         });
         setEngagementIDData(newEngagementIDData);
 
@@ -243,9 +243,9 @@ export const QuestionProvider = ({ children }) => {
         questionIDs.forEach((questionID) => {
             // Check if newEngagementIDData and the corresponding entry for questionID exist
             if (
-                newEngagementData[questionID] && newEngagementData[questionID].UserAnswer
+                newEngagementData[questionID] && newEngagementData[questionID].user_answer
             ) {
-                newUserResponseData[questionID] = newEngagementData[questionID].UserAnswer;
+                newUserResponseData[questionID] = newEngagementData[questionID].user_answer;
             } else {
                 newUserResponseData[questionID] = null;
             }
@@ -257,9 +257,9 @@ export const QuestionProvider = ({ children }) => {
         questionIDs.forEach((questionID) => {
             if (
                 newEngagementData[questionID] &&
-                newEngagementData[questionID].Flagged
+                newEngagementData[questionID].flagged
             ) {
-                newIsFlaggedData[questionID] = newEngagementData[questionID].Flagged;
+                newIsFlaggedData[questionID] = newEngagementData[questionID].flagged;
             } else {
                 newIsFlaggedData[questionID] = false;
             }
@@ -272,9 +272,9 @@ export const QuestionProvider = ({ children }) => {
         questionIDs.forEach((questionID) => {
             if (
                 newEngagementData[questionID] &&
-                newEngagementData[questionID].Starred
+                newEngagementData[questionID].starred
             ) {
-                newIsStarredData[questionID] = newEngagementData[questionID].Starred;
+                newIsStarredData[questionID] = newEngagementData[questionID].starred;
             } else {
                 newIsStarredData[questionID] = false;
             }
@@ -286,9 +286,9 @@ export const QuestionProvider = ({ children }) => {
         const newWasReviewedData = {};
         questionIDs.forEach((questionID) => {
             if (
-                newEngagementData[questionID] && newEngagementData[questionID].Reviewed
+                newEngagementData[questionID] && newEngagementData[questionID].reviewed
             ) {
-                newWasReviewedData[questionID] = newEngagementData[questionID].Reviewed;
+                newWasReviewedData[questionID] = newEngagementData[questionID].reviewed;
             } else {
                 newWasReviewedData[questionID] = false;
             }
@@ -299,8 +299,8 @@ export const QuestionProvider = ({ children }) => {
         // for each questionID, the initial time spent is zero
         const newTimeSpentData = {};
         questionIDs.forEach((questionID) => {
-            if (newEngagementData[questionID] && newEngagementData[questionID].Duration) {
-                newTimeSpentData[questionID] = newEngagementData[questionID].Duration;
+            if (newEngagementData[questionID] && newEngagementData[questionID].duration) {
+                newTimeSpentData[questionID] = newEngagementData[questionID].duration;
             } else {
                 newTimeSpentData[questionID] = 0;
             }
@@ -348,7 +348,7 @@ export const QuestionProvider = ({ children }) => {
             try {
                 await updateEngagement({
                     engagementID: engagementIDData[questionID],
-                    update: { Flagged: newIsFlaggedData[questionID] },
+                    update: { flagged: newIsFlaggedData[questionID] },
                 });
             } catch (error) {
                 console.error("Could not update engagement:", error);
@@ -373,7 +373,7 @@ export const QuestionProvider = ({ children }) => {
             try {
                 await updateEngagement({
                     engagementID: engagementIDData[questionID],
-                    update: { Starred: newIsStarredData[questionID] },
+                    update: { starred: newIsStarredData[questionID] },
                 });
             } catch (error) {
                 console.error("Could not update engagement:", error);
@@ -417,7 +417,7 @@ export const QuestionProvider = ({ children }) => {
             try {
                 await updateEngagement({
                     engagementID: engagementIDData[questionID],
-                    update: { Reviewed: newWasReviewedData[questionID] },
+                    update: { reviewed: newWasReviewedData[questionID] },
                 });
             } catch (error) {
                 console.error("Could not update engagement:", error);
@@ -433,18 +433,18 @@ export const QuestionProvider = ({ children }) => {
 
             questionIDArray.forEach((questionID) => {
                 engagementsArray.push({
-                    QuestionID: questionID,
-                    UserAnswer: userResponseData[questionID],
-                    Status: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
-                    Flagged: isFlaggedData[questionID],
-                    Starred: isStarredData[questionID],
-                    Duration: timeSpentData[questionID],
+                    question_id: questionID,
+                    user_answer: userResponseData[questionID],
+                    status: getResult({question: questionData[questionID], userResponse: userResponseData[questionID]}), 
+                    flagged: isFlaggedData[questionID],
+                    starred: isStarredData[questionID],
+                    duration: timeSpentData[questionID],
                 });
             });
 
             try {
                 const response = await postEngagements(engagementsArray);
-                questionEngagementIDs = response.questionEngagementIDs;
+                questionEngagementIDs = response.question_engagement_ids;
 
                 if (indquizMode === QUIZMODE) {
                     await updateQuizWithQuestionEngagementIDs(

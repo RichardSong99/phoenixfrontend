@@ -208,16 +208,19 @@ export async function fetchQuestionsById({
         console.error('Could not get token:', error);
     }
 
+    // Join the question IDs into a comma-separated string
+    const ids = questionIdList.join(',');
+
     const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ ids: questionIdList })
     };
 
-    const response = await fetch(`${apiUrl}/getquestions`, requestOptions);
+    // Include the ids in the query string
+    const response = await fetch(`${apiUrl}/getquestionsid?ids=${encodeURIComponent(ids)}`, requestOptions);
 
     if (!response.ok) {
         throw new Error('Failed to fetch question data');

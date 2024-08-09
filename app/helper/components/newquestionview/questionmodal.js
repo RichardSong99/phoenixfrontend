@@ -14,6 +14,7 @@ export default function QuestionModal({ mode, review, quizName, question, quizID
             />
             <AnswerBox />
             <QuestionView
+                review={review}
                 mode={mode}
                 quizID={quizID}
             />

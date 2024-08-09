@@ -7,11 +7,9 @@ import { fetchQuiz } from '../../apiservices/quizservice';
 export default function ContentViewer({ review, quizID, question }) {
     const [questions, setQuestions] = useState([]);
     const [quizName, setQuizName] = useState("");
-    const [combos, setCombos] = useState([]);
 
     const handleFetchQuizData = async () => {
         const response = await fetchQuiz({ quizID });
-        setCombos(response.QuestionEngagementIDCombos);
         setQuestions(response.QuestionEngagementIDCombos);
         setQuizName(response.Name);
     }

@@ -175,7 +175,6 @@ export const QuestionProvider = ({ children }) => {
             const response = await fetchQuiz({ quizID: quizID });
             setQuizID(quizID);
             QEIDCombos = response.QuestionEngagementIDCombos;
-            console.log("QEIDCombos", QEIDCombos);
         } catch (error) {
             console.error("Could not fetch quiz:", error);
         }

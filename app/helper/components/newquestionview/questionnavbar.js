@@ -10,6 +10,7 @@ export default function QuestionNavBar({ review, questions }) {
         handleNextQuestion,
         handlePreviousQuestion,
         isFlaggedData,
+        handleSubmitEngagements,
     } = useContext(QuestionContext);
 
     /* test cases, will implement QuestionContext and delete these */
@@ -40,7 +41,7 @@ export default function QuestionNavBar({ review, questions }) {
 
     return (
         <div className='h-[90%] w-[250px] bg-appleGray6 relative top-[40px] left-[30px] flex flex-col justify-between items-center pt-[25px] pb-[40px] rounded-[25px] shadow-custom'>
-            <div className='w-full h-[470px] flex flex-col items-center'>
+            <div className='w-full h-[80%] flex flex-col items-center'>
                 <div className='mb-[20px] w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray5 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px]'>
                     <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px] shadow-custom'></div>
                     <p className='pt-[15px] ml-[-6px]'>Current</p>
@@ -95,7 +96,10 @@ export default function QuestionNavBar({ review, questions }) {
                 </div>
                 {!review ? 
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
-                        <Button className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'>
+                        <Button
+                            className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'
+                            onClick={() => handleSubmitEngagements()}
+                        >
                             Submit Quiz
                         </Button>
                     </div> : null

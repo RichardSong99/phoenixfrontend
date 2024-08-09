@@ -3,8 +3,12 @@ import React, { use, useState, useEffect, useContext, useRef } from 'react';
 import { Button, Avatar } from "@nextui-org/react";
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
+import referenceImage from './sat_reference_sheet.jpg';
+import { fetchQuiz } from '../../apiservices/quizservice';
+import { fetchFullQuestionById } from '../../apiservices/questionservice';
+import { parseLatexString } from '../latexrender/latexrender';
 
-export default function QuestionView({ review, mode, quizID, question }) {
+export default function QuestionView({ review, mode, quizID, topic }) {
     const [selectedChoice, setSelectedChoice] = useState(null);
     const [crossedOut, setCrossedOut] = useState([]);
     const [crossOutMode, setCrossOutMode] = useState(false);
@@ -15,12 +19,15 @@ export default function QuestionView({ review, mode, quizID, question }) {
 
     const{
         activeQuestionIndex,
-        questionData,
+        // questionData,
         setupActiveIndividualMode,
         setupActiveQuizMode,
         setupReviewIndividualMode,
         setupReviewQuizMode,
     } = useContext(QuestionContext);
+
+    /* for testing, will delete later */
+    const [questionData, setQuestionData] = useState({});
 
     const toggleChatBot = () => {
         setChatBotVisible(!isChatBotVisible);
@@ -81,20 +88,32 @@ export default function QuestionView({ review, mode, quizID, question }) {
     );
 
     useEffect(() => {
-        if(review){
-            if(mode === 'single'){
-                setupReviewIndividualMode();
+        const setupModes = async () => {
+            if (review) {
+                if (mode === 'single') {
+                    await setupReviewIndividualMode();
+                } else {
+                    await setupReviewQuizMode(quizID);
+                }
             } else {
-                setupReviewQuizMode(quizID);
+                if (mode === 'single') {
+                    await setupActiveIndividualMode();
+                } else {
+                    await setupActiveQuizMode(quizID);
+                }
             }
-        } else {
-            if(mode === 'single'){
-                setupActiveIndividualMode();
-            } else {
-                setupActiveQuizMode(quizID);
+            const quiz = await fetchQuiz({ quizID });
+            const loadedQuestionData = {};
+
+            for (let i = 0; i < quiz.QuestionEngagementIDCombos.length; i++) {
+                const question = await fetchFullQuestionById(quiz.QuestionEngagementIDCombos[i].QuestionID);
+                loadedQuestionData[i] = question;
             }
-        }
-        console.log(questionData);
+
+            setQuestionData(loadedQuestionData);
+            console.log(loadedQuestionData);
+        };
+        setupModes();
     }, []);
 
     useEffect(() => {
@@ -126,9 +145,11 @@ export default function QuestionView({ review, mode, quizID, question }) {
     }, [isCalculatorVisible]);
 
     return (
-        <div className='mt-[20px] w-[100%] h-[515px] flex justify-center items-center'>
+        <div className='mt-[20px] w-[100%] h-[82%] flex justify-center items-center'>
             <div className='bg-white h-full w-[98%] rounded shadow-custom flex flex-row justify-between pt-[20px]'>
-                <div className='w-[50%]'>question display</div>
+                <div className='w-[50%] h-[80%] flex flex-col justify-center items-center'>
+                    {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].Prompt)}
+                </div>
                 <div className='h-[95%] w-[2px] bg-appleGray1 opacity-[10%] rounded'></div>
                 <div className='w-[50%] flex flex-col justify-between'>
                     <div className='flex flex-row justify-end pr-[20px]'>
@@ -143,6 +164,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                         </div>
                     </div>
                     <div className='h-[450px] w-full flex flex-col gap-y-[8px] justify-center items-center'>
+                        <p className='w-[400px]'>Select one of the following: </p>
                         <Button 
                             className={`w-[400px] h-[50px] border-[2px] rounded-[25px] shadow-custom
                                 ${selectedChoice === 'A' && !crossedOut.includes('A') ? 'bg-appleBlue text-white bg-opacity-70' : 'bg-white text-appleBlue border-appleBlue'}`}
@@ -153,8 +175,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                     ${selectedChoice === 'A' && !crossedOut.includes('A') ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="A"
                             />
-                            Answer Choice 1
-                            {/* {questionData[combos[activeQuestionIndex].QuestionID].AnswerChoices[0].Text} */}
+                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[0])}
                         </Button>
                         <div
                             className={` 
@@ -170,7 +191,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                     ${selectedChoice === 'B' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="B"
                             />
-                            Answer Choice 2
+                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[1])}
                         </Button>
                         <div
                             className={` 
@@ -186,7 +207,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                     ${selectedChoice === 'C' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="C"
                             />
-                            Answer Choice 3
+                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[2])}
                         </Button>
                         <div
                             className={` 
@@ -202,7 +223,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                     ${selectedChoice === 'D' ? 'opacity-70 bg-white border-appleGray3 text-appleBlue' : 'text-white border-appleGray6 bg-appleBlue'}`}
                                 name="D"
                             />
-                            Answer Choice 4
+                            {questionData[activeQuestionIndex] && parseLatexString(questionData[activeQuestionIndex].AnswerChoices[3])}
                         </Button>
                         <div
                             className={` 
@@ -210,7 +231,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                         ></div>
                     </div>
                     <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
-                        <div>
+                        <div className='cursor-pointer'>
                             <Avatar
                                 classNames={{
                                     icon: "h-[30px] w-[30px] fill-white",
@@ -220,7 +241,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                 onClick={toggleReference}
                             />
                         </div>
-                        <div>
+                        <div className='cursor-pointer'>
                             <Avatar
                                 classNames={{
                                     icon: "h-[30px] w-[30px] fill-white",
@@ -230,7 +251,7 @@ export default function QuestionView({ review, mode, quizID, question }) {
                                 onClick={toggleCalculator}
                             />
                         </div>
-                        <div>
+                        <div className='cursor-pointer'>
                             <Avatar
                                 classNames={{
                                     icon: "h-[30px] w-[30px] fill-white",
@@ -249,18 +270,22 @@ export default function QuestionView({ review, mode, quizID, question }) {
                         </Draggable>
                     }
                     {isCalculatorVisible &&
-                        <Draggable className='bg-black'>
-                            <div className='absolute top-0 left-0 cursor-move'>
-                                <div id="calculator" className="invisible absolute bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
+                        <Draggable className='bg-black' cancel='#calculator'>
+                            <div className='absolute top-0 left-0 cursor-move rounded-[15px] bg-white border border-gray-300 p-[15px] shadow-custom'>
+                                <div id="calculator" className="w-[800px] h-[500px] top-[25%] right-[3%] z-999 text-black">
                                 </div>
                             </div>
                         </Draggable>
                     }
-                    {isChatBotVisible &&
+                    {isReferenceVisible &&
                         <Draggable className='bg-black'>
-                            <div className='absolute top-0 left-0 cursor-move'>
-                                <div id="reference" className="invisible absolute bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
-                                    <img src="./sat_reference_sheet.jpg"></img>
+                            <div className='absolute top-0 left-0 cursor-move shadow-custom'>
+                                <div id="reference" className="bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
+                                    <img
+                                        src={referenceImage}
+                                        alt="Reference Sheet"
+                                        className='w-full h-full'
+                                    ></img>
                                 </div>
                             </div>
                         </Draggable>

@@ -8,6 +8,7 @@ export default function QuestionHeader({ mode, review, quizName }) {
         continueTimer,
         changeTimer,
         isFlaggedData,
+        isStarredData,
         handleFlagQuestion,
         handleStarQuestion,
     } = useContext(QuestionContext);
@@ -47,7 +48,7 @@ export default function QuestionHeader({ mode, review, quizName }) {
                         </svg> }
                     </div>
                     <div className='cursor-pointer' onClick={() => handleStarQuestion(activeQuestionIndex)}>
-                        { true ?
+                        { !isStarredData[activeQuestionIndex] ?
                         <svg
                             className='h-[30px] w-[30px] fill-appleYellow'
                             xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"

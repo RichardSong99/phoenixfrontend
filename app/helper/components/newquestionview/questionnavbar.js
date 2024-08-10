@@ -37,9 +37,9 @@ export default function QuestionNavBar() {
         <div className='h-[90%] w-[250px] bg-white relative top-[40px] left-[30px] flex flex-col justify-between items-center pt-[25px] pb-[40px] rounded-[25px] shadow-custom'>
             <div className='w-full h-[80%] flex flex-col items-center'>
                 <div className='mb-[20px] w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray6 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px]'>
-                    <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px] shadow-custom'></div>
+                    <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px]'></div>
                     <p className='pt-[15px] ml-[-6px]'>Current</p>
-                    <div className='h-[25px] w-[25px] rounded-[10px] border-[2px] border-dashed border-appleGray1 shadow-custom'></div>
+                    <div className='h-[25px] w-[25px] rounded-[10px] border-[2px] border-dashed border-appleGray1'></div>
                     <p className='pt-[15px] ml-[-6px]'>Unanswered</p>
                     <div>
                         <svg

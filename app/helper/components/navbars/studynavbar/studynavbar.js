@@ -5,37 +5,24 @@ import React, { useContext, useState, useEffect } from 'react';
 import styles from './studynavbar.module.css';
 import { NavBarContext } from '../../../context/navbarcontext';
 import { useRouter } from 'next/navigation';
-import { Avatar } from "@nextui-org/react";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User } from "@nextui-org/react";
+import { Button, Avatar, Listbox, ListboxItem, Spacer, ScrollShadow } from "@nextui-org/react";
 import { useDisclosure } from '@nextui-org/react';
-import { IoMdHome } from "react-icons/io";
-import { IoIosSearch } from "react-icons/io";
-import { IoSparkles } from "react-icons/io5";
+import { Icon } from '@iconify/react';
+import { IconWrapper } from './components/IconWrapper';
 
 
 
 const StudyNavBar = () => {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const router = useRouter();
-    const [currentPath, setCurrentPath] = useState('');
-    const [showPopup, setShowPopup] = useState(false);
 
-    useEffect(() => {
-        if (router.pathname) {
-            setCurrentPath(router.pathname.split('/').pop());
-        }
-    }, []);
 
-    const handleLinkClick = (path) => {
-        setCurrentPath(path);
-        router.push(`/study/${path}`);
+    const handleLinkClick = (key) => {
+        router.push(`/study/${key}`);
     };
 
-    const isActive = (pathname) => {
-        return currentPath === pathname;
-    };
+
 
     const { isStudyNavBarVisible } = useContext(NavBarContext);
 
@@ -43,85 +30,113 @@ const StudyNavBar = () => {
         return null;
     }
 
+    const logoutHandler = () => {
+        router.push('/auth/login');
+    }
+
     return (
-        <>
+<div className="h-dvh">
+    <div className="relative flex h-full w-72 flex-1 flex-col border-r-small border-divider p-4"> 
 
-            {/* <CreateQuizModal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-            /> */}
-
-            <div className={styles.studyNavbar}>
-                <div className='flex flex-col p-3 gap-2 mt-4'>
-                    <div className={`${styles.navItem} ${isActive('mydashboard') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('mydashboard')}>
-                        <IoMdHome size={24} />
-                        <span>Dashboard</span>
-                    </div>
-
-                    <div className={`${styles.navItem} ${isActive('browse') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('browse')}>
-                        <IoIosSearch size={24} />
-
-                        <span>Browse QBank</span>
-                    </div>
-                    <div className={`${styles.navItem} ${isActive('createquiz') ? styles.activeNavItem : ''}`} onClick={() => onOpen()}>
-                        <IoSparkles size={24} />
-
-                        <span>Create Quiz</span>
-                    </div>
-                    <div className={`${styles.navItem} ${isActive('qbank') ? styles.activeNavItem : ''}`} onClick={() => handleLinkClick('qbank')}>
-                        <span>Admin: QBank</span>
-                    </div>
-
-                </div>
-
-
-
-                <Dropdown
-                    classNames={{
-                        base: "before:bg-default-200", // change arrow background
-                        content: "p-0 border-small border-divider bg-background",
-                    }}
-                >
-                    <DropdownTrigger>
-
-
-                        <div className={styles.footer}>
-                            <Avatar >
-                                <IoPersonCircleSharp />
-                            </Avatar>
-                            <div>Richard Song</div>
-                            {showPopup && (
-                                <div className={styles.popup}>
-                                    <a href="/account">Account</a>
-                                    <a href="/logout">Logout</a>
-                                </div>
-                            )}
-                        </div>
-                    </DropdownTrigger>
-
-                    <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                        <DropdownSection>
-                            <DropdownItem className="ml-0"
-                                key="logout"
-
-                            >
-                                <div className="w-100">
-                                    Log Out
-                                </div>
-                            </DropdownItem>
-                        </DropdownSection>
-                    </DropdownMenu>
-
-
-
-
-                </Dropdown>
-
-
-
-
+        <div className="flex items-center gap-2 px-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground">
+                Icon
             </div>
-        </>
+            <span className="text-small font-bold uppercase">Acme</span>
+        </div>
+
+        <Spacer y={8} />
+
+        <ScrollShadow className="h-full max-h-full py-6 pr-0 pl-2"> {/* Aligned padding to the left */}
+
+            <Listbox
+                aria-label="User Menu"
+                onAction={(key) => handleLinkClick(key)}
+                className="p-0 gap-2 divide-y dark:divide-default-100/80 bg-content1 overflow-visible list-none -ml-9"
+                itemClasses={{
+                    base: "first:rounded-t-medium h-16 last:rounded-b-medium rounded gap-3 data-[hover=true]:bg-default-100/80",
+                }}
+            >
+                <ListboxItem
+                    key="mydashboard"
+                    startContent={
+                        <IconWrapper className="bg-primary/10 text-primary">
+                            <Icon icon="material-symbols:home-outline" width="30" height="30" />
+                        </IconWrapper>
+                    }
+                >
+                    Home
+                </ListboxItem>
+
+                <ListboxItem
+                    key="myquizzes"
+                    startContent={
+                        <IconWrapper className="bg-primary/10 text-primary">
+                            <Icon icon="fluent:quiz-new-20-regular" width="30" height="30" />
+                        </IconWrapper>
+                    }
+                >
+                    My Quizzes
+                </ListboxItem>
+
+                <ListboxItem
+                    key="browse"
+                    startContent={
+                        <IconWrapper className="bg-primary/10 text-primary">
+                            <Icon icon="material-symbols:search" width="30" height="30" />
+                        </IconWrapper>
+                    }
+                >
+                    Browse Questions
+                </ListboxItem>
+
+            </Listbox>
+        </ScrollShadow>
+
+        <div className="mt-auto flex flex-col "> {/* Consistent padding with Listbox */}
+            <Button
+                fullWidth
+                className="justify-start text-default-500 data-[hover=true]:text-foreground"
+                startContent={
+                    <Icon className="text-default-500" icon="solar:info-circle-line-duotone" width={24} />
+                }
+                variant="light"
+            >
+                Help & Information
+            </Button>
+            <Button
+                className="justify-start text-default-500 data-[hover=true]:text-foreground"
+                startContent={
+                    <Icon
+                        className="rotate-180 text-default-500"
+                        icon="solar:minus-circle-line-duotone"
+                        width={24}
+                    />
+                }
+                variant="light"
+            >
+                My Account
+            </Button>
+            <Button
+                className="justify-start text-default-500 data-[hover=true]:text-foreground"
+                startContent={
+                    <Icon
+                        className="rotate-180 text-default-500"
+                        icon="solar:minus-circle-line-duotone"
+                        width={24}
+                    />
+                }
+                variant="light"
+                onPress = {() => logoutHandler()}
+            >
+                Log Out
+            </Button>
+            
+        </div>
+
+    </div>
+</div>
+
     );
 };
 

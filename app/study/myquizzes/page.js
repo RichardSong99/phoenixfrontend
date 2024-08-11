@@ -12,8 +12,7 @@ import {
 
 import { useRouter } from 'next/navigation';
 
-import QBankViewer from "@/app/helper/components/qbank/qbankview/qbankviewer";
-
+import { QuizTable } from "./reviewquiz/quiztable";
 
 export default function MyDashboard() {
 
@@ -28,26 +27,32 @@ export default function MyDashboard() {
           style={{ width: "100%" }}
         >
           <CardHeader>
-            <h1 className="text-2xl font-bold text-white">Question Bank</h1>
+            <h1 className="text-2xl font-bold text-white">My Quizzes</h1>
           </CardHeader>
         </Card>
       </div>
 
-      
+
 
       <Card>
         <CardHeader>
           <div className="flex flex-row w-full justify-between items-center">
             <div>
-              <h5 className="font-bold text-large">Question Bank</h5>
+              <h5 className="font-bold text-large">Review Quizzes</h5>
             </div>
-            {/* <Button color = "primary">Review all</Button> */}
+
+            <div className="flex flex-row gap-2">
+            <Button color = "primary">Review all</Button>
+            <Button color = "primary">Start new quiz</Button>
+            </div>
           </div>
         </CardHeader>
         <CardBody>
-          <QBankViewer />
+          <QuizTable />
         </CardBody>
       </Card>
+
+
     </div>
   );
 }

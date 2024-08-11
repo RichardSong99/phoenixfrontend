@@ -16,6 +16,7 @@ import { QuizTable } from "./dashboardcomponents/reviewquiz/quiztable";
 import QBankViewer from "@/app/helper/components/qbank/qbankview/qbankviewer";
 import TopicModules from "./dashboardcomponents/topicmodules/topicmodules";
 import { Topic } from "@mui/icons-material";
+import { TotalDashboard } from "./dashboardcomponents/totaldashboard/totaldashboard";
 
 export default function MyDashboard() {
 
@@ -34,6 +35,19 @@ export default function MyDashboard() {
           </CardHeader>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row w-full justify-between items-center">
+            <div>
+              <h5 className="font-bold text-large">My Dashboard</h5>
+              </div>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <TotalDashboard />
+        </CardBody>
+      </Card>
 
       <Card>
         <CardHeader>

@@ -31,13 +31,13 @@ const TopicModules = () => {
   useEffect(() => {
     if (Array.isArray(topicSummaryList)) {
       if(selected !== "All") {
-        setDisplayTopicSummaryList(filterTopicSummaryList(topicSummaryList, selected));
+        setDisplayTopicSummaryList(filterTopicSummaryList(selected));
       } else {
         setDisplayTopicSummaryList(topicSummaryList);
       }
     }
   }
-    , [topicSummaryList, selected]);
+  , [topicSummaryList, selected]);
 
   const achievementTypeMapping = {
     "num answered": { icon: "ri:book-fill", earnedColor: "primary" },

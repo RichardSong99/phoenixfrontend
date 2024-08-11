@@ -2,20 +2,24 @@ import { QuestionContext } from '../../context/questioncontext';
 import QuestionView from './questionview';
 import QuestionHeader from './questionheader';
 import AnswerBox from './answerbox';
+import QuestionFooter from './questionfooter';
 
 export default function QuestionModalInterior({ mode, quizName, question, quizID }) {
     return (
         <div 
-            className='shadow-custom bg-white rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px]' style={{width: 'calc(100% - 350px)'}}
+            className='shadow-custom bg-white rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px] flex flex-col justify-between pb-[0px]' style={{width: 'calc(100% - 350px)'}}
         >
-            <QuestionHeader
-                quizName={quizName}
-            />
-            <AnswerBox />
-            <QuestionView
-                mode={mode}
-                quizID={quizID}
-            />
+            <div className='h-[85%]'>
+                <QuestionHeader
+                    quizName={quizName}
+                />
+                <AnswerBox />
+                <QuestionView
+                    mode={mode}
+                    quizID={quizID}
+                />
+            </div>
+            <QuestionFooter />
         </div>
     )
 }

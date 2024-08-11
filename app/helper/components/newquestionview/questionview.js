@@ -1,6 +1,6 @@
 import { QuestionContext } from '../../context/questioncontext';
 import React, { use, useState, useEffect, useContext, useRef } from 'react';
-import { Button, Avatar } from "@nextui-org/react";
+import { Button, Avatar, Spinner } from "@nextui-org/react";
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
 import referenceImage from './sat_reference_sheet.jpg';
@@ -132,15 +132,36 @@ export default function QuestionView({ review, mode, quizID, topic }) {
     }, [isCalculatorVisible]);
 
     if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
-        return <div>Loading...</div>; // or return null, or a loading spinner if you prefer
+        return<div className='w-full h-[90%] flex flex-col justify-center items-center'>
+            <Spinner />
+            <p className='mt-[20px]'>Loading...</p>
+        </div>;
     }
 
     return (
         <div className='mt-[20px] w-[100%] h-[82%] flex justify-center items-center'>
             <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
-                <div className='w-[50%] h-[80%] flex flex-col justify-center items-center'>
-                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
-                </div>
+                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
+                    <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
+                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
+                    </div> :
+                    <div className='w-[45%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
+                        {/* {questionData[questionIDArray[activeQuestionIndex]].text} */}
+                        <p className='text-[20px] max-h-full'>
+                            <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
+                            <br></br><br></br>
+                            It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
+                            "My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"
+                            Mr. Bennet replied that he had not.
+                            "But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."
+                            Mr. Bennet made no answer.
+                            "Do not you want to know who has taken it?" cried his wife impatiently.
+                            "You want to tell me, and I have no objection to hearing it."
+                            This was invitation enough.
+                            "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
+                        </p>
+                    </div>
+                }
                 <div className='h-[95%] w-[2px] bg-appleGray1 opacity-[10%] rounded'></div>
                 <div className='w-[50%] flex flex-col justify-between'>
                     <div className='flex flex-row justify-end pr-[20px]'>
@@ -155,55 +176,85 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                         </div>
                     </div>
                     <div className='h-[450px] w-full flex flex-col gap-y-[8px] justify-center items-center'>
-                        <p className=''>Select one of the following: </p>
-                        {activeReviewMode !== "review" ? (
-                            answerChoices.map((choice, index) => (
-                                <div key={choice} className="relative w-full max-w-xl mx-auto">
-                                    <Button 
-                                        className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
-                                            ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'border-[2px] border-appleBlue bg-white' : 'bg-white border-appleGray5'}`}
-                                        onClick={() => handleSelect(choice)}
-                                    >
-                                        <Avatar
-                                            className={`h-[30px] w-[30px] border-[2px]
-                                                ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'text-white border-appleGray6 bg-appleBlue' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
-                                            name={choice}
-                                        />
-                                        <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
-                                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
+                            <p>Select one of the following: </p>
+                            :
+                            <>
+                                {questionData[questionIDArray[activeQuestionIndex]].subject !== "math" ?
+                                    (questionData[questionIDArray[activeQuestionIndex]].prompt) : null
+                                }
+                                <p className='mt-[20px]'>Please enter your response here: </p>
+                            </>
+                        }
+                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
+                            <>
+                                {activeReviewMode !== "review" ?
+                                (
+                                    answerChoices.map((choice, index) => (
+                                        <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                            <Button 
+                                                className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                                    ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'border-[2px] border-appleBlue bg-white' : 'bg-white border-appleGray5'}`}
+                                                onClick={() => handleSelect(choice)}
+                                            >
+                                                <Avatar
+                                                    className={`h-[30px] w-[30px] border-[2px]
+                                                        ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'text-white border-appleGray6 bg-appleBlue' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
+                                                    name={choice}
+                                                />
+                                                <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
+                                                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                                </div>
+                                            </Button>
+                                            {crossedOut.includes(choice) && (
+                                                <div
+                                                    className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                                ></div>
+                                            )}
                                         </div>
-                                    </Button>
-                                    {crossedOut.includes(choice) && (
-                                        <div
-                                            className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
-                                        ></div>
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            answerChoices.map((choice, index) => (
-                                <div key={choice} className="relative w-full max-w-xl mx-auto">
-                                    <Button 
-                                        className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
-                                            ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'bg-appleGreen text-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
-                                    >
-                                        <Avatar
-                                            className={`h-[30px] w-[30px] border-[2px]
-                                                ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-white bg-appleGreen' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
-                                            name={choice}
-                                        />
-                                        <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
-                                            {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                    ))
+                                ) : (
+                                    answerChoices.map((choice, index) => (
+                                        <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                            <Button 
+                                                className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                                    ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'bg-appleGreen text-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
+                                            >
+                                                <Avatar
+                                                    className={`h-[30px] w-[30px] border-[2px]
+                                                        ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-white bg-appleGreen' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
+                                                    name={choice}
+                                                />
+                                                <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
+                                                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                                </div>
+                                            </Button>
+                                            {crossedOut.includes(choice) && (
+                                                <div
+                                                    className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                                ></div>
+                                            )}
                                         </div>
-                                    </Button>
-                                    {crossedOut.includes(choice) && (
-                                        <div
-                                            className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
-                                        ></div>
-                                    )}
-                                </div>
-                            ))
-                        )}
+                                    ))
+                                )}
+                            </> :
+                            <>
+                                {activeReviewMode !== "review" ? (
+                                    <textarea
+                                        className='w-[90%] h-[150px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
+                                        placeholder='Enter your response here...'
+                                    >
+                                    </textarea>
+                                ) : (
+                                    <textarea
+                                        disabled
+                                        className='w-[90%] h-[150px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
+                                    >
+                                        {questionData[questionIDArray[activeQuestionIndex]].user_response}
+                                    </textarea>
+                                )}
+                            </>
+                        }
                     </div>
                     <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                         <div className='cursor-pointer'>

@@ -64,7 +64,7 @@ const TopicModules = () => {
 
 
       </Tabs>
-      <Table removeWrapper>
+      <Table removeWrapper isCompact = {true}>
         <TableHeader>
           <TableColumn width="200">Topic</TableColumn>
           <TableColumn>Mastery</TableColumn>
@@ -75,7 +75,7 @@ const TopicModules = () => {
         </TableHeader>
         <TableBody>
           {displayTopicSummaryList.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} >
               <TableCell>
                 <div className="flex flex-col">
                   <p className="text-bold text-sm capitalize">{item.topic}</p>

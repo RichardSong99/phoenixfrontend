@@ -19,7 +19,6 @@ import {
     Progress
 } from "@nextui-org/react";
 
-import { QuizSummaryModal } from './quizsummarymodal';
 import { useData } from '@/app/helper/context/datacontext';
 
 export function QuizTable() {
@@ -91,7 +90,6 @@ export function QuizTable() {
 
     return (
         <div >
-            <QuizSummaryModal isOpen={isOpen} onOpenChange={onOpenChange} fullQuizData={activeQuiz} />
 
 
             <Table removeWrapper aria-label="Example static collection table">

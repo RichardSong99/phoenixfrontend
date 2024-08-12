@@ -3,19 +3,12 @@ import { QuestionContext } from '../../context/questioncontext';
 import QuestionNavBar from './questionnavbar';
 import QuestionModalInterior from './questionmodalinterior';
 import { fetchQuiz } from '../../apiservices/quizservice';
+import React, {useContext} from 'react';
 
-export default function ContentViewer({ quizID }) {
-    // const [quizName, setQuizName] = useState("");
-
-    // const handleFetchQuizData = async () => {
-    //     const response = await fetchQuiz({ quizID });
-    //     setQuestions(response.QuestionEngagementIDCombos);
-    //     setQuizName(response.Name);
-    // }
-
-    // useEffect(() => {
-    //     handleFetchQuizData();
-    // }, []);
+export default function ContentViewer({ }) {
+    const {
+        quizID,
+    } = useContext(QuestionContext);
 
     return (
         <div className='custom-font w-screen h-screen bg-appleGray6'>

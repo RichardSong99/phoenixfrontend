@@ -13,11 +13,16 @@ import {
 import { useRouter } from 'next/navigation';
 
 import { QuizTable } from "./reviewquiz/quiztable";
+import QuestionFilterSort from "@/app/helper/components/filter/questionfiltersort";
 
 export default function MyDashboard() {
 
   const router = useRouter();
+  const [createQuiz, setCreateQuiz] = useState(false);
 
+  const createQuizHandler = () => {
+    setCreateQuiz(!createQuiz);
+  };
 
   return (
     <div className="flex flex-col w-full justify-center p-10 gap-4">
@@ -43,7 +48,7 @@ export default function MyDashboard() {
 
             <div className="flex flex-row gap-2">
             <Button color = "primary">Review all</Button>
-            <Button color = "primary">Start new quiz</Button>
+            <Button color = "primary" onClick={createQuizHandler}>Start new quiz</Button>
             </div>
           </div>
         </CardHeader>
@@ -52,7 +57,11 @@ export default function MyDashboard() {
         </CardBody>
       </Card>
 
-
+      {createQuiz && 
+        <div className="absolute w-[90%] top-[10%] right-[5%] bg-white border-[3px] border-appleGray4 rounded-[20px] z-[10]">
+          <QuestionFilterSort />
+        </div>
+      }
     </div>
   );
 }

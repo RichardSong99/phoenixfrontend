@@ -145,6 +145,7 @@ export const QuestionProvider = ({ children }) => {
         const exampleQuestionIDs = ["65bae13d08992ac645d86bc6", "65bae26b08992ac645d86bc7", "65bb0c5c08992ac645d86bcf", "65bb137608992ac645d86bd5", "65bb16e208992ac645d86bd6"];
         const response = await initializeQuiz({ questionIDs: exampleQuestionIDs });
         setupActiveQuizMode(response.quizID);
+        console.log("quizID initialized", response.quizID);
     };
 
     const setupActiveQuizMode = async (quizID) => {
@@ -163,6 +164,7 @@ export const QuestionProvider = ({ children }) => {
         setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
+        console.log(questionData);
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
@@ -537,6 +539,7 @@ export const QuestionProvider = ({ children }) => {
                 startTime,
                 continueTimer,
                 totalSeconds,
+                createQuiz,
                 changeTimer,
                 updateTotalTimer,
                 setupActiveIndividualMode,

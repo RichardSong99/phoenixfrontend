@@ -11,9 +11,10 @@ import {
 import { CustomCheckbox } from '../../assets/components/CustomCheckbox';
 import { CustomCheckboxThick } from '../../assets/components/CustomCheckboxThick';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
+import { useRouter } from "next/navigation";
 
 
-const QuestionFilterSort = () => {
+const QuestionFilterSort = ({ page }) => {
 
     const algebraTopics = ["Algebra", "Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
     const advancedMathTopics = ["Advanced math", "Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
@@ -38,7 +39,27 @@ const QuestionFilterSort = () => {
     const [allAnswerTypesSelected, setAllAnswerTypesSelected] = useState(true);
     const [allAnswerStatusesSelected, setAllAnswerStatusesSelected] = useState(true);
 
-    const { selectedDifficulties, setSelectedDifficulties, selectedAnswerTypes, setSelectedAnswerTypes, selectedAnswerStatuses, setSelectedAnswerStatuses, selectedTopics, setSelectedTopics, SORTDATEANSWERED, SORTDATECREATED, SORTDATELASTEDITED, sortOption, setSortOption, sortDirection, setSortDirection, SORTASCENDING, SORTDESCENDING } = useContext(QuestionContext);
+    const {
+        selectedDifficulties,
+        setSelectedDifficulties,
+        selectedAnswerTypes,
+        setSelectedAnswerTypes,
+        selectedAnswerStatuses,
+        setSelectedAnswerStatuses,
+        selectedTopics,
+        setSelectedTopics,
+        SORTDATEANSWERED,
+        SORTDATECREATED,
+        SORTDATELASTEDITED,
+        sortOption,
+        setSortOption,
+        sortDirection,
+        setSortDirection,
+        SORTASCENDING,
+        SORTDESCENDING,
+        createQuiz,
+        quizID,
+    } = useContext(QuestionContext);
 
     const handleCheckAll = ({
         allChoices,
@@ -106,6 +127,14 @@ const QuestionFilterSort = () => {
 
         setSelectedAnswerStatuses(["unattempted"]);
     };
+
+    const router = useRouter();
+
+    const handleQuizClick = (quiz) => {
+        createQuiz();
+        router.push(`/study/activequiz?quizid=${quizID}&review=false`);
+        console.log(quiz, "quiz")
+    }
 
     return (
         <div className="flex row gap-2 p-2">
@@ -314,6 +343,11 @@ const QuestionFilterSort = () => {
                         <CustomCheckbox value="Circles">Circles</CustomCheckbox>
                     </CheckboxGroup>
                 </div>
+            </div>
+            <div className='w-full flex flex-row justify-center mt-[50px]'>
+                <Button className='rounded-[20px] bg-appleBlue text-white' onClick={handleQuizClick}>
+                    Start Quiz
+                </Button>
             </div>
         </div>
     );

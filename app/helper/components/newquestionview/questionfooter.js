@@ -3,7 +3,7 @@ import { QuestionContext } from '../../context/questioncontext';
 import { Popover, PopoverTrigger, PopoverContent, Button, Avatar } from "@nextui-org/react";
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
-import referenceImage from './sat_reference_sheet.jpg';
+const referenceImage = require('./sat_reference_sheet.jpg');
 
 export default function QuestionFooter({ }) {
     const [isChatBotVisible, setChatBotVisible] = useState(false);
@@ -162,7 +162,6 @@ export default function QuestionFooter({ }) {
                         <div id="reference" className="bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
                             <img
                                 src={referenceImage}
-                                alt="Reference Sheet"
                                 className='w-full h-full'
                             ></img>
                         </div>

@@ -1,12 +1,9 @@
 import { QuestionContext } from '../../context/questioncontext';
-import React, { use, useState, useEffect, useContext, useRef } from 'react';
+import React, { use, useState, useEffect, useContext, useRef, Component } from 'react';
 import { Button, Avatar, Spinner, Tooltip } from "@nextui-org/react";
-import Chatbot from '../chatbot/chatbot';
-import { fetchQuiz } from '../../apiservices/quizservice';
-import { fetchFullQuestionById } from '../../apiservices/questionservice';
 import { parseLatexString } from '../latexrender/latexrender';
 
-export default function QuestionView({ review, mode, quizID, topic }) {
+export default function QuestionView({ }) {
     const [crossedOut, setCrossedOut] = useState([]);
     const [crossOutMode, setCrossOutMode] = useState(false);
     const answerChoices = ['A', 'B', 'C', 'D'];
@@ -115,7 +112,7 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                 }
                             </>
                         }
-                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
+                        {questionData[questionIDArray[activeQuestionIndex]].answer_type !== "multipleChoice" ?
                             <>
                                 {activeReviewMode !== "review" ?
                                 (
@@ -168,26 +165,31 @@ export default function QuestionView({ review, mode, quizID, topic }) {
                                 )}
                             </> :
                             <>
-                                {activeReviewMode !== "review" ? (
+                                {activeReviewMode === "review" ? (
                                     <div className='w-[95%] h-[100px] flex flex-row justify-around items-center'>
-                                        <Tooltip
-                                            className='w-[500px] h-[200px] overflow-y-auto'
-                                            content='
-                                            If you find more than one correct answer, enter only one answer.
-                                            You can enter up to 5 characters for a positive answer and up to 6 characters (including the negative sign) for a negative answer.
-                                            If your answer is a fraction that does not fit in the provided space, enter the decimal equivalent.
-                                            If your answer is a decimal that does not fit in the provided space, enter it by truncating or rounding at the fourth digit.
-                                            If your answer is a mixed number (such as 3 1/2), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).
-                                            Do not enter symbols such as a percent sign, comma, or dollar sign.'
-                                        >
-                                            <button className='rounded-0'>
-                                                <div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className='w-[20px]' viewBox="0 0 24 24">
-                                                        <path d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
-                                                    </svg>
-                                                </div>
-                                            </button>
-                                        </Tooltip>
+                                        <div>
+                                            <Tooltip
+                                                className='w-[500px] h-[250px] overflow-y-auto'
+                                                content={
+                                                    <>
+                                                        If you find more than one correct answer, enter only one answer.<br /><br />
+                                                        You can enter up to 5 characters for a positive answer and up to 6 characters (including the negative sign) for a negative answer.<br /><br />
+                                                        If your answer is a fraction that does not fit in the provided space, enter the decimal equivalent.<br /><br />
+                                                        If your answer is a decimal that does not fit in the provided space, enter it by truncating or rounding at the fourth digit.<br /><br />
+                                                        If your answer is a mixed number (such as 3 1/2), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).<br /><br />
+                                                        Do not enter symbols such as a percent sign, comma, or dollar sign.
+                                                    </>
+                                                }
+                                            >
+                                                <button className='rounded-0 w-[20px] h-[20px] mt-[10px]' aria-label="Info">
+                                                    <div>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className='w-[20px] pointer-events-none' viewBox="0 0 24 24">
+                                                            <path d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            </Tooltip>
+                                        </div>
                                         <textarea
                                             className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
                                             placeholder='Enter your response here...'

@@ -141,6 +141,12 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
+    const createQuiz = async () => {
+        const exampleQuestionIDs = ["65bae13d08992ac645d86bc6", "65bae26b08992ac645d86bc7", "65bb0c5c08992ac645d86bcf", "65bb137608992ac645d86bd5", "65bb16e208992ac645d86bd6"];
+        const response = await initializeQuiz({ questionIDs: exampleQuestionIDs });
+        setupActiveQuizMode(response.quizID);
+    };
+
     const setupActiveQuizMode = async (quizID) => {
         var QEIDCombos = [];
 

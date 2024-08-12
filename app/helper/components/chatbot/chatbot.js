@@ -144,8 +144,8 @@ export default function Chatbot() {
     }, [messages]);
 
     return (
-        <div className="w-[400px] bg-orange h-[600px] relative right-[2%] top-[6%] overflow-y-auto bg-appleGray6 p-[10px] rounded-[15px] shadow-custom flex flex-col justify-between">
-            <div className="h-[65%] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white shadow-custom">
+        <div className="w-[400px] bg-orange h-[600px] relative right-[2%] top-[6%] overflow-y-auto bg-white border-[2px] border-appleGray3 p-[10px] rounded-[15px] flex flex-col justify-between">
+            <div className="h-[65%] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white">
                 <div className="w-full flex flex-col justify-end">
                     {messages.map((msg, index) => (
                         <div key={index} className="border-[2px] rounded-[20px] py-[5px] px-[8px] mt-[5px]">
@@ -160,13 +160,13 @@ export default function Chatbot() {
             <div>
                 <div className="flex justify-between">
                     <Button
-                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom rounded-[20px] p-[20px]"
+                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white rounded-[20px] p-[20px]"
                         onClick={handleHint}
                     >
                         Give me a hint
                     </Button>
                     <Button
-                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white shadow-custom rounded-[20px] p-[20px]"
+                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white rounded-[20px] p-[20px]"
                         onClick={handleSolution}
                     >
                         Give me the solution
@@ -174,7 +174,7 @@ export default function Chatbot() {
                 </div>
                 <form onSubmit={handleSubmit} className="mt-4">
                     <textarea
-                        className="w-full p-2 border border-gray-300 rounded shadow-custom resize-none"
+                        className="w-full p-2 border border-gray-300 rounded resize-none"
                         value={user_message}
                         onChange={(e) => setUserMessage(e.target.value)}
                         onKeyDown={enterKey}
@@ -183,7 +183,7 @@ export default function Chatbot() {
                     {loading ? (
                         <Button
                             isLoading
-                            className="rounded text-white bg-blue-500 mt-2 p-2 shadow-custom rounded-[20px]"
+                            className="rounded text-white bg-blue-500 mt-2 p-2 rounded-[20px]"
                             spinner={
                                 <svg
                                     className="animate-spin h-5 w-5 text-current"
@@ -210,7 +210,7 @@ export default function Chatbot() {
                             Generating
                         </Button>
                     ) : (
-                        <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded shadow-custom rounded-[20px]">
+                        <Button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded rounded-[20px]">
                             Send
                         </Button>
                     )}

@@ -112,7 +112,7 @@ export default function QuestionView({ }) {
                                 }
                             </>
                         }
-                        {questionData[questionIDArray[activeQuestionIndex]].answer_type !== "multipleChoice" ?
+                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
                             <>
                                 {activeReviewMode !== "review" ?
                                 (
@@ -165,7 +165,7 @@ export default function QuestionView({ }) {
                                 )}
                             </> :
                             <>
-                                {activeReviewMode === "review" ? (
+                                {activeReviewMode !== "review" ? (
                                     <div className='w-[95%] h-[100px] flex flex-row justify-around items-center'>
                                         <div>
                                             <Tooltip

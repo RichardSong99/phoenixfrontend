@@ -130,10 +130,10 @@ const QuestionFilterSort = ({ page }) => {
 
     const router = useRouter();
 
-    const handleQuizClick = (quiz) => {
-        createQuiz();
-        router.push(`/study/activequiz?quizid=${quizID}&review=false`);
-        console.log(quiz, "quiz")
+    const handleQuizClick = async () => {
+        const response = await createQuiz();
+        router.push(`/study/activequiz?quizid=${response}&review=false`);
+        console.log(quiz, "quiz");
     }
 
     return (

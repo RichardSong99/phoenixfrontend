@@ -17,7 +17,7 @@ export async function initializeQuiz ({questionIDs, quizName, quizType}) {
 
     let requestData = {}
     
-    if (!questionIDs) {
+    if (questionIDs) {
         requestData.QuestionIDList = questionIDs;
     }
 
@@ -37,6 +37,8 @@ export async function initializeQuiz ({questionIDs, quizName, quizType}) {
         },
         body: JSON.stringify(requestData),
     };
+
+    console.log("initquizrequest", questionIDs, requestData);
 
     const response = await fetch(`${apiUrl}/quiz`, requestOptions);
     console.log(response);
@@ -171,7 +173,7 @@ export async function fetchQuiz({ quizID, quizName }) {
     }
 
     const data = await response.json();
-
+    console.log("data", data);
     return data;
 }
 

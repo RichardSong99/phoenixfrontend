@@ -101,7 +101,7 @@ export const QuestionProvider = ({ children }) => {
     const [quizID, setQuizID] = useState(null);
 
     const [indquizMode, setIndQuizMode] = useState(INDIVIDUALMODE);
-    const [activeReviewMode, setActiveReviewMode] = useState(ACTIVEMODE);
+    const [activeReviewMode, setActiveReviewMode] = useState(null);
 
     // Quiz methods and states ==> for active quiz
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
@@ -146,6 +146,7 @@ export const QuestionProvider = ({ children }) => {
         const response = await initializeQuiz({ questionIDs: exampleQuestionIDs });
         setupActiveQuizMode(response.quizID);
         console.log("quizID initialized", response.quizID);
+        return response.quizID;
     };
 
     const setupActiveQuizMode = async (quizID) => {
@@ -154,6 +155,7 @@ export const QuestionProvider = ({ children }) => {
         // fetch the quiz
         try {
             const response = await fetchQuiz({ quizID: quizID });
+            console.log("response", response.question_engagement_id_combos);
             setQuizID(quizID);
             QEIDCombos = response.question_engagement_id_combos;
         } catch (error) {
@@ -164,7 +166,6 @@ export const QuestionProvider = ({ children }) => {
         setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
-        console.log(questionData);
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
@@ -202,12 +203,17 @@ export const QuestionProvider = ({ children }) => {
 
     const initializeEngagementStates = async (QEIDCombos) => {
         // ================== Initialize user response, flag status, star status, time spent ==================
-
+        console.log("QEIDCombos", QEIDCombos);
         // the QEIDCombos is an array of {QuestionID, EngagementID} objects
-        const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.question_id);
+        // const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.question_id);
+        var questionIDs = [];
+        for (let i = 0; i < QEIDCombos.length; i++) {
+            const QEIDCombo = QEIDCombos[i];
+            console.log("Processing QEIDCombo:", QEIDCombo);
+            questionIDs.push(QEIDCombo.question_id);
+        }
         setQuestionIDArray(questionIDs);
-        console.log("qeIDCombos", QEIDCombos);
-
+        console.log("ids", questionIDs);
         // fetch the questions for the questionIDs, then populate the questionData object
         const newQuestionData = {};
         try {
@@ -218,7 +224,6 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not fetch questions by ID:", error);
         }
-        console.log("newQuestionData", newQuestionData);
         setQuestionData(newQuestionData);
 
         // populate the engagementIDData object
@@ -227,7 +232,6 @@ export const QuestionProvider = ({ children }) => {
             newEngagementIDData[QEIDCombo.question_id] = QEIDCombo.engagement_id;
         });
         setEngagementIDData(newEngagementIDData);
-
 
         // fetch the engagements for the questionIDs, if they exist
         const newEngagementData = {};
@@ -247,7 +251,7 @@ export const QuestionProvider = ({ children }) => {
 
         setEngagementData(newEngagementData);
 
-
+        console.log("newEngagementData", newEngagementData);
         // for each questionID, the initial user response is null
         const newUserResponseData = {};
         questionIDs.forEach((questionID) => {

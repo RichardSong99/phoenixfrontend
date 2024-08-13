@@ -26,41 +26,12 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode, rev
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             scrollBehavior={"inner"}
-            size="3xl"
+            size="full"
         >
-            <ModalContent style={{ padding: '10px' }}>
-                <ModalBody>
-                    <>
-                        {/* {pendingQuestion && <QuestionView
-                            question={pendingQuestion}
-                            userResponse={null}
-                            isFlagged={false}
-                            isStarred={false}
-                            wasReviewed={false}
-                            timeElapsed={0}
-                            activeReviewMode={mode}
-                        />} */}
-
-                        {!pendingQuestion && <QuestionModalInterior
-                            mode={'single'}
-                        />}
-
-                        {/* {!pendingQuestion && questionData[questionIDArray[activeQuestionIndex]] && <QuestionView
-                            question={questionData[questionIDArray[activeQuestionIndex]]}
-                            userResponse={userResponseData[questionIDArray[activeQuestionIndex]]}
-                            isFlagged={isFlaggedData[questionIDArray[activeQuestionIndex]]}
-                            isStarred={isStarredData[questionIDArray[activeQuestionIndex]]}
-                            wasReviewed={wasReviewedData[questionIDArray[activeQuestionIndex]]}
-                            timeElapsed={timeSpentData[questionIDArray[activeQuestionIndex]]}
-                            activeReviewMode={activeReviewMode}
-                        />} */}
-                    </>
-                </ModalBody>
-                <ModalFooter>
-                    <Button onClick={() => handleSubmitEngagements()} color="primary">
-                        Submit Answer
-                    </Button>
-                </ModalFooter>
+            <ModalContent className='bg-transparent flex items-center'>
+                {!pendingQuestion && <QuestionModalInterior
+                    mode={'single'}
+                />}
             </ModalContent>
 
         </Modal>

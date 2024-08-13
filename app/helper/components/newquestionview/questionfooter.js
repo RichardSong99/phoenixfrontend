@@ -10,6 +10,7 @@ export default function QuestionFooter({ }) {
     const [isChatBotVisible, setChatBotVisible] = useState(false);
     const [isCalculatorVisible, setCalculatorVisible] = useState(false);
     const [isReferenceVisible, setReferenceVisible] = useState(false);
+    const [isAnswerVisible, setAnswerVisible] = useState(false);
     const calculatorRef = useRef(null);
 
     const {
@@ -19,6 +20,8 @@ export default function QuestionFooter({ }) {
         activeReviewMode,
         engagementIDData,
         engagementData,
+        handleSubmitEngagements,
+        userResponseData,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -40,6 +43,13 @@ export default function QuestionFooter({ }) {
           <path d="M17.753 14a2.25 2.25 0 0 1 2.25 2.25v.904A3.75 3.75 0 0 1 18.696 20c-1.565 1.344-3.806 2-6.696 2s-5.128-.656-6.69-2a3.75 3.75 0 0 1-1.306-2.843v-.908A2.25 2.25 0 0 1 6.254 14zM11.9 2.006L12 2a.75.75 0 0 1 .743.648l.007.102l-.001.749h3.5a2.25 2.25 0 0 1 2.25 2.25v4.505a2.25 2.25 0 0 1-2.25 2.25h-8.5a2.25 2.25 0 0 1-2.25-2.25V5.75A2.25 2.25 0 0 1 7.75 3.5l3.5-.001V2.75a.75.75 0 0 1 .649-.743L12 2zM9.749 6.5a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498m4.493 0a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498"></path>
         </svg>
     );
+
+    const handleShowAnswer = () => {
+        if(userResponseData[questionIDArray[activeQuestionIndex]] != null){
+            setAnswerVisible(!isAnswerVisible);
+            handleSubmitEngagements();
+        }
+    };
 
     const CalculatorIcon = () => (
         <svg
@@ -90,6 +100,10 @@ export default function QuestionFooter({ }) {
         }
     }, [isCalculatorVisible]);
 
+    useEffect(() => {
+        setAnswerVisible(false);
+    }, [activeQuestionIndex]);
+
     return (
         <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
             {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] && engagementData[questionIDArray[activeQuestionIndex]].status === "incorrect" && <div>
@@ -117,6 +131,14 @@ export default function QuestionFooter({ }) {
                         )}
                     </PopoverContent>
                 </Popover>
+            </div>}
+            {activeReviewMode === "active" && <div>
+                <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleShowAnswer}>
+                    {!isAnswerVisible ?
+                        "Check Answer" :
+                        <div className='text-black'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
+                    }
+                </Button>
             </div>}
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                 <div className='cursor-pointer'>

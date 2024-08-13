@@ -119,12 +119,11 @@ export default function Chatbot() {
                 questionData[questionIDArray[activeQuestionIndex]].answer_type
             );
 
-            // Start streaming the response by updating the assistant's message
             let streamedMessage = '';
             for (let i = 0; i < response.length; i++) {
                 streamedMessage += response[i];
                 updateAssistantMessages(streamedMessage);
-                await new Promise((r) => setTimeout(r, 30)); // Adjust delay to control the speed of streaming
+                await new Promise((r) => setTimeout(r, 30));
             }
         } catch (e) {
             console.log(e);
@@ -144,7 +143,7 @@ export default function Chatbot() {
     }, [messages]);
 
     return (
-        <div className="w-[400px] bg-orange h-[600px] relative right-[2%] top-[6%] overflow-y-auto bg-white border-[2px] border-appleGray3 p-[10px] rounded-[15px] flex flex-col justify-between">
+        <div className="w-[400px] bg-orange h-[600px] relative right-[2%] top-[6%] pt-[20px] overflow-y-auto bg-white border-[2px] border-appleGray3 p-[10px] rounded-[15px] flex flex-col justify-between">
             <div className="h-[65%] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white">
                 <div className="w-full flex flex-col justify-end">
                     {messages.map((msg, index) => (

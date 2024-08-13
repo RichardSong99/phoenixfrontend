@@ -4,6 +4,7 @@ import { Popover, PopoverTrigger, PopoverContent, Button, Avatar } from "@nextui
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
 const referenceImage = require('./sat_reference_sheet.jpg');
+import { updateEngagement } from '../../apiservices/engagementservice';
 
 export default function QuestionFooter({ }) {
     const [isChatBotVisible, setChatBotVisible] = useState(false);
@@ -15,6 +16,9 @@ export default function QuestionFooter({ }) {
         questionData,
         questionIDArray,
         activeQuestionIndex,
+        activeReviewMode,
+        engagementIDData,
+        engagementData,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -53,6 +57,11 @@ export default function QuestionFooter({ }) {
         </svg>
     );
 
+    const handleReviewQuestion = () => {
+        console.log(engagementIDData[questionIDArray[activeQuestionIndex]]);
+        updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed" : true } });
+    };
+
     useEffect(() => {
         if (isCalculatorVisible) {
             if (!document.getElementById('desmos-script')) {
@@ -83,7 +92,7 @@ export default function QuestionFooter({ }) {
 
     return (
         <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
-            <div>
+            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] && engagementData[questionIDArray[activeQuestionIndex]].status === "incorrect" && <div>
                 <Popover placement="top">
                     <PopoverTrigger>
                         <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1'>
@@ -97,18 +106,18 @@ export default function QuestionFooter({ }) {
                                 Why did you get this question wrong?
                                 </p>
                                 <div className="mt-2 flex flex-col gap-2 w-full">
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent'>I guessed.</Button>
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent'>I misunderstood the problem.</Button>
+                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I guessed.</Button>
+                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I misunderstood the problem.</Button>
                                     { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent'>I made a computational error.</Button> :
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent'>The passage was too hard.</Button>
+                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I made a computational error.</Button> :
+                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>The passage was too hard.</Button>
                                     }
                                 </div>
                             </div>
                         )}
                     </PopoverContent>
                 </Popover>
-            </div>
+            </div>}
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                 <div className='cursor-pointer'>
                     <Avatar
@@ -143,7 +152,16 @@ export default function QuestionFooter({ }) {
             </div>
             {isChatBotVisible &&
                 <Draggable className='bg-black'>
-                    <div className='absolute top-0 left-0 cursor-move'>
+                    <div className='absolute top-0 left-0 cursor-move p-[5px] w-[450px] flex flex-col items-center'>
+                        <div className='w-full flex justify-start relative top-[20px] left-[20px] z-[10]'>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                                className="fill-appleRed cursor-pointer"
+                                onClick={toggleChatBot}
+                            >
+                                <path d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59L7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12L5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4"></path>
+                            </svg>
+                        </div>
                         <Chatbot />
                     </div>
                 </Draggable>

@@ -85,7 +85,7 @@ export default function QuestionHeader({ quizName }) {
                 </div>
                 <div className='text-[15px] w-[200px] ml-[-140px] mr-[20px] flex flex-col items-end mt-[-15px]'>
                     <p className='mb-[5px] text-[14px] text-appleGray1'>Total time: {minutes}m {seconds}s</p>
-                    <p className='mb-[5px] text-[14px] w-[300px] text-right'>Current question time: {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] / 60)}m {timeSpentData[questionIDArray[activeQuestionIndex]] % 60}s</p>
+                    <p className='mb-[5px] text-[14px] w-[300px] text-right'>Current question time: {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] / 60)}m {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] % 60)}s</p>
                     {activeReviewMode === "active" && (
                         <Button
                             className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom'

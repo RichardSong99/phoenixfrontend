@@ -180,6 +180,8 @@ export async function updateEngagement({engagementID, update}){
         body: JSON.stringify(update),
     };
 
+    console.log("engageID", engagementID);
+
     const response = await fetch(`${apiUrl}/engagement/${engagementID}`, requestOptions);
 
     if (!response.ok) {

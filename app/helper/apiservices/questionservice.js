@@ -52,12 +52,12 @@ export async function getQuestions({
     console.log('queryParams', queryParams.toString());
 
     const response = await fetch(`${apiUrl}/questions?${queryParams.toString()}`, requestOptions);
-    console.log("inside getQuestions");
 
     if (!response.ok) {
         throw new Error('Failed to fetch questions');
     }
     const data = await response.json();
+    console.log("response", data);
     return data;
 }
 

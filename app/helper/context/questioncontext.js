@@ -77,7 +77,6 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const viewQuestionModal = async ({ questionId = null, engagementId = null }) => {
-
         if (questionId) {
             if (engagementId) {
                 setupReviewIndividualMode(questionId, engagementId);
@@ -323,6 +322,7 @@ export const QuestionProvider = ({ children }) => {
         setTimeSpentData(newTimeSpentData);
 
         setStartTime(Date.now());
+        console.log("engagementData", newEngagementIDData);
     };
 
     const handleNextQuestion = () => {
@@ -425,7 +425,7 @@ export const QuestionProvider = ({ children }) => {
     }, [activeQuestionIndex]);
 
     const updateTotalTimer = () => {
-        if (activeReviewMode !== ACTIVEMODE && continueTimer) {
+        if (activeReviewMode === ACTIVEMODE && continueTimer) {
             const interval = setInterval(() => {
                 setTotalSeconds(prevSeconds => prevSeconds + 1);
             }, 1000);

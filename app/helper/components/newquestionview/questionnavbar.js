@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { QuestionContext } from '../../context/questioncontext';
 import {Button} from "@nextui-org/react";
-import { fetchEngagementByID } from '../../apiservices/engagementservice';
+import { useRouter } from "next/navigation";
 
 export default function QuestionNavBar() {
     const{
@@ -31,6 +31,13 @@ export default function QuestionNavBar() {
 
     const handleKeyChange = (index) => {
         jumpToQuestion(index);
+    }
+
+    const router = useRouter();
+
+    const handleSubmit = async () => {
+        const response = await handleSubmitEngagements();
+        router.push(`/study/myquizzes`);
     }
 
     return (
@@ -92,7 +99,7 @@ export default function QuestionNavBar() {
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
                         <Button
                             className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'
-                            onClick={() => handleSubmitEngagements()}
+                            onClick={() => handleSubmit()}
                         >
                             Submit Quiz
                         </Button>

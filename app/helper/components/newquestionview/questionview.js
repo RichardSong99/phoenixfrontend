@@ -42,22 +42,6 @@ export default function QuestionView({ }) {
         }
     };
 
-    // useEffect(() => {
-    //     const setupData = async () => {
-    //         const quiz = await fetchQuiz({ quizID });
-    //         const loadedQuestionData = {};
-
-    //         for (let i = 0; i < quiz.QuestionEngagementIDCombos.length; i++) {
-    //             const question = await fetchFullQuestionById(quiz.QuestionEngagementIDCombos[i].QuestionID);
-    //             loadedQuestionData[i] = question;
-    //         }
-
-    //         setQuestionData(loadedQuestionData);
-    //         console.log(loadedQuestionData);
-    //     };
-    //     setupData();
-    // }, []);
-
     if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
         return<div className='w-full h-[90%] flex flex-col justify-center items-center'>
             <Spinner />
@@ -193,6 +177,8 @@ export default function QuestionView({ }) {
                                         <textarea
                                             className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
                                             placeholder='Enter your response here...'
+                                            value={userResponseData[questionIDArray[activeQuestionIndex]] || ''}
+                                            onChange={(e) => handleReportUserResponse(e.target.value, questionIDArray[activeQuestionIndex])}
                                         >
                                         </textarea>
                                     </div>

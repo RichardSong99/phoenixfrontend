@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, use } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { QuestionModal } from "@/app/helper/components/question/questionviewcomponents/questionmodal";
 import { QBankFormModal } from "@/app/helper/components/qbank/qbankform/qbankformmodal";
 import {
@@ -18,34 +18,46 @@ import { useUser } from "@/app/helper/context/usercontext";
 import { Icon } from "@iconify/react";
 import { updateEngagement } from "@/app/helper/apiservices/engagementservice";
 
-const QBankTable = ({ questionEngagementCombos }) => {
+const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
   const { isAuthenticated } = useUser();
+  const [questionEngagementCombos, setQuestionEngagementCombos] = useState(initialCombos);  // Store the combos in state
 
   const {
-    activeViewQuestion,
-
     viewQuestionModal,
-    activeViewEngagement,
     isOpen,
     onOpenChange,
     isFormOpen,
     onFormOpenChange,
     editQuestion,
     MODEEDIT,
-    MODENEW,
-    questionsUpdated,
-    setQuestionsUpdated,
     handleEditQuestion,
     handleDeleteQuestion,
   } = useContext(QuestionContext);
 
   const updateStarredTrue = async (engagementID) => {
-    // const response = await updateEngagement({ engagementID: engagementID, update: { "starred" : true } });
-    console.log(questionEngagementCombos);
+    const response = await updateEngagement({ engagementID: engagementID, update: { "starred": true } });
+    
+    // Update state directly
+    setQuestionEngagementCombos((prevCombos) =>
+      prevCombos.map((combo) =>
+        combo.Engagement.id === engagementID
+          ? { ...combo, Engagement: { ...combo.Engagement, starred: true } }
+          : combo
+      )
+    );
   };
 
-  const updateStarredFalse = (engagementID) => {
-    updateEngagement({ engagementID: engagementID, update: { "starred": false } });
+  const updateStarredFalse = async (engagementID) => {
+    await updateEngagement({ engagementID: engagementID, update: { "starred": false } });
+    
+    // Update state directly
+    setQuestionEngagementCombos((prevCombos) =>
+      prevCombos.map((combo) =>
+        combo.Engagement.id === engagementID
+          ? { ...combo, Engagement: { ...combo.Engagement, starred: false } }
+          : combo
+      )
+    );
   };
 
   return (
@@ -162,7 +174,7 @@ const QBankTable = ({ questionEngagementCombos }) => {
               </TableCell>
               <TableCell></TableCell>
               <TableCell>
-                {questionEngagement && (!questionEngagement?.Engagement?.Flagged ? (
+                {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
                     <svg
                         className='h-[30px] w-[30px] fill-appleRed'
                         xmlns="http://www.w3.org/2000/svg"
@@ -185,7 +197,7 @@ const QBankTable = ({ questionEngagementCombos }) => {
                 ))}
               </TableCell>
               <TableCell>
-                {!questionEngagement?.Engagement?.Starred ? (
+                {!questionEngagement?.Engagement?.starred ? (
                     <svg
                         className='h-[30px] w-[30px] fill-appleYellow'
                         xmlns="http://www.w3.org/2000/svg"
@@ -213,16 +225,7 @@ const QBankTable = ({ questionEngagementCombos }) => {
           ))}
         </TableBody>
       </Table>
-      {/* </div> */}
-
-      
-        <QuestionModal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          mode="practice"
-        />
-      
-
+      <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
       {editQuestion && (
         <QBankFormModal
           isOpen={isFormOpen}

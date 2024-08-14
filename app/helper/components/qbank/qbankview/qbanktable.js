@@ -20,7 +20,22 @@ import { updateEngagement } from "@/app/helper/apiservices/engagementservice";
 
 const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
   const { isAuthenticated } = useUser();
-  const [questionEngagementCombos, setQuestionEngagementCombos] = useState(initialCombos);  // Store the combos in state
+  const [questionEngagementCombos, setQuestionEngagementCombos] = useState(initialCombos);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (initialCombos) {
+      setQuestionEngagementCombos(initialCombos);
+      setLoading(false);
+    } else {
+      setError("Failed to load data");
+      setLoading(false);
+    }
+  }, [initialCombos]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   const {
     viewQuestionModal,

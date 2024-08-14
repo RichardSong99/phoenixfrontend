@@ -132,6 +132,7 @@ export const QuestionProvider = ({ children }) => {
     }
 
     const setupActiveIndividualMode = async (questionID) => {
+        resetAllVars();
         QEIDCombos = convertToQEIDComboArray([questionID]);
 
         setActiveReviewMode(ACTIVEMODE);
@@ -140,7 +141,23 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
+    const resetAllVars = () => {
+        setQuizID(null);
+        setActiveQuestionIndex(0);
+        setQuestionIDArray([]);
+        setQuestionData({});
+        setUserResponseData({});
+        setEngagementIDData({});
+        setEngagementData({});
+        setIsFlaggedData({});
+        setIsStarredData({});
+        setWasReviewedData({});
+        setTimeSpentData({});
+        setStartTime(Date.now());
+    }
+
     const createQuiz = async () => {
+        resetAllVars();
         const exampleQuestionIDs = ["65bae13d08992ac645d86bc6", "65bae26b08992ac645d86bc7", "65bb0c5c08992ac645d86bcf", "65bb137608992ac645d86bd5", "65bb16e208992ac645d86bd6"];
         const response = await initializeQuiz({ questionIDs: exampleQuestionIDs, quizType : "quiz" });
         setupActiveQuizMode(response.quizID);
@@ -149,6 +166,7 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const setupActiveQuizMode = async (quizID) => {
+        resetAllVars();
         var QEIDCombos = [];
 
         // fetch the quiz
@@ -168,6 +186,7 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {
+        resetAllVars();
         const QEIDCombos = [{ question_id: questionID, engagement_id: engagementID }];
 
         setActiveReviewMode(REVIEWMODE);
@@ -177,6 +196,7 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const setupReviewQuizMode = async (quizID) => {
+        resetAllVars();
         var QEIDCombos = [];
 
         // fetch the quiz
@@ -457,9 +477,8 @@ export const QuestionProvider = ({ children }) => {
 
     const handleSubmitEngagements = async () => {
         if (activeReviewMode === ACTIVEMODE) {
-            const engagementsArray = [];
+            let engagementsArray = [];
             let questionEngagementIDs = [];
-
             questionIDArray.forEach((questionID) => {
                 engagementsArray.push({
                     question_id: questionID,
@@ -470,7 +489,7 @@ export const QuestionProvider = ({ children }) => {
                     duration: timeSpentData[questionID],
                 });
             });
-
+            console.log("engagementsArray", engagementsArray);
             try {
                 const response = await postEngagements(engagementsArray);
                 questionEngagementIDs = response.question_engagement_ids;
@@ -544,6 +563,7 @@ export const QuestionProvider = ({ children }) => {
                 continueTimer,
                 totalSeconds,
                 createQuiz,
+                resetAllVars,
                 changeTimer,
                 updateTotalTimer,
                 setupActiveIndividualMode,

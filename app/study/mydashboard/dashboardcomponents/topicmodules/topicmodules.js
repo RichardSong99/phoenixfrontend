@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Table,
   TableHeader,
@@ -19,9 +19,18 @@ import {
 import { Icon } from "@iconify/react";
 import { CheckIconGreen } from "@/app/helper/assets/components/CheckIconGreen";
 import { useData } from "@/app/helper/context/datacontext";
+import { useRouter } from 'next/navigation';
+import { QuestionContext } from "@/app/helper/context/questioncontext";
 
 
 const TopicModules = () => {
+  const {
+    selectedAnswerStatuses,
+    setSelectedAnswerStatuses,
+    selectedTopics,
+    setSelectedTopics,
+} = useContext(QuestionContext);
+
   const { mathTopicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList } = useData();
   const [selected, setSelected] = useState("Algebra");
 
@@ -45,6 +54,14 @@ const TopicModules = () => {
     "num hard correct": { icon: "maki:mountain", earnedColor: "warning" },
     "num correct under 60": { icon: "mdi:clock", earnedColor: "secondary" },
     default: { icon: "ri:book-fill", earnedColor: "default" }
+  };
+
+  const router = useRouter();
+
+  const handlePracticeClick = (topic) => {
+    setSelectedTopics([topic]);
+    setSelectedAnswerStatuses(["unattempted"]);
+    router.push('/study/browse');
   };
 
   return (
@@ -145,7 +162,7 @@ const TopicModules = () => {
                 <div className="flex space-x-2">
                   <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>
                     <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
-                      <Button size="small" color="primary">Practice</Button>
+                      <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
                     </Badge>
                   </Tooltip>
                   <Tooltip content={`You have 5 questions to review on ${item.topic}`}>

@@ -305,11 +305,11 @@ const QuestionFilterSort = ({ page }) => {
                     </CheckboxGroup>
                 </div>
             </div>
-            <div className='w-full flex flex-row justify-center mt-[50px]'>
+            {page === "quizzes" && <div className='w-full flex flex-row justify-center mt-[50px]'>
                 <Button className='rounded-[20px] bg-appleBlue text-white' onClick={handleQuizClick}>
                     Start Quiz
                 </Button>
-            </div>
+            </div>}
         </div>
     );
 };

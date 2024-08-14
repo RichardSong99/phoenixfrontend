@@ -59,7 +59,7 @@ export default function MyDashboard() {
 
       {createQuiz && 
         <div className="absolute w-[90%] top-[10%] right-[5%] bg-white border-[3px] border-appleGray4 rounded-[20px] z-[10]">
-          <QuestionFilterSort />
+          <QuestionFilterSort page={"quizzes"}/>
         </div>
       }
     </div>

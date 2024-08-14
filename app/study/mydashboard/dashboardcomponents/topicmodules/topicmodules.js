@@ -143,12 +143,16 @@ const TopicModules = () => {
               </TableCell>
               <TableCell>
                 <div className="flex space-x-2">
-                  <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
-                    <Button size="small" color="primary">Practice</Button>
-                  </Badge>
-                  <Badge color="danger" content="5">
-                    <Button size="small" color="success" style={{ color: "white" }}>Review</Button>
-                  </Badge>
+                  <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>
+                    <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
+                      <Button size="small" color="primary">Practice</Button>
+                    </Badge>
+                  </Tooltip>
+                  <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
+                    <Badge color="danger" content="5">
+                      <Button size="small" color="success" style={{ color: "white" }}>Review</Button>
+                    </Badge>
+                  </Tooltip>
                 </div>
               </TableCell>
             </TableRow>

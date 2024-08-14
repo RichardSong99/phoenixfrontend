@@ -43,6 +43,49 @@ const QBankViewer = () => {
 
     const [filterValue, setFilterValue] = useState("");
 
+    const {
+        selectedDifficulties,
+        setSelectedDifficulties,
+        selectedAnswerTypes,
+        setSelectedAnswerTypes,
+        selectedAnswerStatuses,
+        setSelectedAnswerStatuses,
+        selectedTopics,
+        sortOption,
+        sortDirection,
+        questionsUpdated,
+    } = useContext(QuestionContext);
+
+    const algebraTopics = ["Algebra", "Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
+    const advancedMathTopics = ["Advanced math", "Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
+    const problemSolvingTopics = ["Problem solving and data analysis", "Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
+    const geometryTopics = ["Geometry and trigonometry", "Area and volume formulas", "Lines, angles, and triangles", "Right triangles and trigonometry", "Circles"];
+
+    const [algebraSelectedTopics, setAlgebraSelectedTopics] = useState(algebraTopics);
+    const [advancedMathSelectedTopics, setAdvancedMathSelectedTopics] = useState(advancedMathTopics);
+    const [problemSolvingSelectedTopics, setProblemSolvingSelectedTopics] = useState(problemSolvingTopics);
+    const [geometrySelectedTopics, setGeometrySelectedTopics] = useState(geometryTopics);
+
+    const difficulties = ["easy", "medium", "hard", "extreme"];
+    const answerTypes = ["multipleChoice", "freeResponse"];
+    const answerStatuses = ["unattempted", "correct", "incorrect", "omitted"];
+
+    const handleCheckAll = ({
+        allChoices,
+        allChoicesSelected,
+        selectedChoices,
+        setSelectedChoices,
+        required = false
+    }) => {
+        if (allChoicesSelected) {
+            if (!required) {
+                setSelectedChoices([]);
+            }
+        } else {
+            setSelectedChoices(allChoices);
+        }
+    };
+
     const handleResetFilters = () => {
         console.log("Reset filters");
         handleCheckAll({ allChoices: difficulties, allChoicesSelected: false, selectedChoices: selectedDifficulties, setSelectedChoices: setSelectedDifficulties });
@@ -77,28 +120,6 @@ const QBankViewer = () => {
 
         setSelectedAnswerStatuses(["unattempted"]);
     };
-
-
-    const { 
-        selectedTopics, 
-        selectedDifficulties, 
-        selectedAnswerStatuses, 
-        selectedAnswerTypes, 
-        sortOption, 
-        sortDirection, 
-        activeViewEngagement, 
-        isOpen, 
-        onOpenChange, 
-        isFormOpen, 
-        onFormOpen, 
-        onFormOpenChange, 
-        editQuestion, 
-        setEditQuestion, 
-        MODEEDIT, 
-        MODENEW,
-        questionsUpdated,
-        setQuestionsUpdated 
-    } = useContext(QuestionContext);
 
 
 

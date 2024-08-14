@@ -43,6 +43,41 @@ const QBankViewer = () => {
 
     const [filterValue, setFilterValue] = useState("");
 
+    const handleResetFilters = () => {
+        console.log("Reset filters");
+        handleCheckAll({ allChoices: difficulties, allChoicesSelected: false, selectedChoices: selectedDifficulties, setSelectedChoices: setSelectedDifficulties });
+        handleCheckAll({ allChoices: answerTypes, allChoicesSelected: false, selectedChoices: selectedAnswerTypes, setSelectedChoices: setSelectedAnswerTypes });
+        handleCheckAll({ allChoices: answerStatuses, allChoicesSelected: false, selectedChoices: selectedAnswerStatuses, setSelectedChoices: setSelectedAnswerStatuses });
+        handleCheckAll({ allChoices: algebraTopics, allChoicesSelected: false, selectedChoices: algebraSelectedTopics, setSelectedChoices: setAlgebraSelectedTopics });
+        handleCheckAll({ allChoices: advancedMathTopics, allChoicesSelected: false, selectedChoices: advancedMathSelectedTopics, setSelectedChoices: setAdvancedMathSelectedTopics });
+        handleCheckAll({ allChoices: problemSolvingTopics, allChoicesSelected: false, selectedChoices: problemSolvingSelectedTopics, setSelectedChoices: setProblemSolvingSelectedTopics });
+        handleCheckAll({ allChoices: geometryTopics, allChoicesSelected: false, selectedChoices: geometrySelectedTopics, setSelectedChoices: setGeometrySelectedTopics });
+    };
+
+    const handleSetReviewMode = () => {
+        console.log("Review mode");
+        handleCheckAll({ allChoices: difficulties, allChoicesSelected: false, selectedChoices: selectedDifficulties, setSelectedChoices: setSelectedDifficulties });
+        handleCheckAll({ allChoices: answerTypes, allChoicesSelected: false, selectedChoices: selectedAnswerTypes, setSelectedChoices: setSelectedAnswerTypes });
+        handleCheckAll({ allChoices: algebraTopics, allChoicesSelected: false, selectedChoices: algebraSelectedTopics, setSelectedChoices: setAlgebraSelectedTopics });
+        handleCheckAll({ allChoices: advancedMathTopics, allChoicesSelected: false, selectedChoices: advancedMathSelectedTopics, setSelectedChoices: setAdvancedMathSelectedTopics });
+        handleCheckAll({ allChoices: problemSolvingTopics, allChoicesSelected: false, selectedChoices: problemSolvingSelectedTopics, setSelectedChoices: setProblemSolvingSelectedTopics });
+        handleCheckAll({ allChoices: geometryTopics, allChoicesSelected: false, selectedChoices: geometrySelectedTopics, setSelectedChoices: setGeometrySelectedTopics });
+
+        setSelectedAnswerStatuses(["correct", "incorrect", "omitted"]);
+    };
+
+    const handleSetUnansweredMode = () => {
+        console.log("Review mode");
+        handleCheckAll({ allChoices: difficulties, allChoicesSelected: false, selectedChoices: selectedDifficulties, setSelectedChoices: setSelectedDifficulties });
+        handleCheckAll({ allChoices: answerTypes, allChoicesSelected: false, selectedChoices: selectedAnswerTypes, setSelectedChoices: setSelectedAnswerTypes });
+        handleCheckAll({ allChoices: algebraTopics, allChoicesSelected: false, selectedChoices: algebraSelectedTopics, setSelectedChoices: setAlgebraSelectedTopics });
+        handleCheckAll({ allChoices: advancedMathTopics, allChoicesSelected: false, selectedChoices: advancedMathSelectedTopics, setSelectedChoices: setAdvancedMathSelectedTopics });
+        handleCheckAll({ allChoices: problemSolvingTopics, allChoicesSelected: false, selectedChoices: problemSolvingSelectedTopics, setSelectedChoices: setProblemSolvingSelectedTopics });
+        handleCheckAll({ allChoices: geometryTopics, allChoicesSelected: false, selectedChoices: geometrySelectedTopics, setSelectedChoices: setGeometrySelectedTopics });
+
+        setSelectedAnswerStatuses(["unattempted"]);
+    };
+
 
     const { 
         selectedTopics, 
@@ -141,7 +176,11 @@ const QBankViewer = () => {
                     </DropdownMenu>
                 </Dropdown>
 
-
+                <div className="flex col gap-2">
+                    <Button color="primary" variant="ghost" onPress={handleResetFilters}>Reset filters</Button>
+                    <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
+                    <Button color="primary" variant="ghost" onPress={handleSetUnansweredMode}>Unanswered questions</Button>
+                </div>
             </div>
 
             <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />

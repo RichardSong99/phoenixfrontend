@@ -22,6 +22,8 @@ export default function QuestionFooter({ }) {
         engagementData,
         handleSubmitEngagements,
         userResponseData,
+        indquizMode,
+        setContinueTimer,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -48,6 +50,10 @@ export default function QuestionFooter({ }) {
         if(userResponseData[questionIDArray[activeQuestionIndex]] != null){
             setAnswerVisible(!isAnswerVisible);
             handleSubmitEngagements();
+        }
+
+        if(indquizMode === "individual"){
+            setContinueTimer(false);
         }
     };
 
@@ -108,43 +114,55 @@ export default function QuestionFooter({ }) {
 
     return (
         <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
-            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] && engagementData[questionIDArray[activeQuestionIndex]].status === "incorrect" && <div>
-                <Popover placement="top">
-                    <PopoverTrigger>
-                        <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1'>
-                            {engagementData[questionIDArray[activeQuestionIndex]].reviewed ?
-                                <>
-                                    Reviewed
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" className='fill-appleGreen w-[20px] h-[20px] mb-[2px]'>
-                                        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M416 128L192 384l-96-96"></path>
-                                    </svg> </> : "Review"
-                            }
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                        {(titleProps) => (
-                            <div className="px-1 py-2 w-full">
-                                <p className="text-small font-bold text-foreground" {...titleProps}>
-                                Why did you get this question wrong?
-                                </p>
-                                <div className="mt-2 flex flex-col gap-2 w-full">
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I guessed.</Button>
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I misunderstood the problem.</Button>
-                                    { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I made a computational error.</Button> :
-                                    <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>The passage was too hard.</Button>
-                                    }
+            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] && engagementData[questionIDArray[activeQuestionIndex]].status === "incorrect" &&
+                <div className='w-[500px] h-full flex flex-row justify-start items-center'>
+                    <Popover placement="top">
+                        <PopoverTrigger>
+                            <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1 mr-[20px]'>
+                                {engagementData[questionIDArray[activeQuestionIndex]].reviewed ?
+                                    <>
+                                        Reviewed
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" className='fill-appleGreen w-[20px] h-[20px] mb-[2px]'>
+                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M416 128L192 384l-96-96"></path>
+                                        </svg> </> : "Review"
+                                }
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            {(titleProps) => (
+                                <div className="px-1 py-2 w-full">
+                                    <p className="text-small font-bold text-foreground" {...titleProps}>
+                                    Why did you get this question wrong?
+                                    </p>
+                                    <div className="mt-2 flex flex-col gap-2 w-full">
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I guessed.</Button>
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I misunderstood the problem.</Button>
+                                        { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I made a computational error.</Button> :
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>The passage was too hard.</Button>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </PopoverContent>
-                </Popover>
-            </div>}
+                            )}
+                        </PopoverContent>
+                    </Popover>
+                    <Popover placement="top">
+                        <PopoverTrigger>
+                            <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1'>
+                                Explanation
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            Explanation: {questionData[questionIDArray[activeQuestionIndex]].explanation}
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            }
             {activeReviewMode === "active" && <div>
                 <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleShowAnswer}>
                     {!isAnswerVisible ?
                         "Check Answer" :
-                        <div className='text-black'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
+                        <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
                     }
                 </Button>
             </div>}

@@ -133,7 +133,7 @@ export const QuestionProvider = ({ children }) => {
 
     const setupActiveIndividualMode = async (questionID) => {
         resetAllVars();
-        QEIDCombos = convertToQEIDComboArray([questionID]);
+        const QEIDCombos = convertToQEIDComboArray([questionID]);
 
         setActiveReviewMode(ACTIVEMODE);
         setIndQuizMode(INDIVIDUALMODE);

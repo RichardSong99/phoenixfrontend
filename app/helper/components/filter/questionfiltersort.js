@@ -15,30 +15,6 @@ import { useRouter } from "next/navigation";
 
 
 const QuestionFilterSort = ({ page }) => {
-
-    const algebraTopics = ["Algebra", "Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
-    const advancedMathTopics = ["Advanced math", "Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
-    const problemSolvingTopics = ["Problem solving and data analysis", "Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
-    const geometryTopics = ["Geometry and trigonometry", "Area and volume formulas", "Lines, angles, and triangles", "Right triangles and trigonometry", "Circles"];
-
-    const [algebraSelectedTopics, setAlgebraSelectedTopics] = useState(algebraTopics);
-    const [advancedMathSelectedTopics, setAdvancedMathSelectedTopics] = useState(advancedMathTopics);
-    const [problemSolvingSelectedTopics, setProblemSolvingSelectedTopics] = useState(problemSolvingTopics);
-    const [geometrySelectedTopics, setGeometrySelectedTopics] = useState(geometryTopics);
-
-    const [allAlgebraSelected, setAllAlgebraSelected] = useState(true);
-    const [allAdvancedMathSelected, setAllAdvancedMathSelected] = useState(true);
-    const [allProblemSolvingSelected, setAllProblemSolvingSelected] = useState(true);
-    const [allGeometrySelected, setAllGeometrySelected] = useState(true);
-
-    const difficulties = ["easy", "medium", "hard", "extreme"];
-    const answerTypes = ["multipleChoice", "freeResponse"];
-    const answerStatuses = ["unattempted", "correct", "incorrect", "omitted"];
-
-    const [allDifficultySelected, setAllDifficultySelected] = useState(true);
-    const [allAnswerTypesSelected, setAllAnswerTypesSelected] = useState(true);
-    const [allAnswerStatusesSelected, setAllAnswerStatusesSelected] = useState(true);
-
     const {
         selectedDifficulties,
         setSelectedDifficulties,
@@ -61,6 +37,30 @@ const QuestionFilterSort = ({ page }) => {
         quizID,
     } = useContext(QuestionContext);
 
+    const algebraTopics = ["Algebra", "Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
+    const advancedMathTopics = ["Advanced math", "Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
+    const problemSolvingTopics = ["Problem solving and data analysis", "Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
+    const geometryTopics = ["Geometry and trigonometry", "Area and volume formulas", "Lines, angles, and triangles", "Right triangles and trigonometry", "Circles"];
+
+    const [algebraSelectedTopics, setAlgebraSelectedTopics] = useState([]);
+    const [advancedMathSelectedTopics, setAdvancedMathSelectedTopics] = useState([]);
+    const [problemSolvingSelectedTopics, setProblemSolvingSelectedTopics] = useState([]);
+    const [geometrySelectedTopics, setGeometrySelectedTopics] = useState([]);
+
+    const [allAlgebraSelected, setAllAlgebraSelected] = useState(false);
+    const [allAdvancedMathSelected, setAllAdvancedMathSelected] = useState(false);
+    const [allProblemSolvingSelected, setAllProblemSolvingSelected] = useState(false);
+    const [allGeometrySelected, setAllGeometrySelected] = useState(false);
+
+    // const difficulties = ["easy", "medium", "hard", "extreme"];
+    const difficulties = ["easy", "medium", "hard"];
+    const answerTypes = ["multipleChoice", "freeResponse"];
+    const answerStatuses = ["unattempted", "correct", "incorrect", "omitted"];
+
+    const [allDifficultySelected, setAllDifficultySelected] = useState(false);
+    const [allAnswerTypesSelected, setAllAnswerTypesSelected] = useState(false);
+    const [allAnswerStatusesSelected, setAllAnswerStatusesSelected] = useState(false);
+
     const handleCheckAll = ({
         allChoices,
         allChoicesSelected,
@@ -77,15 +77,32 @@ const QuestionFilterSort = ({ page }) => {
         }
     };
 
+    const loadFilters = () => {
+        setAlgebraSelectedTopics(selectedTopics.filter(topic => algebraTopics.includes(topic)));
+        setAdvancedMathSelectedTopics(selectedTopics.filter(topic => advancedMathTopics.includes(topic)));
+        setProblemSolvingSelectedTopics(selectedTopics.filter(topic => problemSolvingTopics.includes(topic)));
+        setGeometrySelectedTopics(selectedTopics.filter(topic => geometryTopics.includes(topic)));
+        setSelectedDifficulties(selectedDifficulties.filter(difficulty => difficulties.includes(difficulty)));
+        setSelectedAnswerTypes(selectedAnswerTypes.filter(type => answerTypes.includes(type)));
+        setSelectedAnswerStatuses(selectedAnswerStatuses.filter(status => answerStatuses.includes(status)));
+    };
+
     const handlePassiveCheckboxChange = () => {
-        setAllAlgebraSelected(algebraSelectedTopics.length === algebraTopics.length);
-        setAllAdvancedMathSelected(advancedMathSelectedTopics.length === advancedMathTopics.length);
-        setAllProblemSolvingSelected(problemSolvingSelectedTopics.length === problemSolvingTopics.length);
-        setAllGeometrySelected(geometrySelectedTopics.length === geometryTopics.length);
+        setAllAlgebraSelected(algebraSelectedTopics.length === algebraTopics.length - 1);
+        setAllAdvancedMathSelected(advancedMathSelectedTopics.length === advancedMathTopics.length - 1);
+        setAllProblemSolvingSelected(problemSolvingSelectedTopics.length === problemSolvingTopics.length - 1);
+        setAllGeometrySelected(geometrySelectedTopics.length === geometryTopics.length - 1);
         setAllDifficultySelected(selectedDifficulties.length === difficulties.length);
         setAllAnswerTypesSelected(selectedAnswerTypes.length === answerTypes.length);
         setAllAnswerStatusesSelected(selectedAnswerStatuses.length === answerStatuses.length);
+
+
     };
+
+    useEffect(() => {
+        loadFilters();
+        handlePassiveCheckboxChange();
+    }, []);
 
     useEffect(() => {
         handlePassiveCheckboxChange();

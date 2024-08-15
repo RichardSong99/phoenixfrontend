@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, use } from 'react';
 import { fetchMaskedQuestions, fetchFullQuestionById, getQuestions, deleteQuestion as deleteQuestionService } from '@/app/helper/apiservices/questionservice';
 import { QuestionContext } from '@/app/helper/context/questioncontext';
 import { ChevronDownIcon } from '../../../assets/components/ChevronDownIcon';
 import QBankTable from './qbanktable';
+import { UserProvider } from '@/app/helper/context/usercontext';
 
 import QuestionFilterSort from '../../filter/questionfiltersort';
 import {
@@ -122,8 +123,6 @@ const QBankViewer = () => {
     };
 
 
-
-
     useEffect(() => {
         async function loadQuestions() {
             try {
@@ -149,7 +148,7 @@ const QBankViewer = () => {
         loadQuestions();
     }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject]);
 
-
+    
 
     const onSearchChange = React.useCallback((value) => {
         if (value) {
@@ -161,56 +160,57 @@ const QBankViewer = () => {
     }, []);
 
     return (
-        <div className="flex flex-col gap-y-4 p-2">
-            {/* Your component code goes here */}
-            {/* <div>
-                <h3>Question Bank Database</h3>
-            </div> */}
+        <UserProvider>
+            <div className="flex flex-col gap-y-4 p-2">
+                {/* Your component code goes here */}
+                {/* <div>
+                    <h3>Question Bank Database</h3>
+                </div> */}
 
 
 
-            {/* <QbankTable/> */}
-            <div className="relative flex justify-start items-center gap-2">
-                <Input
-                    isClearable
-                    classNames={{
-                        base: "w-full sm:max-w-[44%]",
-                        inputWrapper: "border-1",
-                    }}
-                    placeholder="Search by name..."
-                    // size="sm"
-                    // startContent={<SearchIcon className="text-default-300" />}
-                    value={filterValue}
-                    variant="bordered"
-                    onClear={() => setFilterValue("")}
-                    onValueChange={onSearchChange}
-                />
+                {/* <QbankTable/> */}
+                <div className="relative flex justify-start items-center gap-2">
+                    <Input
+                        isClearable
+                        classNames={{
+                            base: "w-full sm:max-w-[44%]",
+                            inputWrapper: "border-1",
+                        }}
+                        placeholder="Search by name..."
+                        // size="sm"
+                        // startContent={<SearchIcon className="text-default-300" />}
+                        value={filterValue}
+                        variant="bordered"
+                        onClear={() => setFilterValue("")}
+                        onValueChange={onSearchChange}
+                    />
 
-                <Dropdown>
-                    <DropdownTrigger>
-                        <Button color="primary" iconRight={<ChevronDownIcon />}> Filter & Sort </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu closeOnSelect={false} variant="light">
-                        <DropdownItem>
-                            <QuestionFilterSort />
-                        </DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <Button color="primary" iconRight={<ChevronDownIcon />}> Filter & Sort </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu closeOnSelect={false} variant="light">
+                            <DropdownItem>
+                                <QuestionFilterSort />
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
 
-                <div className="flex col gap-2">
-                    <Button color="primary" variant="ghost" onPress={handleResetFilters}>Reset filters</Button>
-                    <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
-                    <Button color="primary" variant="ghost" onPress={handleSetUnansweredMode}>Unanswered questions</Button>
+                    <div className="flex col gap-2">
+                        <Button color="primary" variant="ghost" onPress={handleResetFilters}>Reset filters</Button>
+                        <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
+                        <Button color="primary" variant="ghost" onPress={handleSetUnansweredMode}>Unanswered questions</Button>
+                    </div>
                 </div>
-            </div>
 
-            <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />
+                <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />
 
 
-            <QBankTable questionEngagementCombos = {questions} />
+                <QBankTable questionEngagementCombos = {questions} />
 
-        </div >
-
+            </div >
+        </UserProvider>
     );
 }
 

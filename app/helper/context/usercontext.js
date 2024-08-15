@@ -23,6 +23,7 @@ export const UserProvider = ({ children }) => {
     
             // go to the study page
             router.push('/study');
+            console.log("user data", data.token);
         } catch (error) {
             console.error('Failed to login user:', error);
             setIsAuthenticated(false);

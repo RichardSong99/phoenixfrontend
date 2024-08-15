@@ -17,25 +17,14 @@ import { formatDate } from "@/app/helper/data/utility";
 import { useUser } from "@/app/helper/context/usercontext";
 import { Icon } from "@iconify/react";
 import { updateEngagement } from "@/app/helper/apiservices/engagementservice";
+import { getUserData } from '@/app/helper/apiservices/userservice';
 
 const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
   const { isAuthenticated } = useUser();
   const [questionEngagementCombos, setQuestionEngagementCombos] = useState(initialCombos);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (initialCombos) {
-      setQuestionEngagementCombos(initialCombos);
-      setLoading(false);
-    } else {
-      setError("Failed to load data");
-      setLoading(false);
-    }
-  }, [initialCombos]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  const [user, setUser] = useState(null);
 
   const {
     viewQuestionModal,
@@ -50,7 +39,11 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
   } = useContext(QuestionContext);
 
   const updateStarredTrue = async (engagementID) => {
-    const response = await updateEngagement({ engagementID: engagementID, update: { "starred": true } });
+    try {
+      const response = await updateEngagement({ engagementID: engagementID, update: { "starred": true } });
+    } catch (error) {
+      console.error('Failed to update engagement:', error);
+    }
     
     // Update state directly
     setQuestionEngagementCombos((prevCombos) =>
@@ -74,6 +67,30 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
       )
     );
   };
+
+  useEffect(() => {
+    const checkUser = async () => {
+        try {
+            const response = await getUserData("65b6bdc051859b1dd3cb10fe");
+            setUser(response);
+            console.log("response", response.type);
+        } catch (error) {
+            console.error('Failed to confirm user:', error);
+        }
+    };
+
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    if (initialCombos) {
+      setQuestionEngagementCombos(initialCombos);
+      setLoading(false);
+    } else {
+      setError("Failed to load data");
+      setLoading(false);
+    }
+  }, [initialCombos]);
 
   return (
     <div className="flex flex-col gap-y-4 p-2">
@@ -99,22 +116,24 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
             <TableRow key={index}>
               <TableCell>
                 <div className="flex space-x-2">
-                  <Button
-                    color="danger"
-                    onClick={() =>
-                      handleDeleteQuestion(questionEngagement?.Question?.id)
-                    }
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    color="secondary"
-                    onClick={() =>
-                      handleEditQuestion(questionEngagement?.Question?.id)
-                    }
-                  >
-                    Edit
-                  </Button>
+                  {user.type === "admin" ? <>
+                    <Button
+                      color="danger"
+                      onClick={() =>
+                        handleDeleteQuestion(questionEngagement?.Question?.id)
+                      }
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      color="secondary"
+                      onClick={() =>
+                        handleEditQuestion(questionEngagement?.Question?.id)
+                      }
+                    >
+                      Edit
+                    </Button>
+                  </> : null}
                   <Button
                     color="primary"
                     onClick={() =>
@@ -146,9 +165,11 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                   {questionEngagement?.Question?.Difficulty}
                 </Chip>
               </TableCell>
-              <TableCell>
-                {questionEngagement?.Question?.AccessOption}
-              </TableCell>
+              {/* {user.type === "admin" ? <> */}
+                <TableCell>
+                  {questionEngagement?.Question?.AccessOption}
+                </TableCell>
+              {/* </> : null} */}
               <TableCell>{questionEngagement?.Question?.AnswerType}</TableCell>
               <TableCell>
                 <Chip
@@ -173,12 +194,16 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                   </div>
                 )}
               </TableCell>
-              <TableCell>
-                {formatDate(questionEngagement?.Question?.CreationDate)}
-              </TableCell>
-              <TableCell>
-                {formatDate(questionEngagement?.Question?.LastEditedDate)}
-              </TableCell>
+              {/* {user.type === "admin" ? <> */}
+                <TableCell>
+                  {formatDate(questionEngagement?.Question?.CreationDate)}
+                </TableCell>
+              {/* </> : null} */}
+              {/* {user.type === "admin" ? <> */}
+                <TableCell>
+                  {formatDate(questionEngagement?.Question?.LastEditedDate)}
+                </TableCell>
+              {/* </> : null} */}
               <TableCell>
                 {questionEngagement?.Engagement?.reviewed && <Icon
                   icon="lets-icons:check-fill"
@@ -214,7 +239,7 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
               <TableCell>
                 {!questionEngagement?.Engagement?.starred ? (
                     <svg
-                        className='h-[30px] w-[30px] fill-appleYellow'
+                        className='h-[30px] w-[30px] fill-appleYellow cursor-pointer'
                         xmlns="http://www.w3.org/2000/svg"
                         width="1em"
                         height="1em"
@@ -225,7 +250,7 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                     </svg>
                 ) : (
                     <svg
-                        className='h-[30px] w-[30px] fill-appleYellow'
+                        className='h-[30px] w-[30px] fill-appleYellow cursor-pointer'
                         xmlns="http://www.w3.org/2000/svg"
                         width="1em"
                         height="1em"

@@ -25,6 +25,8 @@ export const DataProvider = ({ children }) => {
     const [problemSolvingData, setProblemSolvingData] = useState(null);
     const [geometryTrigonometryData, setGeometryTrigonometryData] = useState(null);
 
+    const [reloadDataToggle, setReloadDataToggle] = useState(false);
+
     const mathTopicMapping = [
         { topic: "Linear equations in 1 variable", category: "Algebra" },
         { topic: "Linear equations in 2 variables", category: "Algebra" },
@@ -121,7 +123,7 @@ export const DataProvider = ({ children }) => {
         loadQuizList();
         // loadTestUnderlyingList();
         loadTopicSummaryList();
-    }, [isAuthenticated, loginToggle]);
+    }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
         <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList, getTopicSummaryElement }}>

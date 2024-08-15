@@ -15,6 +15,7 @@ export default function QuestionView({ }) {
         userResponseData,
         handleReportUserResponse,
         activeReviewMode,
+        engagementData,
     } = useContext(QuestionContext);
 
     /* for testing, will delete later */
@@ -187,7 +188,7 @@ export default function QuestionView({ }) {
                                         disabled
                                         className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
                                     >
-                                        {questionData[questionIDArray[activeQuestionIndex]].user_response}
+                                        {engagementData[questionIDArray[activeQuestionIndex]].user_answer}
                                     </textarea>
                                 )}
                             </>

@@ -2,6 +2,7 @@ import React from 'react';
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
 import ReactMarkdown from 'react-markdown';
+import Latex from 'react-latex-next';
 
 export function parseLatexString(inputString) {
   if (typeof inputString !== 'string') {
@@ -27,6 +28,21 @@ export function parseLatexString(inputString) {
   return <span>{elements}</span>;
 }
 
+export function RenderLatex({ content }) {
+  return (
+    <div>
+      <Latex>{content}</Latex>
+    </div>
+  );
+};
+
+export function RenderMarkdown({ content }){
+  return (
+    <div>
+      <ReactMarkdown>{content}</ReactMarkdown>
+    </div>
+  );
+};
 
 
 function TestLatexRendering() {

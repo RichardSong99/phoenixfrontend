@@ -159,22 +159,22 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
               <TableCell>
                 {renderMarkdownWithLaTeX(questionEngagement?.Question?.prompt)}
               </TableCell>
-              <TableCell>{questionEngagement?.Question?.Topic}</TableCell>
+              <TableCell>{questionEngagement?.Question?.topic}</TableCell>
               <TableCell>
                 <Chip
                   color={
-                    questionEngagement?.Question?.Difficulty === "easy"
+                    questionEngagement?.Question?.difficulty === "easy"
                       ? "success"
-                      : questionEngagement?.Question?.Difficulty === "medium"
+                      : questionEngagement?.Question?.difficulty === "medium"
                         ? "warning"
                         : "danger"
                   }
                   className="text-white"
                 >
-                  {questionEngagement?.Question?.Difficulty}
+                  {questionEngagement?.Question?.difficulty}
                 </Chip>
               </TableCell>
-              <TableCell>{questionEngagement?.Question?.AccessOption}</TableCell>
+              <TableCell>{questionEngagement?.Question?.access_option}</TableCell>
               <TableCell>{questionEngagement?.Question?.answer_type}</TableCell>
               <TableCell>
                 <Chip
@@ -199,8 +199,8 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                   </div>
                 )}
               </TableCell>
-              <TableCell>{formatDate(questionEngagement?.Question?.CreationDate)}</TableCell>
-              <TableCell>{formatDate(questionEngagement?.Question?.LastEditedDate)}</TableCell>
+              <TableCell>{formatDate(questionEngagement?.Question?.creation_date)}</TableCell>
+              <TableCell>{formatDate(questionEngagement?.Question?.last_edited_date)}</TableCell>
               <TableCell>
                 {questionEngagement?.Engagement?.reviewed && <Icon
                   icon="lets-icons:check-fill"
@@ -326,19 +326,19 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
               <TableCell>
                 {renderMarkdownWithLaTeX(questionEngagement?.Question?.prompt)}
               </TableCell>
-              <TableCell>{questionEngagement?.Question?.Topic}</TableCell>
+              <TableCell>{questionEngagement?.Question?.topic}</TableCell>
               <TableCell>
                 <Chip
                   color={
-                    questionEngagement?.Question?.Difficulty === "easy"
+                    questionEngagement?.Question?.difficulty === "easy"
                       ? "success"
-                      : questionEngagement?.Question?.Difficulty === "medium"
+                      : questionEngagement?.Question?.difficulty === "medium"
                         ? "warning"
                         : "danger"
                   }
                   className="text-white"
                 >
-                  {questionEngagement?.Question?.Difficulty}
+                  {questionEngagement?.Question?.difficulty}
                 </Chip>
               </TableCell>
               <TableCell>{questionEngagement?.Question?.answer_type}</TableCell>

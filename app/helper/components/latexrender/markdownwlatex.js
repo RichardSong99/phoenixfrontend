@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import rehypeRaw from 'rehype-raw';
 
-const renderMarkdownWithLaTeX = (markdownString) => {
+export function renderMarkdownWithLaTeX(markdownString){
   return (
     <ReactMarkdown
       remarkPlugins={[remarkMath]}

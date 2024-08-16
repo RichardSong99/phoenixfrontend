@@ -34,10 +34,10 @@ export function calculateResultHelper({
 }){
     try{
         if (question.AnswerType === 'freeResponse') {
-            const difference = Math.abs(parseFloat(question.CorrectAnswerFree) - parseFloat(userResponse));
+            const difference = Math.abs(parseFloat(question.correct_answer_free) - parseFloat(userResponse));
             return difference <= 0.001;
         } else {
-            return question.CorrectAnswerMultiple === userResponse;
+            return question.correct_answer_multiple === userResponse;
         }
     }catch(error){
         console.error("Error:", error);

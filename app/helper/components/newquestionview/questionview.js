@@ -1,7 +1,8 @@
 import { QuestionContext } from '../../context/questioncontext';
 import React, { use, useState, useEffect, useContext, useRef, Component } from 'react';
 import { Button, Avatar, Spinner, Tooltip, Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
-import { parseLatexString, RenderLatex, RenderMarkdown } from '../latexrender/latexrender';
+import { parseLatexString, RenderLatex } from '../latexrender/latexrender';
+import { renderMarkdownWithLatex } from '../latexrender/markdownwlatex';
 
 export default function QuestionView({ }) {
     const [crossedOut, setCrossedOut] = useState([]);
@@ -62,7 +63,7 @@ export default function QuestionView({ }) {
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
             <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
-                { questionData[questionIDArray[activeQuestionIndex]].subject !== "math" ?
+                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && <RenderLatex content={questionData[questionIDArray[activeQuestionIndex]].prompt} />}
                     </div> :
@@ -86,7 +87,7 @@ export default function QuestionView({ }) {
                                 </>
                             } /> */}
                             { passage === 1 ?
-                                <p className='text-[20px] max-h-full'>
+                                <p className='text-[20px] max-h-full w-full text-left'>
                                     <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
                                     <br></br><br></br>
                                     It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
@@ -100,10 +101,29 @@ export default function QuestionView({ }) {
                                     "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
                                 </p>
                             :
-                                <p className='text-[20px] max-h-full'>
+                                <p className='text-[20px] max-h-full w-full text-left'>
                                     <i>This passage is a test passage two</i>
                                     <br></br><br></br>
-                                    This is passage 2
+                                    Test passage 2
+                                    {/* {renderMarkdownWithLatex(`
+                                        \\begin{table}[h!]
+                                        \\centering
+                                        \\caption{Credited Film Output of James Young Deer, Dark Cloud, Edwin Carewe, and Lillian St. Cyr}
+                                        \\begin{tabular}{|l|c|c|}
+                                        \\hline
+                                        \\textbf{Individual} & \\textbf{Years active} & \\textbf{Number of films known and commonly credited} \\\\
+                                        \\hline
+                                        James Young Deer & 1909--1924 & 33 (actor), 35 (director), 10 (writer) \\\\
+                                        \\hline
+                                        Dark Cloud & 1910--1920 & 35 (actor), 1 (writer) \\\\
+                                        \\hline
+                                        Edwin Carewe & 1912--1934 & 47 (actor), 58 (director), 20 (producer), 4 (writer) \\\\
+                                        \\hline
+                                        Lillian St. Cyr (Red Wing) & 1908--1921 & 66 (actor) \\\\
+                                        \\hline
+                                        \\end{tabular}
+                                        \\end{table}
+                                    `)} */}
                                 </p>
                             }
                         </div>

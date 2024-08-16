@@ -36,13 +36,6 @@ export function RenderLatex({ content }) {
   );
 };
 
-export function RenderMarkdown({ content }){
-  return (
-    <div>
-      <ReactMarkdown>{content}</ReactMarkdown>
-    </div>
-  );
-};
 
 
 function TestLatexRendering() {

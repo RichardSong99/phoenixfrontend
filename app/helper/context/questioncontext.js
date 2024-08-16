@@ -503,6 +503,8 @@ export const QuestionProvider = ({ children }) => {
             } catch (error) {
                 console.error("Could not submit engagements:", error);
             }
+
+            setTotalSeconds(0);
         }
     };
 

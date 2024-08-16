@@ -23,7 +23,7 @@ export default function QuestionFooter({ }) {
         handleSubmitEngagements,
         userResponseData,
         indquizMode,
-        setContinueTimer,
+        changeTimer,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -53,7 +53,7 @@ export default function QuestionFooter({ }) {
         }
 
         if(indquizMode === "individual"){
-            setContinueTimer(false);
+            changeTimer();
         }
     };
 

@@ -126,6 +126,7 @@ export const QuestionProvider = ({ children }) => {
     // new questionview components
     const [continueTimer, setContinueTimer] = useState(true);
     const [totalSeconds, setTotalSeconds] = useState(0);
+    const [currentSeconds, setCurrentSeconds] = useState(0);
 
     const changeTimer = () => {
         setContinueTimer(!continueTimer);
@@ -427,15 +428,15 @@ export const QuestionProvider = ({ children }) => {
 
     const handleUpdateTimeSpentData = (questionID) => {
         if (activeReviewMode === ACTIVEMODE) {
-            const currentTime = Date.now();
-            const timeSpent = (currentTime - startTime) / 1000; // in seconds
+            // const currentTime = Date.now();
+            // const timeSpent = (currentTime - startTime) / 1000; // in seconds
 
             const newTimeSpentData = { ...timeSpentData };
-            newTimeSpentData[questionID] = timeSpent + timeSpentData[questionID];
+            newTimeSpentData[questionID] = currentSeconds + timeSpentData[questionID];
 
             setTimeSpentData(newTimeSpentData);
 
-            setStartTime(currentTime);
+            // setStartTime(currentTime);
             return;
         }
     };
@@ -443,6 +444,17 @@ export const QuestionProvider = ({ children }) => {
     useEffect(() => {
         handleUpdateTimeSpentData(questionIDArray[activeQuestionIndex]);
     }, [activeQuestionIndex]);
+
+    const updateCurrentTimer = () => {
+        if (activeReviewMode === ACTIVEMODE && continueTimer) {
+            const interval = setInterval(() => {
+                setCurrentSeconds(prevSeconds => prevSeconds + 1);
+            }, 1000);
+    
+            return interval;
+        }
+        return null;
+    };
 
     const updateTotalTimer = () => {
         if (activeReviewMode === ACTIVEMODE && continueTimer) {
@@ -593,6 +605,8 @@ export const QuestionProvider = ({ children }) => {
                 startTime,
                 continueTimer,
                 totalSeconds,
+                currentSeconds,
+                updateCurrentTimer,
                 createQuiz,
                 resetAllVars,
                 changeTimer,

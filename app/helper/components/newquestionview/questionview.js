@@ -20,9 +20,6 @@ export default function QuestionView({ }) {
         engagementData,
     } = useContext(QuestionContext);
 
-    /* for testing, will delete later */
-    // const [questionData, setQuestionData] = useState({});
-
     const changeCrossOutMode = () => {
         setCrossOutMode(!crossOutMode);
         console.log(crossOutMode);
@@ -53,7 +50,7 @@ export default function QuestionView({ }) {
         console.log('Passage state updated:', passage);
     }, [passage]);
 
-    if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
+    if (!questionData || !questionData[questionIDArray[activeQuestionIndex]] || !engagementData || !engagementData[questionIDArray[activeQuestionIndex]]) {
         return<div className='w-full h-[90%] flex flex-col justify-center items-center'>
             <Spinner />
             <p className='mt-[20px]'>Loading...</p>
@@ -66,12 +63,17 @@ export default function QuestionView({ }) {
                 { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
+                        {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?
+                            questionData[questionIDArray[activeQuestionIndex]].graphic :
+                            (questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt))
+                        } */}
                     </div> :
                     <div className='flex flex-col items-center w-[45%] h-full'>
                         <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
+                            { questionData[questionIDArray[activeQuestionIndex]].text2_description ?
                             {/* <RenderMarkdown content={
                                 <>
-                                    { passage ?
+                                    { passage === 1 ?
                                         <>
                                             <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
                                             <br></br><br></br>
@@ -86,45 +88,32 @@ export default function QuestionView({ }) {
                                     }
                                 </>
                             } /> */}
-                            { passage === 1 ?
-                                <p className='text-[20px] max-h-full w-full text-left'>
-                                    <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
+                                ( passage === 1 ?
+                                    <p className='text-[20px] max-h-full w-full text-left'>
+                                        <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
+                                        <br></br><br></br>
+                                        It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
+                                        "My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"
+                                        Mr. Bennet replied that he had not.
+                                        "But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."
+                                        Mr. Bennet made no answer.
+                                        "Do not you want to know who has taken it?" cried his wife impatiently.
+                                        "You want to tell me, and I have no objection to hearing it."
+                                        This was invitation enough.
+                                        "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
+                                    </p>
+                                :
+                                    <p className='text-[20px] max-h-full w-full text-left'>
+                                        <i>This passage is a test passage two</i>
+                                        <br></br><br></br>
+                                        Test passage 2
+                                    </p>
+                                ) :
+                                <>
+                                    <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
                                     <br></br><br></br>
-                                    It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
-                                    "My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"
-                                    Mr. Bennet replied that he had not.
-                                    "But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."
-                                    Mr. Bennet made no answer.
-                                    "Do not you want to know who has taken it?" cried his wife impatiently.
-                                    "You want to tell me, and I have no objection to hearing it."
-                                    This was invitation enough.
-                                    "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
-                                </p>
-                            :
-                                <p className='text-[20px] max-h-full w-full text-left'>
-                                    <i>This passage is a test passage two</i>
-                                    <br></br><br></br>
-                                    Test passage 2
-                                    {/* {renderMarkdownWithLatex(`
-                                        \\begin{table}[h!]
-                                        \\centering
-                                        \\caption{Credited Film Output of James Young Deer, Dark Cloud, Edwin Carewe, and Lillian St. Cyr}
-                                        \\begin{tabular}{|l|c|c|}
-                                        \\hline
-                                        \\textbf{Individual} & \\textbf{Years active} & \\textbf{Number of films known and commonly credited} \\\\
-                                        \\hline
-                                        James Young Deer & 1909--1924 & 33 (actor), 35 (director), 10 (writer) \\\\
-                                        \\hline
-                                        Dark Cloud & 1910--1920 & 35 (actor), 1 (writer) \\\\
-                                        \\hline
-                                        Edwin Carewe & 1912--1934 & 47 (actor), 58 (director), 20 (producer), 4 (writer) \\\\
-                                        \\hline
-                                        Lillian St. Cyr (Red Wing) & 1908--1921 & 66 (actor) \\\\
-                                        \\hline
-                                        \\end{tabular}
-                                        \\end{table}
-                                    `)} */}
-                                </p>
+                                    {questionData[questionIDArray[activeQuestionIndex]].text1}
+                                </>
                             }
                         </div>
                         <div className='flex flex-row justify-around items-center w-[30%]'>
@@ -265,8 +254,8 @@ export default function QuestionView({ }) {
                                     <textarea
                                         disabled
                                         className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
+                                        value={engagementData[questionIDArray[activeQuestionIndex]].user_answer}
                                     >
-                                        {engagementData[questionIDArray[activeQuestionIndex]].user_answer}
                                     </textarea>
                                 )}
                             </>

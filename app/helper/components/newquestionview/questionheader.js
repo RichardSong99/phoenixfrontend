@@ -12,18 +12,22 @@ export default function QuestionHeader({ quizName }) {
         handleFlagQuestion,
         handleStarQuestion,
         activeReviewMode,
-        handleUpdateTimeSpentData,
         timeSpentData,
         totalSeconds,
         updateTotalTimer,
         questionIDArray,
+        updateCurrentTimer,
     } = useContext(QuestionContext);
 
     useEffect(() => {
         const intervalId = updateTotalTimer();
+        const currentIntervalId = updateCurrentTimer();
     
-        return () => clearInterval(intervalId);  // Cleanup on unmount
-    }, [continueTimer, activeReviewMode]);
+        return() => {
+            clearInterval(intervalId);
+            clearInterval(currentIntervalId); // Ensure both intervals are cleared
+        };
+    }, [continueTimer, activeReviewMode, activeQuestionIndex]);
 
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;

@@ -3,6 +3,8 @@ import React, { use, useState, useEffect, useContext, useRef, Component } from '
 import { Button, Avatar, Spinner, Tooltip, Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { parseLatexString, RenderLatex } from '../latexrender/latexrender';
 import { renderMarkdownWithLatex, markdownToString } from '../latexrender/markdownwlatex';
+import { LaTeXTable } from '../latexrender/latexrender';
+import MathJax from 'react-mathjax2';
 
 export default function QuestionView({ }) {
     const [crossedOut, setCrossedOut] = useState([]);
@@ -60,7 +62,7 @@ export default function QuestionView({ }) {
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
             <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
-                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
+                { questionData[questionIDArray[activeQuestionIndex]].subject !== "math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                         {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?
@@ -70,7 +72,7 @@ export default function QuestionView({ }) {
                     </div> :
                     <div className='flex flex-col items-center w-[45%] h-full'>
                         <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
-                            { questionData[questionIDArray[activeQuestionIndex]].text2_description ?
+                            {/* { questionData[questionIDArray[activeQuestionIndex]].text2_description ? */}
                             {/* <RenderMarkdown content={
                                 <>
                                     { passage === 1 ?
@@ -88,7 +90,7 @@ export default function QuestionView({ }) {
                                     }
                                 </>
                             } /> */}
-                                ( passage === 1 ?
+                                {passage === 1 ?
                                     <p className='text-[20px] max-h-full w-full text-left'>
                                         <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
                                         <br></br><br></br>
@@ -106,15 +108,20 @@ export default function QuestionView({ }) {
                                     <p className='text-[20px] max-h-full w-full text-left'>
                                         <i>This passage is a test passage two</i>
                                         <br></br><br></br>
-                                        Test passage 2
+                                        <LaTeXTable />
+                                        {/* <MathJax.Context input='ascii'>
+                                            <div>
+                                                This is an inline formula written in AsciiMath: <MathJax.Node inline>{'U = 1/(R_(si) + sum_(i=1)^n(s_n/lambda_n) + R_(se))'}</MathJax.Node>
+                                            </div>
+                                        </MathJax.Context> */}
                                     </p>
-                                ) :
+                                }{/* ) :
                                 <>
                                     <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
                                     <br></br><br></br>
                                     {questionData[questionIDArray[activeQuestionIndex]].text1}
                                 </>
-                            }
+                            } */}
                         </div>
                         <div className='flex flex-row justify-around items-center w-[30%]'>
                             <div>

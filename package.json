@@ -46,6 +46,7 @@
     "react-latex": "^2.0.0",
     "react-latex-next": "^2.2.0",
     "react-markdown": "^9.0.1",
+    "react-mathjax2": "^0.0.2",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
     "react-switch": "^7.0.0",

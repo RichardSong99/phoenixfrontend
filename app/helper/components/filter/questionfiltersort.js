@@ -37,8 +37,8 @@ const QuestionFilterSort = ({ page }) => {
         quizID,
     } = useContext(QuestionContext);
 
-    const algebraTopics = ["Algebra", "Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
-    const advancedMathTopics = ["Advanced math", "Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
+    const algebraTopics = ["Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
+    const advancedMathTopics = ["Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
     const problemSolvingTopics = ["Problem solving and data analysis", "Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
     const geometryTopics = ["Geometry and trigonometry", "Area and volume formulas", "Lines, angles, and triangles", "Right triangles and trigonometry", "Circles"];
 
@@ -52,8 +52,7 @@ const QuestionFilterSort = ({ page }) => {
     const [allProblemSolvingSelected, setAllProblemSolvingSelected] = useState(false);
     const [allGeometrySelected, setAllGeometrySelected] = useState(false);
 
-    // const difficulties = ["easy", "medium", "hard", "extreme"];
-    const difficulties = ["easy", "medium", "hard"];
+    const difficulties = ["easy", "medium", "hard", "extreme"];
     const answerTypes = ["multipleChoice", "freeResponse"];
     const answerStatuses = ["unattempted", "correct", "incorrect", "omitted"];
 
@@ -88,15 +87,13 @@ const QuestionFilterSort = ({ page }) => {
     };
 
     const handlePassiveCheckboxChange = () => {
-        setAllAlgebraSelected(algebraSelectedTopics.length === algebraTopics.length - 1);
-        setAllAdvancedMathSelected(advancedMathSelectedTopics.length === advancedMathTopics.length - 1);
-        setAllProblemSolvingSelected(problemSolvingSelectedTopics.length === problemSolvingTopics.length - 1);
-        setAllGeometrySelected(geometrySelectedTopics.length === geometryTopics.length - 1);
+        setAllAlgebraSelected(algebraSelectedTopics.length === algebraTopics.length);
+        setAllAdvancedMathSelected(advancedMathSelectedTopics.length === advancedMathTopics.length);
+        setAllProblemSolvingSelected(problemSolvingSelectedTopics.length === problemSolvingTopics.length);
+        setAllGeometrySelected(geometrySelectedTopics.length === geometryTopics.length);
         setAllDifficultySelected(selectedDifficulties.length === difficulties.length);
         setAllAnswerTypesSelected(selectedAnswerTypes.length === answerTypes.length);
         setAllAnswerStatusesSelected(selectedAnswerStatuses.length === answerStatuses.length);
-
-
     };
 
     useEffect(() => {
@@ -150,7 +147,6 @@ const QuestionFilterSort = ({ page }) => {
                             allChoicesSelected: allDifficultySelected,
                             selectedChoices: selectedDifficulties,
                             setSelectedChoices: setSelectedDifficulties,
-                            required: true,
                         })
                     }
                 >
@@ -160,6 +156,7 @@ const QuestionFilterSort = ({ page }) => {
                     <CustomCheckbox value="easy">Easy</CustomCheckbox>
                     <CustomCheckbox value="medium">Medium</CustomCheckbox>
                     <CustomCheckbox value="hard">Hard</CustomCheckbox>
+                    <CustomCheckbox value="extreme">Extreme</CustomCheckbox>
                 </CheckboxGroup>
             </div>
 
@@ -175,7 +172,6 @@ const QuestionFilterSort = ({ page }) => {
                             allChoicesSelected: allAnswerTypesSelected,
                             selectedChoices: selectedAnswerTypes,
                             setSelectedChoices: setSelectedAnswerTypes,
-                            required: true,
                         })
                     }
                 >
@@ -199,7 +195,6 @@ const QuestionFilterSort = ({ page }) => {
                             allChoicesSelected: allAnswerStatusesSelected,
                             selectedChoices: selectedAnswerStatuses,
                             setSelectedChoices: setSelectedAnswerStatuses,
-                            required: true,
                         })
                     }
                 >
@@ -315,6 +310,7 @@ const QuestionFilterSort = ({ page }) => {
                     </CustomCheckboxThick>
 
                     <CheckboxGroup className="gap-1" orientation="horizontal" value={geometrySelectedTopics} onChange={setGeometrySelectedTopics}>
+                        <CustomCheckbox value="Geometry and trigonometry">Geometry and trigonometry</CustomCheckbox>
                         <CustomCheckbox value="Area and volume formulas">Area and volume formulas</CustomCheckbox>
                         <CustomCheckbox value="Lines, angles, and triangles">Lines, angles, and triangles</CustomCheckbox>
                         <CustomCheckbox value="Right triangles and trigonometry">Right triangles and trigonometry</CustomCheckbox>

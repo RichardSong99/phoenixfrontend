@@ -65,7 +65,7 @@ export default function QuestionView({ }) {
             <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
                 { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
-                        {questionData[questionIDArray[activeQuestionIndex]] && <RenderLatex content={questionData[questionIDArray[activeQuestionIndex]].prompt} />}
+                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                     </div> :
                     <div className='flex flex-col items-center w-[45%] h-full'>
                         <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
@@ -171,7 +171,7 @@ export default function QuestionView({ }) {
                             :
                             <>
                                 {questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
-                                    (questionData[questionIDArray[activeQuestionIndex]].prompt) : null
+                                    (parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)) : null
                                 }
                             </>
                         }
@@ -192,7 +192,7 @@ export default function QuestionView({ }) {
                                                     name={choice}
                                                 />
                                                 <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
-                                                    {questionData[questionIDArray[activeQuestionIndex]] && <RenderLatex content={questionData[questionIDArray[activeQuestionIndex]].answer_choices[index]} />}
+                                                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
                                                 </div>
                                             </Button>
                                             {crossedOut.includes(choice) && (

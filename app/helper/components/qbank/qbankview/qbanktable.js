@@ -45,7 +45,6 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
       console.error('Failed to update engagement:', error);
     }
     
-    // Update state directly
     setQuestionEngagementCombos((prevCombos) =>
       prevCombos.map((combo) =>
         combo.Engagement.id === engagementID
@@ -62,7 +61,6 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
       console.error('Failed to update engagement:', error);
     }
     
-    // Update state directly
     setQuestionEngagementCombos((prevCombos) =>
       prevCombos.map((combo) =>
         combo.Engagement.id === engagementID

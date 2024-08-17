@@ -64,6 +64,12 @@ const TopicModules = () => {
     router.push('/study/browse');
   };
 
+  const handleReviewClick = (topic) => {
+    setSelectedTopics([topic]);
+    setSelectedAnswerStatuses(["incorrect"]);
+    router.push('/study/browse');
+  };
+
   return (
     <div className="flex w-full flex-col gap-4">
       <Tabs
@@ -167,7 +173,7 @@ const TopicModules = () => {
                   </Tooltip>
                   <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
                     <Badge color="danger" content="5">
-                      <Button size="small" color="success" style={{ color: "white" }}>Review</Button>
+                      <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
                     </Badge>
                   </Tooltip>
                 </div>

@@ -209,8 +209,8 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                   style={{ color: "#3aca2f" }}
                 />}
               </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell>{questionEngagement?.Engagement?.reviewed_response}</TableCell>
+              <TableCell>{Math.floor(questionEngagement?.Engagement?.duration / 60)}m {Math.floor(questionEngagement?.Engagement?.duration % 60)}s</TableCell>
               <TableCell>
                 {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
                     <svg
@@ -374,9 +374,9 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
                 />}
               </TableCell>
               <TableCell>
-                {questionEngagement?.Engagement?.reviewed_reason}
+                {questionEngagement?.Engagement?.reviewed_response}
               </TableCell>
-              <TableCell></TableCell>
+              <TableCell>{Math.floor(questionEngagement?.Engagement?.duration / 60)}m {Math.floor(questionEngagement?.Engagement?.duration % 60)}s</TableCell>
               <TableCell>
                 {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
                     <svg

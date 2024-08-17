@@ -508,6 +508,35 @@ export const QuestionProvider = ({ children }) => {
         }
     };
 
+    const handleSubmitSingleEngagement = async () => {
+        if (activeReviewMode === ACTIVEMODE) {
+            let engagementsArray = [];
+            let questionEngagementID = [];
+            engagementsArray.push({
+                question_id: questionIDArray[activeQuestionIndex],
+                user_answer: userResponseData[activeQuestionIndex],
+                status: getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]}), 
+                flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
+                starred: isStarredData[questionIDArray[activeQuestionIndex]],
+                duration: timeSpentData[questionIDArray[activeQuestionIndex]],
+            });
+            console.log("engagementsArray", engagementsArray);
+            try {
+                const response = await postEngagements(engagementsArray);
+                questionEngagementID = response.question_engagement_ids;
+
+                if (indquizMode === QUIZMODE) {
+                    await updateQuizWithQuestionEngagementIDs(
+                        quizID,
+                        questionEngagementID
+                    );
+                }
+            } catch (error) {
+                console.error("Could not submit engagements:", error);
+            }
+        }
+    };
+
     return (
         <QuestionContext.Provider
             value={{
@@ -581,6 +610,7 @@ export const QuestionProvider = ({ children }) => {
                 handleUpdateTimeSpentData,
                 handleMarkReviewQuestion,
                 handleSubmitEngagements,
+                handleSubmitSingleEngagement,
             }}
         >
             {children}

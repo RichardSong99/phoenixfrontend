@@ -31,7 +31,7 @@ export default function QuestionHeader({ quizName }) {
     return (
         <div className='w-full h-[75px] border-b-[2px] border-appleGray6'>
             <div className='w-full h-full flex flex-row justify-between'>
-                <div id='question-actions' className='flex flex-col items-center pl-[5px] h-full w-[75px]'>
+                {activeReviewMode === "active" ? <div id='question-actions' className='flex flex-col items-center pl-[5px] h-full w-[75px]'>
                     <div className='cursor-pointer' onClick={() => handleFlagQuestion(activeQuestionIndex)}>
                         {!isFlaggedData[activeQuestionIndex] ? (
                             <svg
@@ -78,7 +78,7 @@ export default function QuestionHeader({ quizName }) {
                             </svg>
                         )}
                     </div>
-                </div>
+                </div> : <div className='w-[75px]'></div>}
                 <div className='h-full w-[250px] flex flex-col items-center justify-center text-center mt-[5px]'>
                     <p className='text-[20px] mb-[0px]'>Question {activeQuestionIndex + 1}</p>
                     <p className='text-[15px] text-appleGray3'>{quizName}</p>

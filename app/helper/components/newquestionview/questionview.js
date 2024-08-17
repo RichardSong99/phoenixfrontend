@@ -2,7 +2,7 @@ import { QuestionContext } from '../../context/questioncontext';
 import React, { use, useState, useEffect, useContext, useRef, Component } from 'react';
 import { Button, Avatar, Spinner, Tooltip, Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { parseLatexString, RenderLatex } from '../latexrender/latexrender';
-import { renderMarkdownWithLatex } from '../latexrender/markdownwlatex';
+import { renderMarkdownWithLatex, markdownToString } from '../latexrender/markdownwlatex';
 
 export default function QuestionView({ }) {
     const [crossedOut, setCrossedOut] = useState([]);

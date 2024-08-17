@@ -24,6 +24,7 @@ export default function QuestionFooter({ }) {
         userResponseData,
         indquizMode,
         changeTimer,
+        handleSubmitSingleEngagement,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -49,7 +50,7 @@ export default function QuestionFooter({ }) {
     const handleShowAnswer = () => {
         if(userResponseData[questionIDArray[activeQuestionIndex]] != null){
             setAnswerVisible(!isAnswerVisible);
-            handleSubmitEngagements();
+            handleSubmitSingleEngagement();
         }
 
         if(indquizMode === "individual"){
@@ -73,10 +74,11 @@ export default function QuestionFooter({ }) {
         </svg>
     );
 
-    const handleReviewQuestion = () => {
+    const handleReviewQuestion = (reason) => {
         console.log(engagementIDData[questionIDArray[activeQuestionIndex]]);
         if(!engagementData[questionIDArray[activeQuestionIndex]].reviewed){
             updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed" : true } });
+            updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed_response" : reason } });
         }
     };
 
@@ -135,11 +137,11 @@ export default function QuestionFooter({ }) {
                                     Why did you get this question wrong?
                                     </p>
                                     <div className="mt-2 flex flex-col gap-2 w-full">
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I guessed.</Button>
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I misunderstood the problem.</Button>
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Misunderstood Problem")}>I misunderstood the problem.</Button>
                                         { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>I made a computational error.</Button> :
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={handleReviewQuestion}>The passage was too hard.</Button>
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Computational Error")}>I made a computational error.</Button> :
+                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
                                         }
                                     </div>
                                 </div>

@@ -46,7 +46,7 @@ export default function QuestionView({ }) {
     };
 
     if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
-        return<div className='w-full h-[90%] flex flex-col justify-center items-center'>
+        return <div className='w-full h-[90%] flex flex-col justify-center items-center'>
             <Spinner />
             <p className='mt-[20px]'>Loading...</p>
         </div>;

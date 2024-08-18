@@ -6,6 +6,7 @@ import { fetchQuizStats, fetchQECombos } from '@/app/helper/apiservices/quizserv
 import { fetchQuizUnderlyingById } from '@/app/helper/apiservices/quizservice';
 import { useRouter } from "next/navigation";
 import { QuestionContext } from '@/app/helper/context/questioncontext';
+import { Spinner } from '@nextui-org/react';
 import {
     Table,
     TableHeader,
@@ -87,6 +88,13 @@ export function QuizTable() {
 
         fetchQuizData();
     }, [quizListQuizType]);
+
+    if(quizData.length === 0){
+        return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+            <Spinner />
+            <div className='ml-[20px]'>Loading...</div>
+        </div>;
+    }
 
     return (
         <div >

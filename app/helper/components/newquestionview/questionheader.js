@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { QuestionContext } from '../../context/questioncontext';
 import { Button } from "@nextui-org/react";
+import { act } from 'react';
 
 export default function QuestionHeader({ quizName }) {
+    const [showTimer, setShowTimer] = useState(true);
     const {
         activeQuestionIndex,
         continueTimer,
@@ -26,6 +28,10 @@ export default function QuestionHeader({ quizName }) {
             clearInterval(intervalId);
         };
     }, [continueTimer, activeReviewMode]);
+
+    const handleShowTimer = () => {
+        setShowTimer(!showTimer);
+    };
 
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -85,21 +91,29 @@ export default function QuestionHeader({ quizName }) {
                     <p className='text-[20px] mb-[0px]'>Question {activeQuestionIndex + 1}</p>
                     <p className='text-[15px] text-appleGray3'>{quizName}</p>
                 </div>
-                <div className='text-[15px] w-[200px] ml-[-140px] mr-[20px] flex flex-col items-end mt-[-15px]'>
-                    <p className='mb-[5px] text-[14px] text-appleGray1'>Total time: {minutes}m {seconds}s</p>
+                <div className='text-[15px] w-[500px] ml-[-440px] mr-[20px] flex flex-row justify-end items-center mt-[-15px]'>
                     {activeReviewMode === "active" ? (
-                        <p className='mb-[5px] text-[14px] w-[300px] text-right'>Current question time: {Math.floor(currentSeconds / 60)}m {Math.floor(currentSeconds % 60)}s</p>
-                    ) : (
-                        <p className='mb-[5px] text-[14px] w-[300px] text-right'>Time spent on this question: {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] / 60)}m {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] % 60)}s</p>
-                    )}
-                    {activeReviewMode === "active" && (
-                        <Button
-                            className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom'
-                            onClick={changeTimer}
-                        >
-                            {continueTimer ? 'Pause Timer' : 'Unpause Timer'}
-                        </Button>
-                    )}
+                        <Button className='text-[14px] text-white rounded-[20px] h-[20px] w-[100px] bg-appleBlue text-[12px]' onClick={handleShowTimer}>
+                            {showTimer ? 'Hide Timer' : 'Show Timer'}
+                        </Button>) : null}
+                    {showTimer ?
+                        (activeReviewMode === "active" ? (
+                            <>
+                                <div className='flex-col w-[200px]'>
+                                    <p className='mb-[5px] text-[14px] text-appleGray1 w-[200px] text-right'>Total time: {minutes}m {seconds}s</p>
+                                    <p className='mb-[5px] text-[14px] w-[200px] text-right'>Current question time: {Math.floor(currentSeconds / 60)}m {Math.floor(currentSeconds % 60)}s</p>
+                                    <Button
+                                        className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom ml-[100px]'
+                                        onClick={changeTimer}
+                                    >
+                                        {continueTimer ? 'Pause Timer' : 'Unpause Timer'}
+                                    </Button>
+                                </div>
+                            </>
+                        ) : (
+                            <p className='mb-[5px] text-[14px] w-[300px] text-right mt-[40px]'>Time spent on this question: {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] / 60)}m {Math.floor(timeSpentData[questionIDArray[activeQuestionIndex]] % 60)}s</p>
+                        )) : null
+                    }   
                 </div>
             </div>
         </div>

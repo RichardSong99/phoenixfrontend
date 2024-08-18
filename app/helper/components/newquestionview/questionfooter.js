@@ -227,11 +227,12 @@ export default function QuestionFooter({ }) {
             {isReferenceVisible &&
                 <Draggable className='bg-black'>
                     <div className='absolute top-0 left-0 cursor-move shadow-custom'>
-                        <div id="reference" className="bg-white w-[500px] h-[350px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
+                        <div id="reference" className="bg-white w-[1000px] h-[550px] top-[25%] right-[3%] z-999 text-black rounded border border-gray-300 p-3">
                             <img
-                                src={referenceImage}
-                                className='w-full h-full'
-                            ></img>
+                                src="https://satsuite.collegeboard.org/media/2021-11/SAT-SG-MATH-EQ-01.jpg"
+                                className="w-full h-full pointer-events-none"
+                                alt="SAT Reference Sheet"
+                            />
                         </div>
                     </div>
                 </Draggable>

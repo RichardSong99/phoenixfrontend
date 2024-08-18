@@ -252,6 +252,7 @@ export const QuestionProvider = ({ children }) => {
             newEngagementIDData[QEIDCombo.question_id] = QEIDCombo.engagement_id;
         });
         setEngagementIDData(newEngagementIDData);
+        console.log(newEngagementIDData);
 
         // fetch the engagements for the questionIDs, if they exist
         const newEngagementData = {};
@@ -441,25 +442,24 @@ export const QuestionProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        handleUpdateTimeSpentData(questionIDArray[activeQuestionIndex]);
-    }, [activeQuestionIndex]);
+    const prevActiveQuestionIndexRef = useRef();
 
-    const updateCurrentTimer = () => {
-        if (activeReviewMode === ACTIVEMODE && continueTimer) {
-            const interval = setInterval(() => {
-                setCurrentSeconds(prevSeconds => prevSeconds + 1);
-            }, 1000);
-    
-            return interval;
+    useEffect(() => {
+        // This will run after activeQuestionIndex has changed
+        if (prevActiveQuestionIndexRef.current !== undefined) {
+            handleUpdateTimeSpentData(questionIDArray[prevActiveQuestionIndexRef.current]);
         }
-        return null;
-    };
+
+        // Update the ref with the current activeQuestionIndex
+        prevActiveQuestionIndexRef.current = activeQuestionIndex;
+        setCurrentSeconds(timeSpentData[questionIDArray[activeQuestionIndex]] || 0);
+    }, [activeQuestionIndex]);
 
     const updateTotalTimer = () => {
         if (activeReviewMode === ACTIVEMODE && continueTimer) {
             const interval = setInterval(() => {
                 setTotalSeconds(prevSeconds => prevSeconds + 1);
+                setCurrentSeconds(prevSeconds => prevSeconds + 1);
             }, 1000);
     
             return interval;
@@ -606,7 +606,6 @@ export const QuestionProvider = ({ children }) => {
                 continueTimer,
                 totalSeconds,
                 currentSeconds,
-                updateCurrentTimer,
                 createQuiz,
                 resetAllVars,
                 changeTimer,

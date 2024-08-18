@@ -46,9 +46,9 @@ export default function QuestionView({ }) {
     };
 
     if (!questionData || !questionData[questionIDArray[activeQuestionIndex]]) {
-        return <div className='w-full h-[90%] flex flex-col justify-center items-center'>
+        return <div className='w-full h-[90%] flex flex-row justify-center items-center'>
             <Spinner />
-            <p className='mt-[20px]'>Loading...</p>
+            <div className='ml-[20px]'>Loading...</div>
         </div>;
     }
 
@@ -249,7 +249,7 @@ export default function QuestionView({ }) {
                                     <textarea
                                         disabled
                                         className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
-                                        value={engagementData[questionIDArray[activeQuestionIndex]].user_answer || ''}
+                                        value={engagementData[questionIDArray[activeQuestionIndex]]?.user_answer || ''}
                                     >
                                     </textarea>
                                 )}

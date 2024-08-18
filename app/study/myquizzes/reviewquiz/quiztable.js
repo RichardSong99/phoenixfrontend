@@ -89,6 +89,8 @@ export function QuizTable() {
         fetchQuizData();
     }, [quizListQuizType]);
 
+    
+
     if(quizData.length === 0){
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
             <Spinner />

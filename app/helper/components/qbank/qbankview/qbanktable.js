@@ -18,6 +18,7 @@ import { useUser } from "@/app/helper/context/usercontext";
 import { Icon } from "@iconify/react";
 import { updateEngagement } from "@/app/helper/apiservices/engagementservice";
 import { getUserData } from '@/app/helper/apiservices/userservice';
+import { Spinner } from "@nextui-org/react";
 
 const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
   const { isAuthenticated } = useUser();
@@ -94,9 +95,12 @@ const QBankTable = ({ questionEngagementCombos: initialCombos }) => {
     }
   }, [initialCombos]);
 
-  if (user === null) {
-    return <div>Loading...</div>;
-  }
+  if(user === null){
+    return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+        <Spinner />
+        <div className='ml-[20px]'>Loading...</div>
+    </div>;
+}
 
   return (
     <div className="flex flex-col gap-y-4 p-2">

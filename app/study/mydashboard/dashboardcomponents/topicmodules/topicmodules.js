@@ -21,6 +21,7 @@ import { CheckIconGreen } from "@/app/helper/assets/components/CheckIconGreen";
 import { useData } from "@/app/helper/context/datacontext";
 import { useRouter } from 'next/navigation';
 import { QuestionContext } from "@/app/helper/context/questioncontext";
+import { Spinner } from "@nextui-org/react";
 
 
 const TopicModules = () => {
@@ -69,6 +70,13 @@ const TopicModules = () => {
     setSelectedAnswerStatuses(["incorrect"]);
     router.push('/study/browse');
   };
+
+  if(!Array.isArray(topicSummaryList) || topicSummaryList.length === 0){
+    return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+        <Spinner />
+        <div className='ml-[20px]'>Loading...</div>
+    </div>;
+  }
 
   return (
     <div className="flex w-full flex-col gap-4">

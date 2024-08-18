@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
@@ -9,8 +9,9 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
-    const { mathTopicMapping, loading, datacube, getCategoryList } = useData();
+    const { mathTopicMapping, loading, datacube, getCategoryList, getTopicsByCategory } = useData();
 
+    const [subject, setSubject] = useState("math");
     const [generalCategory, setGeneralCategory] = useState(mathTopicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(mathTopicMapping[0].topic);
     const [numEasy, setNumEasy] = useState(1);
@@ -19,6 +20,25 @@ const QuestionGeneration = () => {
     const [questionResponseArray, setQuestionResponseArray] = useState([]);
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
+    const [questionDescription, setQuestionDescription] = useState("");
+
+    const questionTemplates = [
+        "MATH_SIMPLE", 
+        "MATH_GRAPHIC",
+        "RW_BLANK",
+        "RW_SINGLE_PASSAGE",
+        "RW_DOUBLE_PASSAGE",
+        "RW_BULLETED_TEXT",
+        "RW_TABLE",
+    ]
+
+    useEffect(() => {
+        if(specificTopic !== ""){
+            setQuestionDescription(specificTopic);
+        }
+    }, [specificTopic])
+
+    const [questionTemplate, setQuestionTemplate] = useState(questionTemplates[0]);
 
 
     const [generationLoading, setGenerationLoading] = useState(false);
@@ -41,7 +61,7 @@ const QuestionGeneration = () => {
         console.log("Generate Questions");
         try {
             setGenerationLoading(true);
-            const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard, images });
+            const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard, images, questionTemplate });
             console.log("Generated Questions", data);
             setQuestionResponseArray(data);
             for (let i = 0; i < data.length; i++) {
@@ -103,8 +123,14 @@ const QuestionGeneration = () => {
 
 
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                    <Select label="Subject" value={subject} onChange={e => setSubject(e.target.value)} className="max-w-xs">
+                        <SelectItem key="math" value="math">Math</SelectItem>
+                        <SelectItem key="reading" value="reading">Reading</SelectItem>
+
+                    </Select>
+                    
                     <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} className="max-w-xs">
-                        {getCategoryList.map(item => (
+                        {getCategoryList().map(item => (
                             <SelectItem key={item} value={item}>{item}</SelectItem>
                         ))}
                     </Select>
@@ -115,13 +141,19 @@ const QuestionGeneration = () => {
                             ))}
                         </Select>
                     )}
+                    <Select label = "Question Template" value = {questionTemplate} onChange={e => setQuestionTemplate(e.target.value)} className="max-w-xs">
+                        {questionTemplates.map(item => (
+                            <SelectItem key={item} value={item}>{item}</SelectItem>
+                        ))}
+                    </Select>
+                    <Input label = "Question description to AI" placeholder="Enter question description" value = {questionDescription} onChange = {e => setQuestionDescription(e.target.value)} className="max-w-xs" />
                 </div>
                 
                 <ImageUpload onChangeLocalImages={updateImages}/>
 
 
                 <Slider
-                    size="lg"
+                    size="md"
                     step={1}
                     label="Easy"
                     showSteps={true}
@@ -133,7 +165,7 @@ const QuestionGeneration = () => {
                 />
 
                 <Slider
-                    size="lg"
+                    size="md"
                     step={1}
                     label="Medium"
                     showSteps={true}
@@ -145,7 +177,7 @@ const QuestionGeneration = () => {
                 />
 
                 <Slider
-                    size="lg"
+                    size="md"
                     step={1}
                     label="Hard"
                     showSteps={true}
@@ -186,7 +218,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm inputQuestion={question} mode = {MODENEW}/>
+                                <QBankForm inputQuestion={question} mode = {MODENEW} />
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
@@ -205,7 +237,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm mode = {MODENEW} />
+                            <QBankForm mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic}/>
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

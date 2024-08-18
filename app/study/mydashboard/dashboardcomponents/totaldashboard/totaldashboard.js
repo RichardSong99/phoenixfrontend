@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { CircularProgress, Card, CardBody, CardFooter, Chip, Divider, CardHeader, Button } from "@nextui-org/react";
+import { CircularProgress, Card, CardBody, CardFooter, Chip, Divider, CardHeader, Button, Spinner } from "@nextui-org/react";
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Label, LabelList } from 'recharts';
 import { useData } from "@/app/helper/context/datacontext";
 
@@ -15,6 +15,13 @@ export function TotalDashboard() {
         { x: 150, y: 400, z: 500 },
         { x: 110, y: 280, z: 200 },
     ];
+
+    if(!topicSummaryList) {
+        return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+            <Spinner />
+            <div className='ml-[20px]'>Loading...</div>
+        </div>;
+    }
 
     return (
         topicSummaryList && <div className="flex flex-col gap-3">

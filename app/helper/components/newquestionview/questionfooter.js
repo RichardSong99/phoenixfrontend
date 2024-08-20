@@ -140,21 +140,45 @@ export default function QuestionFooter({ }) {
                                     <div className="mt-2 flex flex-col gap-2 w-full">
                                         {engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
                                         <>
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Misunderstood Problem")}>I misunderstood the problem.</Button>
+                                            <Button
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                onClick={() => handleReviewQuestion("Guessed")}>
+                                                    I guessed.
+                                            </Button>
+                                            <Button 
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Misunderstood Problem' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                onClick={() => handleReviewQuestion("Misunderstood Problem")}>
+                                                    I misunderstood the problem.
+                                            </Button>
                                             { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
                                                 <Button
-                                                    className={`border-[2px] border-appleGray5 bg-transparent ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Computational Error' ? 'bg-appleGray5' : null}`}
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Computational Error' ? 'bg-appleGray1' : 'bg-transparent'}`}
                                                     onClick={() => handleReviewQuestion("Computational Error")}>
                                                         I made a computational error.
                                                 </Button> :
-                                                <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
+                                                <Button
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Hard Passage' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Hard Passage")}>
+                                                        The passage was too hard.
+                                                </Button>
                                             }
                                         </> :
                                         <>
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Understood")}>I nailed it.</Button>
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Inefficient")}>I could've done it faster.</Button>
+                                            <Button
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Understood' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                onClick={() => handleReviewQuestion("Understood")}>
+                                                    I nailed it.
+                                            </Button>
+                                            <Button
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                onClick={() => handleReviewQuestion("Guessed")}>
+                                                    I guessed.
+                                            </Button>
+                                            <Button
+                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Inefficient' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                onClick={() => handleReviewQuestion("Inefficient")}>
+                                                    I could've done it faster.
+                                            </Button>
                                         </>}
                                     </div>
                                 </div>

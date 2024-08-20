@@ -35,9 +35,13 @@ export default function LoginPanel() {
 
     };
 
+    const handleSignUp = async (event) => {
+        router.push('/auth/register');
+    };
+
     return (
         <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500 p-2 sm:p-4 lg:p-8">
-            <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-large">
+            <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-custom">
                 <p className="pb-2 text-xl font-medium">Log In</p>
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <Input
@@ -105,7 +109,7 @@ export default function LoginPanel() {
                 </div>
                 <p className="text-center text-small">
                     Need to create an account?&nbsp;
-                    <Link href="#" size="sm">
+                    <Link href="#" size="sm" onClick={handleSignUp}>
                         Sign Up
                     </Link>
                 </p>

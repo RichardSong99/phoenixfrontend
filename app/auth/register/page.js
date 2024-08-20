@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState} from "react";
-import LoginPanel from "../login/loginpanel";
+import RegisterPanel from "./registerpanel";
 
 
 export default function Register() {
@@ -10,10 +10,7 @@ export default function Register() {
 
   return (
     <div>
-      <LoginPanel 
-        isLoginMode = {isLoginMode}
-        setIsLoginMode = {setIsLoginMode}
-      />
+      <RegisterPanel />
     </div>
   );
 }

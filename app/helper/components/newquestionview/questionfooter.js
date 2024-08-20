@@ -115,7 +115,7 @@ export default function QuestionFooter({ }) {
 
     return (
         <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
-            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] && engagementData[questionIDArray[activeQuestionIndex]].status === "incorrect" &&
+            {activeReviewMode === "review" &&
                 <div className='w-[500px] h-full flex flex-row justify-start items-center'>
                     <Popover placement="top">
                         <PopoverTrigger>
@@ -132,16 +132,26 @@ export default function QuestionFooter({ }) {
                         <PopoverContent>
                             {(titleProps) => (
                                 <div className="px-1 py-2 w-full">
-                                    <p className="text-small font-bold text-foreground" {...titleProps}>
-                                    Why did you get this question wrong?
+                                    <p className="text-small font-bold text-foreground text-center" {...titleProps}>
+                                    { engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
+                                        'Why did you get this question wrong?' :
+                                        'How did you feel about this question?' }
                                     </p>
                                     <div className="mt-2 flex flex-col gap-2 w-full">
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Misunderstood Problem")}>I misunderstood the problem.</Button>
-                                        { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Computational Error")}>I made a computational error.</Button> :
-                                        <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
-                                        }
+                                        {engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
+                                        <>
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Misunderstood Problem")}>I misunderstood the problem.</Button>
+                                            { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Computational Error")}>I made a computational error.</Button> :
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
+                                            }
+                                        </> :
+                                        <>
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Understood")}>I nailed it.</Button>
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
+                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Inefficient")}>I could've done it faster.</Button>
+                                        </>}
                                     </div>
                                 </div>
                             )}

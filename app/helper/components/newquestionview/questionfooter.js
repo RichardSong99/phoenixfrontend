@@ -115,7 +115,7 @@ export default function QuestionFooter({ }) {
 
     return (
         <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
-            {activeReviewMode === "review" &&
+            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] &&
                 <div className='w-[500px] h-full flex flex-row justify-start items-center'>
                     <Popover placement="top">
                         <PopoverTrigger>
@@ -143,8 +143,12 @@ export default function QuestionFooter({ }) {
                                             <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Guessed")}>I guessed.</Button>
                                             <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Misunderstood Problem")}>I misunderstood the problem.</Button>
                                             { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Computational Error")}>I made a computational error.</Button> :
-                                            <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 bg-transparent ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Computational Error' ? 'bg-appleGray5' : null}`}
+                                                    onClick={() => handleReviewQuestion("Computational Error")}>
+                                                        I made a computational error.
+                                                </Button> :
+                                                <Button className='border-[2px] border-appleGray5 bg-transparent' onClick={() => handleReviewQuestion("Hard Passage")}>The passage was too hard.</Button>
                                             }
                                         </> :
                                         <>

@@ -17,6 +17,8 @@ export default function QuestionView({ }) {
         handleReportUserResponse,
         activeReviewMode,
         engagementData,
+        continueTimer,
+        changeTimer,
     } = useContext(QuestionContext);
 
     const changeCrossOutMode = () => {
@@ -54,7 +56,23 @@ export default function QuestionView({ }) {
 
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
-            <div className='h-full w-[98%] rounded flex flex-row justify-between pt-[20px]'>
+            {!continueTimer &&
+                <div className='w-[30%] h-[30%] bg-white absolute z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center'>
+                    <div className='text-[30px] mb-[30px]'>
+                        <strong>Timer paused</strong>
+                    </div>
+                    <div className='mb-[10px]'>Unpause timer to continue</div>
+                    <div>
+                        <Button
+                            className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom'
+                            onClick={changeTimer}
+                        >
+                            Unpause Timer
+                        </Button>
+                    </div>
+                </div>
+            }
+            <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${!continueTimer ? 'blur-sm' : null}`}>
                 { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}

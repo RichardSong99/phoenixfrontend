@@ -3,7 +3,6 @@ import { QuestionContext } from '../../context/questioncontext';
 import { Popover, PopoverTrigger, PopoverContent, Button, Avatar } from "@nextui-org/react";
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
-const referenceImage = require('./sat_reference_sheet.jpg');
 import { updateEngagement } from '../../apiservices/engagementservice';
 
 export default function QuestionFooter({ }) {

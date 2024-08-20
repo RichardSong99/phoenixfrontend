@@ -11,6 +11,7 @@ export default function QuestionNavBar() {
         handleNextQuestion,
         handlePreviousQuestion,
         isFlaggedData,
+        isStarredData,
         handleSubmitEngagements,
         activeReviewMode,
         userResponseData,
@@ -70,13 +71,26 @@ export default function QuestionNavBar() {
                                 style={{ transition: 'transform 0.3s ease-in-out' }}
                                 onClick={() => handleKeyChange(index)}
                             >
-                                {checkFlagged(index) ?
+                                {isFlaggedData[index] ?
                                     <div className='relative top-[-15px] right-[-20px] mb-[-25px]'>
                                         <svg
                                             className='h-[25px] w-[25px] fill-appleRed'
                                             xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
                                         >
                                             <path d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3z"></path>
+                                        </svg>
+                                    </div>
+                                : null}
+                                {isStarredData[index] ?
+                                    <div className='relative top-[-17px] left-[-12px] mb-[-25px]'>
+                                        <svg
+                                            className='h-[25px] w-[25px] fill-appleYellow'
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="1em"
+                                            height="1em"
+                                            viewBox="0 0 256 256"
+                                        >
+                                            <path d="m234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07l-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76l22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08l59 4.76a16.46 16.46 0 0 1 9.37 28.86Z"></path>
                                         </svg>
                                     </div>
                                 : null}

@@ -47,7 +47,13 @@ export function calculateResultHelper({
 
 export const createNewQuestion = ({
     prompt,
-    text,
+    text1,
+    text1Description,
+    text2,
+    text2Description,
+    graphicLatex, 
+    graphicSVG, 
+    graphicDescription,
     answerType,
     difficulty,
     subject,
@@ -60,15 +66,21 @@ export const createNewQuestion = ({
     uploadedImageUrls
 }) => {
     const newQuestion = {
-        Prompt: prompt,
-        Text: text,
-        AnswerType: answerType,
-        Difficulty: difficulty,
-        Subject: subject,
-        Topic: specificTopic,
-        AnswerChoices: answerChoices,
-        Explanation: explanation,
-        AccessOption: accessOption
+        prompt: prompt,
+        text1: text1,
+        text1_description: text1Description,
+        text2: text2,
+        text2_description: text2Description,
+        graphic_latex: graphicLatex,
+        graphic_svg: graphicSVG,
+        graphic_description: graphicDescription,
+        answer_type: answerType,
+        difficulty: difficulty,
+        subject: subject,
+        topic: specificTopic,
+        answer_choices: answerChoices,
+        explanation: explanation,
+        access_option: accessOption
     };
 
     if (answerType === 'multipleChoice') {

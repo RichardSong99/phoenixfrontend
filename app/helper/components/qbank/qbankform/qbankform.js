@@ -6,6 +6,7 @@ import { difficultyData } from '../../../data/data';
 import { useData } from '@/app/helper/context/datacontext';
 import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
+import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
 const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic }) => {
 
@@ -23,6 +24,7 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
     const [graphicLatex, setGraphicLatex] = useState(null); // For graphic questions
     const [graphicSVG, setGraphicSVG] = useState(null); // For graphic questions
     const [graphicDescription, setGraphicDescription] = useState(''); // For graphic questions
+    const [isLoadingGraphicSVG, setIsLoadingGraphicSVG] = useState(false);
 
     const [answerA, setAnswerA] = useState(null);
     const [answerB, setAnswerB] = useState(null);
@@ -47,8 +49,15 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
 
 
     const setFormFields = (question) => {
-        if (question.prompt !== undefined && question.Prompt !== null) setPrompt(question.Prompt);
-        if (question.text1 !== undefined && question.Text1 !== null) setText(question.Text1);
+        if (question.prompt !== undefined && question.Prompt !== null) setPrompt(question.prompt);
+        if (question.text1 !== undefined && question.text1 !== null) setText1(question.text1);
+        if (question.text2 !== undefined && question.text2 !== null) setText2(question.text2);
+        if (question.text1_description !== undefined && question.text1_description !== null) setText1Description(question.text1_description);
+        if (question.text2_description !== undefined && question.text2_description !== null) setText2Description(question.text2_description);
+        if (question.graphic_latex !== undefined && question.graphic_latex !== null) setGraphicLatex(question.graphic_latex);
+        if (question.graphic_svg !== undefined && question.graphic_svg !== null) setGraphicSVG(question.graphic_svg);
+        if (question.graphic_description !== undefined && question.graphic_description !== null) setGraphicDescription(question.graphic_description);
+
         if (question.answer_type !== undefined && question.answer_type !== null) setAnswerType(question.answer_type);
         if (question.difficulty !== undefined && question.difficulty !== null) setDifficulty(question.difficulty);
         if (question.subject !== undefined && question.subject !== null) setSubject(question.subject);
@@ -193,6 +202,22 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
         setQuestionsUpdated(!questionsUpdated);
     }
 
+    const handleSVGRefresh = async () => {
+        if(graphicLatex){
+            setIsLoadingGraphicSVG(true);
+            try{
+
+                console.log("Rendering SVG from latex...")
+                const response = await getSVGFromLatex(graphicLatex);
+                setGraphicSVG(response.svg);
+                setIsLoadingGraphicSVG(false);
+            }catch(error){
+                console.error('Failed to render SVG:', error);
+                setIsLoadingGraphicSVG(false);
+            }
+        }
+    }
+
 
     return (
         <div >
@@ -218,7 +243,11 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
 
                         <Input label="Graphic Description" value={graphicDescription} onChange={e => setGraphicDescription(e.target.value)} />
                         <Textarea label="Graphic (Latex)" value={graphicLatex} onChange={e => setGraphicLatex(e.target.value)} />
-                        <Textarea label="Graphic (SVG)" value={graphicLatex} onChange={e => setGraphicLatex(e.target.value)} />
+                        <div className = "flex flex-row gap-2">
+                        <Button onPress = {handleSVGRefresh} isLoading = {isLoadingGraphicSVG}>Refresh Graphic SVG</Button>
+                        <Button onPress = {() => setIsLoadingGraphicSVG(false)}>Stop</Button>
+                        </div>
+                        <Textarea label="Graphic (SVG)" value={graphicSVG} onChange={e => setGraphicSVG(e.target.value)} />
 
                         <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
                             {["multipleChoice", "freeResponse"].map(item => (

@@ -15,8 +15,8 @@ const QuestionGeneration = () => {
     const [generalCategory, setGeneralCategory] = useState(mathTopicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(mathTopicMapping[0].topic);
     const [numEasy, setNumEasy] = useState(1);
-    const [numMedium, setNumMedium] = useState(1);
-    const [numHard, setNumHard] = useState(1);
+    const [numMedium, setNumMedium] = useState(0);
+    const [numHard, setNumHard] = useState(0);
     const [questionResponseArray, setQuestionResponseArray] = useState([]);
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
@@ -29,7 +29,7 @@ const QuestionGeneration = () => {
         "RW_SINGLE_PASSAGE",
         "RW_DOUBLE_PASSAGE",
         "RW_BULLETED_TEXT",
-        "RW_TABLE",
+        "RW_GRAPHIC",
     ]
 
     useEffect(() => {
@@ -61,13 +61,19 @@ const QuestionGeneration = () => {
         console.log("Generate Questions");
         try {
             setGenerationLoading(true);
-            const data = await getGeneratedQuestions({ topic: specificTopic, numEasy, numMedium, numHard, images, questionTemplate });
+            const data = await getGeneratedQuestions({ description: questionDescription, numEasy: numEasy, numMedium: numMedium, numHard: numHard, images: images, questionTemplate: questionTemplate });
             console.log("Generated Questions", data);
             setQuestionResponseArray(data);
             for (let i = 0; i < data.length; i++) {
                 const question = createNewQuestion({
                     prompt: data[i].prompt,
-                    text: '',
+                    text1: data[i].text1,
+                    text2: data[i].text2,
+                    text1Description: data[i].text1_description,
+                    text2Description: data[i].text2_description,
+                    graphicLatex: data[i].graphic_latex,
+                    graphicDescription: data[i].graphic_description,
+                    // graphic SVG -- to be added later
                     answerType: 'multipleChoice',
                     difficulty: data[i].difficulty,
                     subject: "math",
@@ -218,7 +224,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm inputQuestion={question} mode = {MODENEW} />
+                                <QBankForm inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} />
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

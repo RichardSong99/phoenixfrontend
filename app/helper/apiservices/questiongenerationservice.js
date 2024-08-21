@@ -1,11 +1,11 @@
-const apiUrl = process.env.NEXT_PUBLIC_AI_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getGeneratedQuestions({ topic, numEasy, numMedium, numHard, images,
+export async function getGeneratedQuestions({ description, numEasy, numMedium, numHard, images,
     questionTemplate
  }) {
     // Build query parameters string
     const queryParams = new URLSearchParams({
-        'topic':topic,
+        'topic':description,
         'num_easy':numEasy,
         'num_medium':numMedium,
         'num_hard':numHard,

@@ -9,11 +9,11 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 
 const QuestionGeneration = () => {
 
-    const { mathTopicMapping, loading, datacube, getCategoryList, getTopicsByCategory } = useData();
+    const { topicMapping, loading, datacube, getCategoryList, getTopicsByCategory } = useData();
 
-    const [subject, setSubject] = useState("math");
-    const [generalCategory, setGeneralCategory] = useState(mathTopicMapping[0].category);
-    const [specificTopic, setSpecificTopic] = useState(mathTopicMapping[0].topic);
+    const [subject, setSubject] = useState("Math");
+    const [generalCategory, setGeneralCategory] = useState(topicMapping[0].category);
+    const [specificTopic, setSpecificTopic] = useState(topicMapping[0].topic);
     const [numEasy, setNumEasy] = useState(1);
     const [numMedium, setNumMedium] = useState(0);
     const [numHard, setNumHard] = useState(0);
@@ -76,7 +76,7 @@ const QuestionGeneration = () => {
                     // graphic SVG -- to be added later
                     answerType: 'multipleChoice',
                     difficulty: data[i].difficulty,
-                    subject: "math",
+                    subject: subject,
                     specificTopic: specificTopic,
                     answerChoices: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
                     explanation: data[i].explanation,
@@ -130,13 +130,13 @@ const QuestionGeneration = () => {
 
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Select label="Subject" value={subject} onChange={e => setSubject(e.target.value)} className="max-w-xs">
-                        <SelectItem key="math" value="math">Math</SelectItem>
-                        <SelectItem key="reading" value="reading">Reading</SelectItem>
+                        <SelectItem key="Math" value="Math">Math</SelectItem>
+                        <SelectItem key="Reading & Writing" value="Reading & Writing">Reading & Writing</SelectItem>
 
                     </Select>
                     
                     <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} className="max-w-xs">
-                        {getCategoryList().map(item => (
+                        {getCategoryList(subject).map(item => (
                             <SelectItem key={item} value={item}>{item}</SelectItem>
                         ))}
                     </Select>
@@ -177,7 +177,7 @@ const QuestionGeneration = () => {
                     showSteps={true}
                     maxValue={10}
                     minValue={0}
-                    defaultValue={1}
+                    defaultValue={0}
                     className="max-w-md"
                     onChangeEnd={(value) => handleChangeNumMedium(value)}
                 />
@@ -189,7 +189,7 @@ const QuestionGeneration = () => {
                     showSteps={true}
                     maxValue={10}
                     minValue={0}
-                    defaultValue={1}
+                    defaultValue={0}
                     className="max-w-md"
                     onChangeEnd={(value) => handleChangeNumHard(value)}
                 />

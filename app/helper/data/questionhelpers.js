@@ -84,9 +84,9 @@ export const createNewQuestion = ({
     };
 
     if (answerType === 'multipleChoice') {
-        newQuestion.CorrectAnswerMultiple = correctAnswerMultiple;
+        newQuestion.correct_answer_multiple = correctAnswerMultiple;
     } else {
-        newQuestion.CorrectAnswerFree = correctAnswerFree;
+        newQuestion.correct_answer_free = correctAnswerFree;
     }
 
     newQuestion.Images = uploadedImageUrls.map((url, index) => ({

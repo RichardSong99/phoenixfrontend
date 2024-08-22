@@ -31,7 +31,7 @@ const TopicModules = () => {
     setSelectedTopics,
 } = useContext(QuestionContext);
 
-  const { mathTopicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList } = useData();
+  const { topicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList } = useData();
   const [selected, setSelected] = useState("Algebra");
 
   // Fallback to an empty array if topicSummaryList is undefined, null, or not an array

@@ -10,7 +10,7 @@ import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
 const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic }) => {
 
-    const { mathTopicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
+    const {topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
     const [answerType, setAnswerType] = useState('multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
@@ -38,8 +38,8 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
     const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [subject, setSubject] = useState(initialSubject || 'math');
-    const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || mathTopicMapping[0].category);
-    const [specificTopic, setSpecificTopic] = useState(initialSpecificTopic || mathTopicMapping[0].topic);
+    const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
+    const [specificTopic, setSpecificTopic] = useState(initialSpecificTopic || topicMapping[0].topic);
 
 
 
@@ -94,8 +94,8 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
         setCorrectAnswerFree('');
         setExplanation('');
         setAccessOption('free');
-        setGeneralCategory(mathTopicMapping[0].category);
-        setSpecificTopic(mathTopicMapping[0].topic);
+        setGeneralCategory(topicMapping[0].category);
+        setSpecificTopic(topicMapping[0].topic);
         setReplaceIndex(null);
         setUploadedImageUrls([]);
     };
@@ -110,11 +110,7 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
             }
             if (initialSpecificTopic) {
                 setSpecificTopic(initialSpecificTopic);
-            } else {
-                setSubject('math');
-                setGeneralCategory(mathTopicMapping[0].category);
-                setSpecificTopic(mathTopicMapping[0].topic);
-            }
+            } 
         };
 
         refreshCategoryAndTopic();
@@ -227,7 +223,7 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                     <div className="space-y-4">
                         <Input label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />
-                        {subject === 'reading' && (
+                        {subject === 'Reading & Writing' && (
                             <>
                                 <Divider />
                                 <Input label="Text 1 Description" value={text1Description} onChange={e => setText1Description(e.target.value)} />
@@ -260,7 +256,7 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
                                 <Input label="Answer B" value={answerB} onChange={e => setAnswerB(e.target.value)} isRequired={true} />
                                 <Input label="Answer C" value={answerC} onChange={e => setAnswerC(e.target.value)} isRequired={true} />
                                 <Input label="Answer D" value={answerD} onChange={e => setAnswerD(e.target.value)} isRequired={true} />
-                                <Select label="Correct Choice" value={correctAnswerMultiple} onChange={e => setCorrectAnswerMultiple(e.target.value)} defaultSelectedKeys={[correctAnswerMultiple]} isRequired={true}>
+                                <Select label="Correct Choice" selectedKeys={[correctAnswerMultiple]} onChange={e => setCorrectAnswerMultiple(e.target.value)} defaultSelectedKeys={[correctAnswerMultiple]} isRequired={true}>
                                     {["A", "B", "C", "D"].map((choice) => (
                                         <SelectItem key={choice} value={choice}>{choice}</SelectItem>
                                     ))}
@@ -272,9 +268,9 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
                         )}
                     </div>
                     <div className="space-y-4">
-                        <Select label="Difficulty Level" value={difficulty} onChange={e => setDifficulty(e.target.value)} defaultSelectedKeys={[difficulty]}>
-                            {difficultyData.map(item => (
-                                <SelectItem key={item.Name} value={item.Name}>{item.Name}</SelectItem>
+                        <Select label="Difficulty Level" selectedKeys={[difficulty]} onChange={e => setDifficulty(e.target.value)} defaultSelectedKeys={[difficulty]}>
+                            {["easy", "medium", "hard"].map(item => (
+                                <SelectItem key={item} value={item}>{item}</SelectItem>
                             ))}
                         </Select>
                         {/* <Select label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)} defaultSelectedKeys={[subject]}>

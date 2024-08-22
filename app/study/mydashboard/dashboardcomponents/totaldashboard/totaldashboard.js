@@ -5,7 +5,7 @@ import { useData } from "@/app/helper/context/datacontext";
 
 export function TotalDashboard() {
 
-    const { mathTopicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList, getTopicSummaryElement } = useData();
+    const { topicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList, getTopicSummaryElement } = useData();
 
     const data = [
         { x: 100, y: 200, z: 200 },

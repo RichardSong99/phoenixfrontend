@@ -30,7 +30,7 @@ export function QuizTable() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
-    const { mathTopicMapping, quizListQuizType } = useData();
+    const { topicMapping, quizListQuizType } = useData();
 
     const router = useRouter();
 

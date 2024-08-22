@@ -27,27 +27,46 @@ export const DataProvider = ({ children }) => {
 
     const [reloadDataToggle, setReloadDataToggle] = useState(false);
 
-    const mathTopicMapping = [
-        { topic: "Linear equations in 1 variable", category: "Algebra" },
-        { topic: "Linear equations in 2 variables", category: "Algebra" },
-        { topic: "Linear functions", category: "Algebra" },
-        { topic: "Systems of 2 linear equations in 2 variables", category: "Algebra" },
-        { topic: "Linear inequalities in 1 or 2 variables", category: "Algebra" },
-        { topic: "Equivalent expressions", category: "Advanced math" },
-        { topic: "Nonlinear equations in 1 variable", category: "Advanced math" },
-        { topic: "System of equations in 2 variables", category: "Advanced math" },
-        { topic: "Nonlinear functions", category: "Advanced math" },
-        { topic: "Ratios, rates, proportional relationships, and units", category: "Problem solving and data analysis" },
-        { topic: "Percentages", category: "Problem solving and data analysis" },
-        { topic: "One-variable data: distributions and measures of center and spread", category: "Problem solving and data analysis" },
-        { topic: "Two-variable data: models and scatterplots", category: "Problem solving and data analysis" },
-        { topic: "Probability and conditional probability", category: "Problem solving and data analysis" },
-        { topic: "Inference from sample statistics and margin of error", category: "Problem solving and data analysis" },
-        { topic: "Evaluating statistical claims: observational studies and experiments", category: "Problem solving and data analysis" },
-        { topic: "Area and volume formulas", category: "Geometry and trigonometry" },
-        { topic: "Lines, angles, and triangles", category: "Geometry and trigonometry" },
-        { topic: "Right triangles and trigonometry", category: "Geometry and trigonometry" },
-        { topic: "Circles", category: "Geometry and trigonometry" }
+    const topicMapping = [
+        { topic: "Linear equations in 1 variable", category: "Algebra", subject : "Math" },
+        { topic: "Linear equations in 2 variables", category: "Algebra" , subject : "Math"},
+        { topic: "Linear functions", category: "Algebra", subject : "Math" },
+        { topic: "Systems of 2 linear equations in 2 variables", category: "Algebra" , subject : "Math"},
+        { topic: "Linear inequalities in 1 or 2 variables", category: "Algebra" , subject : "Math"},
+        { topic: "Equivalent expressions", category: "Advanced math" , subject : "Math"},
+        { topic: "Nonlinear equations in 1 variable", category: "Advanced math" , subject : "Math"},
+        { topic: "System of equations in 2 variables", category: "Advanced math", subject : "Math" },
+        { topic: "Nonlinear functions", category: "Advanced math", subject : "Math" },
+        { topic: "Ratios, rates, proportional relationships, and units", category: "Problem solving and data analysis", subject : "Math"},
+        { topic: "Percentages", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "One-variable data: distributions and measures of center and spread", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "Two-variable data: models and scatterplots", category: "Problem solving and data analysis" , subject : "Math"},
+        { topic: "Probability and conditional probability", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "Inference from sample statistics and margin of error", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "Evaluating statistical claims: observational studies and experiments", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "Area and volume formulas", category: "Geometry and trigonometry", subject : "Math" },
+        { topic: "Lines, angles, and triangles", category: "Geometry and trigonometry", subject : "Math" },
+        { topic: "Right triangles and trigonometry", category: "Geometry and trigonometry", subject : "Math" },
+        { topic: "Circles", category: "Geometry and trigonometry", subject : "Math" },
+        { topic: "Main purpose", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Main idea", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Most likely response", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Based on the text", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Support or weaken statement", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Best illustrates the claim", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Relevant information from the notes", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Data from graphic", category: "Information and ideas", subject: "Reading & Writing"},
+        { topic: "Logically completes text", category: "Craft and structure", subject: "Reading & Writing"},
+        { topic: "Function of the sentence", category: "Craft and structure", subject: "Reading & Writing"},
+        { topic: "Overall structure of the text", category: "Craft and structure", subject: "Reading & Writing"},
+        { topic: "Subject-verb agreement", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Pronoun-antecedent agreement", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Plurals and possessives", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Verb forms", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Subject-modifier placement", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Linking clauses", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Punctuation", category: "Standard English conventions", subject: "Reading & Writing"},
+        { topic: "Other conventions", category: "Standard English conventions", subject: "Reading & Writing"},
     ];
 
     const [loading, setLoading] = useState(true);
@@ -56,15 +75,18 @@ export const DataProvider = ({ children }) => {
     const [testUnderlyingList, setTestUnderlyingList] = useState([]);
 
     const getTopicsByCategory = (category) => {
-        return mathTopicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
+        return topicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
     }
 
-    const getCategoryList = () => {
-        return Array.from(new Set(mathTopicMapping.map(topicObj => topicObj.category)));
+    const getCategoryList = (subject) => {
+        if (subject) {
+            return Array.from(new Set(topicMapping.filter(topicObj => topicObj.subject === subject).map(topicObj => topicObj.category)));
+        }
+        return Array.from(new Set(topicMapping.map(topicObj => topicObj.category)));
     }
 
         // Create a lookup map for topic order
-    const topicOrderLookup = mathTopicMapping.reduce((acc, item, index) => {
+    const topicOrderLookup = topicMapping.reduce((acc, item, index) => {
         acc[item.topic] = index;
         return acc;
     }, {});
@@ -126,7 +148,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, mathTopicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList, getTopicSummaryElement }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList, getTopicSummaryElement }}>
             {children}
         </DataContext.Provider>
     );

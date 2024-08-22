@@ -35,11 +35,13 @@ const QuestionFilterSort = ({ page }) => {
         SORTDESCENDING,
         createQuiz,
         quizID,
+        createAdaptiveQuiz,
+
     } = useContext(QuestionContext);
 
     const algebraTopics = ["Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"];
     const advancedMathTopics = ["Equivalent expressions", "Nonlinear equations in 1 variable", "Systems of equations in 2 variables", "Nonlinear functions"];
-    const problemSolvingTopics = ["Problem solving and data analysis", "Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
+    const problemSolvingTopics = ["Ratios, rates, proportional relationships, and units", "Percentages", "One-variable data: distributions and measures of center and spread", "Two-variable data: models and scatterplots", "Probability and conditional probability", "Inference from sample statistics and margin of error", "Evaluating statistical claims: observational studies and experiments"];
     const geometryTopics = ["Geometry and trigonometry", "Area and volume formulas", "Lines, angles, and triangles", "Right triangles and trigonometry", "Circles"];
 
     const [algebraSelectedTopics, setAlgebraSelectedTopics] = useState([]);
@@ -52,7 +54,7 @@ const QuestionFilterSort = ({ page }) => {
     const [allProblemSolvingSelected, setAllProblemSolvingSelected] = useState(false);
     const [allGeometrySelected, setAllGeometrySelected] = useState(false);
 
-    const difficulties = ["easy", "medium", "hard", "extreme"];
+    const difficulties = ["easy", "medium", "hard"];
     const answerTypes = ["multipleChoice", "freeResponse"];
     const answerStatuses = ["unattempted", "correct", "incorrect", "omitted"];
 
@@ -114,6 +116,11 @@ const QuestionFilterSort = ({ page }) => {
         router.push(`/study/activequiz?quizid=${response}&review=false`);
     }
 
+    const handleAdaptiveQuizClick = async () => {
+        const response = await createAdaptiveQuiz();
+        router.push(`/study/activequiz?quizid=${response}&review=false`);
+    }
+
     return (
         <div className="flex row gap-2 p-2">
             
@@ -155,7 +162,6 @@ const QuestionFilterSort = ({ page }) => {
                     <CustomCheckbox value="easy">Easy</CustomCheckbox>
                     <CustomCheckbox value="medium">Medium</CustomCheckbox>
                     <CustomCheckbox value="hard">Hard</CustomCheckbox>
-                    <CustomCheckbox value="extreme">Extreme</CustomCheckbox>
                 </CheckboxGroup>
             </div>
 
@@ -320,6 +326,9 @@ const QuestionFilterSort = ({ page }) => {
             {page === "quizzes" && <div className='w-full flex flex-row justify-center mt-[50px]'>
                 <Button className='rounded-[20px] bg-appleBlue text-white' onClick={handleQuizClick}>
                     Start Quiz
+                </Button>
+                <Button className='rounded-[20px] bg-appleBlue text-white ml-[20px]' onClick={handleAdaptiveQuizClick}>
+                    Start Adaptive Quiz
                 </Button>
             </div>}
         </div>

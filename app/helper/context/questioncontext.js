@@ -7,13 +7,14 @@ import {
     updateEngagement,
     fetchEngagementsByID,
 } from "@/app/helper/apiservices/engagementservice";
-import { fetchFullQuestionById, fetchQuestionsById } from "../apiservices/questionservice";
+import { fetchFullQuestionById, fetchQuestionsById, getAdaptiveQuestion } from "../apiservices/questionservice";
 import {
     updateQuizWithQuestionEngagementIDs,
     initializeQuiz,
     fetchQuiz,
 } from "../apiservices/quizservice";
 import { getResult } from "../data/questionhelpers";
+import { create } from "@mui/material/styles/createTransitions";
 
 export const QuestionContext = createContext();
 
@@ -96,6 +97,7 @@ export const QuestionProvider = ({ children }) => {
 
     const ACTIVEMODE = "active";
     const REVIEWMODE = "review";
+    const ADAPTIVEMODE = "adaptive";
 
     const [quizID, setQuizID] = useState(null);
 
@@ -194,6 +196,97 @@ export const QuestionProvider = ({ children }) => {
         setIndQuizMode(INDIVIDUALMODE);
 
         initializeEngagementStates(QEIDCombos);
+    };
+
+    const createAdaptiveQuiz = async () => {
+        resetAllVars();
+        var quizID = null;
+        try{
+            const data = await getAdaptiveQuestion({
+                selectedTopics: selectedTopics,
+                selectedDifficulties: selectedDifficulties,
+                selectedAnswerStatuses: selectedAnswerStatuses,
+                selectedAnswerTypes: selectedAnswerTypes,
+            });
+            const first_question_array = [data.data[0].Question.id];
+            const response = await initializeQuiz({ questionIDs: first_question_array, quizType : "quiz" });
+            setupAdaptiveQuizMode(response.quizID);
+            quizID = response.quizID;
+        } catch (error) {
+            console.error("Could not start adaptive quiz:", error);
+        }
+
+        return quizID;
+    };
+
+    const setupAdaptiveQuizMode = async (quizID) => {
+        resetAllVars();
+        var QEIDCombos = [];
+
+        try {
+            const response = await fetchQuiz({ quizID: quizID });
+            console.log("response", response.question_engagement_id_combos);
+            setQuizID(quizID);
+            QEIDCombos = response.question_engagement_id_combos;
+        } catch (error) {
+            console.error("Could not start adaptive quiz:", error);
+        }
+
+        setActiveReviewMode(ACTIVEMODE);
+        setIndQuizMode(ADAPTIVEMODE);
+
+        initializeEngagementStates(QEIDCombos);
+    };
+
+    const handleAdaptiveSubmit = async (questionID, correct) => {
+        let engagementsArray = [];
+        let questionEngagementID = [];
+        engagementsArray.push({
+            question_id: questionIDArray[activeQuestionIndex],
+            user_answer: userResponseData[activeQuestionIndex],
+            status: getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]}), 
+            flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
+            starred: isStarredData[questionIDArray[activeQuestionIndex]],
+            duration: timeSpentData[questionIDArray[activeQuestionIndex]],
+        });
+        console.log("engagementsArray", engagementsArray);
+        try {
+            const response = await postEngagements(engagementsArray);
+            questionEngagementID = response.question_engagement_ids;
+
+            if (indquizMode === QUIZMODE) {
+                await updateQuizWithQuestionEngagementIDs(
+                    quizID,
+                    questionEngagementID
+                );
+            }
+        } catch (error) {
+            console.error("Could not submit engagements:", error);
+        }
+
+        resetAllVars();
+        let numCorrect = 0;
+        let numIncorrect = 0;
+        if(correct){
+            numCorrect = 1;
+        } else{
+            numIncorrect = 1;
+        }
+        let next_question = null;
+        try {
+            next_question = await getAdaptiveQuestion({
+                selectedTopics: selectedTopics,
+                selectedDifficulties: selectedDifficulties,
+                selectedAnswerStatuses: selectedAnswerStatuses,
+                selectedAnswerTypes: selectedAnswerTypes,
+                numIncorrect: numIncorrect,
+                numCorrect: numCorrect,
+            });
+        } catch (error) {
+            console.error("Could not add to adaptive quiz:", error);
+        }
+
+        const first_question_array = [next_question.data[0].Question.id];
     };
 
     const setupReviewQuizMode = async (quizID) => {
@@ -606,6 +699,9 @@ export const QuestionProvider = ({ children }) => {
                 continueTimer,
                 totalSeconds,
                 currentSeconds,
+                createAdaptiveQuiz,
+                setupAdaptiveQuizMode,
+                handleAdaptiveSubmit,
                 createQuiz,
                 resetAllVars,
                 changeTimer,

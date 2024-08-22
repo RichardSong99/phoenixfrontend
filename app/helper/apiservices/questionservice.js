@@ -229,3 +229,53 @@ export async function fetchQuestionsById({
     const data = await response.json();
     return data;
 }
+
+export async function getAdaptiveQuestion({
+    selectedTopics = [],
+    selectedDifficulties = [],
+    selectedAnswerStatuses = [],
+    selectedAnswerTypes = [],
+    numIncorrect = 0,
+    numCorrect = 0,
+}) {
+    let token;
+    try {
+        token = Cookies.get('token');
+    } catch (error) {
+        console.error('Could not get token:', error);
+    }
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    };
+
+    let queryParams = new URLSearchParams();
+    if (selectedTopics.length > 0) {
+        queryParams.append('topic', selectedTopics.join(','));
+    }
+    if (selectedDifficulties.length > 0) {
+        queryParams.append('difficulty', selectedDifficulties.join(','));
+    }
+    if (selectedAnswerStatuses.length > 0) {
+        queryParams.append('answerStatus', selectedAnswerStatuses.join(','));
+    }
+    if (selectedAnswerTypes.length > 0) {
+        queryParams.append('answerType', selectedAnswerTypes.join(','));
+    }
+
+    queryParams.append('numIncorrect', numIncorrect);
+    queryParams.append('numCorrect', numCorrect);
+
+    const response = await fetch(`${apiUrl}/getAdaptiveQuestion?${queryParams.toString()}`, requestOptions);
+
+    if (!response.ok) {
+        throw new Error('Failed to start adaptive quiz');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+}

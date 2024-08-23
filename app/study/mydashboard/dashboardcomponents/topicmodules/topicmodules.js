@@ -115,9 +115,20 @@ const TopicModules = () => {
               </TableCell>
               <TableCell>
                 <div className="flex flex-row">
-                  <Chip color="success" style={{ color: 'white' }}>Beginner</Chip>
+                  {(() => {
+                    let chipColor = "success";
+                    if (item.mastery_level === "Beginner") {
+                      chipColor = "primary";
+                    }else if (item.mastery_level === "Intermediate") {
+                      chipColor = "warning";
+                    }else if (item.mastery_level === "Advanced") {
+                      chipColor = "success";
+                    }
+                    return <Chip color={chipColor} style={{ color: 'white' }}>{item.mastery_level}</Chip>;
+                  })()}
                 </div>
               </TableCell>
+
 
               <TableCell width="500">
                 <Progress
@@ -180,7 +191,7 @@ const TopicModules = () => {
                     </Badge>
                   </Tooltip>
                   <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
-                    <Badge color="danger" content="5">
+                    <Badge color="danger" content={Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0))}>
                       <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
                     </Badge>
                   </Tooltip>

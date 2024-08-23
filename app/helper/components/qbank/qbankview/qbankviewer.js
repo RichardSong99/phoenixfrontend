@@ -171,7 +171,7 @@ const QBankViewer = () => {
 
                 {/* <QbankTable/> */}
                 <div className="relative flex justify-start items-center gap-2">
-                    <Input
+                    {/* <Input
                         isClearable
                         classNames={{
                             base: "w-full sm:max-w-[44%]",
@@ -184,7 +184,7 @@ const QBankViewer = () => {
                         variant="bordered"
                         onClear={() => setFilterValue("")}
                         onValueChange={onSearchChange}
-                    />
+                    /> */}
 
                     <Dropdown>
                         <DropdownTrigger>

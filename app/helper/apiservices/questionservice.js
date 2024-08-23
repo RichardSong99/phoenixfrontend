@@ -96,7 +96,7 @@ export async function uploadQuestion(question) {
         body: JSON.stringify(question)
     };
 
-    const response = await fetch(`${apiUrl}/questions`, requestOptions);
+    const response = await fetch(`${apiUrl}/question`, requestOptions);
 
     if (!response.ok) {
         throw new Error('Failed to upload question');
@@ -144,7 +144,7 @@ export async function updateQuestion(questionId, updatedQuestion) {
         body: JSON.stringify(updatedQuestion)
     };
 
-    const response = await fetch(`${apiUrl}/questions/${questionId}`, requestOptions);
+    const response = await fetch(`${apiUrl}/question/${questionId}`, requestOptions);
 
     if (!response.ok) {
         throw new Error(`Failed to update question with ID: ${questionId}`);

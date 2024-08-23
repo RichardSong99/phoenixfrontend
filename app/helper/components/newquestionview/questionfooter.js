@@ -11,6 +11,7 @@ export default function QuestionFooter({ }) {
     const [isReferenceVisible, setReferenceVisible] = useState(false);
     const [isAnswerVisible, setAnswerVisible] = useState(false);
     const calculatorRef = useRef(null);
+    const [adapativeNextModal, setAdaptiveNextModal] = useState(false);
 
     const {
         questionData,
@@ -22,6 +23,7 @@ export default function QuestionFooter({ }) {
         handleSubmitEngagements,
         userResponseData,
         indquizMode,
+        adaptiveRegularMode,
         changeTimer,
         handleSubmitSingleEngagement,
     } = useContext(QuestionContext);
@@ -56,6 +58,11 @@ export default function QuestionFooter({ }) {
             changeTimer();
         }
     };
+
+    const handleNextAdpativeQuestion = () => {
+        console.log("adaptive ind mode", indquizMode);
+        setAdaptiveNextModal(true);
+    }
 
     const CalculatorIcon = () => (
         <svg
@@ -198,12 +205,18 @@ export default function QuestionFooter({ }) {
                 </div>
             }
             {activeReviewMode === "active" && <div>
-                <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleShowAnswer}>
-                    {!isAnswerVisible ?
-                        "Check Answer" :
-                        <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
-                    }
-                </Button>
+                { adaptiveRegularMode !== "adaptive" ? 
+                    <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleShowAnswer}>
+                        {!isAnswerVisible ?
+                            "Check Answer" :
+                            <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
+                        }
+                    </Button>
+                :
+                    <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleNextAdpativeQuestion}>
+                        Next question
+                    </Button>
+                }
             </div>}
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                 <div className='cursor-pointer'>
@@ -273,6 +286,23 @@ export default function QuestionFooter({ }) {
                         </div>
                     </div>
                 </Draggable>
+            }
+            { adapativeNextModal &&
+                <>
+                    <div className='w-[30%] h-[30%] bg-white absolute top-0 left-[20%] z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center'>
+                        <div className='text-[30px] mb-[30px]'>
+                            <strong>Your answer is: </strong>
+                        </div>
+                        <div className='mb-[10px]'>Click to go to the next question</div>
+                        <div>
+                            <Button
+                                className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom'
+                            >
+                                Next question
+                            </Button>
+                        </div>
+                    </div>
+                </>
             }
         </div>
     );

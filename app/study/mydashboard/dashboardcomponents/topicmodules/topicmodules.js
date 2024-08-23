@@ -101,7 +101,7 @@ const TopicModules = () => {
           <TableColumn>Mastery</TableColumn>
           <TableColumn># Questions answered</TableColumn>
           <TableColumn>% Correct</TableColumn>
-          <TableColumn>Achievements</TableColumn>
+          {/* <TableColumn>Achievements</TableColumn> */}
           <TableColumn>Action</TableColumn>
         </TableHeader>
         <TableBody>
@@ -138,7 +138,7 @@ const TopicModules = () => {
                 />
               </TableCell>
 
-              <TableCell>
+              {/* <TableCell>
                 <div className="flex flex-row gap-2">
                   {Array.isArray(item.achievements) && item.achievements.map((achievement, index) => {
                     // Retrieve the icon and button color based on the achievement type
@@ -171,7 +171,7 @@ const TopicModules = () => {
                     );
                   })}
                 </div>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <div className="flex space-x-2">
                   <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>

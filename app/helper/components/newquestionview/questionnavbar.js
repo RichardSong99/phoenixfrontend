@@ -14,6 +14,7 @@ export default function QuestionNavBar() {
         isStarredData,
         handleSubmitEngagements,
         activeReviewMode,
+        indquizMode,
         userResponseData,
         handleUpdateTimeSpentData,
     } = useContext(QuestionContext);
@@ -101,14 +102,15 @@ export default function QuestionNavBar() {
                 </div>
             </div>
             <div className='mb-[-30px]'>
-                <div className='mb-[-10px]'>
-                    <Button className='h-[30px] text-white rounded-[20px] bg-appleBlue shadow-custom' onClick={() => handlePreviousQuestion()}>
-                        Prev
-                    </Button>
-                    <Button className='h-[30px] text-white rounded-[20px] bg-appleBlue shadow-custom ml-[5px]' onClick={() => handleNextQuestion()}>
-                        Next
-                    </Button>
-                </div>
+                {indquizMode !== 'adaptive' ?
+                    <div className='mb-[-10px]'>
+                        <Button className='h-[30px] text-white rounded-[20px] bg-appleBlue shadow-custom' onClick={() => handlePreviousQuestion()}>
+                            Prev
+                        </Button>
+                        <Button className='h-[30px] text-white rounded-[20px] bg-appleBlue shadow-custom ml-[5px]' onClick={() => handleNextQuestion()}>
+                            Next
+                        </Button>
+                    </div> : null }
                 {activeReviewMode === "active" ? 
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
                         <Button

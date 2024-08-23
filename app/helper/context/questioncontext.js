@@ -98,11 +98,13 @@ export const QuestionProvider = ({ children }) => {
     const ACTIVEMODE = "active";
     const REVIEWMODE = "review";
     const ADAPTIVEMODE = "adaptive";
+    const REGULARMODE = "regular";
 
     const [quizID, setQuizID] = useState(null);
 
     const [indquizMode, setIndQuizMode] = useState(INDIVIDUALMODE);
     const [activeReviewMode, setActiveReviewMode] = useState(null);
+    const [adaptiveRegularMode, setAdaptiveRegularMode] = useState(REGULARMODE);
 
     // Quiz methods and states ==> for active quiz
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
@@ -233,12 +235,12 @@ export const QuestionProvider = ({ children }) => {
         }
 
         setActiveReviewMode(ACTIVEMODE);
-        setIndQuizMode(ADAPTIVEMODE);
+        setAdaptiveRegularMode(ADAPTIVEMODE);
 
         initializeEngagementStates(QEIDCombos);
     };
 
-    const handleAdaptiveSubmit = async (questionID, correct) => {
+    const handleAdaptiveSubmit = async (correct) => {
         let engagementsArray = [];
         let questionEngagementID = [];
         engagementsArray.push({
@@ -254,7 +256,7 @@ export const QuestionProvider = ({ children }) => {
             const response = await postEngagements(engagementsArray);
             questionEngagementID = response.question_engagement_ids;
 
-            if (indquizMode === QUIZMODE) {
+            if (adaptiveRegularMode === ADAPTIVEMODE) {
                 await updateQuizWithQuestionEngagementIDs(
                     quizID,
                     questionEngagementID
@@ -285,8 +287,8 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not add to adaptive quiz:", error);
         }
-
-        const first_question_array = [next_question.data[0].Question.id];
+        updateQuizWithQuestionEngagementIDs(quizID, next_question.data[0]);
+        return next_question.data[0].Question.id;
     };
 
     const setupReviewQuizMode = async (quizID) => {
@@ -699,6 +701,7 @@ export const QuestionProvider = ({ children }) => {
                 continueTimer,
                 totalSeconds,
                 currentSeconds,
+                adaptiveRegularMode,
                 createAdaptiveQuiz,
                 setupAdaptiveQuizMode,
                 handleAdaptiveSubmit,

@@ -5,7 +5,7 @@ import { useUser } from './usercontext';
 import { fetchTopicList } from '../apiservices/parameterdataservice';
 import { getQuizzesForUser, fetchQuizUnderlyingById,  fetchQuizzesUnderlyingForUser} from '../apiservices/quizservice';
 import { fetchTestsUnderlyingForUser } from '../apiservices/testservice';
-import { getTopicListSummary } from '../apiservices/dataservice';
+import { getUserData } from '../apiservices/dataservice';
 
 // Create a new context
 export const DataContext = createContext();
@@ -125,13 +125,10 @@ export const DataProvider = ({ children }) => {
         }
     }
 
-    const loadTopicSummaryList = async () => {
+    const loadUserData = async () => {
         try {
-            const topicListSummaryResponse = await getTopicListSummary();
-            setTopicSummaryList(sortTopicSummaryList(topicListSummaryResponse));
-
-
-
+            const userDataResponse = await getUserData();
+            setTopicSummaryList(sortTopicSummaryList(userDataResponse.topic_summary_list));
         } catch (error) {
             console.log("Error fetching topic list summary", error);
         }
@@ -144,7 +141,7 @@ export const DataProvider = ({ children }) => {
         }
         loadQuizList();
         // loadTestUnderlyingList();
-        loadTopicSummaryList();
+        loadUserData();
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (

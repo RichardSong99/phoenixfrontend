@@ -185,16 +185,24 @@ const TopicModules = () => {
               </TableCell> */}
               <TableCell>
                 <div className="flex space-x-2">
-                  <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>
-                    <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
-                      <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
-                    </Badge>
-                  </Tooltip>
-                  <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
-                    <Badge color="danger" content={Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0))}>
-                      <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
-                    </Badge>
-                  </Tooltip>
+                  {(item.num_total || 0) - (item.num_answered || 0) == 0 ?
+                    <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
+                  :
+                    <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>
+                      <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
+                        <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
+                      </Badge>
+                    </Tooltip>
+                  }
+                  {Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0)) == 0 ?
+                    <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
+                  :
+                    <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
+                      <Badge color="danger" content={Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0))}>
+                        <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
+                      </Badge>
+                    </Tooltip>
+                  }
                 </div>
               </TableCell>
             </TableRow>

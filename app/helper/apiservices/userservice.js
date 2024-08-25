@@ -1,14 +1,16 @@
 import Cookies from 'js-cookie';
+import { First } from 'react-bootstrap/esm/PageItem';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function registerUser(email, password) {
+export async function registerUser(first_name, last_name, email, phone_number, password) {
+    console.log({ first_name, last_name, email, phone_number, password });
     const response = await fetch(`${apiUrl}/user/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ Email: email, Password: password }),
+        body: JSON.stringify({ "email": email, "password": password, "first_name": first_name, "last_name": last_name, "phone_number": phone_number }),
     });
 
     if (!response.ok) {

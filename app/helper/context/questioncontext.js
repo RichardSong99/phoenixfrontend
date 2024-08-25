@@ -104,7 +104,7 @@ export const QuestionProvider = ({ children }) => {
 
     const [indquizMode, setIndQuizMode] = useState(INDIVIDUALMODE);
     const [activeReviewMode, setActiveReviewMode] = useState(null);
-    const [adaptiveRegularMode, setAdaptiveRegularMode] = useState(REGULARMODE);
+    const [adaptiveRegularMode, setAdaptiveRegularMode] = useState(null);
 
     // Quiz methods and states ==> for active quiz
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);

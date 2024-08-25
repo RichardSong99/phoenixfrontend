@@ -27,6 +27,26 @@ export default function RegisterPanel() {
         router.push('/auth/login');
     };
 
+    const handleRegister = async (event) => {
+        console.log("first name", firstName);
+        console.log("last name", lastName);
+        console.log("email", email);
+        console.log("phone number", phoneNumber);
+        console.log("password", password);
+        if(firstName !== '' && lastName !== '' && email !== '' && password !== '' && passwordCopy !== '') {
+            if(password === passwordCopy) {
+                try {
+                    const response = await registerUser(firstName, lastName, email, phoneNumber, password);
+                    console.log(response);
+                } catch (error) {
+                    console.error('Failed to register user:', error);
+                }
+            } else {
+                console.error('Passwords do not match');
+            }
+        }
+    };
+
     return (
         <div className="w-screen h-screen flex justify-center items-center">
             <div className="h-[80%] w-[25%] rounded-[20px] border-[2px] border-appleGray5 flex flex-col justify-around items-center pt-[30px] shadow-custom">
@@ -118,7 +138,10 @@ export default function RegisterPanel() {
                             <div className="text-appleGreen text-[14px]">Passwords match</div> :
                             <div className="text-appleRed text-[14px]">Passwords do not match</div>
                         ) : <div className="text-[14px]">&nbsp;</div>
-                    }   
+                    }
+                    <Button className="bg-appleBlue text-white rounded-[15px]" onClick={handleRegister}>
+                        Sign up    
+                    </Button>   
                 </div>
                 <div className="mt-[30px]">Already have an account? <Link href="#" onClick={handleLogin}>Log in</Link></div>
             </div>

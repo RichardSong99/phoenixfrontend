@@ -20,11 +20,6 @@ export const DataProvider = ({ children }) => {
     const [topicSummaryList, setTopicSummaryList] = useState(null);
     const [userData, setUserData] = useState(null);
 
-    const [algebraGraphData, setAlgebraGraphData] = useState(null);
-    const [advancedMathGraphData, setAdvancedMathGraphData] = useState(null);
-    const [problemSolvingData, setProblemSolvingData] = useState(null);
-    const [geometryTrigonometryData, setGeometryTrigonometryData] = useState(null);
-
     const [reloadDataToggle, setReloadDataToggle] = useState(false);
 
     const topicMapping = [
@@ -95,8 +90,12 @@ export const DataProvider = ({ children }) => {
         return list.sort((a, b) => topicOrderLookup[a.topic] - topicOrderLookup[b.topic]);
     }
 
-    const filterTopicSummaryList = ( category) => {
+    const filterTopicSummaryListByCategory = ( category) => {
         return topicSummaryList.filter(item => item.category === category);
+    }
+
+    const filterTopicSummaryListBySubject = ( subject) => {
+        return topicSummaryList.filter(item => item.subject === subject);
     }
 
     const getTopicSummaryElement = (topic) => {
@@ -145,7 +144,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryList, getTopicSummaryElement }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject }}>
             {children}
         </DataContext.Provider>
     );

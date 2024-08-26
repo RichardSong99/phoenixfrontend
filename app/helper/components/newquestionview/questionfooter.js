@@ -183,7 +183,7 @@ export default function QuestionFooter({ }) {
                                             <Button
                                                 className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Inefficient' ? 'bg-appleGray1' : 'bg-transparent'}`}
                                                 onClick={() => handleReviewQuestion("Inefficient")}>
-                                                    I could've done it faster.
+                                                    I could have done it faster.
                                             </Button>
                                         </>}
                                     </div>

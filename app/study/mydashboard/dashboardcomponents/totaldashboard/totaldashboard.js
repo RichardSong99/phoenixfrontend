@@ -5,7 +5,7 @@ import { useData } from "@/app/helper/context/datacontext";
 
 export function TotalDashboard() {
 
-    const { topicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryList, getTopicSummaryElement } = useData();
+    const { topicMapping, topicSummaryList, getTopicsByCategory, getTopicSummaryElement } = useData();
 
     const data = [
         { x: 100, y: 200, z: 200 },
@@ -175,42 +175,6 @@ export function TotalDashboard() {
 
             </div>
 
-            {/* <div className="border-[2px] border-gray-100" />
-
-            <div>
-                <ResponsiveContainer width="100%" height={400}>
-                    <ScatterChart
-                        margin={{
-                            top: 20,
-                            right: 20,
-                            bottom: 20,
-                            left: 20,
-                        }}
-                    >
-                        <CartesianGrid />
-                        <XAxis type="number" dataKey="num_answered" name="# questions answered" unit=" questions">
-                            <Label value="Number of questions answered" offset={-10} position="insideBottom" />
-                        </XAxis>
-                        <YAxis type="number" dataKey="accuracy" name="Accuracy" unit="%">
-                            <Label value="Accuracy %" angle={-90} position="insideLeft" />
-                        </YAxis>
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                        <Scatter name="Algebra" data={filterTopicSummaryList("Algebra")} fill="#006FEE">
-                            <LabelList dataKey="topic" position="top" />
-                        </Scatter>
-                        <Scatter name="Advanced math" data={filterTopicSummaryList("Advanced math")} fill="#7828C8">
-                            <LabelList dataKey="topic" position="top" />
-                        </Scatter>
-                        <Scatter name="Problem solving and data analysis" data={filterTopicSummaryList("Problem solving and data analysis")} fill="#17C964">
-                            <LabelList dataKey="topic" position="top" />
-                        </Scatter>
-                        <Scatter name="Geometry and trigonometry" data={filterTopicSummaryList("Geometry and trigonometry")} fill="#F31260">
-                            <LabelList dataKey="topic" position="top" />
-                        </Scatter>
-                        <Legend verticalAlign="top" height={36} />
-                    </ScatterChart>
-                </ResponsiveContainer>
-            </div> */}
 
         </div>
     );

@@ -58,7 +58,7 @@ const StudyNavBar = () => {
                 }}
             >
                 <ListboxItem
-                    key="mydashboard"
+                    key="study/mydashboard"
                     startContent={
                         <IconWrapper className="bg-primary/10 text-primary">
                             <Icon icon="material-symbols:home-outline" width="30" height="30" />
@@ -69,7 +69,7 @@ const StudyNavBar = () => {
                 </ListboxItem>
 
                 <ListboxItem
-                    key="myquizzes"
+                    key="study/myquizzes"
                     startContent={
                         <IconWrapper className="bg-primary/10 text-primary">
                             <Icon icon="fluent:quiz-new-20-regular" width="30" height="30" />
@@ -80,7 +80,7 @@ const StudyNavBar = () => {
                 </ListboxItem>
 
                 <ListboxItem
-                    key="browse"
+                    key="study/browse"
                     startContent={
                         <IconWrapper className="bg-primary/10 text-primary">
                             <Icon icon="material-symbols:search" width="30" height="30" />

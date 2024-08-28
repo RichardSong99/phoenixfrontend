@@ -116,44 +116,20 @@ export default function QuestionView({ }) {
                     <div className='flex flex-col items-center w-[45%] h-full'>
                         <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
                             { questionData[questionIDArray[activeQuestionIndex]].text2_description ?
-                            {/* <RenderMarkdown content={
-                                <>
-                                    { passage === 1 ?
-                                        <>
-                                            <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
-                                            <br></br><br></br>
-                                            {questionData[questionIDArray[activeQuestionIndex]].text1}
-                                        </>
-                                    :
-                                        <>
-                                            <i>{questionData[questionIDArray[activeQuestionIndex]].text2_description}</i>
-                                            <br></br><br></br>
-                                            {questionData[questionIDArray[activeQuestionIndex]].text2}
-                                        </>
-                                    }
-                                </>
-                            } /> */}
-                                (passage === 1 ?
-                                    <p className='text-[20px] max-h-full w-full text-left'>
-                                        <i>This passage is adapted from Jane Austen's "Pride and Prejudice," originally published in 1813.</i>
+                                ( passage === 1 ?
+                                    <>
+                                        <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
                                         <br></br><br></br>
-                                        It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
-                                        "My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"
-                                        Mr. Bennet replied that he had not.
-                                        "But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."
-                                        Mr. Bennet made no answer.
-                                        "Do not you want to know who has taken it?" cried his wife impatiently.
-                                        "You want to tell me, and I have no objection to hearing it."
-                                        This was invitation enough.
-                                        "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
-                                    </p>
+                                        {questionData[questionIDArray[activeQuestionIndex]].text1}
+                                    </>
                                 :
-                                    <p className='text-[20px] max-h-full w-full text-left'>
-                                        <i>This passage is a test passage two</i>
+                                    <>
+                                        <i>{questionData[questionIDArray[activeQuestionIndex]].text2_description}</i>
                                         <br></br><br></br>
-                                        Test passage 2
-                                    </p>
-                                ) :
+                                        {questionData[questionIDArray[activeQuestionIndex]].text2}
+                                    </>
+                                )
+                            :
                                 <>
                                     <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
                                     <br></br><br></br>

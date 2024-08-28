@@ -79,9 +79,27 @@ export const loadLessonModules = async () => {
     return tempLessonModules;
 }
 
-export const goToModule = ({ groupName, type }) => {
+export const useGoToModule = () => {
     const router = useRouter();
-    const activeIndex = 0;
-    const formattedGroupName = encodeURIComponent(groupName);
-    router.push(`/study/${type === 'practiceQuestions' ? 'practicemodule' : 'lessonmodule'}/${formattedGroupName}/${activeIndex}`);
-}
+
+    const goToModule = ({ groupName, type }) => {
+        const activeIndex = 0;
+        const formattedGroupName = encodeURIComponent(groupName);
+        router.push(`/study/${type === 'practiceQuestions' ? 'practicemodule' : 'lessonmodule'}/${formattedGroupName}/${activeIndex}`);
+    };
+
+    return goToModule;
+};
+
+const MyComponent = () => {
+    const goToModule = useGoToModule();
+
+    // Example usage
+    const handleClick = () => {
+        goToModule({ groupName: "Linear equations in 1 variable", type: "practiceQuestions" });
+    };
+
+    return <button onClick={handleClick}>Go to Module</button>;
+};
+
+export default MyComponent;

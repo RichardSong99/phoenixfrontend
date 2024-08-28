@@ -30,7 +30,7 @@ export default function LoginPanel() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        router.push('/auth/loading');
         loginUserHandler(email, password);
 
     };
@@ -38,6 +38,14 @@ export default function LoginPanel() {
     const handleSignUp = async (event) => {
         router.push('/auth/register');
     };
+
+    if(loginLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full">
+                <Spinner />
+            </div>
+        );
+    }
 
     return (
         <div>

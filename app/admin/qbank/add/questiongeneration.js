@@ -128,11 +128,10 @@ const QuestionGeneration = () => {
         }
     }
 
-    const handleUploadQGenMain =  (key) => {
+    const handleUploadQGenMain =  (index) => {
         // remove the key-th question from questionArray
-        const newQuestionArray = [...questionArray];
-        newQuestionArray.splice(key, 1);
-        setQuestionArray(newQuestionArray);
+        setQuestionArray((prev) => prev.filter((_, i) => i !== index));
+
     }
 
 

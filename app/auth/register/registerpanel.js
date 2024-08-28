@@ -48,8 +48,8 @@ export default function RegisterPanel() {
     };
 
     return (
-        <div className="w-screen h-screen flex justify-center items-center">
-            <div className="h-[80%] w-[25%] rounded-[20px] border-[2px] border-appleGray5 flex flex-col justify-around items-center pt-[30px] shadow-custom">
+        <div>
+            <div className="flex flex-col justify-around items-center pt-[30px] pb-10">
                 <div className="text-[20px]"><strong>Sign up</strong></div>
                 <div className="flex flex-col w-[80%] gap-y-[20px]">
                     <Input

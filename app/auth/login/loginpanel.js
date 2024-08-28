@@ -40,8 +40,8 @@ export default function LoginPanel() {
     };
 
     return (
-        <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500 p-2 sm:p-4 lg:p-8">
-            <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-custom">
+        <div>
+            <div className="flex flex-col gap-4 px-8 pb-10 pt-6">
                 <p className="pb-2 text-xl font-medium">Log In</p>
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <Input

@@ -113,12 +113,12 @@ const QuestionFilterSort = ({ page }) => {
 
     const handleQuizClick = async () => {
         const response = await createQuiz();
-        router.push(`/study/activequiz?quizid=${response}&review=false`);
+        router.push(`/study/activequiz?quizid=${response}&review=false&mode=normal`);
     }
 
     const handleAdaptiveQuizClick = async () => {
         const response = await createAdaptiveQuiz();
-        router.push(`/study/activequiz?quizid=${response}&review=false`);
+        router.push(`/study/activequiz?quizid=${response}&review=false&mode=adaptive`);
     }
 
     return (

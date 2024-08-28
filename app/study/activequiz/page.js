@@ -14,6 +14,7 @@ export default function Page() {
     // const [quizID, activeIndex] = pathname.split('/').slice(-2).map(part => decodeURI(part));
     const search = searchParams.get('review');
     const quizID = searchParams.get('quizid');
+    const mode = searchParams.get('mode');
 
     console.log(search, "search")
 
@@ -24,13 +25,18 @@ export default function Page() {
     const {
         setupActiveQuizMode, 
         setupReviewQuizMode,
+        setupAdaptiveQuizMode,
     } = useContext(QuestionContext);
 
     useEffect(() => {
         if (search === "true") {
             setupReviewQuizMode(quizID);
         } else {
-            setupActiveQuizMode(quizID);
+            if(mode === "adaptive"){
+                setupAdaptiveQuizMode(quizID);
+            } else {
+                setupActiveQuizMode(quizID);
+            }
         }
     }, []);
     

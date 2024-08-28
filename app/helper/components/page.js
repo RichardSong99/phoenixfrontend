@@ -1,11 +1,6 @@
 "use client"
 
 import React, {useState} from 'react';
-import {SiteNavBar, SideNavBar} from './navbars/navbar';
-import { SignUpOption } from './signup/signupoption';
-import { QuestionChoiceArea } from './question/questionpieces/questionpieces';
-
-import { ObjectSideNav } from './contentviewer/objectsidenav';
 import { ContentViewer } from './contentviewer/contentviewer';
 
 export default function ComponentTester() {

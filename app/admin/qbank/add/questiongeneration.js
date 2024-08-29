@@ -130,8 +130,7 @@ const QuestionGeneration = () => {
 
     const handleUploadQGenMain =  (index) => {
         // remove the key-th question from questionArray
-        setQuestionArray((prev) => prev.filter((_, i) => i !== index));
-
+        handleRemoveQuestion(index);
     }
 
 
@@ -244,7 +243,9 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm key = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain}/>
+                                <QBankForm questionKey = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain}
+                
+                                />
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

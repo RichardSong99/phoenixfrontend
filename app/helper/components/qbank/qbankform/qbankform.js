@@ -8,7 +8,7 @@ import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-or
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
-const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, handleUploadQGenMain }) => {
+const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, handleUploadQGenMain}) => {
 
     const {topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
@@ -34,14 +34,11 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
     const [correctAnswerFree, setCorrectAnswerFree] = useState('');
     const [explanation, setExplanation] = useState('');
     const [accessOption, setAccessOption] = useState('free');
-    const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
-    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW } = useContext(QuestionContext); // State for the question being viewed
+    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW, setEditQuestion, questionsUpdated, setQuestionsUpdated  } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [subject, setSubject] = useState(initialSubject || 'math');
     const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(initialSpecificTopic || topicMapping[0].topic);
-
-
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -191,7 +188,7 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
                 alert('Question uploaded successfully');
                 console.log('Question uploaded successfully');
 
-                handleUploadQGenMain(key);
+                handleUploadQGenMain(questionKey);
             }
         } catch (error) {
             console.error('Failed to upload question:', error);

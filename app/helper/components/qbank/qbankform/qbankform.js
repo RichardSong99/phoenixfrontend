@@ -8,11 +8,11 @@ import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-or
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
-const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, handleUploadQGenMain }) => {
+const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, handleUploadQGenMain,  }) => {
 
     const {topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
-    const [answerType, setAnswerType] = useState('multipleChoice');
+    const [answerType, setAnswerType] = useState(initialAnswerType || 'multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
     const [topic, setTopic] = useState('');
     const [prompt, setPrompt] = useState('');
@@ -34,14 +34,11 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
     const [correctAnswerFree, setCorrectAnswerFree] = useState('');
     const [explanation, setExplanation] = useState('');
     const [accessOption, setAccessOption] = useState('free');
-    const { questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext);
-    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW } = useContext(QuestionContext); // State for the question being viewed
+    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW, setEditQuestion, questionsUpdated, setQuestionsUpdated  } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [subject, setSubject] = useState(initialSubject || 'math');
     const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(initialSpecificTopic || topicMapping[0].topic);
-
-
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -111,6 +108,9 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
             if (initialSpecificTopic) {
                 setSpecificTopic(initialSpecificTopic);
             } 
+            if (initialAnswerType) {
+                setAnswerType(initialAnswerType);
+            }
         };
 
         refreshCategoryAndTopic();
@@ -119,7 +119,7 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
             setFormFields(inputQuestion);
         }
 
-    }, [inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic]);
+    }, [inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType]);
 
 
     // renders question
@@ -191,7 +191,7 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
                 alert('Question uploaded successfully');
                 console.log('Question uploaded successfully');
 
-                handleUploadQGenMain(key);
+                handleUploadQGenMain(questionKey);
             }
         } catch (error) {
             console.error('Failed to upload question:', error);
@@ -224,7 +224,7 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
                 <h4>Input Question Details</h4>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                     <div className="space-y-4">
-                        <Input label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />
+                        <Textarea label="Question Stem" value={prompt} onChange={e => setPrompt(e.target.value)} isRequired={true} />
                         {subject === 'Reading & Writing' && (
                             <>
                                 <Divider />
@@ -247,11 +247,12 @@ const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCat
                         </div>
                         <Textarea label="Graphic (SVG)" value={graphicSVG} onChange={e => setGraphicSVG(e.target.value)} />
 
-                        <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
+                        {/* <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
                             {["multipleChoice", "freeResponse"].map(item => (
                                 <SelectItem key={item} value={item}>{item}</SelectItem>
                             ))}
-                        </Select>
+                        </Select> */}
+                        <Input label="Answer Type" value={answerType} onValueChange={setAnswerType} />
                         {answerType === 'multipleChoice' && (
                             <>
                                 <Input label="Answer A" value={answerA} onChange={e => setAnswerA(e.target.value)} isRequired={true} />

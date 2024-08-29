@@ -21,10 +21,12 @@ const QuestionGeneration = () => {
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
     const [questionDescription, setQuestionDescription] = useState("");
-
+    const [answerType, setAnswerType] = useState("multipleChoice");
     const questionTemplates = [
         "MATH_SIMPLE", 
         "MATH_GRAPHIC",
+        "MATH_FREE_SINGLE",
+        "MATH_FREE_MULTIPLE",
         "Main purpose",
         "Main idea",
         "Most likely response",
@@ -38,6 +40,10 @@ const QuestionGeneration = () => {
         "Overall structure of the text",
         "Standard English conventions",
     ]
+    const [questionTemplate, setQuestionTemplate] = useState(questionTemplates[0]);
+    const [generationLoading, setGenerationLoading] = useState(false);
+    const { MODENEW } = useContext(QuestionContext);
+
 
     useEffect(() => {
         if(specificTopic !== ""){
@@ -45,12 +51,18 @@ const QuestionGeneration = () => {
         }
     }, [specificTopic])
 
-    const [questionTemplate, setQuestionTemplate] = useState(questionTemplates[0]);
 
 
-    const [generationLoading, setGenerationLoading] = useState(false);
 
-    const { MODENEW } = useContext(QuestionContext);
+
+    useEffect(() => {
+        if(questionTemplate === "MATH_FREE_SINGLE" || questionTemplate === "MATH_FREE_MULTIPLE"){
+            setAnswerType("freeResponse");
+        }
+        else{
+            setAnswerType("multipleChoice");
+        }
+    }, [questionTemplate])
 
     const handleChangeNumEasy = (value) => {
         setNumEasy(value);
@@ -81,15 +93,15 @@ const QuestionGeneration = () => {
                     graphicLatex: data[i].graphic_latex,
                     graphicDescription: data[i].graphic_description,
                     // graphic SVG -- to be added later
-                    answerType: 'multipleChoice',
+                    answerType:  answerType,
                     difficulty: data[i].difficulty,
                     subject: subject,
                     specificTopic: specificTopic,
-                    answerChoices: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
+                    answerChoices: answerType === 'freeResponse' ? null: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
                     explanation: data[i].explanation,
                     accessOption: "free",
                     correctAnswerMultiple: data[i].answer,
-                    correctAnswerFree: '',
+                    correctAnswerFree: answerType === 'freeResponse'? data[i].answer_free : null,
                     uploadedImageUrls: []
                 });
                 setQuestionArray((prev) => [...prev, question]);
@@ -130,8 +142,7 @@ const QuestionGeneration = () => {
 
     const handleUploadQGenMain =  (index) => {
         // remove the key-th question from questionArray
-        setQuestionArray((prev) => prev.filter((_, i) => i !== index));
-
+        handleRemoveQuestion(index);
     }
 
 
@@ -244,7 +255,9 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm key = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain}/>
+                                <QBankForm questionKey = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain} initialAnswerType = {answerType}
+                
+                                />
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
@@ -263,7 +276,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm kemode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic}/>
+                            <QBankForm kemode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} initialAnswerType={answerType}/>
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

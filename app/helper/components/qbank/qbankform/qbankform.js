@@ -8,7 +8,7 @@ import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-or
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
-const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic }) => {
+const QBankForm = ({ key, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, handleUploadQGenMain }) => {
 
     const {topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
@@ -190,6 +190,8 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
                 await uploadQuestion(newQuestion);
                 alert('Question uploaded successfully');
                 console.log('Question uploaded successfully');
+
+                handleUploadQGenMain(key);
             }
         } catch (error) {
             console.error('Failed to upload question:', error);
@@ -303,7 +305,7 @@ const QBankForm = ({ inputQuestion, mode, initialSubject, initialGeneralCategory
                         </Select>
                     </div>
                     <div className="col-span-1 md:col-span-2 flex space-x-4">
-                        <Button type="submit">Render</Button>
+                        <Button color = "primary" type="submit">Render</Button>
                         <Button
                             onPress={handleUpload}
                             disabled={

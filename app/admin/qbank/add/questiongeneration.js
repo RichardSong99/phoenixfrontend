@@ -25,11 +25,18 @@ const QuestionGeneration = () => {
     const questionTemplates = [
         "MATH_SIMPLE", 
         "MATH_GRAPHIC",
-        "RW_BLANK",
-        "RW_SINGLE_PASSAGE",
-        "RW_DOUBLE_PASSAGE",
-        "RW_BULLETED_TEXT",
-        "RW_GRAPHIC",
+        "Main purpose",
+        "Main idea",
+        "Most likely response",
+        "Based on the text",
+        "Support or weaken argument",
+        "Best illustrates the claim",
+        "Relevant information from the notes",
+        "Data from the graphic",
+        "Logically completes text",
+        "Function of the sentence",
+        "Overall structure of the text",
+        "Standard English conventions",
     ]
 
     useEffect(() => {
@@ -102,6 +109,10 @@ const QuestionGeneration = () => {
         setQuestionArray(newQuestionArray);
     }
 
+    const handleRemoveAllQuestions = () => {
+        setQuestionArray([]);
+    }
+
     const updateImages = (newImages) => {
         setImages(newImages);
     }
@@ -116,6 +127,14 @@ const QuestionGeneration = () => {
             console.error("Error testing images", error);
         }
     }
+
+    const handleUploadQGenMain =  (index) => {
+        // remove the key-th question from questionArray
+        setQuestionArray((prev) => prev.filter((_, i) => i !== index));
+
+    }
+
+
 
 
     return (
@@ -195,14 +214,15 @@ const QuestionGeneration = () => {
                 />
 
                 <div className="flex items-center space-x-4">
-                <Button color="primary" onPress={handleGenerateQuestions} >
+                <Button color="primary" onPress={handleGenerateQuestions} isLoading = {generationLoading} >
                     Generate
                 </Button>
 
-                {generationLoading && (
-                    <Spinner color="primary" />
-                )}
+                <Button color="danger" onPress={() => handleRemoveAllQuestions()} >
+                                Remove All
+                </Button>
 
+                    
                 </div>
 
                 {/* <Button color="success" onPress={imageAITester} >
@@ -224,7 +244,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} />
+                                <QBankForm key = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain}/>
                             </CardBody>
                             <CardFooter>
                                 <Button color="danger" onPress={() => handleRemoveQuestion(index)} >
@@ -243,7 +263,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic}/>
+                            <QBankForm kemode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic}/>
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

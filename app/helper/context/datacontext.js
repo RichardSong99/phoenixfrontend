@@ -144,7 +144,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, loadUserData }}>
             {children}
         </DataContext.Provider>
     );

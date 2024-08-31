@@ -287,7 +287,16 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not add to adaptive quiz:", error);
         }
-        updateQuizWithQuestionEngagementIDs(quizID, next_question.data[0]);
+
+        console.log("next question data", next_question.data[0].Question.id);
+
+        const QEIDCombo = [{ question_id: next_question.data[0].Question.id, engagement_id: null }];
+
+        try {
+            await updateQuizWithQuestionEngagementIDs(quizID, QEIDCombo);
+        } catch (error) {
+            console.error("Could not update quiz with next question:", error);
+        }
         return next_question.data[0].Question.id;
     };
 

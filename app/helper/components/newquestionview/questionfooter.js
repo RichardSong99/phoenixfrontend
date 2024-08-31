@@ -59,8 +59,9 @@ export default function QuestionFooter({ }) {
         }
     };
 
-    const handleNextAdpativeQuestion = () => {
-        handleAdaptiveSubmit();
+    const handleNextAdpativeQuestion = async () => {
+        await handleAdaptiveSubmit();
+        window.location.reload();
     }
 
     const CalculatorIcon = () => (

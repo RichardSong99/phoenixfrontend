@@ -201,7 +201,7 @@ export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngage
     }
 
     const data = await response.json();
-
+    console.log("posted", data);
     return data;
 }
 

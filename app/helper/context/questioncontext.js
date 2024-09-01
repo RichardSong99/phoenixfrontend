@@ -481,7 +481,6 @@ export const QuestionProvider = ({ children }) => {
         //     setActiveQuestionIndex(index);
         // }
         setActiveQuestionIndex(index);
-        setAdaptiveQuestionIndex(index);
     };
 
     const handleFlagQuestion = async (questionID) => {

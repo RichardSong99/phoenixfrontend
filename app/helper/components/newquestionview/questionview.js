@@ -42,6 +42,8 @@ export default function QuestionView({ }) {
         engagementData,
         continueTimer,
         changeTimer,
+        adaptiveRegularMode,
+        adaptiveQuestionIndex,
     } = useContext(QuestionContext);
 
     const changeCrossOutMode = () => {
@@ -56,16 +58,37 @@ export default function QuestionView({ }) {
     const handleSelect = (choice) => {
         if(!crossOutMode){
             if(!crossedOut.includes(choice)){
-                handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
+                if(adaptiveRegularMode === 'adaptive'){
+                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                        handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
+                    }
+                } else {
+                    handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
+                }
             }
         } else {
             if (crossedOut.includes(choice)) {
-                setCrossedOut(crossedOut.filter(item => item !== choice));
-            } else {
-                if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
-                    handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
+                if(adaptiveRegularMode === 'adaptive'){
+                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                        setCrossedOut(crossedOut.filter(item => item !== choice));
+                    }
+                } else {
+                    setCrossedOut(crossedOut.filter(item => item !== choice));
                 }
-                setCrossedOut([...crossedOut, choice]);
+            } else {
+                if(adaptiveRegularMode === 'adaptive'){
+                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                        if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
+                            handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
+                        }
+                        setCrossedOut([...crossedOut, choice]);
+                    }
+                } else {
+                    if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
+                        handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
+                    }
+                    setCrossedOut([...crossedOut, choice]);
+                }
             }
         }
     };

@@ -18,7 +18,18 @@ export default function QuestionNavBar() {
         userResponseData,
         handleUpdateTimeSpentData,
         adaptiveRegularMode,
+        adaptiveQuestionIndex,
     } = useContext(QuestionContext);
+
+    const [updatedQuestionIDArray, setUpdatedQuestionIDArray] = useState(questionIDArray);
+
+    // Update questionIDArray whenever adaptiveQuestionIndex changes
+    useEffect(() => {
+        if (adaptiveQuestionIndex !== undefined && adaptiveQuestionIndex !== null) {
+            // Update the questionIDArray based on the adaptiveQuestionIndex
+            setUpdatedQuestionIDArray(questionIDArray); // No sorting or remapping, just updating
+        }
+    }, [adaptiveQuestionIndex, questionIDArray]);
 
     const checkSelected = (index) => {
         return index === activeQuestionIndex;
@@ -63,7 +74,7 @@ export default function QuestionNavBar() {
                 </div> }
                 <div className='w-[95%] h-full rounded-[20px]'>
                     <div className='w-full flex flex-wrap gap-[19px] items-start p-[10px]'>                    
-                        {questionIDArray.map((_, index) => (
+                        {updatedQuestionIDArray.map((_, index) => (
                             <div
                                 key={index}
                                 className={`h-[40px] w-[40px] text-center text-appleBlue cursor-pointer rounded-[12px] pt-[5px]

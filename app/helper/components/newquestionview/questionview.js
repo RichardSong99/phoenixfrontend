@@ -210,7 +210,7 @@ export default function QuestionView({ }) {
                         }
                         {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
                             <>
-                                {activeReviewMode !== "review" ?
+                                {activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex == adaptiveQuestionIndex) ?
                                 (
                                     answerChoices.map((choice, index) => (
                                         <div key={choice} className="relative w-full max-w-xl mx-auto">

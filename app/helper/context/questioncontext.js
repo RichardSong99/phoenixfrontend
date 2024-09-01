@@ -108,8 +108,13 @@ export const QuestionProvider = ({ children }) => {
 
     // Quiz methods and states ==> for active quiz
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+    const [adaptiveQuestionIndex, setAdaptiveQuestionIndex] = useState(0);
     const [questionIDArray, setQuestionIDArray] = useState([]);
     const [questionData, setQuestionData] = useState({});
+
+    useEffect(() => {
+        setActiveQuestionIndex(adaptiveQuestionIndex);
+    }, [adaptiveQuestionIndex]);
 
     const [userResponseData, setUserResponseData] = useState({});
 
@@ -148,7 +153,6 @@ export const QuestionProvider = ({ children }) => {
 
     const resetAllVars = () => {
         setQuizID(null);
-        setActiveQuestionIndex(0);
         setQuestionIDArray([]);
         setQuestionData({});
         setUserResponseData({});
@@ -288,8 +292,6 @@ export const QuestionProvider = ({ children }) => {
             console.error("Could not add to adaptive quiz:", error);
         }
 
-        console.log("next question data", next_question.data[0].Question.id);
-
         const QEIDCombo = [{ question_id: next_question.data[0].Question.id, engagement_id: null }];
 
         try {
@@ -297,6 +299,15 @@ export const QuestionProvider = ({ children }) => {
         } catch (error) {
             console.error("Could not update quiz with next question:", error);
         }
+
+        try {
+            await setupAdaptiveQuizMode(quizID);
+        } catch (error) {
+            console.error("Could not refetch the quiz:", error);
+        }
+
+        setAdaptiveQuestionIndex(adaptiveQuestionIndex + 1);
+
         return next_question.data[0].Question.id;
     };
 
@@ -470,6 +481,7 @@ export const QuestionProvider = ({ children }) => {
         //     setActiveQuestionIndex(index);
         // }
         setActiveQuestionIndex(index);
+        setAdaptiveQuestionIndex(index);
     };
 
     const handleFlagQuestion = async (questionID) => {
@@ -711,6 +723,7 @@ export const QuestionProvider = ({ children }) => {
                 totalSeconds,
                 currentSeconds,
                 adaptiveRegularMode,
+                adaptiveQuestionIndex,
                 createAdaptiveQuiz,
                 setupAdaptiveQuizMode,
                 handleAdaptiveSubmit,

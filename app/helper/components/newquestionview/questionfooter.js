@@ -26,6 +26,7 @@ export default function QuestionFooter({ }) {
         changeTimer,
         handleSubmitSingleEngagement,
         handleAdaptiveSubmit,
+        adaptiveQuestionIndex,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -61,7 +62,7 @@ export default function QuestionFooter({ }) {
 
     const handleNextAdpativeQuestion = async () => {
         await handleAdaptiveSubmit();
-        window.location.reload();
+        // window.location.reload();
     }
 
     const CalculatorIcon = () => (
@@ -213,9 +214,9 @@ export default function QuestionFooter({ }) {
                         }
                     </Button>
                 :
-                    <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleNextAdpativeQuestion}>
+                    (activeQuestionIndex == adaptiveQuestionIndex && <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleNextAdpativeQuestion}>
                         Next question
-                    </Button>
+                    </Button>)
                 }
             </div>}
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>

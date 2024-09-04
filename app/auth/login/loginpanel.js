@@ -26,26 +26,22 @@ export default function LoginPanel() {
 
     const { loginUserHandler } = useUser();
 
-
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         router.push('/auth/loading');
-        loginUserHandler(email, password);
-
+    
+        try {
+            await loginUserHandler(email, password);
+        } catch (error) {
+            setErrorMessage("Failed to log in. Please check your credentials.");
+            router.push('/auth');
+        }
     };
+    
 
     const handleSignUp = async (event) => {
         router.push('/auth/register');
     };
-
-    if(loginLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center h-full">
-                <Spinner />
-            </div>
-        );
-    }
 
     return (
         <div>

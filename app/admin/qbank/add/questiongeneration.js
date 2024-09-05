@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input, Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
@@ -51,7 +51,18 @@ const QuestionGeneration = () => {
         if(specificTopic !== ""){
             setQuestionDescription(specificTopic);
         }
-    }, [specificTopic])
+
+        if(subject === "Reading & Writing"){
+            if(generalCategory === "Standard English conventions"){
+                setQuestionTemplate("Standard English conventions");
+            }
+            else{
+                setQuestionTemplate(specificTopic);
+            }
+        }      
+
+
+    }, [specificTopic, generalCategory, subject])
 
 
 
@@ -181,11 +192,11 @@ const QuestionGeneration = () => {
                             ))}
                         </Select>
                     )}
-                    <Select label = "Question Template" value = {questionTemplate} onChange={e => setQuestionTemplate(e.target.value)} className="max-w-xs">
+                    <Autocomplete label = "Question Template" selectedKey = {questionTemplate} onSelectionChange = {setQuestionTemplate} className="max-w-xs">
                         {questionTemplates.map(item => (
-                            <SelectItem key={item} value={item}>{item}</SelectItem>
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
                         ))}
-                    </Select>
+                    </Autocomplete>
                     <Input label = "Question description to AI" placeholder="Enter question description" value = {questionDescription} onChange = {e => setQuestionDescription(e.target.value)} className="max-w-xs" />
                 </div>
                 

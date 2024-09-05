@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input, Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
@@ -23,7 +23,9 @@ const QuestionGeneration = () => {
     const [questionDescription, setQuestionDescription] = useState("");
     const [answerType, setAnswerType] = useState("multipleChoice");
     const questionTemplates = [
-        "MATH_SIMPLE", 
+        "MATH_SIMPLE",
+        "MATH_EQUATION1_PROMPT",
+        "MATH_EQUATION2_PROMPT", 
         "MATH_GRAPHIC",
         "MATH_FREE_SINGLE",
         "MATH_FREE_MULTIPLE",
@@ -49,7 +51,18 @@ const QuestionGeneration = () => {
         if(specificTopic !== ""){
             setQuestionDescription(specificTopic);
         }
-    }, [specificTopic])
+
+        if(subject === "Reading & Writing"){
+            if(generalCategory === "Standard English conventions"){
+                setQuestionTemplate("Standard English conventions");
+            }
+            else{
+                setQuestionTemplate(specificTopic);
+            }
+        }      
+
+
+    }, [specificTopic, generalCategory, subject])
 
 
 
@@ -90,6 +103,8 @@ const QuestionGeneration = () => {
                     text2: data[i].text2,
                     text1Description: data[i].text1_description,
                     text2Description: data[i].text2_description,
+                    equation1: data[i].equation1,
+                    equation2: data[i].equation2,
                     graphicLatex: data[i].graphic_latex,
                     graphicDescription: data[i].graphic_description,
                     // graphic SVG -- to be added later
@@ -177,11 +192,11 @@ const QuestionGeneration = () => {
                             ))}
                         </Select>
                     )}
-                    <Select label = "Question Template" value = {questionTemplate} onChange={e => setQuestionTemplate(e.target.value)} className="max-w-xs">
+                    <Autocomplete label = "Question Template" selectedKey = {questionTemplate} onSelectionChange = {setQuestionTemplate} className="max-w-xs">
                         {questionTemplates.map(item => (
-                            <SelectItem key={item} value={item}>{item}</SelectItem>
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
                         ))}
-                    </Select>
+                    </Autocomplete>
                     <Input label = "Question description to AI" placeholder="Enter question description" value = {questionDescription} onChange = {e => setQuestionDescription(e.target.value)} className="max-w-xs" />
                 </div>
                 

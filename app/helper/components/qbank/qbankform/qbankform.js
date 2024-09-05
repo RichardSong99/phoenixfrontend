@@ -4,13 +4,13 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 import { ImageUpload } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../../data/data';
 import { useData } from '@/app/helper/context/datacontext';
-import { Input, Button, Select, SelectItem, Textarea, Divider } from '@nextui-org/react';
+import { Input, Button, Select, SelectItem, Textarea, Divider, Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 
-const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, handleUploadQGenMain,  }) => {
+const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, handleUploadQGenMain, }) => {
 
-    const {topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
+    const { topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
     const [answerType, setAnswerType] = useState(initialAnswerType || 'multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
@@ -20,6 +20,9 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [text2, setText2] = useState(''); // For reading questions
     const [text1Description, setText1Description] = useState(''); // For reading questions
     const [text2Description, setText2Description] = useState(''); // For reading questions
+
+    const [equation1, setEquation1] = useState(''); // For math questions
+    const [equation2, setEquation2] = useState(''); // For math questions
 
     const [graphicLatex, setGraphicLatex] = useState(null); // For graphic questions
     const [graphicSVG, setGraphicSVG] = useState(null); // For graphic questions
@@ -34,7 +37,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [correctAnswerFree, setCorrectAnswerFree] = useState('');
     const [explanation, setExplanation] = useState('');
     const [accessOption, setAccessOption] = useState('free');
-    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW, setEditQuestion, questionsUpdated, setQuestionsUpdated  } = useContext(QuestionContext); // State for the question being viewed
+    const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW, setEditQuestion, questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext); // State for the question being viewed
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
     const [subject, setSubject] = useState(initialSubject || 'math');
     const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
@@ -51,6 +54,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         if (question.text2 !== undefined && question.text2 !== null) setText2(question.text2);
         if (question.text1_description !== undefined && question.text1_description !== null) setText1Description(question.text1_description);
         if (question.text2_description !== undefined && question.text2_description !== null) setText2Description(question.text2_description);
+        if (question.equation1 !== undefined && question.equation1 !== null) setEquation1(question.equation1);
+        if (question.equation2 !== undefined && question.equation2 !== null) setEquation2(question.equation2);
         if (question.graphic_latex !== undefined && question.graphic_latex !== null) setGraphicLatex(question.graphic_latex);
         if (question.graphic_svg !== undefined && question.graphic_svg !== null) setGraphicSVG(question.graphic_svg);
         if (question.graphic_description !== undefined && question.graphic_description !== null) setGraphicDescription(question.graphic_description);
@@ -80,6 +85,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         setText2('');
         setText1Description('');
         setText2Description('');
+        setEquation1('');
+        setEquation2('');
         setGraphicLatex(null);
         setGraphicSVG(null);
         setGraphicDescription('');
@@ -107,7 +114,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             }
             if (initialSpecificTopic) {
                 setSpecificTopic(initialSpecificTopic);
-            } 
+            }
             if (initialAnswerType) {
                 setAnswerType(initialAnswerType);
             }
@@ -132,6 +139,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             text1Description,
             text2,
             text2Description,
+            equation1,
+            equation2,
             graphicLatex: graphicLatex,
             graphicSVG: graphicSVG,
             graphicDescription: graphicDescription,
@@ -158,6 +167,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             text1Description,
             text2,
             text2Description,
+            equation1,
+            equation2,
             graphicLatex: graphicLatex,
             graphicSVG: graphicSVG,
             graphicDescription: graphicDescription,
@@ -201,15 +212,15 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     }
 
     const handleSVGRefresh = async () => {
-        if(graphicLatex){
+        if (graphicLatex) {
             setIsLoadingGraphicSVG(true);
-            try{
+            try {
 
                 console.log("Rendering SVG from latex...")
                 const response = await getSVGFromLatex(graphicLatex);
                 setGraphicSVG(response.svg);
                 setIsLoadingGraphicSVG(false);
-            }catch(error){
+            } catch (error) {
                 console.error('Failed to render SVG:', error);
                 setIsLoadingGraphicSVG(false);
             }
@@ -238,12 +249,18 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                             </>
                         )}
                         <Divider />
+                        {subject === 'Math' && (
+                            <>
+                                <Input label="Equation 1" value={equation1} onChange={e => setEquation1(e.target.value)} />
+                                <Input label="Equation 2" value={equation2} onChange={e => setEquation2(e.target.value)} />
+                            </>
+                        )}
 
                         <Input label="Graphic Description" value={graphicDescription} onChange={e => setGraphicDescription(e.target.value)} />
                         <Textarea label="Graphic (Latex)" value={graphicLatex} onChange={e => setGraphicLatex(e.target.value)} />
-                        <div className = "flex flex-row gap-2">
-                        <Button onPress = {handleSVGRefresh} isLoading = {isLoadingGraphicSVG}>Refresh Graphic SVG</Button>
-                        <Button onPress = {() => setIsLoadingGraphicSVG(false)}>Stop</Button>
+                        <div className="flex flex-row gap-2">
+                            <Button onPress={handleSVGRefresh} isLoading={isLoadingGraphicSVG}>Refresh Graphic SVG</Button>
+                            <Button onPress={() => setIsLoadingGraphicSVG(false)}>Stop</Button>
                         </div>
                         <Textarea label="Graphic (SVG)" value={graphicSVG} onChange={e => setGraphicSVG(e.target.value)} />
 
@@ -252,7 +269,12 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                                 <SelectItem key={item} value={item}>{item}</SelectItem>
                             ))}
                         </Select> */}
-                        <Input label="Answer Type" value={answerType} onValueChange={setAnswerType} />
+                        <Autocomplete label="Answer Type" selectedKey={answerType} onSelectionChange={setAnswerType} >
+                            {["multipleChoice", "freeResponse"].map(item => (
+                                <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
+                            ))}
+                        </Autocomplete>
+
                         {answerType === 'multipleChoice' && (
                             <>
                                 <Input label="Answer A" value={answerA} onChange={e => setAnswerA(e.target.value)} isRequired={true} />
@@ -306,7 +328,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                         </Select>
                     </div>
                     <div className="col-span-1 md:col-span-2 flex space-x-4">
-                        <Button color = "primary" type="submit">Render</Button>
+                        <Button color="primary" type="submit">Render</Button>
                         <Button
                             onPress={handleUpload}
                             disabled={

@@ -23,7 +23,9 @@ const QuestionGeneration = () => {
     const [questionDescription, setQuestionDescription] = useState("");
     const [answerType, setAnswerType] = useState("multipleChoice");
     const questionTemplates = [
-        "MATH_SIMPLE", 
+        "MATH_SIMPLE",
+        "MATH_EQUATION1_PROMPT",
+        "MATH_EQUATION2_PROMPT", 
         "MATH_GRAPHIC",
         "MATH_FREE_SINGLE",
         "MATH_FREE_MULTIPLE",
@@ -90,6 +92,8 @@ const QuestionGeneration = () => {
                     text2: data[i].text2,
                     text1Description: data[i].text1_description,
                     text2Description: data[i].text2_description,
+                    equation1: data[i].equation1,
+                    equation2: data[i].equation2,
                     graphicLatex: data[i].graphic_latex,
                     graphicDescription: data[i].graphic_description,
                     // graphic SVG -- to be added later

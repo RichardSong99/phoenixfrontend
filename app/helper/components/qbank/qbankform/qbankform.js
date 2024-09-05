@@ -21,6 +21,9 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [text1Description, setText1Description] = useState(''); // For reading questions
     const [text2Description, setText2Description] = useState(''); // For reading questions
 
+    const [equation1, setEquation1] = useState(''); // For math questions
+    const [equation2, setEquation2] = useState(''); // For math questions
+
     const [graphicLatex, setGraphicLatex] = useState(null); // For graphic questions
     const [graphicSVG, setGraphicSVG] = useState(null); // For graphic questions
     const [graphicDescription, setGraphicDescription] = useState(''); // For graphic questions
@@ -51,6 +54,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         if (question.text2 !== undefined && question.text2 !== null) setText2(question.text2);
         if (question.text1_description !== undefined && question.text1_description !== null) setText1Description(question.text1_description);
         if (question.text2_description !== undefined && question.text2_description !== null) setText2Description(question.text2_description);
+        if (question.equation1 !== undefined && question.equation1 !== null) setEquation1(question.equation1);
+        if (question.equation2 !== undefined && question.equation2 !== null) setEquation2(question.equation2);
         if (question.graphic_latex !== undefined && question.graphic_latex !== null) setGraphicLatex(question.graphic_latex);
         if (question.graphic_svg !== undefined && question.graphic_svg !== null) setGraphicSVG(question.graphic_svg);
         if (question.graphic_description !== undefined && question.graphic_description !== null) setGraphicDescription(question.graphic_description);
@@ -80,6 +85,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         setText2('');
         setText1Description('');
         setText2Description('');
+        setEquation1('');
+        setEquation2('');
         setGraphicLatex(null);
         setGraphicSVG(null);
         setGraphicDescription('');
@@ -132,6 +139,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             text1Description,
             text2,
             text2Description,
+            equation1,
+            equation2,
             graphicLatex: graphicLatex,
             graphicSVG: graphicSVG,
             graphicDescription: graphicDescription,
@@ -158,6 +167,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             text1Description,
             text2,
             text2Description,
+            equation1,
+            equation2,
             graphicLatex: graphicLatex,
             graphicSVG: graphicSVG,
             graphicDescription: graphicDescription,
@@ -238,6 +249,8 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                             </>
                         )}
                         <Divider />
+                        <Input label="Equation 1" value={equation1} onChange={e => setEquation1(e.target.value)} />
+                        <Input label="Equation 2" value={equation2} onChange={e => setEquation2(e.target.value)} />
 
                         <Input label="Graphic Description" value={graphicDescription} onChange={e => setGraphicDescription(e.target.value)} />
                         <Textarea label="Graphic (Latex)" value={graphicLatex} onChange={e => setGraphicLatex(e.target.value)} />

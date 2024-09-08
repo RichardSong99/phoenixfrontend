@@ -115,8 +115,8 @@ const QuestionGeneration = () => {
                     answerChoices: answerType === 'freeResponse' ? null: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
                     explanation: data[i].explanation,
                     accessOption: "free",
-                    correctAnswerMultiple: data[i].answer,
-                    correctAnswerFree: answerType === 'freeResponse'? data[i].answer_free : null,
+                    correctAnswerMultiple: data[i].correct_answer_multiple,
+                    correctAnswerFree: answerType === 'freeResponse'? data[i].correct_answer_free : null,
                     uploadedImageUrls: []
                 });
                 setQuestionArray((prev) => [...prev, question]);

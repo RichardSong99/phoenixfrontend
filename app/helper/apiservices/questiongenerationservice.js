@@ -50,3 +50,20 @@ export async function visionAITester({images}) {
     const data = await response.json();
     return data;
 }
+
+export async function iterateQuestionGeneration(question){
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(question)
+    };
+
+    const response = await fetch(`${apiUrl}/iterate_question_gen`, requestOptions);
+    console.log("response", response);
+    
+    const data = await response.json();
+    console.log("data", data);
+    return data;
+}

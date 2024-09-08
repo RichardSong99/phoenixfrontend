@@ -244,16 +244,21 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
-    const handleAdaptiveSubmit = async (correct) => {
+    const handleAdaptiveSubmit = async () => {
         let engagementsArray = [];
         let questionEngagementID = [];
+        const result = getResult({question: questionData[questionIDArray[adaptiveQuestionIndex]], userResponse: userResponseData[questionIDArray[adaptiveQuestionIndex]]});
+        const difficulty = questionData[questionIDArray[adaptiveQuestionIndex]].difficulty;
+        const difficultyArray = [difficulty];
+        console.log("user response", userResponseData);
+        console.log("current difficulty", difficulty);
         engagementsArray.push({
-            question_id: questionIDArray[activeQuestionIndex],
-            user_answer: userResponseData[activeQuestionIndex],
-            status: getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]}), 
-            flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
-            starred: isStarredData[questionIDArray[activeQuestionIndex]],
-            duration: timeSpentData[questionIDArray[activeQuestionIndex]],
+            question_id: questionIDArray[adaptiveQuestionIndex],
+            user_answer: userResponseData[questionIDArray[adaptiveQuestionIndex]],
+            status: result, 
+            flagged: isFlaggedData[questionIDArray[adaptiveQuestionIndex]],
+            starred: isStarredData[questionIDArray[adaptiveQuestionIndex]],
+            duration: timeSpentData[questionIDArray[adaptiveQuestionIndex]],
         });
         console.log("engagementsArray", engagementsArray);
         try {
@@ -273,7 +278,7 @@ export const QuestionProvider = ({ children }) => {
         resetAllVars();
         let numCorrect = 0;
         let numIncorrect = 0;
-        if(correct){
+        if(result == "correct"){
             numCorrect = 1;
         } else{
             numIncorrect = 1;
@@ -282,7 +287,7 @@ export const QuestionProvider = ({ children }) => {
         try {
             next_question = await getAdaptiveQuestion({
                 selectedTopics: selectedTopics,
-                selectedDifficulties: selectedDifficulties,
+                selectedDifficulties: difficultyArray,
                 selectedAnswerStatuses: selectedAnswerStatuses,
                 selectedAnswerTypes: selectedAnswerTypes,
                 numIncorrect: numIncorrect,

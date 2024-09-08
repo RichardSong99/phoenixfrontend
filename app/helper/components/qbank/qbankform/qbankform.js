@@ -92,10 +92,10 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         if (question.difficulty !== undefined && question.difficulty !== null) setDifficulty(question.difficulty);
         if (question.subject !== undefined && question.subject !== null) setSubject(question.subject);
         if (question.topic !== undefined && question.topic !== null) setSpecificTopic(question.topic);
-        if (question.answer_choices !== undefined && question.answer_choices[0] !== undefined && question.answer_choices[0] !== null) setChoiceA(question.answer_choices[0]);
-        if (question.answer_choices !== undefined && question.answer_choices[1] !== undefined && question.answer_choices[1] !== null) setChoiceB(question.answer_choices[1]);
-        if (question.answer_choices !== undefined && question.answer_choices[2] !== undefined && question.answer_choices[2] !== null) setChoiceC(question.answer_choices[2]);
-        if (question.answer_choices !== undefined && question.answer_choices[3] !== undefined && question.answer_choices[3] !== null) setChoiceD(question.answer_choices[3]);
+        if (question.answer_choices !== undefined && question.answer_choices!== null && question.answer_choices[0] !== undefined && question.answer_choices[0] !== null) setChoiceA(question.answer_choices[0]);
+        if (question.answer_choices !== undefined && question.answer_choices!== null && question.answer_choices[1] !== undefined && question.answer_choices[1] !== null) setChoiceB(question.answer_choices[1]);
+        if (question.answer_choices !== undefined && question.answer_choices!== null && question.answer_choices[2] !== undefined && question.answer_choices[2] !== null) setChoiceC(question.answer_choices[2]);
+        if (question.answer_choices !== undefined && question.answer_choices!== null && question.answer_choices[3] !== undefined && question.answer_choices[3] !== null) setChoiceD(question.answer_choices[3]);
         if (question.correct_answer_multiple !== undefined && question.correct_answer_multiple !== null) setCorrectAnswerMultiple(question.correct_answer_multiple);
         if (question.correct_answer_free !== undefined && question.correct_answer_free !== null) setCorrectAnswerFree(question.correct_answer_free);
         if (question.explanation !== undefined && question.explanation !== null) setExplanation(question.explanation);

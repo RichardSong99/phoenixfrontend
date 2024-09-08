@@ -15,8 +15,8 @@ const QuestionGeneration = () => {
     const [generalCategory, setGeneralCategory] = useState(topicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(topicMapping[0].topic);
     const [numEasy, setNumEasy] = useState(1);
-    const [numMedium, setNumMedium] = useState(0);
-    const [numHard, setNumHard] = useState(0);
+    const [numMedium, setNumMedium] = useState(2);
+    const [numHard, setNumHard] = useState(2);
     const [questionResponseArray, setQuestionResponseArray] = useState([]);
     const [questionArray, setQuestionArray] = useState([]);
     const [images, setImages] = useState([]);
@@ -222,7 +222,7 @@ const QuestionGeneration = () => {
                     showSteps={true}
                     maxValue={10}
                     minValue={0}
-                    defaultValue={0}
+                    defaultValue={2}
                     className="max-w-md"
                     onChangeEnd={(value) => handleChangeNumMedium(value)}
                 />
@@ -234,7 +234,7 @@ const QuestionGeneration = () => {
                     showSteps={true}
                     maxValue={10}
                     minValue={0}
-                    defaultValue={0}
+                    defaultValue={2}
                     className="max-w-md"
                     onChangeEnd={(value) => handleChangeNumHard(value)}
                 />

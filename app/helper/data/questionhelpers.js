@@ -93,10 +93,10 @@ export const createNewQuestion = ({
         newQuestion.correct_answer_free = correctAnswerFree;
     }
 
-    newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-        Filename: `IMG${index}`,
-        Url: url
-    }));
+    // newQuestion.Images = uploadedImageUrls.map((url, index) => ({
+    //     Filename: `IMG${index}`,
+    //     Url: url
+    // }));
 
     return newQuestion;
 }

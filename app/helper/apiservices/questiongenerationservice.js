@@ -50,3 +50,42 @@ export async function visionAITester({images}) {
     const data = await response.json();
     return data;
 }
+
+export async function iterateQuestionGeneration({ question, message, action, questionTemplate}) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(question)
+    };
+
+    // Construct the URL with optional query parameters
+    let url = `${apiUrl}/iterate_question_gen`;
+    const queryParams = [];
+
+    if (message && message !== '') {
+        queryParams.push(`message=${encodeURIComponent(message)}`);
+    }
+
+    if (action && action !== '') {
+        queryParams.push(`action=${encodeURIComponent(action)}`);
+    }
+
+    if(questionTemplate && questionTemplate !== '') {
+        queryParams.push(`template=${encodeURIComponent(questionTemplate)}`);
+    }
+
+    // Append query parameters if any exist
+    if (queryParams.length > 0) {
+        url += `?${queryParams.join('&')}`;
+    }
+
+    const response = await fetch(url, requestOptions);
+    
+    console.log("response", response);
+    
+    const data = await response.json();
+    console.log("data", data);
+    return data;
+}

@@ -25,7 +25,7 @@ const QuestionGeneration = () => {
     const questionTemplates = [
         "MATH_SIMPLE",
         "MATH_EQUATION1_PROMPT",
-        "MATH_EQUATION2_PROMPT", 
+        "MATH_EQUATION2_PROMPT",
         "MATH_GRAPHIC",
         "MATH_FREE_SINGLE",
         "MATH_FREE_MULTIPLE",
@@ -46,20 +46,23 @@ const QuestionGeneration = () => {
     const [generationLoading, setGenerationLoading] = useState(false);
     const { MODENEW } = useContext(QuestionContext);
 
+    const [sourcePracticeTest, setSourcePracticeTest] = useState("CBPT 1");
+    const  [sourceModule, setSourceModule] = useState("M1");
+    const [sourceQuestion, setSourceQuestion] = useState("1");
 
     useEffect(() => {
-        if(specificTopic !== ""){
+        if (specificTopic !== "") {
             setQuestionDescription(specificTopic);
         }
 
-        if(subject === "Reading & Writing"){
-            if(generalCategory === "Standard English conventions"){
+        if (subject === "Reading & Writing") {
+            if (generalCategory === "Standard English conventions") {
                 setQuestionTemplate("Standard English conventions");
             }
-            else{
+            else {
                 setQuestionTemplate(specificTopic);
             }
-        }      
+        }
 
 
     }, [specificTopic, generalCategory, subject])
@@ -69,10 +72,10 @@ const QuestionGeneration = () => {
 
 
     useEffect(() => {
-        if(questionTemplate === "MATH_FREE_SINGLE" || questionTemplate === "MATH_FREE_MULTIPLE"){
+        if (questionTemplate === "MATH_FREE_SINGLE" || questionTemplate === "MATH_FREE_MULTIPLE") {
             setAnswerType("freeResponse");
         }
-        else{
+        else {
             setAnswerType("multipleChoice");
         }
     }, [questionTemplate])
@@ -108,22 +111,22 @@ const QuestionGeneration = () => {
                     graphicLatex: data[i].graphic_latex,
                     graphicDescription: data[i].graphic_description,
                     // graphic SVG -- to be added later
-                    answerType:  answerType,
+                    answerType: answerType,
                     difficulty: data[i].difficulty,
                     subject: subject,
                     specificTopic: specificTopic,
-                    answerChoices: answerType === 'freeResponse' ? null: [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
+                    answerChoices: answerType === 'freeResponse' ? null : [data[i].choiceA, data[i].choiceB, data[i].choiceC, data[i].choiceD],
                     explanation: data[i].explanation,
                     accessOption: "free",
                     correctAnswerMultiple: data[i].correct_answer_multiple,
-                    correctAnswerFree: answerType === 'freeResponse'? data[i].correct_answer_free : null,
+                    correctAnswerFree: answerType === 'freeResponse' ? data[i].correct_answer_free : null,
                     uploadedImageUrls: []
                 });
                 setQuestionArray((prev) => [...prev, question]);
             }
 
             setGenerationLoading(false);
-            
+
         } catch (error) {
             console.error("Error generating questions", error);
             setGenerationLoading(false);
@@ -147,15 +150,15 @@ const QuestionGeneration = () => {
     const imageAITester = async () => {
         console.log("Image AI Tester", images)
 
-        try{
-            const data = await visionAITester({images});
+        try {
+            const data = await visionAITester({ images });
             console.log("Image AI Tester", data);
-        }catch(error){
+        } catch (error) {
             console.error("Error testing images", error);
         }
     }
 
-    const handleUploadQGenMain =  (index) => {
+    const handleUploadQGenMain = (index) => {
         // remove the key-th question from questionArray
         handleRemoveQuestion(index);
     }
@@ -174,33 +177,89 @@ const QuestionGeneration = () => {
 
 
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                    <Select label="Subject" value={subject} onChange={e => setSubject(e.target.value)} className="max-w-xs">
-                        <SelectItem key="Math" value="Math">Math</SelectItem>
-                        <SelectItem key="Reading & Writing" value="Reading & Writing">Reading & Writing</SelectItem>
+                    <Autocomplete
+                        label="Subject"
+                        selectedKey={subject}
+                        onSelectionChange={setSubject}
+                        className="max-w-xs"
+                    >
+                        <AutocompleteItem key="Math" value="Math">Math</AutocompleteItem>
+                        <AutocompleteItem key="Reading & Writing" value="Reading & Writing">Reading & Writing</AutocompleteItem>
+                    </Autocomplete>
 
-                    </Select>
-                    
-                    <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} className="max-w-xs">
+                    <Autocomplete
+                        label="General Category"
+                        selectedKey={generalCategory}
+                        onSelectionChange={setGeneralCategory}
+                        className="max-w-xs"
+                    >
                         {getCategoryList(subject).map(item => (
-                            <SelectItem key={item} value={item}>{item}</SelectItem>
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
                         ))}
-                    </Select>
+                    </Autocomplete>
+
                     {generalCategory && (
-                        <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} className="max-w-xs">
+                        <Autocomplete
+                            label="Specific Topic"
+                            selectedKey={specificTopic}
+                            onSelectionChange={setSpecificTopic}
+                            className="max-w-xs"
+                        >
                             {getTopicsByCategory(generalCategory).map(topic => (
-                                <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                                <AutocompleteItem key={topic} value={topic}>{topic}</AutocompleteItem>
                             ))}
-                        </Select>
+                        </Autocomplete>
                     )}
-                    <Autocomplete label = "Question Template" selectedKey = {questionTemplate} onSelectionChange = {setQuestionTemplate} className="max-w-xs">
+
+                    <Divider orientation = "vertical"/>
+
+                    <Autocomplete
+                        label="Question Template"
+                        selectedKey={questionTemplate}
+                        onSelectionChange={setQuestionTemplate}
+                        className="max-w-xs"
+                    >
                         {questionTemplates.map(item => (
                             <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
                         ))}
                     </Autocomplete>
-                    <Input label = "Question description to AI" placeholder="Enter question description" value = {questionDescription} onChange = {e => setQuestionDescription(e.target.value)} className="max-w-xs" />
+
+                    <Input label="Question description to AI" placeholder="Enter question description" value={questionDescription} onChange={e => setQuestionDescription(e.target.value)} className="max-w-xs" />
+                    <Divider orientation = "vertical"/>
+                    <Autocomplete
+                        label="Source Practice Test"
+                        selectedKey={sourcePracticeTest}
+                        onSelectionChange={setSourcePracticeTest}
+                        className="w-40"
+                    >
+    {Array.from({ length: 6 }, (_, index) => `CBPT ${index + 1}`).map(item => (
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
+                        ))}
+                    </Autocomplete>
+                    <Autocomplete
+                        label="Source Module"
+                        selectedKey={sourceModule}
+                        onSelectionChange={setSourceModule}
+                        className="w-40"
+                    >
+                        {["M1", "M2", "RW1", "RW2"].map(item => (
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
+                        ))}
+                    </Autocomplete>
+                    <Autocomplete
+                        label="Source Question"
+                        selectedKey={sourceQuestion}
+                        onSelectionChange={setSourceQuestion}
+                        className="w-40"
+                    >
+                        {Array.from({ length: 40 }, (_, index) => String(index + 1)).map(item => (
+                            <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
+                        ))}
+                    </Autocomplete>
+
                 </div>
-                
-                <ImageUpload onChangeLocalImages={updateImages}/>
+
+                <ImageUpload onChangeLocalImages={updateImages} />
 
 
                 <Slider
@@ -240,15 +299,15 @@ const QuestionGeneration = () => {
                 />
 
                 <div className="flex items-center space-x-4">
-                <Button color="primary" onPress={handleGenerateQuestions} isLoading = {generationLoading} >
-                    Generate
-                </Button>
+                    <Button color="primary" onPress={handleGenerateQuestions} isLoading={generationLoading} >
+                        Generate
+                    </Button>
 
-                <Button color="danger" onPress={() => handleRemoveAllQuestions()} >
-                                Remove All
-                </Button>
+                    <Button color="danger" onPress={() => handleRemoveAllQuestions()} >
+                        Remove All
+                    </Button>
 
-                    
+
                 </div>
 
                 {/* <Button color="success" onPress={imageAITester} >
@@ -264,14 +323,14 @@ const QuestionGeneration = () => {
 
             <div>
                 {questionArray.map((question, index) => (
-                    <div key = {index}>
+                    <div key={index}>
                         <Card key={index} className="w-full">
                             <CardHeader>
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm questionKey = {index} inputQuestion={question} mode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} handleUploadQGenMain = {handleUploadQGenMain} initialAnswerType = {answerType}
-                
+                                <QBankForm questionKey={index} inputQuestion={question} mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} handleUploadQGenMain={handleUploadQGenMain} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion}
+
                                 />
                             </CardBody>
                             <CardFooter>
@@ -291,7 +350,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm kemode = {MODENEW} initialSubject = {subject} initialGeneralCategory = {generalCategory} initialSpecificTopic= {specificTopic} initialAnswerType={answerType}/>
+                            <QBankForm kemode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} />
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

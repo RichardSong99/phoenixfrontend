@@ -9,9 +9,11 @@ import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 import { iterateQuestionGeneration } from '@/app/helper/apiservices/questiongenerationservice';
 
-const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, handleUploadQGenMain, }) => {
+const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, initialQuestionTemplate, initialSourcePracticeTest, initialSourceModule, initialSourceQuestion, handleUploadQGenMain, }) => {
 
     const { topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
+
+    const [messageToAI, setMessageToAI] = useState('');
 
     const [answerType, setAnswerType] = useState(initialAnswerType || 'multipleChoice');
     const [difficulty, setDifficulty] = useState('easy');
@@ -59,6 +61,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     // loading indicators
     const [isLoadingGraphicSVG, setIsLoadingGraphicSVG] = useState(false);
     const [isLoadingCheckQuestion, setIsLoadingCheckQuestion] = useState(false);
+    const [isChatbotLoading, setIsChatbotLoading] = useState(false);
 
 
     const [accessOption, setAccessOption] = useState('free');
@@ -68,8 +71,11 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [subject, setSubject] = useState(initialSubject || 'math');
     const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
     const [specificTopic, setSpecificTopic] = useState(initialSpecificTopic || topicMapping[0].topic);
-
-
+    const [questionTemplate, setQuestionTemplate] = useState(initialQuestionTemplate || '');
+    
+    const [sourcePracticeTest, setSourcePracticeTest] = useState(initialSourcePracticeTest || '');
+    const [sourceModule, setSourceModule] = useState(initialSourceModule || '');
+    const [sourceQuestion, setSourceQuestion] = useState(initialSourceQuestion || '');
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -146,6 +152,18 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             if (initialAnswerType) {
                 setAnswerType(initialAnswerType);
             }
+            if (initialQuestionTemplate) {
+                setQuestionTemplate(initialQuestionTemplate);
+            }
+            if (initialSourcePracticeTest) {
+                setSourcePracticeTest(initialSourcePracticeTest);
+            }
+            if (initialSourceModule) {
+                setSourceModule(initialSourceModule);
+            }
+            if (initialSourceQuestion) {
+                setSourceQuestion(initialSourceQuestion);
+            }
         };
 
         refreshCategoryAndTopic();
@@ -154,7 +172,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             setFormFields(inputQuestion);
         }
 
-    }, [inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType]);
+    }, [inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, initialQuestionTemplate, initialSourcePracticeTest, initialSourceModule, initialSourceQuestion]);
 
 
     // renders question
@@ -181,7 +199,11 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             accessOption,
             correctAnswerMultiple,
             correctAnswerFree,
-            uploadedImageUrls
+            uploadedImageUrls,
+            questionTemplate,
+            sourcePracticeTest,
+            sourceModule,
+            sourceQuestion
         });
 
         setActiveViewQuestion(newQuestion);
@@ -209,7 +231,11 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             accessOption,
             correctAnswerMultiple,
             correctAnswerFree,
-            uploadedImageUrls
+            uploadedImageUrls,
+            questionTemplate,
+            sourcePracticeTest,
+            sourceModule,
+            sourceQuestion
         });
 
         console.log('newQuestion', newQuestion);
@@ -258,6 +284,19 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const handleCheckButtonClicked = async () => {
         setIsLoadingCheckQuestion(true);
 
+        await handleIterateQuestion({action: 'check-math'});
+
+        setIsLoadingCheckQuestion(false);
+    }
+
+    const handleChatbotButtonClicked = async () => {
+        setIsChatbotLoading(true);
+        await handleIterateQuestion({action: 'chatbot', message: messageToAI});
+        setIsChatbotLoading(false);
+    }
+
+    const handleIterateQuestion = async ({action = null, message = null}) => {
+
         var originalQuestion = {
             prompt,
             text1,
@@ -281,12 +320,13 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         }
 
         try{
-            const response = await iterateQuestionGeneration(originalQuestion);
+            const response = await iterateQuestionGeneration({question: originalQuestion, message : message, action : action, questionTemplate: questionTemplate});
 
             console.log(    "response in qgenform", response);
 
             if(response){
-                alert("Question checked successfully");
+
+                alert("Question updated successfully");
 
                 if(response.prompt !== undefined && response.prompt !== null){
                     setPromptPrev(prompt);
@@ -368,16 +408,13 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                     setExplanationPrev(explanation);
                     setExplanation(response.explanation);
                 }
-                setIsLoadingCheckQuestion(false);
             }
             else{
-                setIsLoadingCheckQuestion(false);
             }
 
 
         } catch (error) {
             console.error('Failed to check question:', error);
-            setIsLoadingCheckQuestion(false);
         }
     }
 
@@ -502,6 +539,12 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                                 <SelectItem key={item} value={item}>{item}</SelectItem>
                             ))}
                         </Select>
+                        <div className = "flex flex-row gap-x-3">
+                        <Input label = "Question Template" value = {questionTemplate} onValueChange = {setQuestionTemplate} />
+                        <Input label = "Source Practice Test" value = {sourcePracticeTest} onValueChange = {setSourcePracticeTest} />
+                        <Input label = "Source Module" value = {sourceModule} onValueChange = {setSourceModule} />
+                        <Input label = "Source Question" value = {sourceQuestion} onValueChange = {setSourceQuestion} />
+                        </div>
                     </div>
                     <div className="col-span-1 md:col-span-2 flex space-x-4">
                         <Button color="default" type="submit">Render</Button>
@@ -518,9 +561,14 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                         >
                             {mode === MODEEDIT ? 'Save Question' : 'Upload'}
                         </Button>
-                        <Button onPress = {handleCheckButtonClicked} isLoading = {isLoadingCheckQuestion}>Check Question</Button>
-                        <Button onPress = {handleRevertButtonClicked} >Revert</Button>
                         <Button onPress={clearForm}>Clear Form</Button>
+                        <Divider orientation="vertical"/>
+                        <Button color = "primary" variant = "bordered" onPress = {handleCheckButtonClicked} isLoading = {isLoadingCheckQuestion}>Check Question</Button>
+                        <Input label = "Instruction to AI" placeholder = "Check question" value = {messageToAI} onValueChange = {setMessageToAI} endContent = {
+                            <Button isDisabled = {messageToAI === ""} color = "primary" onPress = {handleChatbotButtonClicked} isLoading = {isChatbotLoading}>Go</Button>
+                        }/>
+                        <Button onPress = {handleRevertButtonClicked} >Revert</Button>
+    
                     </div>
                 </form>
 

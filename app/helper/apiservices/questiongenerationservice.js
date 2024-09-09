@@ -51,7 +51,7 @@ export async function visionAITester({images}) {
     return data;
 }
 
-export async function iterateQuestionGeneration(question){
+export async function iterateQuestionGeneration({ question, message, action, questionTemplate}) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -60,7 +60,29 @@ export async function iterateQuestionGeneration(question){
         body: JSON.stringify(question)
     };
 
-    const response = await fetch(`${apiUrl}/iterate_question_gen`, requestOptions);
+    // Construct the URL with optional query parameters
+    let url = `${apiUrl}/iterate_question_gen`;
+    const queryParams = [];
+
+    if (message && message !== '') {
+        queryParams.push(`message=${encodeURIComponent(message)}`);
+    }
+
+    if (action && action !== '') {
+        queryParams.push(`action=${encodeURIComponent(action)}`);
+    }
+
+    if(questionTemplate && questionTemplate !== '') {
+        queryParams.push(`template=${encodeURIComponent(questionTemplate)}`);
+    }
+
+    // Append query parameters if any exist
+    if (queryParams.length > 0) {
+        url += `?${queryParams.join('&')}`;
+    }
+
+    const response = await fetch(url, requestOptions);
+    
     console.log("response", response);
     
     const data = await response.json();

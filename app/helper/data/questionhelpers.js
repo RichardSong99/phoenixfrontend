@@ -65,6 +65,10 @@ export const createNewQuestion = ({
     accessOption,
     correctAnswerMultiple,
     correctAnswerFree,
+    questionTemplate,
+    sourcePracticeTest, 
+    sourceModule, 
+    sourceQuestion,
     uploadedImageUrls
 }) => {
     const newQuestion = {
@@ -84,7 +88,11 @@ export const createNewQuestion = ({
         topic: specificTopic,
         answer_choices: answerChoices,
         explanation: explanation,
-        access_option: accessOption
+        access_option: accessOption,
+        question_template: questionTemplate,
+        source_practice_test: sourcePracticeTest,
+        source_module: sourceModule,
+        source_question: parseInt(sourceQuestion, 10)
     };
 
     if (answerType === 'multipleChoice') {
@@ -93,10 +101,10 @@ export const createNewQuestion = ({
         newQuestion.correct_answer_free = correctAnswerFree;
     }
 
-    newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-        Filename: `IMG${index}`,
-        Url: url
-    }));
+    // newQuestion.Images = uploadedImageUrls.map((url, index) => ({
+    //     Filename: `IMG${index}`,
+    //     Url: url
+    // }));
 
     return newQuestion;
 }

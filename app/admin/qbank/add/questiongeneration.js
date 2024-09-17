@@ -41,6 +41,8 @@ const QuestionGeneration = () => {
         "Function of the sentence",
         "Overall structure of the text",
         "Standard English conventions",
+        // "SEC_Verb forms",
+        // "SEC_Linking clauses",
     ]
     const [questionTemplate, setQuestionTemplate] = useState(questionTemplates[0]);
     const [generationLoading, setGenerationLoading] = useState(false);

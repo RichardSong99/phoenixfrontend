@@ -7,7 +7,7 @@ import {
     updateEngagement,
     fetchEngagementsByID,
 } from "@/app/helper/apiservices/engagementservice";
-import { fetchFullQuestionById, fetchQuestionsById, getAdaptiveQuestion } from "../apiservices/questionservice";
+import { fetchFullQuestionById, fetchQuestionsById, getAdaptiveQuestion, getQuestions } from "../apiservices/questionservice";
 import {
     updateQuizWithQuestionEngagementIDs,
     initializeQuiz,
@@ -94,6 +94,7 @@ export const QuestionProvider = ({ children }) => {
 
     const INDIVIDUALMODE = "individual";
     const QUIZMODE = "quiz";
+    const TESTMODE = "test";
 
     const ACTIVEMODE = "active";
     const REVIEWMODE = "review";
@@ -165,13 +166,19 @@ export const QuestionProvider = ({ children }) => {
         setStartTime(Date.now());
     }
 
-    const createQuiz = async () => {
+    const createQuiz = async ({ count = 5 } = {}) => {
         resetAllVars();
-        const exampleQuestionIDs = ["65bae13d08992ac645d86bc6", "65bae26b08992ac645d86bc7", "65bb0c5c08992ac645d86bcf", "65bb137608992ac645d86bd5", "65bb16e208992ac645d86bd6"];
-        const response = await initializeQuiz({ questionIDs: exampleQuestionIDs, quizType : "quiz" });
+        const newQuestions = await getQuestions({ pageSize : count, selectedAnswerStatuses: ["unattempted"] });
+        console.log("newQuestions", newQuestions);
+        const newQuestionIDs = newQuestions.data.map((question) => question.Question.id);
+        const response = await initializeQuiz({ questionIDs: newQuestionIDs, quizType : "quiz" });
         setupActiveQuizMode(response.quizID);
         console.log("quizID initialized", response.quizID);
         return response.quizID;
+    };
+
+    const setupTestMode = async () => {
+        setIndQuizMode(TESTMODE);
     };
 
     const setupActiveQuizMode = async (quizID) => {
@@ -730,6 +737,7 @@ export const QuestionProvider = ({ children }) => {
                 adaptiveQuestionIndex,
                 createAdaptiveQuiz,
                 setupAdaptiveQuizMode,
+                setupTestMode,
                 handleAdaptiveSubmit,
                 createQuiz,
                 resetAllVars,

@@ -123,7 +123,7 @@ export default function QuestionNavBar() {
                             Next
                         </Button>
                     </div> : null }
-                {activeReviewMode === "active" && adaptiveRegularMode !== 'adaptive' ? 
+                {activeReviewMode === "active" && adaptiveRegularMode !== 'adaptive' && indquizMode === 'quiz' ? 
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
                         <Button
                             className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'

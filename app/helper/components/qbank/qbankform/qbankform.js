@@ -4,7 +4,7 @@ import { QuestionContext } from '@/app/helper/context/questioncontext';
 import { ImageUpload } from '@/app/helper/components/form/formcomponents';
 import { difficultyData } from '../../../data/data';
 import { useData } from '@/app/helper/context/datacontext';
-import { Input, Button, Select, SelectItem, Textarea, Divider, Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import { Input, Button, Select, SelectItem, Textarea, Divider, Autocomplete, AutocompleteItem, Table, TableHeader, TableBody, TableCell, TableColumn, TableRow } from '@nextui-org/react';
 import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 import { iterateQuestionGeneration } from '@/app/helper/apiservices/questiongenerationservice';
@@ -30,6 +30,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [graphicLatex, setGraphicLatex] = useState(null); // For graphic questions
     const [graphicSVG, setGraphicSVG] = useState(null); // For graphic questions
     const [graphicDescription, setGraphicDescription] = useState(''); // For graphic questions
+    const [questionImageURL, setQuestionImageURL] = useState(null);
 
     const [choiceA, setChoiceA] = useState(null);
     const [choiceB, setChoiceB] = useState(null);
@@ -50,6 +51,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [graphicLatexPrev, setGraphicLatexPrev] = useState(null);
     const [graphicSVGPrev, setGraphicSVGPrev] = useState(null);
     const [graphicDescriptionPrev, setGraphicDescriptionPrev] = useState('');
+    const [questionImageURLPrev, setQuestionImageURLPrev] = useState(null);
     const [choiceAPrev, setChoiceAPrev] = useState(null);
     const [choiceBPrev, setChoiceBPrev] = useState(null);
     const [choiceCPrev, setChoiceCPrev] = useState(null);
@@ -66,7 +68,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
 
     const [accessOption, setAccessOption] = useState('free');
     const { activeViewQuestion, setActiveViewQuestion, onOpen, MODEEDIT, MODENEW, setEditQuestion, questionsUpdated, setQuestionsUpdated } = useContext(QuestionContext); // State for the question being viewed
-    const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
+    // const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
     const [subject, setSubject] = useState(initialSubject || 'math');
     const [generalCategory, setGeneralCategory] = useState(initialGeneralCategory || topicMapping[0].category);
@@ -76,6 +78,51 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
     const [sourcePracticeTest, setSourcePracticeTest] = useState(initialSourcePracticeTest || '');
     const [sourceModule, setSourceModule] = useState(initialSourceModule || '');
     const [sourceQuestion, setSourceQuestion] = useState(initialSourceQuestion || '');
+
+//     const svg = `<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+//   <!-- Background -->
+//   <rect width="100%" height="100%" fill="white"/>
+
+//   <!-- Grid lines -->
+//   <g stroke="lightgray" stroke-width="1">
+//     <line x1="50" y1="50" x2="350" y2="50"/>
+//     <line x1="50" y1="100" x2="350" y2="100"/>
+//     <line x1="50" y1="150" x2="350" y2="150"/>
+//   </g>
+
+//   <!-- X and Y axis -->
+//   <line x1="50" y1="150" x2="350" y2="150" stroke="black" stroke-width="2"/>
+//   <line x1="50" y1="50" x2="50" y2="150" stroke="black" stroke-width="2"/>
+
+//   <!-- X-axis labels -->
+//   <text x="100" y="170" font-family="Arial" font-size="12" text-anchor="middle">Q1</text>
+//   <text x="200" y="170" font-family="Arial" font-size="12" text-anchor="middle">Q2</text>
+//   <text x="300" y="170" font-family="Arial" font-size="12" text-anchor="middle">Q3</text>
+
+//   <!-- Y-axis labels -->
+//   <text x="35" y="55" font-family="Arial" font-size="12" text-anchor="end">300</text>
+//   <text x="35" y="105" font-family="Arial" font-size="12" text-anchor="end">200</text>
+//   <text x="35" y="155" font-family="Arial" font-size="12" text-anchor="end">100</text>
+
+//   <!-- Line chart -->
+//   <polyline
+//     fill="none"
+//     stroke="blue"
+//     stroke-width="2"
+//     points="
+//       100,120
+//       200,90
+//       300,70
+//     "/>
+
+//   <!-- Data points -->
+//   <circle cx="100" cy="120" r="4" fill="blue"/>
+//   <circle cx="200" cy="90" r="4" fill="blue"/>
+//   <circle cx="300" cy="70" r="4" fill="blue"/>
+
+//   <!-- Title -->
+//   <text x="200" y="30" font-family="Arial" font-size="16" text-anchor="middle">Quarterly Sales</text>
+// </svg>`
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -93,6 +140,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         if (question.graphic_latex !== undefined && question.graphic_latex !== null) setGraphicLatex(question.graphic_latex);
         if (question.graphic_svg !== undefined && question.graphic_svg !== null) setGraphicSVG(question.graphic_svg);
         if (question.graphic_description !== undefined && question.graphic_description !== null) setGraphicDescription(question.graphic_description);
+        if (question.question_image_url !== undefined && question.question_image_url !== null) setQuestionImageURL(question.question_image_url);
 
         if (question.answer_type !== undefined && question.answer_type !== null) setAnswerType(question.answer_type);
         if (question.difficulty !== undefined && question.difficulty !== null) setDifficulty(question.difficulty);
@@ -106,7 +154,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         if (question.correct_answer_free !== undefined && question.correct_answer_free !== null) setCorrectAnswerFree(question.correct_answer_free);
         if (question.explanation !== undefined && question.explanation !== null) setExplanation(question.explanation);
         if (question.access_option !== undefined && question.access_option !== null) setAccessOption(question.access_option);
-        if (question.images !== undefined && question.images !== null) setUploadedImageUrls(question.images.map(image => image.url));
+                
     }
 
     const clearForm = () => {
@@ -124,6 +172,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         setGraphicLatex(null);
         setGraphicSVG(null);
         setGraphicDescription('');
+        setQuestionImageURL(null);
         setChoiceA('');
         setChoiceB('');
         setChoiceC('');
@@ -135,7 +184,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         setGeneralCategory(topicMapping[0].category);
         setSpecificTopic(topicMapping[0].topic);
         setReplaceIndex(null);
-        setUploadedImageUrls([]);
+        setQuestionImageURL(null);
     };
 
     useEffect(() => {
@@ -199,7 +248,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             accessOption,
             correctAnswerMultiple,
             correctAnswerFree,
-            uploadedImageUrls,
+            questionImageURL,
             questionTemplate,
             sourcePracticeTest,
             sourceModule,
@@ -231,7 +280,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
             accessOption,
             correctAnswerMultiple,
             correctAnswerFree,
-            uploadedImageUrls,
+            questionImageURL,
             questionTemplate,
             sourcePracticeTest,
             sourceModule,
@@ -471,17 +520,16 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
 
                         <Input label="Graphic Description" value={graphicDescription} onChange={e => setGraphicDescription(e.target.value)} />
                         <Textarea label="Graphic (Latex)" value={graphicLatex} onChange={e => setGraphicLatex(e.target.value)} />
-                        <div className="flex flex-row gap-2">
+                        {/* <div className="flex flex-row gap-2">
                             <Button onPress={handleSVGRefresh} isLoading={isLoadingGraphicSVG}>Refresh Graphic SVG</Button>
                             <Button onPress={() => setIsLoadingGraphicSVG(false)}>Stop</Button>
                         </div>
-                        <Textarea label="Graphic (SVG)" value={graphicSVG} onChange={e => setGraphicSVG(e.target.value)} />
-
-                        {/* <Select label="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)} defaultSelectedKeys={[answerType]}>
-                            {["multipleChoice", "freeResponse"].map(item => (
-                                <SelectItem key={item} value={item}>{item}</SelectItem>
-                            ))}
-                        </Select> */}
+                        <Textarea label="Graphic (SVG)" value={graphicSVG} onChange={e => setGraphicSVG(e.target.value)} /> */}
+                        <Input label = "Question Image URL" value = {questionImageURL} onValueChange = {setQuestionImageURL} />
+                        {/* <div
+                            dangerouslySetInnerHTML={{ __html: graphicSVG }}
+                        /> */}
+        
                         <Autocomplete label="Answer Type" selectedKey={answerType} onSelectionChange={setAnswerType} >
                             {["multipleChoice", "freeResponse"].map(item => (
                                 <AutocompleteItem key={item} value={item}>{item}</AutocompleteItem>
@@ -511,23 +559,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                                 <SelectItem key={item} value={item}>{item}</SelectItem>
                             ))}
                         </Select>
-                        {/* <Select label="Subject" value={subject} onChange={e => handleChangeSubject(e.target.value)} defaultSelectedKeys={[subject]}>
-                                {["math", "reading"].map(item => (
-                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                ))}
-                            </Select>
-                            <Select label="General Category" value={generalCategory} onChange={e => setGeneralCategory(e.target.value)} defaultSelectedKeys={[generalCategory]}>
-                                {getCategoryList().map(item => (
-                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                ))}
-                            </Select>
-                            {generalCategory && (
-                                <Select label="Specific Topic" value={specificTopic} onChange={e => setSpecificTopic(e.target.value)} defaultSelectedKeys={[specificTopic]}>
-                                    {getTopicsByCategory(generalCategory).map(topic => (
-                                        <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                                    ))}
-                                </Select>
-                            )} */}
+
                         <Input label="Subject" value={subject} onValueChange={setSubject} />
                         <Input label="General Category" value={generalCategory} onValueChange={setGeneralCategory} />
                         <Input label="Specific Topic" value={specificTopic} onValueChange={setSpecificTopic} />
@@ -575,10 +607,10 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
 
 
                 <Divider />  {/* Here is the horizontal bar */}
-                <ImageUpload
+                {/* <ImageUpload
                     uploadedImageUrls={uploadedImageUrls}
                     setUploadedImageUrls={setUploadedImageUrls}
-                />
+                /> */}
             </div>
         </div>
 

@@ -69,7 +69,7 @@ export const createNewQuestion = ({
     sourcePracticeTest, 
     sourceModule, 
     sourceQuestion,
-    uploadedImageUrls
+    questionImageURL
 }) => {
     const newQuestion = {
         prompt: prompt,
@@ -92,7 +92,8 @@ export const createNewQuestion = ({
         question_template: questionTemplate,
         source_practice_test: sourcePracticeTest,
         source_module: sourceModule,
-        source_question: parseInt(sourceQuestion, 10)
+        source_question: parseInt(sourceQuestion, 10),
+        question_image_url: questionImageURL
     };
 
     if (answerType === 'multipleChoice') {
@@ -101,10 +102,6 @@ export const createNewQuestion = ({
         newQuestion.correct_answer_free = correctAnswerFree;
     }
 
-    // newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-    //     Filename: `IMG${index}`,
-    //     Url: url
-    // }));
 
     return newQuestion;
 }

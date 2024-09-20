@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input, Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Slider, Select, SelectItem, Button, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, Input, Autocomplete, AutocompleteItem,  } from "@nextui-org/react";
 import { useData } from '@/app/helper/context/datacontext';
 import QBankForm from '../../../helper/components/qbank/qbankform/qbankform';
 import { getGeneratedQuestions, visionAITester } from '@/app/helper/apiservices/questiongenerationservice';
@@ -122,7 +122,7 @@ const QuestionGeneration = () => {
                     accessOption: "free",
                     correctAnswerMultiple: data[i].correct_answer_multiple,
                     correctAnswerFree: answerType === 'freeResponse' ? data[i].correct_answer_free : null,
-                    uploadedImageUrls: []
+                    questionImageURL: null,
                 });
                 setQuestionArray((prev) => [...prev, question]);
             }
@@ -352,7 +352,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm kemode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} />
+                            <QBankForm mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} />
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

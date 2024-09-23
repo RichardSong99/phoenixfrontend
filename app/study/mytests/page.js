@@ -37,9 +37,9 @@ export default function MyTestDashboard() {
                     </div>
                     <div className="flex flex-row gap-2">
                     </div>
-                    <Button onClick={startTest} className="bg-appleBlue text-white rounded-[20px]" variant="contained" size="sm">
+                    {/* <Button onClick={startTest} className="bg-appleBlue text-white rounded-[20px]" variant="contained" size="sm">
                         Create Practice Test
-                    </Button>
+                    </Button> */}
                 </div>
                 </CardHeader>
                 <CardBody>

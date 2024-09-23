@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button } from '@nextui-org/button';
+import { TestContext } from '@/app/study/activetest/activetestcontext';
 
 export const BreakScreen = () => {
+    const {
+        handleNextTestStage,
+    } = useContext(TestContext);
+
     const [timeLeft, setTimeLeft] = useState(600);
 
     useEffect(() => {
@@ -26,7 +31,7 @@ export const BreakScreen = () => {
                 <div className="flex flex-col items-center gap-5 p-5 box-border">
                     <div style={{ color: "white", fontWeight: "600", fontSize: "14px" }}> Remaining Break Time:</div>
                     <div style={{ color: "white", fontWeight: "700", fontSize: "40px" }}> {minutes}:{seconds < 10 ? '0' : ''}{seconds} </div>
-                    <Button className='rounded-[25px] w-[150px] bg-appleBlue text-white'>Resume Test</Button>
+                    <Button onClick={handleNextTestStage} className='rounded-[25px] w-[150px] bg-appleBlue text-white'>Resume Test</Button>
                 </div>
                 <div className="flex flex-col gap-5 p-5 box-border w-[500px]">
                     <div>You can resume this practice test as soon as you&apos;re ready to move on.</div>

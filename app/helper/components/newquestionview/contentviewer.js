@@ -8,7 +8,18 @@ import React, {useContext} from 'react';
 export default function ContentViewer({ }) {
     const {
         quizID,
+        indquizMode,
     } = useContext(QuestionContext);
+
+    // useEffect(() => {
+    //     const url = window.location.href;
+    //     if (url.includes('activetest') && indquizMode !== 'test') {
+    //         return <div className='w-screen h-screen z-[12] absolute top-0 left-0 bg-white flex flex-row justify-center items-center'>
+    //             <Spinner />
+    //             <div className='ml-[20px]'>Loading Test...</div>
+    //         </div>;
+    //     }
+    // }, []);
 
     return (
         <div className='custom-font w-screen h-screen bg-appleGray6 z-[10] absolute top-0 left-0'>

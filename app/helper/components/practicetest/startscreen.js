@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import { QuestionContext } from "../../context/questioncontext";
 import { TestContext } from "@/app/study/activetest/activetestcontext";
 
-export const StartScreen = () => {
+export const StartScreen = ({ testID }) => {
     const {
         handleNextTestStage,
+        initializeModuleIDs,
     } = useContext(TestContext);
 
     const {
@@ -14,8 +15,8 @@ export const StartScreen = () => {
     } = useContext(QuestionContext);
 
     const router = useRouter();
-    const startTest = () => {
-        createQuiz({ count: 27 });
+    const startTest = async () => {
+        await initializeModuleIDs(testID);
         handleNextTestStage();
     }
     return (

@@ -177,7 +177,8 @@ export const QuestionProvider = ({ children }) => {
         return response.quizID;
     };
 
-    const setupTestMode = async () => {
+    const setupTestMode = async (quizID) => {
+        await setupActiveQuizMode(quizID);
         setIndQuizMode(TESTMODE);
     };
 
@@ -198,7 +199,7 @@ export const QuestionProvider = ({ children }) => {
         setActiveReviewMode(ACTIVEMODE);
         setIndQuizMode(QUIZMODE);
 
-        initializeEngagementStates(QEIDCombos);
+        await initializeEngagementStates(QEIDCombos);
     };
 
     const setupReviewIndividualMode = async (questionID, engagementID) => {

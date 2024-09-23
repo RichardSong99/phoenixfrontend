@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { QuestionContext } from '../../context/questioncontext';
 import {Button} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { TestContext } from '@/app/study/activetest/activetestcontext';
 
 export default function QuestionNavBar() {
     const{
@@ -133,6 +134,9 @@ export default function QuestionNavBar() {
                         </Button>
                     </div> : <div className='h-[100px]'></div>
                 }
+                {/* {indquizMode === "test" && <div className='mb-[10px] mt-[-100px] h-[100px] flex flex-col justify-around items-center'>
+                    <Button onClick={handleNextTestStage} className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'>Next Section</Button>
+                </div>} */}
             </div>
         </div>
     )

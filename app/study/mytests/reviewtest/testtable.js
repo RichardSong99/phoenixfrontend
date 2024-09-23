@@ -15,6 +15,7 @@ import {
     Spinner
 } from "@nextui-org/react";
 import { getTestsForUser } from '@/app/helper/apiservices/testservice';
+import { useRouter } from 'next/navigation';
 
 export function TestTable() {
     const [testData, setTestData] = useState([]);
@@ -22,11 +23,17 @@ export function TestTable() {
     useEffect(() => {
         const fetchTests = async () => {
             const response = await getTestsForUser();
-            console.log("response", response);
             setTestData(response.filter(test => test !== null));
         };
         fetchTests();
     }, []);
+
+    const router = useRouter();
+
+    const startTest = (testID) => {
+        console.log("start test", testID);
+        router.push(`/study/activetest?testid=${testID}`);
+    };
 
     if(testData.length === 0){
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
@@ -39,7 +46,7 @@ export function TestTable() {
         <div >
             <Table removeWrapper aria-label="Example static collection table">
                 <TableHeader>
-                    <TableColumn>Review Test</TableColumn>
+                    <TableColumn>Action</TableColumn>
                     <TableColumn>Test Name</TableColumn>
                     <TableColumn>Reading Score</TableColumn>
                     <TableColumn>Math Score</TableColumn>
@@ -50,8 +57,11 @@ export function TestTable() {
                     {testData.map((item, index) => (
                         <TableRow>
                             <TableCell>
-                                <Button color="success" variant="bordered" size="sm">
+                                <Button className='mr-[20px] rounded-[20px]' color="success" variant="bordered" size="sm">
                                     Review Test
+                                </Button>
+                                <Button onClick={() => startTest(item.id)} className='mr-[-80px] border-appleBlue text-appleGray1 rounded-[20px]' variant="bordered" size="sm">
+                                    Start Test
                                 </Button>
                             </TableCell>
                             <TableCell>{item.name}</TableCell>

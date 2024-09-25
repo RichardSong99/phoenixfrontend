@@ -94,6 +94,14 @@ const QuestionGeneration = () => {
         setNumHard(value);
     }
 
+    const handleDuplicateQuestion = (index, question) => {
+        // insert the question after the index-th question in questionArray
+        const newQuestionArray = [...questionArray];
+        newQuestionArray.splice(index + 1, 0, question);
+        setQuestionArray(newQuestionArray);       
+
+    }
+
     const handleGenerateQuestions = async () => {
         console.log("Generate Questions");
         try {
@@ -331,7 +339,7 @@ const QuestionGeneration = () => {
                                 <h4>Question {index + 1}</h4>
                             </CardHeader>
                             <CardBody>
-                                <QBankForm questionKey={index} inputQuestion={question} mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} handleUploadQGenMain={handleUploadQGenMain} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion}
+                                <QBankForm questionKey={index} inputQuestion={question} mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} handleUploadQGenMain={handleUploadQGenMain} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} handleDuplicateQuestion={handleDuplicateQuestion}
 
                                 />
                             </CardBody>
@@ -352,7 +360,7 @@ const QuestionGeneration = () => {
                             <h4>Question {1}</h4>
                         </CardHeader>
                         <CardBody>
-                            <QBankForm mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} />
+                            <QBankForm mode={MODENEW} initialSubject={subject} initialGeneralCategory={generalCategory} initialSpecificTopic={specificTopic} initialAnswerType={answerType} initialQuestionTemplate={questionTemplate} initialSourcePracticeTest={sourcePracticeTest} initialSourceModule={sourceModule} initialSourceQuestion={sourceQuestion} handleDuplicateQuestion={handleDuplicateQuestion}/>
                         </CardBody>
                         <CardFooter>
                             <Button color="danger" onPress={() => handleRemoveQuestion(index)} >

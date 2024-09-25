@@ -9,7 +9,7 @@ import { createNewQuestion } from '@/app/helper/data/questionhelpers';
 import { getSVGFromLatex } from '@/app/helper/apiservices/latexservice';
 import { iterateQuestionGeneration } from '@/app/helper/apiservices/questiongenerationservice';
 
-const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, initialQuestionTemplate, initialSourcePracticeTest, initialSourceModule, initialSourceQuestion, handleUploadQGenMain, }) => {
+const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGeneralCategory, initialSpecificTopic, initialAnswerType, initialQuestionTemplate, initialSourcePracticeTest, initialSourceModule, initialSourceQuestion, handleUploadQGenMain, handleDuplicateQuestion }) => {
 
     const { topicMapping, loading, datacube, getTopicsByCategory, getCategoryList } = useData();
 
@@ -486,6 +486,38 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
         setCorrectAnswerFree(correctAnswerFreePrev);
         setExplanation(explanationPrev);
     }
+
+    const handleInternalDuplicateQuestion = async () => {
+        const newQuestion = createNewQuestion({
+            prompt,
+            text1,
+            text1Description,
+            text2,
+            text2Description,
+            equation1,
+            equation2,
+            graphicLatex: graphicLatex,
+            graphicSVG: graphicSVG,
+            graphicDescription: graphicDescription,
+            answerType,
+            difficulty,
+            subject,
+            specificTopic,
+            answerChoices: [choiceA, choiceB, choiceC, choiceD],
+            explanation,
+            accessOption,
+            correctAnswerMultiple,
+            correctAnswerFree,
+            questionImageURL,
+            questionTemplate,
+            sourcePracticeTest,
+            sourceModule,
+            sourceQuestion
+        });
+
+        handleDuplicateQuestion(questionKey, newQuestion);
+
+    }
         
 
 
@@ -593,6 +625,7 @@ const QBankForm = ({ questionKey, inputQuestion, mode, initialSubject, initialGe
                         >
                             {mode === MODEEDIT ? 'Save Question' : 'Upload'}
                         </Button>
+                        <Button onPress = {() => handleInternalDuplicateQuestion()}>Duplicate</Button>
                         <Button onPress={clearForm}>Clear Form</Button>
                         <Divider orientation="vertical"/>
                         <Button color = "primary" variant = "bordered" onPress = {handleCheckButtonClicked} isLoading = {isLoadingCheckQuestion}>Check Question</Button>

@@ -24,6 +24,13 @@ const config = {
         appleYellow: '#FFCC00',
         appleRed: '#FF3B30',
         appleGreen: '#34C759',
+        themeGreen: "#14BF96",
+        themeBlue: "#005D9E",
+        themeLightGreen: "#78D5A3",
+        themeDarkGray: "#333333",
+        themeMediumGray: "#C8D5E0",
+        themeLightGray: "#EEEEEE",
+        themeWhite: "#F2F0EF",
       },
       boxShadow: {
         custom: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',

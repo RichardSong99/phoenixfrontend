@@ -105,7 +105,7 @@ export default function QuestionView({ }) {
             <div className='ml-[20px]'>Loading...</div>
         </div>;
     }
-
+    
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
             {!continueTimer &&
@@ -125,7 +125,7 @@ export default function QuestionView({ }) {
                 </div>
             }
             <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${!continueTimer ? 'blur-sm' : null}`}>
-                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
+                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" || questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                         {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?
@@ -210,7 +210,7 @@ export default function QuestionView({ }) {
                         }
                         {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
                             <>
-                                {activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex == adaptiveQuestionIndex) ?
+                                {(activeReviewMode !== "review" && adaptiveRegularMode !== 'adaptive') || (activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex === adaptiveQuestionIndex)) ?
                                 (
                                     answerChoices.map((choice, index) => (
                                         <div key={choice} className="relative w-full max-w-xl mx-auto">

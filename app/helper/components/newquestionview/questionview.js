@@ -125,7 +125,7 @@ export default function QuestionView({ }) {
                 </div>
             }
             <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${!continueTimer ? 'blur-sm' : null}`}>
-                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
+                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" || questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                         {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?

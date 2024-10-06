@@ -56,7 +56,7 @@ export default function QuestionNavBar() {
     }
 
     return (
-        <div className='h-[90%] w-[250px] bg-white relative top-[40px] left-[30px] flex flex-col justify-between items-center pt-[25px] pb-[40px] rounded-[25px] shadow-custom'>
+        <div className='h-[90%] w-[250px] bg-white relative top-[60px] left-[30px] flex flex-col justify-between items-center pt-[25px] pb-[40px] rounded-[25px] shadow-custom'>
             <div className='w-full h-[80%] flex flex-col items-center'>
                 { adaptiveRegularMode !== 'adaptive' && <div className='mb-[20px] w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray6 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px]'>
                     <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px]'></div>

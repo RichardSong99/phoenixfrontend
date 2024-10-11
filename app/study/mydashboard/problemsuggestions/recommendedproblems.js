@@ -43,6 +43,11 @@ export function RecommendedProblems() {
         return answerType;
     }
 
+    const loadMore = async () => {
+        const response = await getQuestions({selectedAnswerStatuses: ['unattempted'], pageSize: 8});
+        setQuestionData([...questionData, ...response.data]);
+    }
+
     if(!questionData) {
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
             <Spinner />
@@ -51,28 +56,24 @@ export function RecommendedProblems() {
     }
 
     return (
-        <div className="flex flex-row flex-wrap w-full gap-2">
+        <div className="flex flex-row flex-wrap w-[98%] justify-between">
             {questionData.map(
                 (question, index) => {
                     const difficulty = question?.Question?.difficulty;
-                    let gradientClass = '';
                     let textColor = '';
 
                     if (difficulty === 'easy') {
-                        gradientClass = 'bg-gradient-to-br from-[#45CD91] to-[#0FAF89]';
                         textColor = 'text-[#0FAF89]';
                     } else if (difficulty === 'medium') {
-                        gradientClass = 'bg-gradient-to-br from-[#50E2D1] to-[#1283FF]';
-                        textColor = 'text-[#005D9E]';
+                        textColor = 'text-[#FFB341]';
                     } else if (difficulty === 'hard' || difficulty === 'extreme') {
-                        gradientClass = 'bg-gradient-to-br from-[#F49AB0] to-[#FF414C]';
                         textColor = 'text-[#FF414C]';
                     }
 
                     return (
-                        <div onClick={() => viewQuestionModal({ questionId: question?.Question?.id })}
-                        className={`px-[20px] py-[10px] rounded-[15px] w-[300px] h-[150px] ${gradientClass}
-                        flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-white text-center`}>
+                        <div onClick={() => viewQuestionModal({ questionId: question.Question.id })}
+                        className={`px-[20px] py-[10px] rounded-[15px] w-[300px] h-[150px] bg-gradient-to-br from-[#FFFFFF] to-[#EAF4FF]
+                        flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-black text-center shadow-custom`}>
                             <div className="h-[75%] flex flex-col justify-around items-center">
                                 <div className="w-[full] h-[20px]">{parseLatexString(truncatePrompt(question.Question.prompt, 8))}</div>
                                 <Chip className={`text-center border h-[20px] bg-white px-[4px] py-[2px] text-[12px] rounded-[10px] font-bold ${textColor}`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></Chip>
@@ -82,6 +83,11 @@ export function RecommendedProblems() {
                     )
                 }
             )}
+            <div className="w-full flex flex-row justify-center mt-[10px]">
+                <div className="border-[2px] px-[20px] py-[5px] rounded-[25px] cursor-pointer text-[12px]" onClick={loadMore}>
+                    Load More
+                </div>
+            </div>
         </div>
     );
 }
@@ -123,6 +129,11 @@ export function RecentProblems() {
         return answerType;
     }
 
+    const loadMore = async () => {
+        const response = await getQuestions({selectedAnswerStatuses: ['correct', 'incorrect'], pageSize: 8});
+        setQuestionData([...questionData, ...response.data]);
+    }
+
     if(!questionData) {
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
             <Spinner />
@@ -131,24 +142,41 @@ export function RecentProblems() {
     }
 
     return (
-        <div className="flex flex-row flex-wrap w-full gap-2">
+        <div className="flex flex-row flex-wrap w-[98%] justify-between">
             {questionData.map(
                 (question, index) => {
+                    const difficulty = question?.Question?.difficulty;
+                    let textColor = '';
+
+                    if (difficulty === 'easy') {
+                        textColor = 'text-[#0FAF89]';
+                    } else if (difficulty === 'medium') {
+                        textColor = 'text-[#FFB341]';
+                    } else if (difficulty === 'hard' || difficulty === 'extreme') {
+                        textColor = 'text-[#FF414C]';
+                    }
+
                     return (
                         <div onClick={() => viewQuestionModal({
                             questionId: question.Question.id,
-                            engagementId: question.Engagement.id})} className={`px-[20px] py-[10px] rounded-[15px] w-[200px] h-[150px] bg-themeLightGray ${
+                            engagementId: question.Engagement.id})} className={`px-[20px] py-[10px] rounded-[15px] w-[300px] h-[150px] bg-gradient-to-br from-[#FFFFFF] to-[#EAF4FF]
+                            flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-black text-center shadow-custom ${
                             question.Engagement.status === 'correct' ? 'border-[2px] border-appleGreen' : ' border-[2px] border-appleRed'
                         } flex flex-col justify-between cursor-pointer mb-[10px] text-[12px]`}>
-                            <div className="w-[130px]">{parseLatexString(truncatePrompt(question.Question.prompt, 8))}</div>
-                            <div>
-                                <div className="text-center w-full">{formatDifficulty(question.Question.difficulty)}</div>
-                                <div className="text-center w-full">{formatAnswerType(question.Question.answer_type)}</div>
+                            <div className="h-[75%] flex flex-col justify-around items-center">
+                                <div className="w-[full] h-[20px]">{parseLatexString(truncatePrompt(question.Question.prompt, 8))}</div>
+                                <Chip className={`text-center border h-[20px] bg-white px-[4px] py-[2px] text-[12px] rounded-[10px] font-bold ${textColor}`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></Chip>
                             </div>
+                            <div className="text-center w-full h-[25%]">{formatAnswerType(question.Question.topic)}</div>
                         </div>
                     )
                 }
             )}
+            <div className="w-full flex flex-row justify-center mt-[10px]">
+                <div className="border-[2px] px-[20px] py-[5px] rounded-[25px] cursor-pointer text-[12px]" onClick={loadMore}>
+                    Load More
+                </div>
+            </div>
         </div>
     );
 }

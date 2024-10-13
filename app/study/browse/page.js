@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'next/navigation';
 
 import QBankViewer from "@/app/helper/components/qbank/qbankview/qbankviewer";
+import NewQBankViewer from "@/app/helper/components/qbank/qbankview/newqbanktable";
 
 import { UserProvider } from "@/app/helper/context/usercontext";
 
@@ -49,6 +50,7 @@ export default function MyDashboard() {
           </CardHeader>
           <CardBody>
             <QBankViewer />
+            <NewQBankViewer />
           </CardBody>
         </Card>
       </div>

@@ -90,6 +90,10 @@ export const DataProvider = ({ children }) => {
         return topicSummaryList.filter(item => item.subject === subject);
     }
 
+    const filterTopicSummaryListBySubjectAll = () => {
+        return topicSummaryList.filter(item => item.subject === "Math" || item.subject === "Reading & Writing");
+    }
+
     const getTopicSummaryElement = (topic) => {
         return topicSummaryList.find(item => item.topic === topic);
     }
@@ -136,7 +140,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, loadUserData }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll }}>
             {children}
         </DataContext.Provider>
     );

@@ -79,6 +79,10 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
         return text;
     };
 
+    function formatDifficulty(difficulty) {
+        return difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    }
+
     useEffect(() => {
         const checkUser = async () => {
             try {
@@ -156,22 +160,25 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     </Button>
                                 </div>
                             </TableCell> */}
-                            <TableCell className="flex flex-row gap-2">
-                                <Chip
-                                    color={
-                                        questionEngagement?.status === "correct"
-                                            ? "success"
-                                            : questionEngagement?.status === "incorrect"
-                                                ? "danger"
-                                                : questionEngagement?.status === "omitted"
-                                                    ? "warning"
-                                                    : "default"
+                            <TableCell className="flex flex-row gap-2 justify-center items-center">
+                                <div className="w-[20px] h-[20px]">
+                                    { questionEngagement?.status === "correct" ?
+                                        <><svg className="fill-[#0FAF89]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
+                                        </svg></> : questionEngagement?.status === "incorrect" ?
+                                        <svg className="fill-[#FF414C]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="M9.172 16.242L12 13.414l2.828 2.828l1.414-1.414L13.414 12l2.828-2.828l-1.414-1.414L12 10.586L9.172 7.758L7.758 9.172L10.586 12l-2.828 2.828z"></path>
+                                            <path d="M12 22c5.514 0 10-4.486 10-10S17.514 2 12 2S2 6.486 2 12s4.486 10 10 10m0-18c4.411 0 8 3.589 8 8s-3.589 8-8 8s-8-3.589-8-8s3.589-8 8-8"></path>
+                                        </svg> :
+                                        <svg className="fill-appleGray4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
+                                        </svg>
                                     }
-                                    className="text-white"
-                                >
-                                    {isAuthenticated ? questionEngagement?.status : "Unattempted"}
+                                </div>
+                                <Chip className="bg-[#F8F7F7] text-[#333333] px-[10px] py-[3px] flex flex-row justify-center items-center">
+                                {isNaN(Math.floor(questionEngagement?.Engagement?.duration / 60)) ? 0 : Math.floor(questionEngagement?.Engagement?.duration / 60)}:
+                                {isNaN(Math.floor(questionEngagement?.Engagement?.duration % 60)) ? '00' : Math.floor(questionEngagement?.Engagement?.duration % 60).toString().padStart(2, '0')}
                                 </Chip>
-                                <Chip className="bg-[#F8F7F7] text-[#333333] px-[10px] py-[3px] flex flex-row justify-center items-center">{Math.floor(questionEngagement?.Engagement?.duration / 60)}:{Math.floor(questionEngagement?.Engagement?.duration % 60)}</Chip>
                             </TableCell>
                             <TableCell>
                                 {renderMarkdownWithLaTeX(truncatePrompt(questionEngagement?.Question?.prompt, 16))}

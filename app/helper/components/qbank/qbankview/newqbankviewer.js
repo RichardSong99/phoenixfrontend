@@ -122,6 +122,18 @@ const NewQBankViewer = () => {
         setSelectedAnswerStatuses(["unattempted"]);
     };
 
+    const handleSetAnsweredMode = () => {
+        console.log("Review mode");
+        handleCheckAll({ allChoices: difficulties, allChoicesSelected: false, selectedChoices: selectedDifficulties, setSelectedChoices: setSelectedDifficulties });
+        handleCheckAll({ allChoices: answerTypes, allChoicesSelected: false, selectedChoices: selectedAnswerTypes, setSelectedChoices: setSelectedAnswerTypes });
+        handleCheckAll({ allChoices: algebraTopics, allChoicesSelected: false, selectedChoices: algebraSelectedTopics, setSelectedChoices: setAlgebraSelectedTopics });
+        handleCheckAll({ allChoices: advancedMathTopics, allChoicesSelected: false, selectedChoices: advancedMathSelectedTopics, setSelectedChoices: setAdvancedMathSelectedTopics });
+        handleCheckAll({ allChoices: problemSolvingTopics, allChoicesSelected: false, selectedChoices: problemSolvingSelectedTopics, setSelectedChoices: setProblemSolvingSelectedTopics });
+        handleCheckAll({ allChoices: geometryTopics, allChoicesSelected: false, selectedChoices: geometrySelectedTopics, setSelectedChoices: setGeometrySelectedTopics });
+
+        setSelectedAnswerStatuses(["unattempted"]);
+    };
+
 
     useEffect(() => {
         async function loadQuestions() {
@@ -188,26 +200,28 @@ const NewQBankViewer = () => {
 
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button color="primary" iconRight={<ChevronDownIcon />}> Filter & Sort </Button>
+                            <Button className='text-[12px] rounded px-[8px] h-[35px]'> Answer Status </Button>
                         </DropdownTrigger>
-                        <DropdownMenu closeOnSelect={false} variant="light">
+                        <DropdownMenu className='p-0'>
                             <DropdownItem>
-                                <QuestionFilterSort />
+                                <div onClick={handleSetUnansweredMode} className=''>Unanswered</div>
+                            </DropdownItem>
+                            <DropdownItem>
+                                <div onClick={handleSetUnansweredMode}>Correct</div>
+                            </DropdownItem>
+                            <DropdownItem>
+                                <div onClick={handleSetUnansweredMode}>Incorrect</div>
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
 
-                    <div className="flex col gap-2">
+                    {/* <div className="flex col gap-2">
                         <Button color="primary" variant="ghost" onPress={handleResetFilters}>Reset filters</Button>
                         <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
-                        <Button color="primary" variant="ghost" onPress={handleSetUnansweredMode}>Unanswered questions</Button>
-                    </div>
+                    </div> */}
                 </div>
-
-                <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />
-
-
                 <NewQBankTable questionEngagementCombos = {questions} />
+                <Pagination aria-label = "table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color = "primary" />
 
             </div >
         </UserProvider>

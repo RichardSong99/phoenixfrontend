@@ -56,18 +56,18 @@ export function RecommendedProblems() {
     }
 
     return (
-        <div className="flex flex-row flex-wrap w-[98%] justify-between">
+        <div className="flex flex-row flex-wrap w-[98%] justify-around">
             {questionData.map(
                 (question, index) => {
                     const difficulty = question?.Question?.difficulty;
-                    let textColor = '';
+                    let backgroundColor = '';
 
                     if (difficulty === 'easy') {
-                        textColor = 'text-[#0FAF89]';
+                        backgroundColor = 'bg-[#0FAF89]';
                     } else if (difficulty === 'medium') {
-                        textColor = 'text-[#FFB341]';
+                        backgroundColor = 'bg-[#FFB341]';
                     } else if (difficulty === 'hard' || difficulty === 'extreme') {
-                        textColor = 'text-[#FF414C]';
+                        backgroundColor = 'bg-[#FF414C]';
                     }
 
                     return (
@@ -76,7 +76,7 @@ export function RecommendedProblems() {
                         flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-black text-center shadow-custom`}>
                             <div className="h-[75%] flex flex-col justify-around items-center">
                                 <div className="w-[full] h-[20px]">{parseLatexString(truncatePrompt(question.Question.prompt, 8))}</div>
-                                <Chip className={`text-center border h-[20px] bg-white px-[4px] py-[2px] text-[12px] rounded-[10px] font-bold ${textColor}`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></Chip>
+                                <div className={`text-center text-[12px] rounded font-bold ${backgroundColor} text-white px-[10px] py-[2px]`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></div>
                             </div>
                             <div className="text-center w-full h-[25%]">{formatAnswerType(question.Question.topic)}</div>
                         </div>
@@ -142,18 +142,18 @@ export function RecentProblems() {
     }
 
     return (
-        <div className="flex flex-row flex-wrap w-[98%] justify-between">
+        <div className="flex flex-row flex-wrap w-[98%] justify-around">
             {questionData.map(
                 (question, index) => {
                     const difficulty = question?.Question?.difficulty;
-                    let textColor = '';
+                    let backgroundColor = '';
 
                     if (difficulty === 'easy') {
-                        textColor = 'text-[#0FAF89]';
+                        backgroundColor = 'bg-[#0FAF89]';
                     } else if (difficulty === 'medium') {
-                        textColor = 'text-[#FFB341]';
+                        backgroundColor = 'bg-[#FFB341]';
                     } else if (difficulty === 'hard' || difficulty === 'extreme') {
-                        textColor = 'text-[#FF414C]';
+                        backgroundColor = 'bg-[#FF414C]';
                     }
 
                     return (
@@ -165,7 +165,7 @@ export function RecentProblems() {
                         } flex flex-col justify-between cursor-pointer mb-[10px] text-[12px]`}>
                             <div className="h-[75%] flex flex-col justify-around items-center">
                                 <div className="w-[full] h-[20px]">{parseLatexString(truncatePrompt(question.Question.prompt, 8))}</div>
-                                <Chip className={`text-center border h-[20px] bg-white px-[4px] py-[2px] text-[12px] rounded-[10px] font-bold ${textColor}`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></Chip>
+                                <div className={`text-center text-[12px] rounded font-bold ${backgroundColor} text-white px-[10px] py-[2px]`}><strong>{formatDifficulty(question.Question.difficulty)}</strong></div>
                             </div>
                             <div className="text-center w-full h-[25%]">{formatAnswerType(question.Question.topic)}</div>
                         </div>

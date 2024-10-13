@@ -63,7 +63,7 @@ export default function MyDashboard() {
         </Card> */}
             <Card>
                 <CardHeader>
-                    <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[10px]">
+                    <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[10px] text-center">
                         <div
                             className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'topics' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                             onClick={() => setSelected("topics")}

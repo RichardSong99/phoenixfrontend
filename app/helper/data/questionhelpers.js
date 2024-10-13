@@ -51,6 +51,8 @@ export const createNewQuestion = ({
     text1Description,
     text2,
     text2Description,
+    equation1,
+    equation2,
     graphicLatex, 
     graphicSVG, 
     graphicDescription,
@@ -63,7 +65,11 @@ export const createNewQuestion = ({
     accessOption,
     correctAnswerMultiple,
     correctAnswerFree,
-    uploadedImageUrls
+    questionTemplate,
+    sourcePracticeTest, 
+    sourceModule, 
+    sourceQuestion,
+    questionImageURL
 }) => {
     const newQuestion = {
         prompt: prompt,
@@ -71,6 +77,8 @@ export const createNewQuestion = ({
         text1_description: text1Description,
         text2: text2,
         text2_description: text2Description,
+        equation1: equation1,
+        equation2: equation2,
         graphic_latex: graphicLatex,
         graphic_svg: graphicSVG,
         graphic_description: graphicDescription,
@@ -80,7 +88,12 @@ export const createNewQuestion = ({
         topic: specificTopic,
         answer_choices: answerChoices,
         explanation: explanation,
-        access_option: accessOption
+        access_option: accessOption,
+        question_template: questionTemplate,
+        source_practice_test: sourcePracticeTest,
+        source_module: sourceModule,
+        source_question: parseInt(sourceQuestion, 10),
+        question_image_url: questionImageURL
     };
 
     if (answerType === 'multipleChoice') {
@@ -89,10 +102,6 @@ export const createNewQuestion = ({
         newQuestion.correct_answer_free = correctAnswerFree;
     }
 
-    newQuestion.Images = uploadedImageUrls.map((url, index) => ({
-        Filename: `IMG${index}`,
-        Url: url
-    }));
 
     return newQuestion;
 }

@@ -14,9 +14,10 @@ import TopicModules from "../dashboardcomponents/topicmodules/topicmodules";
 import { TotalDashboard } from "../dashboardcomponents/totaldashboard/totaldashboard";
 import { RecommendedProblems, RecentProblems } from "../problemsuggestions/recommendedproblems";
 import NewQBankViewer from "@/app/helper/components/qbank/qbankview/newqbankviewer";
-import { QuizTable } from "../../myquizzes/reviewquiz/quiztable";
+import QuizzesAndTests from "@/app/helper/components/quizzestests/quizzesandtests";
 import { QuestionContext } from "@/app/helper/context/questioncontext";
 import { QuestionModal } from "@/app/helper/components/question/questionviewcomponents/questionmodal";
+import NewDashboard from "../dashboardcomponents/totaldashboard/newdashboard";
 
 export default function MyDashboard() {
     const {
@@ -38,11 +39,7 @@ export default function MyDashboard() {
                 </div>
             </div>
 
-            <Card>
-                <CardBody>
-                    <TotalDashboard />
-                </CardBody>
-            </Card>
+            <NewDashboard />
             {/* <Card>
             <CardHeader>
                 <div className="flex flex-row w-full justify-between items-center">
@@ -82,7 +79,7 @@ export default function MyDashboard() {
                         >
                             Question Bank
                         </div>
-                        <div
+                        {/* <div
                             className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'rec' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                             onClick={() => setSelected("rec")}
                         >
@@ -93,11 +90,11 @@ export default function MyDashboard() {
                             onClick={() => setSelected("recent")}
                         >
                             Recently Completed
-                        </div>
+                        </div> */}
                     </div>
                 </CardHeader>
                 <CardBody className="overflow-x-hidden flex-row justify-center">
-                    {selected === "topics" ? <TopicModules /> : (selected === 'qbank' ? <NewQBankViewer /> : (selected === 'rec' ? <RecommendedProblems /> : (selected === 'recent' ? <RecentProblems /> : <QuizTable />)))}
+                    {selected === "topics" ? <TopicModules /> : (selected === 'qbank' ? <NewQBankViewer /> : (selected === 'rec' ? <RecommendedProblems /> : (selected === 'recent' ? <RecentProblems /> : <QuizzesAndTests />)))}
                 </CardBody>
             </Card>
             <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />

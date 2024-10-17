@@ -240,11 +240,11 @@ export default function QuestionView({ }) {
                                         <div key={choice} className="relative w-full max-w-xl mx-auto">
                                             <Button 
                                                 className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
-                                                    ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'bg-appleGreen text-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
+                                                    ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'border-appleGreen bg-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
                                             >
                                                 <Avatar
                                                     className={`h-[30px] w-[30px] border-[2px]
-                                                        ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-white bg-appleGreen' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
+                                                        ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-appleGreen border-appleGreen bg-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
                                                     name={choice}
                                                 />
                                                 <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
 import { QuestionContext } from "../../context/questioncontext";
@@ -20,19 +20,24 @@ export const StartScreen = ({ testID }) => {
         handleNextTestStage();
     }
     return (
-        <div className = "w-full h-full bg-[rgb(182,182,182)]">
-            <div className = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex w-[558px] p-4 gap-5 flex-col justify-between items-center rounded-lg border border-white bg-white shadow-md">
-                <div style={{ color: "#716E6E", fontSize: "25px", fontWeight: "600" }}> Practice Test</div>
-                <div className="w-[100%] justify-center text-center">
-                    <strong>Time:</strong>
-                    <div>134 minutes</div>
-                    <strong>Number of Questions:</strong>
-                    <div>54 Reading and Writing, 44 Math</div>
-                    <strong>Sections:</strong>
-                    <div>4</div>
+        <div className="w-full h-full bg-gray-200 flex justify-center items-center">
+            <div className="flex flex-col w-[90%] max-w-[600px] p-8 gap-6 items-center justify-between rounded-2xl bg-white shadow-lg">
+                <h1 className="text-gray-700 text-2xl font-semibold">Practice Test</h1>
+
+                <div className="w-full text-center text-gray-600">
+                    <p className="text-lg"><strong>Time:</strong> 134 minutes</p>
+                    <p className="text-lg"><strong>Number of Questions:</strong> 54 Reading and Writing, 44 Math</p>
+                    <p className="text-lg"><strong>Sections:</strong> 4</p>
                 </div>
-                <Button onClick={startTest} className="bg-appleBlue text-white rounded-[20px]">Start Test</Button>
+
+                <button
+                    onClick={startTest}
+                    className="w-full max-w-[250px] py-3 mt-4 text-lg font-medium bg-appleBlue text-white rounded-full transition-transform transform hover:scale-105"
+                >
+                    Start Test
+                </button>
             </div>
         </div>
+
     );
 }

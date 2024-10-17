@@ -3,13 +3,22 @@ import { QuestionContext } from '../../context/questioncontext';
 import QuestionNavBar from './questionnavbar';
 import QuestionModalInterior from './questionmodalinterior';
 import { fetchQuiz } from '../../apiservices/quizservice';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
+import {Icon} from '@iconify/react';
+import { Button } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 
 export default function ContentViewer({ }) {
     const {
         quizID,
         indquizMode,
     } = useContext(QuestionContext);
+
+    const router = useRouter();
+
+    const handleGoBack = () => {
+        router.back();
+    }
 
     // useEffect(() => {
     //     const url = window.location.href;
@@ -35,14 +44,18 @@ export default function ContentViewer({ }) {
                     font-family: 'SF Pro Display', sans-serif;
                 }
             `}</style>
-            <div className='w-screen h-screen flex flex-row'>
-                <QuestionNavBar 
-                />
-                <QuestionModalInterior 
-                    mode={"quiz"}
-                    quizName={"Default Quiz"}
-                    quizID={quizID}
-                />
+            <div className='w-screen h-screen flex flex-col'>
+                <div className='w-full h-[60px] bg-white shadow-md flex items-center px-4'>
+                    <div className='text-lg font-bold text-gray-800'><Button className = "text-gray-800" onPress={handleGoBack}> <Icon icon="icon-park-solid:back" width="24" height="24" style={{ color: "#AAAAAA" }} /> Go Back</Button></div>
+                </div>
+                <div className='w-full h-full flex flex-row'>
+                    <QuestionNavBar />
+                    <QuestionModalInterior
+                        mode={'quiz'}
+                        quizName={'Default Quiz'}
+                        quizID={quizID}
+                    />
+                </div>
             </div>
         </div>
     )

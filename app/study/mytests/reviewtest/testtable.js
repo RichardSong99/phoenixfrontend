@@ -16,6 +16,7 @@ import {
 } from "@nextui-org/react";
 import { getTestsForUser } from '@/app/helper/apiservices/testservice';
 import { useRouter } from 'next/navigation';
+import { Icon } from '@iconify/react';
 
 export function TestTable() {
     const [testData, setTestData] = useState([]);
@@ -46,29 +47,43 @@ export function TestTable() {
         <div >
             <Table removeWrapper aria-label="Example static collection table">
                 <TableHeader>
-                    <TableColumn>Action</TableColumn>
+             
                     <TableColumn>Test Name</TableColumn>
                     <TableColumn>Reading Score</TableColumn>
                     <TableColumn>Math Score</TableColumn>
-                    <TableColumn width = "300">Total Score</TableColumn>
+                    <TableColumn>Total Score</TableColumn>
                     <TableColumn>Date</TableColumn>
+                    <TableColumn></TableColumn>
                 </TableHeader>
                 <TableBody>
                     {testData.map((item, index) => (
-                        <TableRow>
-                            <TableCell>
-                                <Button className='mr-[20px] rounded-[20px]' color="success" variant="bordered" size="sm">
-                                    Review Test
-                                </Button>
-                                <Button onClick={() => startTest(item.id)} className='mr-[-80px] border-appleBlue text-appleGray1 rounded-[20px]' variant="bordered" size="sm">
-                                    Start Test
-                                </Button>
-                            </TableCell>
+                        <TableRow key = {index}>
+                        
                             <TableCell>{item.name}</TableCell>
                             <TableCell>{item.reading_score}</TableCell>
                             <TableCell>{item.math_score}</TableCell>
                             <TableCell>{item.reading_score + item.math_score}</TableCell>
                             <TableCell>{new Date(item.attempt_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>
+                            <TableCell>
+                                {item.completed ? (<Button  color="success" variant="bordered" size="md">
+                                    Review
+                                    <Icon
+                                                    icon="line-md:arrow-right"
+                                                    width="16"
+                                                    height="16"
+                                                    className="text-green-600 hover:text-black"
+                                                />
+                                </Button>):
+                                (<Button onClick={() => startTest(item.id)} className=' border-themeDarkBlue text-themeDarkBlue' variant="bordered" size="md">
+                                    Start 
+                                    <Icon
+                                                    icon="line-md:arrow-right"
+                                                    width="16"
+                                                    height="16"
+                                                    className="text-themeDarkBlue hover:text-black"
+                                                />
+                                </Button>)}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

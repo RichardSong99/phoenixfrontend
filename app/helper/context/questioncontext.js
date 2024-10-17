@@ -16,6 +16,8 @@ import {
 import { getResult } from "../data/questionhelpers";
 import { create } from "@mui/material/styles/createTransitions";
 
+import { useRouter } from "next/navigation";
+
 export const QuestionContext = createContext();
 
 export const QuestionProvider = ({ children }) => {
@@ -23,6 +25,8 @@ export const QuestionProvider = ({ children }) => {
     const [editQuestion, setEditQuestion] = useState(null);
     const [activeViewQuestion, setActiveViewQuestion] = useState(null);
     const [activeViewEngagement, setActiveViewEngagement] = useState(null); // {questionID, userID, userAnswer, userScore, userFeedback, userReported, userReportedReason, userReportedDate, userReportedAction, userReportedActionDate, userReportedActionBy}
+
+    const router = useRouter();
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -212,18 +216,27 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
-    const createAdaptiveQuiz = async () => {
+    const handleNextAdaptiveButton = async () => {
+        if(adaptiveQuestionIndex < questionIDArray.length - 1){
+            setAdaptiveQuestionIndex(adaptiveQuestionIndex + 1);
+        } else {
+            handleAdaptiveSubmit();
+        }
+    };
+
+    const createAdaptiveQuiz = async ({allowedDifficulties, topics}) => {
         resetAllVars();
         var quizID = null;
         try{
             const data = await getAdaptiveQuestion({
-                selectedTopics: selectedTopics,
-                selectedDifficulties: selectedDifficulties,
-                selectedAnswerStatuses: selectedAnswerStatuses,
-                selectedAnswerTypes: selectedAnswerTypes,
+                topics: topics,
+                allowedDifficulties: allowedDifficulties,
+    
             });
             const first_question_array = [data.data[0].Question.id];
             const response = await initializeQuiz({ questionIDs: first_question_array, quizType : "quiz" });
+            setSelectedTopics(topics);
+            setSelectedDifficulties(allowedDifficulties);
             setupAdaptiveQuizMode(response.quizID);
             quizID = response.quizID;
         } catch (error) {
@@ -252,12 +265,22 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
-    const handleAdaptiveSubmit = async () => {
+    const handleEndAdaptiveQuiz = async () => {
+        // check if there are any unsubmitted questions
+    
+
+        // await handleAdaptiveSubmit({end:true});
+
+        router.push("/study/mydashboard/newpage");
+    };
+
+
+
+    const handleAdaptiveSubmit = async ({end = false}) => {
         let engagementsArray = [];
         let questionEngagementID = [];
         const result = getResult({question: questionData[questionIDArray[adaptiveQuestionIndex]], userResponse: userResponseData[questionIDArray[adaptiveQuestionIndex]]});
         const difficulty = questionData[questionIDArray[adaptiveQuestionIndex]].difficulty;
-        const difficultyArray = [difficulty];
         console.log("user response", userResponseData);
         console.log("current difficulty", difficulty);
         engagementsArray.push({
@@ -284,22 +307,29 @@ export const QuestionProvider = ({ children }) => {
         }
 
         resetAllVars();
-        let numCorrect = 0;
-        let numIncorrect = 0;
-        if(result == "correct"){
-            numCorrect = 1;
-        } else{
-            numIncorrect = 1;
+
+        if (end) {
+            return;
         }
+
+        // let numCorrect = 0;
+        // let numIncorrect = 0;
+        // if(result == "correct"){
+        //     numCorrect = 1;
+        // } else{
+        //     numIncorrect = 1;
+        // }
         let next_question = null;
         try {
             next_question = await getAdaptiveQuestion({
-                selectedTopics: selectedTopics,
-                selectedDifficulties: difficultyArray,
-                selectedAnswerStatuses: selectedAnswerStatuses,
-                selectedAnswerTypes: selectedAnswerTypes,
-                numIncorrect: numIncorrect,
-                numCorrect: numCorrect,
+                allowedTopics: selectedTopics,
+                allowedDifficulties: selectedDifficulties,
+                prevDifficulty: difficulty,
+                prevStatus: result,
+                // selectedAnswerStatuses: selectedAnswerStatuses,
+                // selectedAnswerTypes: selectedAnswerTypes,
+                // numIncorrect: numIncorrect,
+                // numCorrect: numCorrect,
             });
         } catch (error) {
             console.error("Could not add to adaptive quiz:", error);
@@ -533,6 +563,10 @@ export const QuestionProvider = ({ children }) => {
             const newIsStarredData = { ...isStarredData };
             newIsStarredData[questionID] = !newIsStarredData[questionID];
             setIsStarredData(newIsStarredData);
+
+            console.log("engagementIDData", engagementIDData);
+            console.log("questionID", questionID);
+            console.log("engagementID", engagementIDData[questionID]);
             // update the engagement with the new star status
             try {
                 await updateEngagement({
@@ -758,6 +792,8 @@ export const QuestionProvider = ({ children }) => {
                 handleMarkReviewQuestion,
                 handleSubmitEngagements,
                 handleSubmitSingleEngagement,
+                handleEndAdaptiveQuiz,
+                handleNextAdaptiveButton,
             }}
         >
             {children}

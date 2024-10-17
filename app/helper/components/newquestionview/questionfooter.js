@@ -4,6 +4,7 @@ import { Popover, PopoverTrigger, PopoverContent, Button, Avatar } from "@nextui
 import Draggable from 'react-draggable';
 import Chatbot from '../chatbot/chatbot';
 import { updateEngagement } from '../../apiservices/engagementservice';
+import { parseLatexString } from '../latexrender/latexrender';
 
 export default function QuestionFooter({ }) {
     const [isChatBotVisible, setChatBotVisible] = useState(false);
@@ -27,6 +28,8 @@ export default function QuestionFooter({ }) {
         handleSubmitSingleEngagement,
         handleAdaptiveSubmit,
         adaptiveQuestionIndex,
+        handleEndAdaptiveQuiz,
+        handleNextAdaptiveButton,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -45,25 +48,22 @@ export default function QuestionFooter({ }) {
         <svg
             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
         >
-          <path d="M17.753 14a2.25 2.25 0 0 1 2.25 2.25v.904A3.75 3.75 0 0 1 18.696 20c-1.565 1.344-3.806 2-6.696 2s-5.128-.656-6.69-2a3.75 3.75 0 0 1-1.306-2.843v-.908A2.25 2.25 0 0 1 6.254 14zM11.9 2.006L12 2a.75.75 0 0 1 .743.648l.007.102l-.001.749h3.5a2.25 2.25 0 0 1 2.25 2.25v4.505a2.25 2.25 0 0 1-2.25 2.25h-8.5a2.25 2.25 0 0 1-2.25-2.25V5.75A2.25 2.25 0 0 1 7.75 3.5l3.5-.001V2.75a.75.75 0 0 1 .649-.743L12 2zM9.749 6.5a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498m4.493 0a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498"></path>
+            <path d="M17.753 14a2.25 2.25 0 0 1 2.25 2.25v.904A3.75 3.75 0 0 1 18.696 20c-1.565 1.344-3.806 2-6.696 2s-5.128-.656-6.69-2a3.75 3.75 0 0 1-1.306-2.843v-.908A2.25 2.25 0 0 1 6.254 14zM11.9 2.006L12 2a.75.75 0 0 1 .743.648l.007.102l-.001.749h3.5a2.25 2.25 0 0 1 2.25 2.25v4.505a2.25 2.25 0 0 1-2.25 2.25h-8.5a2.25 2.25 0 0 1-2.25-2.25V5.75A2.25 2.25 0 0 1 7.75 3.5l3.5-.001V2.75a.75.75 0 0 1 .649-.743L12 2zM9.749 6.5a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498m4.493 0a1.25 1.25 0 1 0 0 2.498a1.25 1.25 0 0 0 0-2.498"></path>
         </svg>
     );
 
     const handleShowAnswer = () => {
-        if(userResponseData[questionIDArray[activeQuestionIndex]] != null){
+        if (userResponseData[questionIDArray[activeQuestionIndex]] != null) {
             setAnswerVisible(!isAnswerVisible);
             handleSubmitSingleEngagement();
         }
 
-        if(indquizMode === "individual"){
+        if (indquizMode === "individual") {
             changeTimer();
         }
     };
 
-    const handleNextAdpativeQuestion = async () => {
-        await handleAdaptiveSubmit();
-        // window.location.reload();
-    }
+
 
     const CalculatorIcon = () => (
         <svg
@@ -83,9 +83,9 @@ export default function QuestionFooter({ }) {
 
     const handleReviewQuestion = (reason) => {
         console.log(engagementIDData[questionIDArray[activeQuestionIndex]]);
-        if(!engagementData[questionIDArray[activeQuestionIndex]].reviewed){
-            updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed" : true } });
-            updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed_response" : reason } });
+        if (!engagementData[questionIDArray[activeQuestionIndex]].reviewed) {
+            updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed": true } });
+            updateEngagement({ engagementID: engagementIDData[questionIDArray[activeQuestionIndex]], update: { "reviewed_response": reason } });
         }
     };
 
@@ -127,7 +127,7 @@ export default function QuestionFooter({ }) {
                 <div className='w-[500px] h-full flex flex-row justify-start items-center'>
                     <Popover placement="top">
                         <PopoverTrigger>
-                            <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1 mr-[20px]'>
+                            <Button className='rounded-[20px] bg-white border-[2px] border-themeDarkGray text-appleGray1 mr-[20px]'>
                                 {engagementData[questionIDArray[activeQuestionIndex]].reviewed ?
                                     <>
                                         Reviewed
@@ -141,53 +141,53 @@ export default function QuestionFooter({ }) {
                             {(titleProps) => (
                                 <div className="px-1 py-2 w-full">
                                     <p className="text-small font-bold text-foreground text-center" {...titleProps}>
-                                    { engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
-                                        'Why did you get this question wrong?' :
-                                        'How did you feel about this question?' }
+                                        {engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
+                                            'Why did you get this question wrong?' :
+                                            'How did you feel about this question?'}
                                     </p>
                                     <div className="mt-2 flex flex-col gap-2 w-full">
                                         {engagementData[questionIDArray[activeQuestionIndex]].status === 'incorrect' || engagementData[questionIDArray[activeQuestionIndex]].status === 'omitted' ?
-                                        <>
-                                            <Button
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                onClick={() => handleReviewQuestion("Guessed")}>
+                                            <>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Guessed")}>
                                                     I guessed.
-                                            </Button>
-                                            <Button 
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Misunderstood Problem' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                onClick={() => handleReviewQuestion("Misunderstood Problem")}>
-                                                    I misunderstood the problem.
-                                            </Button>
-                                            { questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
-                                                <Button
-                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Computational Error' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                    onClick={() => handleReviewQuestion("Computational Error")}>
-                                                        I made a computational error.
-                                                </Button> :
-                                                <Button
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Hard Passage' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                    onClick={() => handleReviewQuestion("Hard Passage")}>
-                                                        The passage was too hard.
                                                 </Button>
-                                            }
-                                        </> :
-                                        <>
-                                            <Button
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Understood' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                onClick={() => handleReviewQuestion("Understood")}>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Misunderstood Problem' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Misunderstood Problem")}>
+                                                    I misunderstood the problem.
+                                                </Button>
+                                                {questionData[questionIDArray[activeQuestionIndex]].subject === 'math' ?
+                                                    <Button
+                                                        className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Computational Error' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                        onClick={() => handleReviewQuestion("Computational Error")}>
+                                                        I made a computational error.
+                                                    </Button> :
+                                                    <Button
+                                                        className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Hard Passage' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                        onClick={() => handleReviewQuestion("Hard Passage")}>
+                                                        The passage was too hard.
+                                                    </Button>
+                                                }
+                                            </> :
+                                            <>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Understood' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Understood")}>
                                                     I nailed it.
-                                            </Button>
-                                            <Button
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                onClick={() => handleReviewQuestion("Guessed")}>
+                                                </Button>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Guessed' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Guessed")}>
                                                     I guessed.
-                                            </Button>
-                                            <Button
-                                                className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Inefficient' ? 'bg-appleGray1' : 'bg-transparent'}`}
-                                                onClick={() => handleReviewQuestion("Inefficient")}>
+                                                </Button>
+                                                <Button
+                                                    className={`border-[2px] border-appleGray5 ${engagementData[questionIDArray[activeQuestionIndex]].reviewed_response === 'Inefficient' ? 'bg-appleGray1' : 'bg-transparent'}`}
+                                                    onClick={() => handleReviewQuestion("Inefficient")}>
                                                     I could have done it faster.
-                                            </Button>
-                                        </>}
+                                                </Button>
+                                            </>}
                                     </div>
                                 </div>
                             )}
@@ -195,38 +195,46 @@ export default function QuestionFooter({ }) {
                     </Popover>
                     <Popover placement="top">
                         <PopoverTrigger>
-                            <Button className='rounded-[20px] bg-white border-[2px] border-appleBlue text-appleGray1'>
+                            <Button className='text-white bg-gray-500'>
                                 Explanation
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent>
-                            Explanation: {questionData[questionIDArray[activeQuestionIndex]].explanation}
+                        <PopoverContent size = "md" className = "max-w-[800px] p-3" backdrop = "opaque">
+                            {parseLatexString(questionData[questionIDArray[activeQuestionIndex]].explanation)}
                         </PopoverContent>
                     </Popover>
                 </div>
             }
             {activeReviewMode === "active" && <div>
-                { adaptiveRegularMode !== "adaptive" ? 
-                    <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleShowAnswer}>
+                <div className="flex flex-row gap-x-[10px]">
+
+                    <Button className='bg-white border-[2px] text-gray-600' onClick={handleShowAnswer}>
                         {!isAnswerVisible ?
                             "Check Answer" :
                             <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
                         }
                     </Button>
-                :
-                    (activeQuestionIndex == adaptiveQuestionIndex && <Button className='bg-white border-[2px] border-appleBlue rounded-[20px] text-appleGray1' onClick={handleNextAdpativeQuestion}>
+
+                    <Button className='bg-white border-[2px] text-gray-600' onClick={handleNextAdaptiveButton}>
                         Next question
-                    </Button>)
-                }
+                    </Button>
+
+                    <Button className='bg-gray-400 text-white' onPress={handleEndAdaptiveQuiz}>
+                        End Quiz
+                    </Button>
+                </div>
+
+
+
             </div>}
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                 <div className='cursor-pointer'>
                     <Avatar
                         classNames={{
                             icon: "h-[30px] w-[30px] fill-white",
-                            base: "bg-appleBlue",
+                            base: "bg-themeDarkGray",
                         }}
-                        icon={<ReferenceIcon/>}
+                        icon={<ReferenceIcon />}
                         onClick={toggleReference}
                     />
                 </div>
@@ -234,9 +242,9 @@ export default function QuestionFooter({ }) {
                     <Avatar
                         classNames={{
                             icon: "h-[30px] w-[30px] fill-white",
-                            base: "bg-appleBlue",
+                            base: "bg-themeDarkGray",
                         }}
-                        icon={<CalculatorIcon/>}
+                        icon={<CalculatorIcon />}
                         onClick={toggleCalculator}
                     />
                 </div>
@@ -244,9 +252,9 @@ export default function QuestionFooter({ }) {
                     <Avatar
                         classNames={{
                             icon: "h-[30px] w-[30px] fill-white",
-                            base: "bg-appleBlue",
+                            base: "bg-themeDarkGray",
                         }}
-                        icon={<ChatbotIcon/>}
+                        icon={<ChatbotIcon />}
                         onClick={toggleChatBot}
                     />
                 </div>

@@ -99,28 +99,28 @@ export function QuizTable() {
     }
 
     return (
-        <div >
+        <div className = "w-full">
 
 
-            <Table removeWrapper aria-label="Example static collection table">
+            <Table removeWrapper aria-label="Example static collection table" className = "w-full">
                 <TableHeader>
-                    <TableColumn>Review Quiz</TableColumn>
+                    {/* <TableColumn>Review Quiz</TableColumn> */}
                     <TableColumn>Quiz Name</TableColumn>
                     <TableColumn>Topics</TableColumn>
-                    <TableColumn width = "300">Score</TableColumn>
+                    <TableColumn width = "200">Score</TableColumn>
                     <TableColumn>Date</TableColumn>
                 </TableHeader>
                 <TableBody>
                     {quizData.map((item, index) => (
-                        <TableRow key={index} onClick={() => handleQuizClick(item.quiz)}>
-                            <TableCell>
+                        <TableRow key={index} onClick={() => handleQuizClick(item.quiz)} className = "cursor-pointer hover:bg-gray-100">
+                            {/* <TableCell>
                                 <Button color="success" variant="bordered" size="sm" onClick={() => handleQuizClick(item.quiz)}>
                                     Review Quiz
                                 </Button>
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell>{`Quiz ${index + 1}`}</TableCell>
 
-                            <TableCell className="flex flex-row gap-2">
+                            <TableCell className="flex flex-row flex-wrap gap-2">
                                 {item.uniqueTopicNames.map((topic, index) => (
                                     <Chip variant="flat" key={index} size="sm" color="primary">{topic}</Chip>
                                 ))}

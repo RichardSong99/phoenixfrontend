@@ -33,12 +33,8 @@ export const DataProvider = ({ children }) => {
         { topic: "System of equations in 2 variables", category: "Advanced math", subject : "Math" },
         { topic: "Nonlinear functions", category: "Advanced math", subject : "Math" },
         { topic: "Ratios, rates, proportional relationships, and units", category: "Problem solving and data analysis", subject : "Math"},
-        { topic: "Percentages", category: "Problem solving and data analysis", subject : "Math" },
-        { topic: "One-variable data: distributions and measures of center and spread", category: "Problem solving and data analysis", subject : "Math" },
-        { topic: "Two-variable data: models and scatterplots", category: "Problem solving and data analysis" , subject : "Math"},
-        { topic: "Probability and conditional probability", category: "Problem solving and data analysis", subject : "Math" },
-        { topic: "Inference from sample statistics and margin of error", category: "Problem solving and data analysis", subject : "Math" },
-        { topic: "Evaluating statistical claims: observational studies and experiments", category: "Problem solving and data analysis", subject : "Math" },
+        { topic: "Statistics & probability", category: "Problem solving and data analysis", subject : "Math" },
+       
         { topic: "Area and volume formulas", category: "Geometry and trigonometry", subject : "Math" },
         { topic: "Lines, angles, and triangles", category: "Geometry and trigonometry", subject : "Math" },
         { topic: "Right triangles and trigonometry", category: "Geometry and trigonometry", subject : "Math" },
@@ -63,6 +59,10 @@ export const DataProvider = ({ children }) => {
 
     const getTopicsByCategory = (category) => {
         return topicMapping.filter(topicObj => topicObj.category === category).map(topicObj => topicObj.topic);
+    }
+
+    const getTopicsBySubject = (subject) => {  
+        return topicMapping.filter(topicObj => topicObj.subject === subject).map(topicObj => topicObj.topic);
     }
 
     const getCategoryList = (subject) => {
@@ -95,7 +95,15 @@ export const DataProvider = ({ children }) => {
     }
 
     const getTopicSummaryElement = (topic) => {
-        return topicSummaryList.find(item => item.topic === topic);
+        // if(!topicSummaryList){
+        //     await loadUserData();
+        // }
+
+        console.log("topicSummaryList", topicSummaryList)
+        if(topicSummaryList){
+            return topicSummaryList.find(item => item.topic === topic);
+        }
+        return  null;
     }
 
     const loadQuizList = async () => {
@@ -122,13 +130,18 @@ export const DataProvider = ({ children }) => {
 
     const loadUserData = async () => {
         try {
-            const userDataResponse = await getUserData();
+          const userDataResponse = await getUserData();
+          if (userDataResponse?.topic_summary_list) {
             setTopicSummaryList(sortTopicSummaryList(userDataResponse.topic_summary_list));
+          } else {
+            setTopicSummaryList([]); // Ensure topicSummaryList is always an array
+          }
         } catch (error) {
-            console.log("Error fetching topic list summary", error);
+          console.error("Error fetching topic list summary", error);
+          setTopicSummaryList([]); // Handle failure gracefully
         }
-    }
-
+      };
+    
     useEffect(() => {
         if (!isAuthenticated) {
             console.log("User is not authenticated");
@@ -140,7 +153,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll, getTopicsBySubject, loadUserData }}>
             {children}
         </DataContext.Provider>
     );

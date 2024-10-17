@@ -26,6 +26,7 @@ const config = {
         appleGreen: '#34C759',
         themeGreen: "#14BF96",
         themeBlue: "#005D9E",
+        themeDarkBlue: "#0B2149",
         themeLightGreen: "#78D5A3",
         themeDarkGray: "#333333",
         themeMediumGray: "#C8D5E0",

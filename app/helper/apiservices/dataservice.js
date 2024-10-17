@@ -6,6 +6,7 @@ export async function getUserData() {
     let token;
     try {
         token = Cookies.get('token');
+        console.log('Token:', token);
     } catch (error) {
         console.error('Could not get token:', error);
     }

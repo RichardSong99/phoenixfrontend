@@ -121,63 +121,33 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                     <TableColumn>Status</TableColumn>
                     <TableColumn>Question</TableColumn>
                     <TableColumn>Difficulty</TableColumn>
-                    <TableColumn>Reviewed</TableColumn>
-                    <TableColumn></TableColumn>
+                    {/* <TableColumn>Reviewed</TableColumn> */}
+                    <TableColumn>Starred</TableColumn>
+                    <TableColumn>View</TableColumn>
+
                 </TableHeader>
                 <TableBody>
                     {questionEngagementCombos.map((questionEngagement, index) => (
-                        <TableRow key={index}>
-                            {/* <TableCell>
-                                <div className="flex space-x-2">
-                                    {user.type === "admin" ? <>
-                                        <Button
-                                            color="danger"
-                                            onClick={() =>
-                                                handleDeleteQuestion(questionEngagement?.Question?.id)
-                                            }
-                                        >
-                                            Delete
-                                        </Button>
-                                        <Button
-                                            color="secondary"
-                                            onClick={() =>
-                                                handleEditQuestion(questionEngagement?.Question?.id)
-                                            }
-                                        >
-                                            Edit
-                                        </Button>
-                                    </> : null}
-                                    <Button
-                                        color="primary"
-                                        onClick={() =>
-                                            viewQuestionModal({
-                                                questionId: questionEngagement?.Question?.id,
-                                                engagementId: questionEngagement?.Engagement?.id,
-                                            })
-                                        }
-                                    >
-                                        View
-                                    </Button>
-                                </div>
-                            </TableCell> */}
+                        <TableRow key={index} className="cursor-pointer hover:bg-gray-100" >
+
                             <TableCell className="flex flex-row gap-2 justify-center items-center">
                                 <div className="w-[20px] h-[20px]">
-                                    { questionEngagement?.status === "correct" ?
+                                    {questionEngagement?.status === "correct" ?
                                         <><svg className="fill-[#0FAF89]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                             <path d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
                                         </svg></> : questionEngagement?.status === "incorrect" ?
-                                        <svg className="fill-[#FF414C]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path d="M9.172 16.242L12 13.414l2.828 2.828l1.414-1.414L13.414 12l2.828-2.828l-1.414-1.414L12 10.586L9.172 7.758L7.758 9.172L10.586 12l-2.828 2.828z"></path>
-                                            <path d="M12 22c5.514 0 10-4.486 10-10S17.514 2 12 2S2 6.486 2 12s4.486 10 10 10m0-18c4.411 0 8 3.589 8 8s-3.589 8-8 8s-8-3.589-8-8s3.589-8 8-8"></path>
-                                        </svg> :
-                                        <svg className="fill-appleGray4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
-                                        </svg>
+                                            <svg className="fill-[#FF414C]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path d="M9.172 16.242L12 13.414l2.828 2.828l1.414-1.414L13.414 12l2.828-2.828l-1.414-1.414L12 10.586L9.172 7.758L7.758 9.172L10.586 12l-2.828 2.828z"></path>
+                                                <path d="M12 22c5.514 0 10-4.486 10-10S17.514 2 12 2S2 6.486 2 12s4.486 10 10 10m0-18c4.411 0 8 3.589 8 8s-3.589 8-8 8s-8-3.589-8-8s3.589-8 8-8"></path>
+                                            </svg> :
+                                            <svg className="fill-appleGray4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"></path>
+                                            </svg>
                                     }
                                 </div>
                                 <Chip className="bg-[#F8F7F7] text-[#333333] px-[10px] py-[3px] flex flex-row justify-center items-center">
-                                {isNaN(Math.floor(questionEngagement?.Engagement?.duration / 60)) ? 0 : Math.floor(questionEngagement?.Engagement?.duration / 60)}:
-                                {isNaN(Math.floor(questionEngagement?.Engagement?.duration % 60)) ? '00' : Math.floor(questionEngagement?.Engagement?.duration % 60).toString().padStart(2, '0')}
+                                    {isNaN(Math.floor(questionEngagement?.Engagement?.duration / 60)) ? 0 : Math.floor(questionEngagement?.Engagement?.duration / 60)}:
+                                    {isNaN(Math.floor(questionEngagement?.Engagement?.duration % 60)) ? '00' : Math.floor(questionEngagement?.Engagement?.duration % 60).toString().padStart(2, '0')}
                                 </Chip>
                             </TableCell>
                             <TableCell>
@@ -197,13 +167,13 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     {questionEngagement?.Question?.difficulty}
                                 </Chip>
                             </TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 {questionEngagement?.Engagement?.reviewed_response}
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell className="flex flex-row">
-                                {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
+                                {/* {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
                                     <svg
-                                        className='h-[25px] w-[25px] fill-[#14BF96]'
+                                        className='h-[30px] w-[30px] fill-[#14BF96]'
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1em"
                                         height="1em"
@@ -213,7 +183,7 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     </svg>
                                 ) : (
                                     <svg
-                                        className='h-[25px] w-[25px] fill-[#14BF96]'
+                                        className='h-[30px] w-[30px] fill-[#14BF96]'
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1em"
                                         height="1em"
@@ -221,10 +191,10 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     >
                                         <path d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3z"></path>
                                     </svg>
-                                ))}
+                                ))} */}
                                 {!questionEngagement?.Engagement?.starred ? (
                                     <svg
-                                        className='h-[25px] w-[25px] fill-[#1865F2] cursor-pointer'
+                                        className='h-[30px] w-[30px] fill-[#1865F2] cursor-pointer'
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1em"
                                         height="1em"
@@ -235,7 +205,7 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     </svg>
                                 ) : (
                                     <svg
-                                        className='h-[25px] w-[25px] fill-[#1865F2] cursor-pointer'
+                                        className='h-[30px] w-[30px] fill-[#1865F2] cursor-pointer'
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1em"
                                         height="1em"
@@ -246,19 +216,22 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                                     </svg>
                                 )}
                             </TableCell>
+                            <TableCell>
+                                <Button isIconOnly size="sm" onClick={() =>
+                                    viewQuestionModal({
+                                        questionId: questionEngagement?.Question?.id,
+                                        engagementId: questionEngagement?.Engagement?.id,
+                                    })
+                                }>
+                                    <Icon icon="line-md:arrow-right" width="24" height="24" style={{ color: "#0B2149" }} />
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
             <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
-            {editQuestion && (
-                <QBankFormModal
-                    isOpen={isFormOpen}
-                    onOpenChange={onFormOpenChange}
-                    question={editQuestion}
-                    mode={MODEEDIT}
-                />
-            )}
+
         </div>
     );
 };

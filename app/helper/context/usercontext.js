@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
             setLoginToggle(!loginToggle)
     
             // go to the study page
-            router.push('/study/mydashboard');
+            router.push('/study/mydashboard/newpage');
             console.log("user data", data.token);
         } catch (error) {
             console.error('Failed to login user:', error);

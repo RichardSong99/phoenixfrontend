@@ -211,7 +211,7 @@ export default function QuestionFooter({ }) {
                     <Button className='bg-white border-[2px] text-gray-600' onClick={handleShowAnswer}>
                         {!isAnswerVisible ?
                             "Check Answer" :
-                            <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple}</div>
+                            <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ? questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple : questionData[questionIDArray[activeQuestionIndex]].correct_answer_free}</div>
                         }
                     </Button>
 

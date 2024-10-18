@@ -121,6 +121,7 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                     <TableColumn>Status</TableColumn>
                     <TableColumn>Question</TableColumn>
                     <TableColumn>Difficulty</TableColumn>
+                    <TableColumn>MC / FR</TableColumn>
                     {/* <TableColumn>Reviewed</TableColumn> */}
                     <TableColumn>Starred</TableColumn>
                     <TableColumn>View</TableColumn>
@@ -170,6 +171,9 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
                             {/* <TableCell>
                                 {questionEngagement?.Engagement?.reviewed_response}
                             </TableCell> */}
+                            <TableCell className = "text-gray-500 text-center">
+                                {questionEngagement?.Question?.answer_type === "multipleChoice" ? "MC" : "FR"}
+                            </TableCell>
                             <TableCell className="flex flex-row">
                                 {/* {questionEngagement && (!questionEngagement?.Engagement?.flagged ? (
                                     <svg

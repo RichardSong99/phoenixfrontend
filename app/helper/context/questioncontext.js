@@ -142,9 +142,18 @@ export const QuestionProvider = ({ children }) => {
     const [totalSeconds, setTotalSeconds] = useState(0);
     const [currentSeconds, setCurrentSeconds] = useState(0);
 
+    const [showPauseTimer, setShowPauseTimer] = useState(false);
+
+
     const changeTimer = () => {
         setContinueTimer(!continueTimer);
     }
+
+    const handleUserTimerStopped = () => {
+        changeTimer();
+        setShowPauseTimer(!showPauseTimer);
+    }
+
 
     const setupActiveIndividualMode = async (questionID) => {
         resetAllVars();
@@ -688,7 +697,7 @@ export const QuestionProvider = ({ children }) => {
             let questionEngagementID = [];
             engagementsArray.push({
                 question_id: questionIDArray[activeQuestionIndex],
-                user_answer: userResponseData[activeQuestionIndex],
+                user_answer: userResponseData[questionIDArray[activeQuestionIndex]],
                 status: getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]}), 
                 flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
                 starred: isStarredData[questionIDArray[activeQuestionIndex]],
@@ -794,6 +803,8 @@ export const QuestionProvider = ({ children }) => {
                 handleSubmitSingleEngagement,
                 handleEndAdaptiveQuiz,
                 handleNextAdaptiveButton,
+                handleUserTimerStopped,
+                showPauseTimer,
             }}
         >
             {children}

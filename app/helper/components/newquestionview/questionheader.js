@@ -9,7 +9,7 @@ export default function QuestionHeader({ quizName }) {
     const {
         activeQuestionIndex,
         continueTimer,
-        changeTimer,
+        handleUserTimeStopped,
         isFlaggedData,
         isStarredData,
         handleFlagQuestion,
@@ -177,7 +177,7 @@ export default function QuestionHeader({ quizName }) {
                                         </Button>) : null}
                                     <Button
                                         className='text-[14px] text-white h-[20px]  bg-themeDarkGray text-[12px]' size = "sm"
-                                        onClick={changeTimer}
+                                        onClick={handleUserTimeStopped}
                                     >
                                         {continueTimer ? 'Pause Timer' : 'Unpause Timer'}
                                     </Button>

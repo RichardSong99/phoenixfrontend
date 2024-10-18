@@ -42,9 +42,11 @@ export default function QuestionView({ }) {
         engagementData,
         continueTimer,
         changeTimer,
+        showPauseTimer,
         adaptiveRegularMode,
         adaptiveQuestionIndex,
     } = useContext(QuestionContext);
+
 
     const changeCrossOutMode = () => {
         setCrossOutMode(!crossOutMode);
@@ -108,7 +110,7 @@ export default function QuestionView({ }) {
     
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
-            {!continueTimer &&
+            {showPauseTimer &&
                 <div className='w-[30%] h-[30%] bg-white absolute z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center'>
                     <div className='text-[30px] mb-[30px]'>
                         <strong>Timer paused</strong>
@@ -124,7 +126,7 @@ export default function QuestionView({ }) {
                     </div>
                 </div>
             }
-            <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${!continueTimer ? 'blur-sm' : null}`}>
+            <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${showPauseTimer ? 'blur-sm' : null}`}>
                 { questionData[questionIDArray[activeQuestionIndex]].subject === "math" || questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
@@ -295,12 +297,17 @@ export default function QuestionView({ }) {
                                         </textarea>
                                     </div>
                                 ) : (
-                                    <textarea
+                                    <div className = "flex flex-col gap-4 w-full p-4">
+                                        <textarea
                                         disabled
                                         className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
                                         value={engagementData[questionIDArray[activeQuestionIndex]]?.user_answer || ''}
                                     >
                                     </textarea>
+
+                                    <span>Correct answer: {parseLatexString(String("$" + questionData[questionIDArray[activeQuestionIndex]].correct_answer_free)+ "$")}</span>
+
+                                    </div>
                                 )}
                             </>
                         }

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { confirmUser, loginUserAPI } from '../apiservices/userservice';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useData } from './datacontext';
 
 const UserContext = createContext(null);
 
@@ -12,8 +13,12 @@ export const UserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loginToggle, setLoginToggle] = useState(false);
     const [user, setUser]  = useState(null);
+    const [authLoading, setAuthLoading] = useState(false);
 
     const loginUserHandler = async (email, password) => {
+
+        setAuthLoading(true);
+
         try {
             const data = await loginUserAPI(email, password);
             Cookies.set('token', data.token);
@@ -28,6 +33,7 @@ export const UserProvider = ({ children }) => {
             console.error('Failed to login user:', error);
             setIsAuthenticated(false);
         }
+
     };
 
     useEffect(() => {
@@ -45,7 +51,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginToggle, loginUserHandler, user }}>
+        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginToggle, loginUserHandler, user,  setUser, authLoading, setAuthLoading }}>
             {children}
         </UserContext.Provider>
     );

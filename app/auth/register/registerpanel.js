@@ -49,8 +49,8 @@ export default function RegisterPanel() {
 
     return (
         <div>
-            <div className="flex flex-col justify-around items-center pt-[30px] pb-10">
-                <div className="text-[20px]"><strong>Sign up</strong></div>
+            <div className="flex flex-col w-[500px] justify-around items-center pt-[30px] pb-10">
+                <div className="text-[40px] mb-[20px] text-gray-700"><strong>Sign Up</strong></div>
                 <div className="flex flex-col w-[80%] gap-y-[20px]">
                     <Input
                         label="First name"

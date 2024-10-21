@@ -21,19 +21,19 @@ export default function QuestionNavBar() {
         userResponseData,
         handleUpdateTimeSpentData,
         adaptiveRegularMode,
-        adaptiveQuestionIndex,
-        engagementData
+        engagementData,
+        TESTMODE
     } = useContext(QuestionContext);
 
     const [updatedQuestionIDArray, setUpdatedQuestionIDArray] = useState(questionIDArray);
 
     // Update questionIDArray whenever adaptiveQuestionIndex changes
     useEffect(() => {
-        if (adaptiveQuestionIndex !== undefined && adaptiveQuestionIndex !== null) {
+        if (activeQuestionIndex !== undefined && activeQuestionIndex !== null) {
             // Update the questionIDArray based on the adaptiveQuestionIndex
             setUpdatedQuestionIDArray(questionIDArray); // No sorting or remapping, just updating
         }
-    }, [adaptiveQuestionIndex, questionIDArray]);
+    }, [activeQuestionIndex, questionIDArray]);
 
     const checkSelected = (index) => {
         return index === activeQuestionIndex;
@@ -53,49 +53,61 @@ export default function QuestionNavBar() {
         let bgColor = '';
         let textColor = '';
         let engagementStatus = engagementData[questionIDArray[index]]?.status;
+        let userResponseStatus = userResponseData[questionIDArray[index]];
         let questionSelected = (index === activeQuestionIndex);
 
-        if (questionSelected) {
-            style += 'transform scale-[1.05] font-bold border-[2px]'
-        } else {
-            style += 'bg-white text-appleGray1 border-[2px]'
+        console.log('userResponseStatus', userResponseStatus);
+        console.log('indquizMode', indquizMode);
+
+        console.log("userresponse data", userResponseData);
+
+        if (indquizMode === TESTMODE && userResponseStatus !== null) {
+            bgColor = "bg-gray-200";
         }
 
-        if (engagementStatus !== undefined) {
-            console.log('engagementStatus', engagementStatus);
-            if (engagementStatus === 'correct') {
-                borderColor = 'border-green-500';
-            } else if (engagementStatus === 'incorrect') {
-                borderColor = 'border-red-500';
-            } else if (engagementStatus === 'omitted') {
-                borderColor = 'border-yellow-500';
-            }
-
-            if (questionSelected) {
-                if (engagementStatus === 'correct') {
-                    bgColor = 'bg-green-500';
-                } else if (engagementStatus === 'incorrect') {
-                    bgColor = 'bg-red-500';
-                } else if (engagementStatus === 'omitted') {
-                    bgColor = 'bg-yellow-500';
-                }
-                textColor = 'text-white';
-            }else{
-                if (engagementStatus === 'correct') {
-                    textColor = 'text-green-500';
-                } else if (engagementStatus === 'incorrect') {
-                    textColor = 'text-red-500';
-                } else if (engagementStatus === 'omitted') {
-                    textColor = 'text-yellow-500';
-                }
-            }
+        if (questionSelected) {
+            style += 'transform scale-[1.05] font-bold border-[2px] border-gray-600'
         } else {
-            if (questionSelected) {
-                borderColor = 'border-appleGray3';
-                bgColor = 'bg-appleGray3';
-                textColor = 'text-white';
+            style += 'text-appleGray1 border-[2px]'
+        }
+
+        if (!(indquizMode === TESTMODE && activeReviewMode === 'active')) {
+            if (engagementStatus !== undefined) {
+                console.log('engagementStatus', engagementStatus);
+                if (engagementStatus === 'correct') {
+                    borderColor = 'border-green-500';
+                } else if (engagementStatus === 'incorrect') {
+                    borderColor = 'border-red-500';
+                } else if (engagementStatus === 'omitted') {
+                    borderColor = 'border-yellow-500';
+                }
+
+                if (questionSelected) {
+                    if (engagementStatus === 'correct') {
+                        bgColor = 'bg-green-500';
+                    } else if (engagementStatus === 'incorrect') {
+                        bgColor = 'bg-red-500';
+                    } else if (engagementStatus === 'omitted') {
+                        bgColor = 'bg-yellow-500';
+                    }
+                    textColor = 'text-white';
+                } else {
+                    if (engagementStatus === 'correct') {
+                        textColor = 'text-green-500';
+                    } else if (engagementStatus === 'incorrect') {
+                        textColor = 'text-red-500';
+                    } else if (engagementStatus === 'omitted') {
+                        textColor = 'text-yellow-500';
+                    }
+                }
             } else {
-                borderColor = 'border-appleGray5';
+                if (questionSelected) {
+                    borderColor = 'border-appleGray3';
+                    bgColor = 'bg-appleGray3';
+                    textColor = 'text-white';
+                } else {
+                    borderColor = 'border-appleGray5';
+                }
             }
         }
 
@@ -116,8 +128,8 @@ export default function QuestionNavBar() {
     return (
         <div className='h-[90%] w-[250px] bg-white relative top-[60px] left-[30px] flex flex-col justify-between items-center pt-[25px] pb-[40px] rounded-[25px] shadow-custom '>
             <div className='w-full h-full  flex flex-col items-center '>
-                {adaptiveRegularMode !== 'adaptive' && <div className='mb-[20px] w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray6 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px]'>
-                    <div className='h-[25px] w-[25px] bg-appleBlue rounded-[10px]'></div>
+                {/* {adaptiveRegularMode !== 'adaptive' && <div className='mb-[20px] w-[85%] h-[100px] border-t-[2px] border-b-[2px] border-solid border-appleGray6 flex flex-row flex-wrap justify-center items-center gap-x-[10px] text-[15px] text-gray-600'>
+                    <div className='h-[25px] w-[25px] bg-appleGray3 rounded-[10px]'></div>
                     <p className='pt-[15px] ml-[-6px]'>Current</p>
                     <div className='h-[25px] w-[25px] rounded-[10px] border-[2px] border-dashed border-appleGray1'></div>
                     <p className='pt-[15px] ml-[-6px]'>Unanswered</p>
@@ -130,7 +142,7 @@ export default function QuestionNavBar() {
                         </svg>
                     </div>
                     <p className='pt-[15px] ml-[-8px]'>Flagged</p>
-                </div>}
+                </div>} */}
                 <div className='w-[95%] h-full rounded-[20px]'>
                     <div className='w-full flex flex-wrap gap-[19px] items-start p-[10px]'>
                         {updatedQuestionIDArray.map((_, index) => (
@@ -141,7 +153,7 @@ export default function QuestionNavBar() {
                                 style={{ transition: 'transform 0.3s ease-in-out' }}
                                 onClick={() => handleKeyChange(index)}
                             >
-                                {isFlaggedData[index] ?
+                                {isFlaggedData[questionIDArray[index]] ?
                                     <div className='relative top-[-15px] right-[-20px] mb-[-25px]'>
                                         <svg
                                             className='h-[25px] w-[25px] fill-appleRed'
@@ -151,7 +163,7 @@ export default function QuestionNavBar() {
                                         </svg>
                                     </div>
                                     : null}
-                                {isStarredData[index] ?
+                                {isStarredData[questionIDArray[index]] ?
                                     <div className='relative top-[-17px] left-[-12px] mb-[-25px]'>
                                         <svg
                                             className='h-[25px] w-[25px] fill-appleYellow'
@@ -179,7 +191,7 @@ export default function QuestionNavBar() {
                         <Icon icon="mage:next-fill" width="30" height="30" style={{ color: "#0B2149" }} />
                     </Button>
                 </div>
-                {activeReviewMode === "active" && adaptiveRegularMode !== 'adaptive' && indquizMode === 'quiz' ?
+                {/* {activeReviewMode === "active" && adaptiveRegularMode !== 'adaptive' && indquizMode === 'quiz' ?
                     <div id='buttons' className='mb-[10px] h-[100px] flex flex-col justify-around items-center'>
                         <Button
                             className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'
@@ -188,7 +200,7 @@ export default function QuestionNavBar() {
                             Submit Quiz
                         </Button>
                     </div> : null
-                }
+                } */}
                 {/* {indquizMode === "test" && <div className='mb-[10px] mt-[-100px] h-[100px] flex flex-col justify-around items-center'>
                     <Button onClick={handleNextTestStage} className='w-[150px] text-appleBlue rounded-[20px] bg-white border-[1px] border-appleBlue shadow-custom'>Next Section</Button>
                 </div>} */}

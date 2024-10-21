@@ -231,7 +231,7 @@ export async function fetchQuestionsById({
 }
 
 export async function getAdaptiveQuestion({
-    topics = [],
+    allowedTopics = [],
     allowedDifficulties = [],
     selectedAnswerStatuses = [],
     selectedAnswerTypes = [],
@@ -255,8 +255,8 @@ export async function getAdaptiveQuestion({
     };
 
     let queryParams = new URLSearchParams();
-    if (topics.length > 0) {
-        queryParams.append('topic', topics.join(','));
+    if (allowedTopics.length > 0) {
+        queryParams.append('allowedTopics', allowedTopics.join(','));
     }
     if (allowedDifficulties.length > 0) {
         queryParams.append('allowedDifficulties', allowedDifficulties.join(','));

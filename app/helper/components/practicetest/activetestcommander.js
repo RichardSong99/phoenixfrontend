@@ -37,7 +37,6 @@ export const ActiveTestCommander = ({ test }) => {
             markTestCompleted({ testID: test.id });
             router.push(`/study/reviewpracticetests/${test.id}`);
         }
-
     }
 
 

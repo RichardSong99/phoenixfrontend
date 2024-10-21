@@ -16,6 +16,8 @@ export const DataProvider = ({ children }) => {
 
     const {isAuthenticated, loginToggle, user} = useUser();
 
+    const [globalLoading, setGlobalLoading] = useState(true);
+
 
     const [topicSummaryList, setTopicSummaryList] = useState(null);
     const [userData, setUserData] = useState(null);
@@ -140,6 +142,8 @@ export const DataProvider = ({ children }) => {
           console.error("Error fetching topic list summary", error);
           setTopicSummaryList([]); // Handle failure gracefully
         }
+
+        setGlobalLoading(false);
       };
     
     useEffect(() => {
@@ -153,7 +157,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll, getTopicsBySubject, loadUserData }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll, getTopicsBySubject, loadUserData, globalLoading, setGlobalLoading }}>
             {children}
         </DataContext.Provider>
     );

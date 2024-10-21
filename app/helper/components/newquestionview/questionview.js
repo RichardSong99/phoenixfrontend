@@ -44,7 +44,6 @@ export default function QuestionView({ }) {
         changeTimer,
         showPauseTimer,
         adaptiveRegularMode,
-        adaptiveQuestionIndex,
     } = useContext(QuestionContext);
 
 
@@ -61,7 +60,7 @@ export default function QuestionView({ }) {
         if(!crossOutMode){
             if(!crossedOut.includes(choice)){
                 if(adaptiveRegularMode === 'adaptive'){
-                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                    if(activeQuestionIndex === activeQuestionIndex){
                         handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
                     }
                 } else {
@@ -71,7 +70,7 @@ export default function QuestionView({ }) {
         } else {
             if (crossedOut.includes(choice)) {
                 if(adaptiveRegularMode === 'adaptive'){
-                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                    if(activeQuestionIndex === activeQuestionIndex){
                         setCrossedOut(crossedOut.filter(item => item !== choice));
                     }
                 } else {
@@ -79,7 +78,7 @@ export default function QuestionView({ }) {
                 }
             } else {
                 if(adaptiveRegularMode === 'adaptive'){
-                    if(adaptiveQuestionIndex === activeQuestionIndex){
+                    if(activeQuestionIndex === activeQuestionIndex){
                         if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
                             handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
                         }
@@ -111,14 +110,14 @@ export default function QuestionView({ }) {
     return (
         <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
             {showPauseTimer &&
-                <div className='w-[30%] h-[30%] bg-white absolute z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center'>
-                    <div className='text-[30px] mb-[30px]'>
+                <div className='w-[30%] h-[30%] bg-white absolute z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center gap-4'>
+                    <div className='text-[30px]'>
                         <strong>Timer paused</strong>
                     </div>
-                    <div className='mb-[10px]'>Unpause timer to continue</div>
+                    <div >Unpause timer to continue</div>
                     <div>
                         <Button
-                            className='w-[100px] h-[25px] bg-appleBlue rounded-[20px] text-white text-[12px] shadow-custom'
+                            className='bg-gray-700 text-white'
                             onClick={changeTimer}
                         >
                             Unpause Timer
@@ -127,16 +126,17 @@ export default function QuestionView({ }) {
                 </div>
             }
             <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${showPauseTimer ? 'blur-sm' : null}`}>
-                { questionData[questionIDArray[activeQuestionIndex]].subject === "math" || questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
-                    <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px]'>
+                { questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
+                    <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px] gap-3'>
+                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].equation1)}
+                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].equation2)}
+
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
                         {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?
                             questionData[questionIDArray[activeQuestionIndex]].graphic :
                             (questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt))
                         } */}
-                        {/* <div
-                            dangerouslySetInnerHTML={{ __html: svg }}
-                        /> */}
+
                     </div> :
                     <div className='flex flex-col items-center w-[45%] h-full'>
                         <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
@@ -162,6 +162,7 @@ export default function QuestionView({ }) {
                                 </>
                             }
                         </div>
+                        {questionData[questionIDArray[activeQuestionIndex]].text1 !== "" && questionData[questionIDArray[activeQuestionIndex]].text2 !== "" && 
                         <div className='flex flex-row justify-around items-center w-[30%]'>
                             <div>
                                 <Button onClick={() => changePassage(1)} className='bg-transparent w-[10px]'>
@@ -184,7 +185,7 @@ export default function QuestionView({ }) {
                                     </svg>
                                 </Button>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 }
                 <div className='h-[95%] w-[2px] bg-appleGray1 opacity-[10%] rounded'></div>
@@ -212,7 +213,7 @@ export default function QuestionView({ }) {
                         }
                         {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
                             <>
-                                {(activeReviewMode !== "review" && adaptiveRegularMode !== 'adaptive') || (activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex === adaptiveQuestionIndex)) ?
+                                {(activeReviewMode !== "review" && adaptiveRegularMode !== 'adaptive') || (activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex === questionIDArray.length - 1)) ?
                                 (
                                     answerChoices.map((choice, index) => (
                                         <div key={choice} className="relative w-full max-w-xl mx-auto">

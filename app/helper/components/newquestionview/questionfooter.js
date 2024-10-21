@@ -27,9 +27,13 @@ export default function QuestionFooter({ }) {
         changeTimer,
         handleSubmitSingleEngagement,
         handleAdaptiveSubmit,
-        adaptiveQuestionIndex,
         handleEndAdaptiveQuiz,
         handleNextAdaptiveButton,
+        INDIVIDUALMODE,
+        QUIZMODE,
+        TESTMODE,
+        handleEndTestModule,  
+        handlePauseTestModule,
     } = useContext(QuestionContext);
 
     const toggleChatBot = () => {
@@ -122,13 +126,14 @@ export default function QuestionFooter({ }) {
     }, [activeQuestionIndex]);
 
     return (
-        <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px]'>
-            {activeReviewMode === "review" && engagementData[questionIDArray[activeQuestionIndex]] &&
-                <div className='w-[500px] h-full flex flex-row justify-start items-center'>
-                    <Popover placement="top">
+        <div className='w-full h-[10%] border-t-[2px] border-appleGray6 flex flex-row items-center pl-[20px] gap-4'>
+            {
+            (activeReviewMode === "review" || ( adaptiveRegularMode === "adaptive" )) && engagementData[questionIDArray[activeQuestionIndex]] !== undefined &&
+                <div className='h-full  flex flex-row justify-start items-center'>
+                    {/* <Popover placement="top">
                         <PopoverTrigger>
                             <Button className='rounded-[20px] bg-white border-[2px] border-themeDarkGray text-appleGray1 mr-[20px]'>
-                                {engagementData[questionIDArray[activeQuestionIndex]].reviewed ?
+                                {engagementData[questionIDArray[activeQuestionIndex]]?.reviewed ?
                                     <>
                                         Reviewed
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" className='fill-appleGreen w-[20px] h-[20px] mb-[2px]'>
@@ -192,41 +197,50 @@ export default function QuestionFooter({ }) {
                                 </div>
                             )}
                         </PopoverContent>
-                    </Popover>
+                    </Popover> */}
                     <Popover placement="top">
                         <PopoverTrigger>
-                            <Button className='text-white bg-gray-500'>
+                            <Button className='bg-white border-[2px] text-gray-600'>
                                 Explanation
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent size = "md" className = "max-w-[800px] p-3" backdrop = "opaque">
-                            {parseLatexString(questionData[questionIDArray[activeQuestionIndex]].explanation)}
+                            {parseLatexString(questionData[questionIDArray[activeQuestionIndex]]?.explanation)}
                         </PopoverContent>
                     </Popover>
                 </div>
             }
-            {activeReviewMode === "active" && <div>
+            <div>
                 <div className="flex flex-row gap-x-[10px]">
-
-                    <Button className='bg-white border-[2px] text-gray-600' onClick={handleShowAnswer}>
+                {activeReviewMode === "active" && indquizMode === INDIVIDUALMODE && 
+                    (<Button className='bg-white border-[2px] text-gray-600' onClick={handleShowAnswer}>
                         {!isAnswerVisible ?
                             "Check Answer" :
                             <div className='text-black pointer-events-none'>Correct Answer: {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ? questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple : questionData[questionIDArray[activeQuestionIndex]].correct_answer_free}</div>
                         }
-                    </Button>
+                    </Button>)
+                }
 
-                    <Button className='bg-white border-[2px] text-gray-600' onClick={handleNextAdaptiveButton}>
+                    {activeReviewMode === "active" && <Button className='bg-white border-blue-700 border-[2px] text-blue-700' onClick={handleNextAdaptiveButton}>
                         Next question
-                    </Button>
+                    </Button>}
 
-                    <Button className='bg-gray-400 text-white' onPress={handleEndAdaptiveQuiz}>
+                    {activeReviewMode === "active" && indquizMode === QUIZMODE && <Button className='bg-white border-[2px] text-gray-600' onPress={handleEndAdaptiveQuiz}>
                         End Quiz
-                    </Button>
+                    </Button>}
+
+                    {activeReviewMode === "active" && indquizMode === TESTMODE && <Button className='bg-white border-[2px] text-gray-600' onPress={handleEndTestModule}>
+                        End Module
+                    </Button>}
+
+                    {activeReviewMode === "active" && indquizMode === TESTMODE && userResponseData.length !== questionIDArray.length && <Button className='bg-white border-[2px] text-gray-600' onPress={handlePauseTestModule}>
+                        Save & Exit Module
+                    </Button>}
                 </div>
 
 
 
-            </div>}
+            </div>
             <div className='w-full h-[50px] flex flex-row justify-end items-center pr-[20px] gap-x-[10px]'>
                 <div className='cursor-pointer'>
                     <Avatar

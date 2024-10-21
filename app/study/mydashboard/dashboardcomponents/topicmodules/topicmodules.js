@@ -51,7 +51,7 @@ const TopicModules = () => {
   const router = useRouter();
 
   const [selectedDisplaySubject, setSelectedDisplaySubject] = useState("All");
-  
+
   const { createAdaptiveQuiz, setSelectedTopics } = useContext(QuestionContext);
 
   const [displayErrorInModal, setDisplayErrorInModal] = useState(false);
@@ -63,14 +63,14 @@ const TopicModules = () => {
     // setSelectedDifficulties(["easy"]);
     try {
       const response = await createAdaptiveQuiz({
-          allowedDifficulties: selectedDifficultiesLocal, 
-          topics: selectedTopicsLocal,
-          // numQuestions: 10,
-          
-        });
+        allowedDifficulties: selectedDifficultiesLocal,
+        topics: selectedTopicsLocal,
+        // numQuestions: 10,
+
+      });
 
       console.log("response", response)
-      
+
       if (response !== null) {
         router.push(`/study/activequiz?quizid=${response}&review=false&mode=adaptive`);
       } else {
@@ -87,16 +87,27 @@ const TopicModules = () => {
     onOpen();
   };
 
+  const getBackgroundColor = (progressValue) => {
+    if (progressValue == 0) return "bg-gray-300";
+    if (progressValue < 20) return "bg-gray-500";
+    if (progressValue < 40) return "bg-gray-400";
+    if (progressValue < 60) return "bg-green-300";
+    if (progressValue < 80) return "bg-green-400";
+    return "bg-green-500"; // Fully green at 80% or above
+  };
+
 
   const renderTopics = (category) => {
     const topics = getTopicsByCategory(category);
-    return topics.map( (topic, index) => {
-            var progressValue = 0
+    return topics.map((topic, index) => {
+      var progressValue = 0
+      var accuracyValue = 0
       console.log("topic", topic)
-      try{
-        var topicSummaryElement =  getTopicSummaryElement(topic);
-        var progressValue = (topicSummaryElement.usage) * 100;
-      }catch(e){
+      try {
+        var topicSummaryElement = getTopicSummaryElement(topic);
+        progressValue = (topicSummaryElement.usage) * 100;
+        accuracyValue = topicSummaryElement.accuracy * 100;
+      } catch (e) {
         console.log(e)
       }
 
@@ -110,8 +121,18 @@ const TopicModules = () => {
             <Tooltip content={`${Math.round(progressValue)}% completed`}>
               <Progress value={progressValue} color="default" className="w-60" size="md" />
             </Tooltip>
-            <Chip color="success" size="sm" className="text-white">
-              Advanced
+            <Chip
+              size="sm"
+              className={`text-white ${getBackgroundColor(progressValue)}`}
+            >
+              {Math.round(progressValue)}% completed
+            </Chip>
+
+            <Chip
+              size="sm"
+              className={`text-white ${getBackgroundColor(accuracyValue)}`}
+            >
+              {Math.round(accuracyValue) === 0 ? "--" : (Math.round(accuracyValue))}% correct
             </Chip>
             <Button isIconOnly size="sm" onPress={() => handleTopicClick(topic)}>
               <Icon icon="line-md:arrow-right" width="24" height="24" style={{ color: "#0B2149" }} />
@@ -135,7 +156,7 @@ const TopicModules = () => {
           {renderTopics("Algebra")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -147,7 +168,7 @@ const TopicModules = () => {
           {renderTopics("Advanced math")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -159,7 +180,7 @@ const TopicModules = () => {
           {renderTopics("Problem solving and data analysis")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -187,7 +208,7 @@ const TopicModules = () => {
           {renderTopics("Rhetorical and structural analysis")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -199,7 +220,7 @@ const TopicModules = () => {
           {renderTopics("Interpreting information and ideas")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -211,7 +232,7 @@ const TopicModules = () => {
           {renderTopics("Standard English conventions")}
         </div>
       </div>
-  
+
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
@@ -225,14 +246,14 @@ const TopicModules = () => {
       </div>
     </>
   );
-  
+
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <div>
-        <Tabs color="default" aria-label="Tabs colors" radius="full" selectedKey = {selectedDisplaySubject} onSelectionChange={setSelectedDisplaySubject}>
+        <Tabs color="default" aria-label="Tabs colors" radius="full" selectedKey={selectedDisplaySubject} onSelectionChange={setSelectedDisplaySubject}>
           <Tab key="All" title="All" />
-          
+
           <Tab key="Math" title="Math" />
           <Tab key="Reading & Writing" title="Reading & Writing" />
         </Tabs>
@@ -241,7 +262,7 @@ const TopicModules = () => {
       <div className="flex flex-col w-full px-20 gap-3">
         {selectedDisplaySubject === "All" || selectedDisplaySubject === "Math" ? mathModules : null}
         {selectedDisplaySubject === "All" || selectedDisplaySubject === "Reading & Writing" ? rwModules : null}
-       
+
       </div>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -261,7 +282,7 @@ const TopicModules = () => {
                   <CustomCheckbox value="medium">medium</CustomCheckbox>
                   <CustomCheckbox value="hard">hard</CustomCheckbox>
                 </CheckboxGroup>
-
+                {/* 
                 <Slider
                   size="md"
                   step={5}
@@ -272,7 +293,7 @@ const TopicModules = () => {
                   defaultValue={10}
                   className="max-w-md"
                   style={{ fontSize: "18px", color: "#95959B" }}
-                />
+                /> */}
 
                 {displayErrorInModal &&
                   <div className="text-red-500 text-sm">

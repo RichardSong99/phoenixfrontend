@@ -19,23 +19,23 @@ export default function Page() {
         router.push(`/study/myquizzes/`);
     }
 
-    const {
-        setupActiveQuizMode, 
-        setupReviewQuizMode,
-        setupAdaptiveQuizMode,
-    } = useContext(QuestionContext);
+    // const {
+    //     setupActiveQuizMode, 
+    //     setupReviewQuizMode,
+    //     setupAdaptiveQuizMode,
+    // } = useContext(QuestionContext);
 
-    useEffect(() => {
-        if (search === "true") {
-            setupReviewQuizMode(quizID);
-        } else {
-            if(mode === "adaptive"){
-                setupAdaptiveQuizMode(quizID);
-            } else {
-                setupActiveQuizMode(quizID);
-            }
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (search === "true") {
+    //         setupReviewQuizMode(quizID);
+    //     } else {
+    //         if(mode === "adaptive"){
+    //             setupAdaptiveQuizMode(quizID);
+    //         } else {
+    //             setupActiveQuizMode(quizID);
+    //         }
+    //     }
+    // }, []);
     
     return (
         <>

@@ -31,12 +31,14 @@ export function QuizTable() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
     const { topicMapping, quizListQuizType } = useData();
+    const [isLoading, setIsLoading] = useState(true);
 
     const router = useRouter();
 
 
 
     const handleQuizClick = (quiz) => {
+        setupReviewQuizMode(quiz.id);
         router.push(`/study/activequiz?quizid=${quiz.id}&review=true`);
         console.log(quiz, "quiz")
     }
@@ -84,6 +86,8 @@ export function QuizTable() {
                 })
             );
             setQuizData(data.filter(item => item !== null));
+
+            setIsLoading(false);
         };
 
         fetchQuizData();
@@ -91,7 +95,7 @@ export function QuizTable() {
 
     
 
-    if(quizData.length === 0){
+    if(isLoading){
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
             <Spinner />
             <div className='ml-[20px]'>Loading...</div>
@@ -110,7 +114,7 @@ export function QuizTable() {
                     <TableColumn width = "200">Score</TableColumn>
                     <TableColumn>Date</TableColumn>
                 </TableHeader>
-                <TableBody>
+                <TableBody emptyContent={"No quizzes completed yet."}>
                     {quizData.map((item, index) => (
                         <TableRow key={index} onClick={() => handleQuizClick(item.quiz)} className = "cursor-pointer hover:bg-gray-100">
                             {/* <TableCell>

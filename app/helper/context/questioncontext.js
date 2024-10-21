@@ -14,7 +14,14 @@ import {
     fetchQuiz,
 } from "../apiservices/quizservice";
 import { getResult } from "../data/questionhelpers";
+
+import { testQuestions } from "./testquestionconfig";
+
 import { create } from "@mui/material/styles/createTransitions";
+
+import { useRouter } from "next/navigation";
+
+import { useData } from "./datacontext";
 
 export const QuestionContext = createContext();
 
@@ -23,6 +30,10 @@ export const QuestionProvider = ({ children }) => {
     const [editQuestion, setEditQuestion] = useState(null);
     const [activeViewQuestion, setActiveViewQuestion] = useState(null);
     const [activeViewEngagement, setActiveViewEngagement] = useState(null); // {questionID, userID, userAnswer, userScore, userFeedback, userReported, userReportedReason, userReportedDate, userReportedAction, userReportedActionDate, userReportedActionBy}
+
+    const {globalLoading, setGlobalLoading} = useData();
+
+    const router = useRouter();
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -52,6 +63,123 @@ export const QuestionProvider = ({ children }) => {
     const [sortDirection, setSortDirection] = useState(SORTDESCENDING);
 
     //====================================================================================================
+
+    const INDIVIDUALMODE = "individual";
+    const QUIZMODE = "quiz";
+    const TESTMODE = "test";
+
+    const ACTIVEMODE = "active";
+    const REVIEWMODE = "review";
+    const ADAPTIVEMODE = "adaptive";
+    const REGULARMODE = "regular";
+
+    const [quizID, setQuizID] = useState(null);
+
+    const [indquizMode, setIndQuizMode] = useState(INDIVIDUALMODE);
+    const [activeReviewMode, setActiveReviewMode] = useState(null);
+    const [adaptiveRegularMode, setAdaptiveRegularMode] = useState(null);
+
+    // Quiz methods and states ==> for active quiz
+    const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+    const [questionIDArray, setQuestionIDArray] = useState([]);
+    const [questionData, setQuestionData] = useState({});
+
+    useEffect(() => {
+        setActiveQuestionIndex(activeQuestionIndex);
+    }, [activeQuestionIndex]);
+
+    const [userResponseData, setUserResponseData] = useState({});
+
+    // engagementIDs
+    const [engagementIDData, setEngagementIDData] = useState({});
+    const [engagementData, setEngagementData] = useState({});
+
+    // initialize as false for all questions
+    const [isFlaggedData, setIsFlaggedData] = useState({});
+    const [isStarredData, setIsStarredData] = useState({});
+    const [wasReviewedData, setWasReviewedData] = useState({});
+
+    // initialize as zero for all questions
+    const [timeSpentData, setTimeSpentData] = useState({});
+    const [startTime, setStartTime] = useState(Date.now());
+    const timerRef = useRef(null);
+
+    // new questionview components
+    const [continueTimer, setContinueTimer] = useState(true);
+    const [totalSeconds, setTotalSeconds] = useState(0);
+    const [currentSeconds, setCurrentSeconds] = useState(0);
+
+    const [showPauseTimer, setShowPauseTimer] = useState(false);
+
+    // Question display modes ==================================
+
+    const [showEndQuizButton, setShowEndQuizButton] = useState(false);
+    const [showNextSectionButton, setShowNextSectionButton] = useState(false);
+    const [allowFlagQuestion, setAllowFlagQuestion] = useState(false);
+    const [showFlagQuestion, setShowFlagQuestion] = useState(false);
+
+    const [allowStarQuestion, setAllowStarQuestion] = useState(false);
+
+    const [showDifficulty, setShowDifficulty] = useState(false);
+    const [allowShowAnswer, setAllowShowAnswer] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
+
+    const [showChatbotButton, setShowChatbotButton] = useState(false);
+    const [showMathRefSheet, setShowMathRefSheet] = useState(false);
+
+
+    // set up question display modes
+
+    const setupQuestionDisplayModes = () => {
+        if(activeReviewMode === ACTIVEMODE) {          
+            if(indquizMode === QUIZMODE){  
+                if(adaptiveRegularMode === ADAPTIVEMODE){
+                    setShowEndQuizButton(true);
+                    setShowNextSectionButton(false);
+                    setAllowFlagQuestion(false);
+                    setShowFlagQuestion(false);
+                    setAllowStarQuestion(true);
+                    setShowDifficulty(true);
+                    setAllowShowAnswer(true);
+                    setShowChatbotButton(true);
+
+                    if(activeQuestionIndex < questionIDArray.length - 1){
+                        setShowAnswer(true);
+                    }else{
+                        setShowAnswer(false);
+                    }
+                }
+            }
+
+            if(indquizMode === TESTMODE ){
+                setShowEndQuizButton(false);
+                setShowNextSectionButton(true);
+                setAllowFlagQuestion(true);
+                setShowFlagQuestion(true);
+                setAllowStarQuestion(false);
+                setShowDifficulty(false);
+                setAllowShowAnswer(false);
+                setShowAnswer(false);
+                setShowChatbotButton(false);
+            }
+        }else if(activeReviewMode === REVIEWMODE){
+            setShowEndQuizButton(false);
+            setShowNextSectionButton(false);
+            setAllowFlagQuestion(true);
+            setShowFlagQuestion(true);
+            setAllowStarQuestion(true);
+            setShowDifficulty(true);
+            setAllowShowAnswer(true);
+            setShowAnswer(true);
+            setShowChatbotButton(true);
+        }
+
+     
+    }   
+
+
+
+    // ======================== Methods ========================
 
     const handleDeleteQuestion = async (questionId) => {
         if (window.confirm("Are you sure you want to delete this question?")) {
@@ -90,57 +218,19 @@ export const QuestionProvider = ({ children }) => {
     };
 
 
-    //=============================================
 
-    const INDIVIDUALMODE = "individual";
-    const QUIZMODE = "quiz";
-    const TESTMODE = "test";
 
-    const ACTIVEMODE = "active";
-    const REVIEWMODE = "review";
-    const ADAPTIVEMODE = "adaptive";
-    const REGULARMODE = "regular";
-
-    const [quizID, setQuizID] = useState(null);
-
-    const [indquizMode, setIndQuizMode] = useState(INDIVIDUALMODE);
-    const [activeReviewMode, setActiveReviewMode] = useState(null);
-    const [adaptiveRegularMode, setAdaptiveRegularMode] = useState(null);
-
-    // Quiz methods and states ==> for active quiz
-    const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-    const [adaptiveQuestionIndex, setAdaptiveQuestionIndex] = useState(0);
-    const [questionIDArray, setQuestionIDArray] = useState([]);
-    const [questionData, setQuestionData] = useState({});
-
-    useEffect(() => {
-        setActiveQuestionIndex(adaptiveQuestionIndex);
-    }, [adaptiveQuestionIndex]);
-
-    const [userResponseData, setUserResponseData] = useState({});
-
-    // engagementIDs
-    const [engagementIDData, setEngagementIDData] = useState({});
-    const [engagementData, setEngagementData] = useState({});
-
-    // initialize as false for all questions
-    const [isFlaggedData, setIsFlaggedData] = useState({});
-    const [isStarredData, setIsStarredData] = useState({});
-    const [wasReviewedData, setWasReviewedData] = useState({});
-
-    // initialize as zero for all questions
-    const [timeSpentData, setTimeSpentData] = useState({});
-    const [startTime, setStartTime] = useState(Date.now());
-    const timerRef = useRef(null);
-
-    // new questionview components
-    const [continueTimer, setContinueTimer] = useState(true);
-    const [totalSeconds, setTotalSeconds] = useState(0);
-    const [currentSeconds, setCurrentSeconds] = useState(0);
 
     const changeTimer = () => {
         setContinueTimer(!continueTimer);
+        setShowPauseTimer(!showPauseTimer);
     }
+
+    const handleUserTimerStopped = () => {
+        changeTimer();
+        setShowPauseTimer(!showPauseTimer);
+    }
+
 
     const setupActiveIndividualMode = async (questionID) => {
         resetAllVars();
@@ -177,9 +267,42 @@ export const QuestionProvider = ({ children }) => {
         return response.quizID;
     };
 
+    const createTestQuiz = async ({ quizName } = {}) => {
+        resetAllVars();
+
+        var quizID = null
+
+        try{
+            var questionIDs = testQuestions[quizName];
+
+            const response = await initializeQuiz({ quizName: quizName, quizType : "test", questionIDs: questionIDs });
+
+            await setupTestMode(response.quizID);
+
+
+            quizID = response.quizID;
+        }catch(e){
+            console.error("Could not create test quiz:", e);
+        }
+
+        return quizID;
+    };
+
+    const resumeTestQuiz = async ({ quizID }) => {
+
+        try{
+            await setupTestMode(quizID);
+        }catch(e){
+            console.error("Could not resume test quiz:", e);
+        }
+    };
+
+
     const setupTestMode = async (quizID) => {
+        console.log("setting up test mode");
         await setupActiveQuizMode(quizID);
         setIndQuizMode(TESTMODE);
+        console.log("indquizmode", indquizMode);
     };
 
     const setupActiveQuizMode = async (quizID) => {
@@ -212,18 +335,53 @@ export const QuestionProvider = ({ children }) => {
         initializeEngagementStates(QEIDCombos);
     };
 
-    const createAdaptiveQuiz = async () => {
+    const handleNextAdaptiveButton = async () => {
+        if(activeQuestionIndex < questionIDArray.length - 1){
+            setActiveQuestionIndex(activeQuestionIndex + 1);
+        } else {
+            handleAdaptiveSubmit();
+        }
+    };
+
+    const handleEndTestModule = async () => {
+        setGlobalLoading(true);
+        console.log("handleEndTestModule");
+    
+        // Correctly pass "completed" as an argument for quizStatus
+        await handleSubmitEngagements("completed");
+    
+        router.push("/study/mydashboard");
+        setGlobalLoading(false);
+    };
+    
+
+    const handlePauseTestModule = async () => {
+        setGlobalLoading(true);
+
+        if(userResponseData.length === questionIDArray.length){
+            await handleEndTestModule();
+            return;
+        }
+
+        await handleSubmitEngagements("paused");
+
+        router.push("/study/mydashboard");
+        setGlobalLoading(false);
+    };
+
+    const createAdaptiveQuiz = async ({allowedDifficulties, topics}) => {
         resetAllVars();
         var quizID = null;
         try{
             const data = await getAdaptiveQuestion({
-                selectedTopics: selectedTopics,
-                selectedDifficulties: selectedDifficulties,
-                selectedAnswerStatuses: selectedAnswerStatuses,
-                selectedAnswerTypes: selectedAnswerTypes,
+                allowedTopics: topics,
+                allowedDifficulties: allowedDifficulties,
+    
             });
             const first_question_array = [data.data[0].Question.id];
             const response = await initializeQuiz({ questionIDs: first_question_array, quizType : "quiz" });
+            setSelectedTopics(topics);
+            setSelectedDifficulties(allowedDifficulties);
             setupAdaptiveQuizMode(response.quizID);
             quizID = response.quizID;
         } catch (error) {
@@ -248,25 +406,37 @@ export const QuestionProvider = ({ children }) => {
 
         setActiveReviewMode(ACTIVEMODE);
         setAdaptiveRegularMode(ADAPTIVEMODE);
+        setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
     };
 
-    const handleAdaptiveSubmit = async () => {
+    const handleEndAdaptiveQuiz = async () => {
+        // check if there are any unsubmitted questions
+    
+        if(userResponseData[questionIDArray[activeQuestionIndex]] !== undefined){
+            await handleAdaptiveSubmit({end:true});
+        }
+
+        router.push("/study/mydashboard");
+    };
+
+
+
+    const handleAdaptiveSubmit = async ({end = false} = {}) => {
         let engagementsArray = [];
         let questionEngagementID = [];
-        const result = getResult({question: questionData[questionIDArray[adaptiveQuestionIndex]], userResponse: userResponseData[questionIDArray[adaptiveQuestionIndex]]});
-        const difficulty = questionData[questionIDArray[adaptiveQuestionIndex]].difficulty;
-        const difficultyArray = [difficulty];
+        const result = getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]});
+        const difficulty = questionData[questionIDArray[activeQuestionIndex]].difficulty;
         console.log("user response", userResponseData);
         console.log("current difficulty", difficulty);
         engagementsArray.push({
-            question_id: questionIDArray[adaptiveQuestionIndex],
-            user_answer: userResponseData[questionIDArray[adaptiveQuestionIndex]],
+            question_id: questionIDArray[activeQuestionIndex],
+            user_answer: userResponseData[questionIDArray[activeQuestionIndex]],
             status: result, 
-            flagged: isFlaggedData[questionIDArray[adaptiveQuestionIndex]],
-            starred: isStarredData[questionIDArray[adaptiveQuestionIndex]],
-            duration: timeSpentData[questionIDArray[adaptiveQuestionIndex]],
+            flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
+            starred: isStarredData[questionIDArray[activeQuestionIndex]],
+            duration: timeSpentData[questionIDArray[activeQuestionIndex]],
         });
         console.log("engagementsArray", engagementsArray);
         try {
@@ -284,22 +454,29 @@ export const QuestionProvider = ({ children }) => {
         }
 
         resetAllVars();
-        let numCorrect = 0;
-        let numIncorrect = 0;
-        if(result == "correct"){
-            numCorrect = 1;
-        } else{
-            numIncorrect = 1;
+
+        if (end) {
+            return;
         }
+
+        // let numCorrect = 0;
+        // let numIncorrect = 0;
+        // if(result == "correct"){
+        //     numCorrect = 1;
+        // } else{
+        //     numIncorrect = 1;
+        // }
         let next_question = null;
         try {
             next_question = await getAdaptiveQuestion({
-                selectedTopics: selectedTopics,
-                selectedDifficulties: difficultyArray,
-                selectedAnswerStatuses: selectedAnswerStatuses,
-                selectedAnswerTypes: selectedAnswerTypes,
-                numIncorrect: numIncorrect,
-                numCorrect: numCorrect,
+                allowedTopics: selectedTopics,
+                allowedDifficulties: selectedDifficulties,
+                prevDifficulty: difficulty,
+                prevStatus: result,
+                // selectedAnswerStatuses: selectedAnswerStatuses,
+                // selectedAnswerTypes: selectedAnswerTypes,
+                // numIncorrect: numIncorrect,
+                // numCorrect: numCorrect,
             });
         } catch (error) {
             console.error("Could not add to adaptive quiz:", error);
@@ -319,7 +496,7 @@ export const QuestionProvider = ({ children }) => {
             console.error("Could not refetch the quiz:", error);
         }
 
-        setAdaptiveQuestionIndex(adaptiveQuestionIndex + 1);
+        setActiveQuestionIndex(activeQuestionIndex + 1);
 
         return next_question.data[0].Question.id;
     };
@@ -358,8 +535,12 @@ export const QuestionProvider = ({ children }) => {
         for (let i = 0; i < QEIDCombos.length; i++) {
             const QEIDCombo = QEIDCombos[i];
             console.log("Processing QEIDCombo:", QEIDCombo);
-            questionIDs.push(QEIDCombo.question_id);
+            if(QEIDCombo.question_id && QEIDCombo.engagement_id){
+                questionIDs.push(QEIDCombo.question_id);
+            }
         }
+        console.log("questionIDs in initialize engagement states", questionIDs);
+
         setQuestionIDArray(questionIDs);
         console.log("ids", questionIDs);
         // fetch the questions for the questionIDs, then populate the questionData object
@@ -376,8 +557,10 @@ export const QuestionProvider = ({ children }) => {
 
         // populate the engagementIDData object
         const newEngagementIDData = {};
-        QEIDCombos.forEach((QEIDCombo) => {
-            newEngagementIDData[QEIDCombo.question_id] = QEIDCombo.engagement_id;
+        questionIDs.forEach((questionID) => {
+            newEngagementIDData[questionID] = QEIDCombos.find(
+                (QEIDCombo) => QEIDCombo.question_id === questionID
+            ).engagement_id;
         });
         setEngagementIDData(newEngagementIDData);
         console.log(newEngagementIDData);
@@ -533,6 +716,10 @@ export const QuestionProvider = ({ children }) => {
             const newIsStarredData = { ...isStarredData };
             newIsStarredData[questionID] = !newIsStarredData[questionID];
             setIsStarredData(newIsStarredData);
+
+            console.log("engagementIDData", engagementIDData);
+            console.log("questionID", questionID);
+            console.log("engagementID", engagementIDData[questionID]);
             // update the engagement with the new star status
             try {
                 await updateEngagement({
@@ -555,45 +742,54 @@ export const QuestionProvider = ({ children }) => {
         }
     };
 
-    const handleUpdateTimeSpentData = (questionID) => {
-        if (activeReviewMode === ACTIVEMODE) {
-            // const currentTime = Date.now();
-            // const timeSpent = (currentTime - startTime) / 1000; // in seconds
+const handleUpdateTimeSpentData = (questionID) => {
+    if (activeReviewMode === ACTIVEMODE) {
+        const newTimeSpentData = { ...timeSpentData };
 
-            const newTimeSpentData = { ...timeSpentData };
-            newTimeSpentData[questionID] = currentSeconds + timeSpentData[questionID];
+        // Safeguard against undefined values by defaulting to 0
+        const previousTime = timeSpentData[questionID] || 0;
 
-            setTimeSpentData(newTimeSpentData);
+        console.log("currentSeconds", currentSeconds);
+        console.log("previousTime", previousTime);
 
-            // setStartTime(currentTime);
-            return;
-        }
-    };
+        // Accumulate time properly
+        newTimeSpentData[questionID] = currentSeconds + previousTime;
 
-    const prevActiveQuestionIndexRef = useRef();
+        setTimeSpentData(newTimeSpentData);
+        return;
+    }
+};
 
-    useEffect(() => {
-        // This will run after activeQuestionIndex has changed
-        if (prevActiveQuestionIndexRef.current !== undefined) {
-            handleUpdateTimeSpentData(questionIDArray[prevActiveQuestionIndexRef.current]);
-        }
+const prevActiveQuestionIndexRef = useRef();
 
-        // Update the ref with the current activeQuestionIndex
-        prevActiveQuestionIndexRef.current = activeQuestionIndex;
-        setCurrentSeconds(timeSpentData[questionIDArray[activeQuestionIndex]] || 0);
-    }, [activeQuestionIndex]);
+useEffect(() => {
+    console.log("prevActiveQuestionIndexRef", prevActiveQuestionIndexRef.current);
 
-    const updateTotalTimer = () => {
-        if (activeReviewMode === ACTIVEMODE && continueTimer) {
-            const interval = setInterval(() => {
-                setTotalSeconds(prevSeconds => prevSeconds + 1);
-                setCurrentSeconds(prevSeconds => prevSeconds + 1);
-            }, 1000);
-    
-            return interval;
-        }
-        return null;
-    };
+    // This will run after activeQuestionIndex has changed
+    if (prevActiveQuestionIndexRef.current !== undefined) {
+        // Update the time spent on the previous question
+        handleUpdateTimeSpentData(questionIDArray[prevActiveQuestionIndexRef.current]);
+    }
+
+    // Update the ref with the current activeQuestionIndex
+    prevActiveQuestionIndexRef.current = activeQuestionIndex;
+
+    // Reset or set currentSeconds for the new active question
+    setCurrentSeconds(timeSpentData[questionIDArray[activeQuestionIndex]] || 0);
+}, [activeQuestionIndex]);
+
+const updateTotalTimer = () => {
+    if (activeReviewMode === ACTIVEMODE && continueTimer) {
+        const interval = setInterval(() => {
+            setTotalSeconds(prevSeconds => prevSeconds + 1);
+            setCurrentSeconds(prevSeconds => prevSeconds + 1); // Increment time for the current question
+        }, 1000);
+
+        return interval;
+    }
+    return null;
+};
+
 
     const handleMarkReviewQuestion = async (questionID) => {
         if (activeReviewMode === REVIEWMODE) {
@@ -615,10 +811,11 @@ export const QuestionProvider = ({ children }) => {
         }
     };
 
-    const handleSubmitEngagements = async () => {
+    const handleSubmitEngagements = async (quizStatus) => {
         if (activeReviewMode === ACTIVEMODE) {
             let engagementsArray = [];
             let questionEngagementIDs = [];
+    
             questionIDArray.forEach((questionID) => {
                 engagementsArray.push({
                     question_id: questionID,
@@ -629,24 +826,36 @@ export const QuestionProvider = ({ children }) => {
                     duration: timeSpentData[questionID],
                 });
             });
+    
             console.log("engagementsArray", engagementsArray);
+    
             try {
                 const response = await postEngagements(engagementsArray);
                 questionEngagementIDs = response.question_engagement_ids;
-
-                if (indquizMode === QUIZMODE) {
-                    await updateQuizWithQuestionEngagementIDs(
-                        quizID,
-                        questionEngagementIDs
-                    );
+    
+                if (indquizMode === QUIZMODE || indquizMode === TESTMODE) {
+                    // Conditionally pass quizStatus only if it is defined
+                    if (quizStatus !== undefined) {
+                        await updateQuizWithQuestionEngagementIDs(
+                            quizID,
+                            questionEngagementIDs,
+                            quizStatus
+                        );
+                    } else {
+                        await updateQuizWithQuestionEngagementIDs(
+                            quizID,
+                            questionEngagementIDs
+                        );
+                    }
                 }
             } catch (error) {
                 console.error("Could not submit engagements:", error);
             }
-
+    
             setTotalSeconds(0);
         }
     };
+    
 
     const handleSubmitSingleEngagement = async () => {
         if (activeReviewMode === ACTIVEMODE) {
@@ -654,7 +863,7 @@ export const QuestionProvider = ({ children }) => {
             let questionEngagementID = [];
             engagementsArray.push({
                 question_id: questionIDArray[activeQuestionIndex],
-                user_answer: userResponseData[activeQuestionIndex],
+                user_answer: userResponseData[questionIDArray[activeQuestionIndex]],
                 status: getResult({question: questionData[questionIDArray[activeQuestionIndex]], userResponse: userResponseData[questionIDArray[activeQuestionIndex]]}), 
                 flagged: isFlaggedData[questionIDArray[activeQuestionIndex]],
                 starred: isStarredData[questionIDArray[activeQuestionIndex]],
@@ -715,7 +924,9 @@ export const QuestionProvider = ({ children }) => {
                 SORTDESCENDING,
                 handleDeleteQuestion,
                 handleEditQuestion,
-
+                INDIVIDUALMODE,
+                QUIZMODE,
+                ACTIVEMODE,
                 // Quiz states and methods
                 quizID,
                 indquizMode,
@@ -735,7 +946,6 @@ export const QuestionProvider = ({ children }) => {
                 totalSeconds,
                 currentSeconds,
                 adaptiveRegularMode,
-                adaptiveQuestionIndex,
                 createAdaptiveQuiz,
                 setupAdaptiveQuizMode,
                 setupTestMode,
@@ -758,6 +968,15 @@ export const QuestionProvider = ({ children }) => {
                 handleMarkReviewQuestion,
                 handleSubmitEngagements,
                 handleSubmitSingleEngagement,
+                handleEndAdaptiveQuiz,
+                handleNextAdaptiveButton,
+                handleUserTimerStopped,
+                showPauseTimer,
+                createTestQuiz,
+                resumeTestQuiz,
+                TESTMODE,
+                handleEndTestModule,
+                handlePauseTestModule
             }}
         >
             {children}

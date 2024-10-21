@@ -45,7 +45,7 @@ export default function LoginPanel() {
 
     return (
         <div>
-            <div className="flex flex-col gap-4 px-8 pb-10 pt-6">
+            <div className="flex flex-col gap-4 px-8 pb-10 pt-6 w-full">
                 <p className="pb-2 text-xl font-medium">Log In</p>
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <Input

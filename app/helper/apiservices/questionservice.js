@@ -231,12 +231,14 @@ export async function fetchQuestionsById({
 }
 
 export async function getAdaptiveQuestion({
-    selectedTopics = [],
-    selectedDifficulties = [],
+    allowedTopics = [],
+    allowedDifficulties = [],
     selectedAnswerStatuses = [],
     selectedAnswerTypes = [],
-    numIncorrect = 0,
-    numCorrect = 0,
+    prevDifficulty = "medium",
+    prevStatus = "correct",
+    // numIncorrect = 0,
+    // numCorrect = 0,
 }) {
     let token;
     try {
@@ -253,11 +255,11 @@ export async function getAdaptiveQuestion({
     };
 
     let queryParams = new URLSearchParams();
-    if (selectedTopics.length > 0) {
-        queryParams.append('topic', selectedTopics.join(','));
+    if (allowedTopics.length > 0) {
+        queryParams.append('allowedTopics', allowedTopics.join(','));
     }
-    if (selectedDifficulties.length > 0) {
-        queryParams.append('difficulty', selectedDifficulties.join(','));
+    if (allowedDifficulties.length > 0) {
+        queryParams.append('allowedDifficulties', allowedDifficulties.join(','));
     }
     if (selectedAnswerStatuses.length > 0) {
         queryParams.append('answerStatus', selectedAnswerStatuses.join(','));
@@ -266,10 +268,13 @@ export async function getAdaptiveQuestion({
         queryParams.append('answerType', selectedAnswerTypes.join(','));
     }
 
-    queryParams.append('numIncorrect', numIncorrect);
-    queryParams.append('numCorrect', numCorrect);
+    queryParams.append('prevDifficulty', prevDifficulty);
+    queryParams.append('prevStatus', prevStatus);
 
-    const response = await fetch(`${apiUrl}/getAdaptiveQuestion?${queryParams.toString()}`, requestOptions);
+    // queryParams.append('numIncorrect', numIncorrect);
+    // queryParams.append('numCorrect', numCorrect);
+
+    const response = await fetch(`${apiUrl}/getadaptivequestion?${queryParams.toString()}`, requestOptions);
 
     if (!response.ok) {
         throw new Error('Failed to start adaptive quiz');

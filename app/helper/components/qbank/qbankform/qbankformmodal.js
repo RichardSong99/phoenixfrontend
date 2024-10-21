@@ -7,7 +7,8 @@ export const QBankFormModal = ({ isOpen, onOpenChange, question, mode }) => {
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             scrollBehavior={"inner"}
-            size="3xl"
+            size="full"
+            shouldBlockScroll = {false}
         >
             <ModalContent style={{ padding: '10px' }}>
                 <ModalBody>

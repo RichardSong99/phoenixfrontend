@@ -7,7 +7,7 @@ import QuestionFooter from './questionfooter';
 export default function QuestionModalInterior({ mode, quizID }) {
     return (
         <div 
-            className='shadow-custom bg-white rounded-[25px] pt-[25px] h-[90%] relative top-[40px] left-[60px] flex flex-col justify-between pb-[0px]' style={{width: 'calc(100% - 350px)'}}
+            className='shadow-custom bg-white rounded-[25px] pt-[25px] h-[90%] relative top-[60px] left-[60px] flex flex-col justify-between pb-[0px]' style={{width: 'calc(100% - 350px)'}}
         >
             <div className='h-[85%]'>
                 <QuestionHeader

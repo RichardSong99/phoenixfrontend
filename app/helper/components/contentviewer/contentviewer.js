@@ -138,10 +138,10 @@ export function ContentViewer({
                         <div className="flex flex-row w-full justify-between p-3 "            >
                             <div className={styles.nextPrevGroup}>
                                 
-                                <Button color="warning" onClick={() => handleSubmitEngagements()} > Finish Section </Button>
-                                <Button color="warning" onClick={() => handlePause()} > {isPaused ? "Unpause Timer" : "Pause Timer"}</Button>
+                                <Button className = "bg-themeDarkGray" onClick={() => handleSubmitEngagements()} > Finish Section </Button>
+                                <Button className = "bg-themeDarkGray" onClick={() => handlePause()} > {isPaused ? "Unpause Timer" : "Pause Timer"}</Button>
                             </div>
-                            <ButtonGroup color="primary" variant="bordered">
+                            <ButtonGroup color="#95959B" variant="bordered">
                                 <Button onClick={() => handlePreviousQuestion()}>Back</Button>
                                 <Button onClick={() => handleNextQuestion()}>Next</Button>
                             </ButtonGroup>

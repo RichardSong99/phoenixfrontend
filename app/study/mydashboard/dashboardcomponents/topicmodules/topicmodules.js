@@ -14,201 +14,304 @@ import {
   Tooltip,
   Divider,
   Tabs,
-  Tab
+  Tab,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalContent,
+  useDisclosure,
+  CheckboxGroup,
+  Slider,
+
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { CheckIconGreen } from "@/app/helper/assets/components/CheckIconGreen";
-import { useData } from "@/app/helper/context/datacontext";
 import { useRouter } from 'next/navigation';
 import { QuestionContext } from "@/app/helper/context/questioncontext";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Accordion, AccordionItem } from "@nextui-org/react";
+import { CustomCheckbox } from "@/app/helper/assets/components/CustomCheckbox";
+import { useData } from "@/app/helper/context/datacontext";
 
 
 const TopicModules = () => {
   const {
-    selectedAnswerStatuses,
-    setSelectedAnswerStatuses,
-    selectedTopics,
-    setSelectedTopics,
-} = useContext(QuestionContext);
+    getTopicsByCategory,
+    getTopicSummaryElement,
+    topicSummaryList,
+  } = useData();
 
-  const { topicMapping, topicSummaryList, getTopicsByCategory, filterTopicSummaryListByCategory } = useData();
-  const [selected, setSelected] = useState("Algebra");
-
-  // Fallback to an empty array if topicSummaryList is undefined, null, or not an array
-  const [displayTopicSummaryList, setDisplayTopicSummaryList] = useState(Array.isArray(topicSummaryList) ? topicSummaryList : []);
-
-  useEffect(() => {
-    if (Array.isArray(topicSummaryList)) {
-      if(selected !== "All") {
-        setDisplayTopicSummaryList(filterTopicSummaryListByCategory(selected));
-      } else {
-        setDisplayTopicSummaryList(topicSummaryList);
-      }
-    }
-  }
-  , [topicSummaryList, selected]);
-
-  const achievementTypeMapping = {
-    "num answered": { icon: "ri:book-fill", earnedColor: "primary" },
-    "num correct": { icon: "clarity:bullseye-solid", earnedColor: "success" },
-    "num hard correct": { icon: "maki:mountain", earnedColor: "warning" },
-    "num correct under 60": { icon: "mdi:clock", earnedColor: "secondary" },
-    default: { icon: "ri:book-fill", earnedColor: "default" }
-  };
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedDifficultiesLocal, setSelectedDifficultiesLocal] = useState(["easy", "medium", "hard"]);
+  const [selectedTopicsLocal, setSelectedTopicsLocal] = useState([]);
   const router = useRouter();
 
-  const handlePracticeClick = (topic) => {
-    setSelectedTopics([topic]);
-    setSelectedAnswerStatuses(["unattempted"]);
-    router.push('/study/browse');
+  const [selectedDisplaySubject, setSelectedDisplaySubject] = useState("All");
+
+  const { createAdaptiveQuiz, setSelectedTopics } = useContext(QuestionContext);
+
+  const [displayErrorInModal, setDisplayErrorInModal] = useState(false);
+
+  const handlePracticeClick = async (onClose, topics) => {
+    onClose();
+    setSelectedTopics(["Linear equations in 1 variable"]);
+    // setSelectedAnswerStatuses(["unattempted"]);
+    // setSelectedDifficulties(["easy"]);
+    try {
+      const response = await createAdaptiveQuiz({
+        allowedDifficulties: selectedDifficultiesLocal,
+        topics: selectedTopicsLocal,
+        // numQuestions: 10,
+
+      });
+
+      console.log("response", response)
+
+      if (response !== null) {
+        router.push(`/study/activequiz?quizid=${response}&review=false&mode=adaptive`);
+      } else {
+        console.log("Failed to create adaptive quiz");
+        setDisplayErrorInModal(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleReviewClick = (topic) => {
-    setSelectedTopics([topic]);
-    setSelectedAnswerStatuses(["incorrect"]);
-    router.push('/study/browse');
+  const handleTopicClick = (topic) => {
+    setSelectedTopicsLocal([topic]);
+    onOpen();
   };
 
-  if(!Array.isArray(topicSummaryList) || topicSummaryList.length === 0){
-    return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
-        <Spinner />
-        <div className='ml-[20px]'>Loading...</div>
-    </div>;
-  }
+  const getBackgroundColor = (progressValue) => {
+    if (progressValue == 0) return "bg-gray-300";
+    if (progressValue < 20) return "bg-gray-500";
+    if (progressValue < 40) return "bg-gray-400";
+    if (progressValue < 60) return "bg-green-300";
+    if (progressValue < 80) return "bg-green-400";
+    return "bg-green-500"; // Fully green at 80% or above
+  };
+
+
+  const renderTopics = (category) => {
+    const topics = getTopicsByCategory(category);
+    return topics.map((topic, index) => {
+      var progressValue = 0
+      var accuracyValue = 0
+      console.log("topic", topic)
+      try {
+        var topicSummaryElement = getTopicSummaryElement(topic);
+        progressValue = (topicSummaryElement.usage) * 100;
+        accuracyValue = topicSummaryElement.accuracy * 100;
+      } catch (e) {
+        console.log(e)
+      }
+
+      return (
+        <div key={index} className="flex flex-row justify-between items-center w-full">
+          <div style={{ fontSize: "14px", color: "#333333" }} className="px-2">
+            {topic}
+          </div>
+
+          <div className="flex flex-row items-center gap-5">
+            <Tooltip content={`${Math.round(progressValue)}% completed`}>
+              <Progress value={progressValue} color="default" className="w-60" size="md" />
+            </Tooltip>
+            <Chip
+              size="sm"
+              className={`text-white ${getBackgroundColor(progressValue)}`}
+            >
+              {Math.round(progressValue)}% completed
+            </Chip>
+
+            <Chip
+              size="sm"
+              className={`text-white ${getBackgroundColor(accuracyValue)}`}
+            >
+              {Math.round(accuracyValue) === 0 ? "--" : (Math.round(accuracyValue))}% correct
+            </Chip>
+            <Button isIconOnly size="sm" onPress={() => handleTopicClick(topic)}>
+              <Icon icon="line-md:arrow-right" width="24" height="24" style={{ color: "#0B2149" }} />
+            </Button>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  const mathModules = (
+    <>
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Algebra
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Algebra")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Advanced Math
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Advanced math")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Problem Solving & Data Analysis
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Problem solving and data analysis")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Geometry & Trigonometry
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Geometry and trigonometry")}
+        </div>
+      </div>
+    </>
+  );
+
+  const rwModules = (
+    <>
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Rhetorical and Structural Analysis
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Rhetorical and structural analysis")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Interpreting Information and Ideas
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Interpreting information and ideas")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Standard English Conventions
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Standard English conventions")}
+        </div>
+      </div>
+
+      <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+              Effective Expression and Revision
+            </div>
+          </div>
+          <Divider />
+          {renderTopics("Effective expression and revision")}
+        </div>
+      </div>
+    </>
+  );
+
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Tabs
-        aria-label="Topic Modules"
-        selectedKey={selected}
-        onSelectionChange={setSelected}
-      >
-        <Tab title="All" key="All" >
-       
-        </Tab>
-        <Tab title="Algebra" key="Algebra" />
-        <Tab title="Advanced math" key="Advanced math" />
-        <Tab title="Problem solving and data analysis" key="Problem solving and data analysis" />
-        <Tab title="Geometry and trigonometry" key="Geometry and trigonometry" />
+    <div className="flex w-full flex-col items-center gap-4">
+      <div>
+        <Tabs color="default" aria-label="Tabs colors" radius="full" selectedKey={selectedDisplaySubject} onSelectionChange={setSelectedDisplaySubject}>
+          <Tab key="All" title="All" />
 
+          <Tab key="Math" title="Math" />
+          <Tab key="Reading & Writing" title="Reading & Writing" />
+        </Tabs>
+      </div>
 
-      </Tabs>
-      <Table removeWrapper isCompact = {true}>
-        <TableHeader>
-          <TableColumn width="200">Topic</TableColumn>
-          <TableColumn>Mastery</TableColumn>
-          <TableColumn># Questions answered</TableColumn>
-          <TableColumn>% Correct</TableColumn>
-          {/* <TableColumn>Achievements</TableColumn> */}
-          <TableColumn>Action</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {displayTopicSummaryList.map((item, index) => (
-            <TableRow key={index} >
-              <TableCell>
-                <div className="flex flex-col">
-                  <p className="text-bold text-sm capitalize">{item.topic}</p>
-                  <p className="text-bold text-sm capitalize text-default-400">{item.category}</p>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-row">
-                  {(() => {
-                    let chipColor = "success";
-                    if (item.mastery_level === "Beginner") {
-                      chipColor = "primary";
-                    }else if (item.mastery_level === "Intermediate") {
-                      chipColor = "warning";
-                    }else if (item.mastery_level === "Advanced") {
-                      chipColor = "success";
-                    }
-                    return <Chip color={chipColor} style={{ color: 'white' }}>{item.mastery_level}</Chip>;
-                  })()}
-                </div>
-              </TableCell>
+      <div className="flex flex-col w-full px-20 gap-3">
+        {selectedDisplaySubject === "All" || selectedDisplaySubject === "Math" ? mathModules : null}
+        {selectedDisplaySubject === "All" || selectedDisplaySubject === "Reading & Writing" ? rwModules : null}
 
+      </div>
 
-              <TableCell width="500">
-                <Progress
-                  value={100 * (item.num_answered || 0) / (item.num_total || 1)}
-                  size="sm"
-                  label="Number of questions answered"
-                  showValueLabel={true}
-                />
-              </TableCell>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Start Practice</ModalHeader>
+              <ModalBody>
+                <CheckboxGroup
+                  className="gap-1"
+                  label="Select difficulties"
+                  orientation="horizontal"
+                  value={selectedDifficultiesLocal}
+                  onChange={setSelectedDifficultiesLocal}
+                >
+                  <CustomCheckbox value="easy">easy</CustomCheckbox>
+                  <CustomCheckbox value="medium">medium</CustomCheckbox>
+                  <CustomCheckbox value="hard">hard</CustomCheckbox>
+                </CheckboxGroup>
+                {/* 
+                <Slider
+                  size="md"
+                  step={5}
+                  label="Number of questions"
+                  showSteps={true}
+                  maxValue={20}
+                  minValue={5}
+                  defaultValue={10}
+                  className="max-w-md"
+                  style={{ fontSize: "18px", color: "#95959B" }}
+                /> */}
 
-              <TableCell width="500">
-                <Progress
-                  value={100 * (item.num_correct || 0) / (item.num_answered || 1)}
-                  size="sm"
-                  color="danger"
-                  label="% answered correctly"
-                  showValueLabel={true}
-                />
-              </TableCell>
-
-              {/* <TableCell>
-                <div className="flex flex-row gap-2">
-                  {Array.isArray(item.achievements) && item.achievements.map((achievement, index) => {
-                    // Retrieve the icon and button color based on the achievement type
-                    const { icon, earnedColor } = achievementTypeMapping[achievement.type] || achievementTypeMapping.default;
-
-                    // Determine the button color based on the earned status
-                    const buttonColor = achievement.earned ? earnedColor : "default";
-
-                    // Render Tooltip and Button
-                    const tooltipAndButton = (
-                      <Tooltip key={index} content={achievement.description}>
-                        <Button color={buttonColor} isIconOnly>
-                          <Icon icon={icon} width="30" height="30" />
-                        </Button>
-                      </Tooltip>
-                    );
-
-                    // Wrap with Badge if earned, otherwise just return the Tooltip and Button
-                    return achievement.earned ? (
-                      <Badge
-                        key={index}
-                        color={buttonColor}
-                        isOneChar
-                        content={<CheckIconGreen />} // Assuming CheckIconGreen is a valid component
-                      >
-                        {tooltipAndButton}
-                      </Badge>
-                    ) : (
-                      tooltipAndButton
-                    );
-                  })}
-                </div>
-              </TableCell> */}
-              <TableCell>
-                <div className="flex space-x-2">
-                  {(item.num_total || 0) - (item.num_answered || 0) == 0 ?
-                    <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
-                  :
-                    <Tooltip content={`You have ${(item.num_total || 0) - (item.num_answered || 0)} unanswered questions on ${item.topic}`}>
-                      <Badge color="danger" content={Math.max(0, (item.num_total || 0) - (item.num_answered || 0))}>
-                        <Button size="small" color="primary" onClick={() => handlePracticeClick(item.topic)}>Practice</Button>
-                      </Badge>
-                    </Tooltip>
-                  }
-                  {Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0)) == 0 ?
-                    <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
-                  :
-                    <Tooltip content={`You have 5 questions to review on ${item.topic}`}>
-                      <Badge color="danger" content={Math.max(0, (item.num_answered || 0) - (item.num_reviewed || 0))}>
-                        <Button size="small" color="success" style={{ color: "white" }} onClick={() => handleReviewClick(item.topic)}>Review</Button>
-                      </Badge>
-                    </Tooltip>
-                  }
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                {displayErrorInModal &&
+                  <div className="text-red-500 text-sm">
+                    Error creating adaptive quiz.
+                  </div>}
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={() => handlePracticeClick(onClose)}>
+                  Start Practice
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

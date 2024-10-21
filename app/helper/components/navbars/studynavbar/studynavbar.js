@@ -80,6 +80,17 @@ const StudyNavBar = () => {
                 </ListboxItem>
 
                 <ListboxItem
+                    key="/mytests"
+                    startContent={
+                        <IconWrapper className="bg-primary/10 text-primary">
+                            <Icon icon="fluent:quiz-new-20-regular" width="30" height="30" />
+                        </IconWrapper>
+                    }
+                >
+                    My Tests
+                </ListboxItem>
+
+                <ListboxItem
                     key="/browse"
                     startContent={
                         <IconWrapper className="bg-primary/10 text-primary">

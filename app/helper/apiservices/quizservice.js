@@ -177,12 +177,20 @@ export async function fetchQuiz({ quizID, quizName }) {
     return data;
 }
 
-export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngagementIDs){
+export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngagementIDs, status) {
     let token;
     try {
         token = Cookies.get('token');
     } catch (error) {
         console.error('Could not get token:', error);
+    }
+
+    // Build the request body conditionally
+    const requestBody = { QEIDArray: questionEngagementIDs };
+
+    // Include status only if it's passed in
+    if (status !== undefined) {
+        requestBody.Status = status;
     }
 
     const requestOptions = {
@@ -191,7 +199,7 @@ export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngage
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({QEIDArray: questionEngagementIDs}),
+        body: JSON.stringify(requestBody),
     };
 
     const response = await fetch(`${apiUrl}/quiz/${quizID}`, requestOptions);
@@ -204,6 +212,7 @@ export async function updateQuizWithQuestionEngagementIDs(quizID, questionEngage
     console.log("posted", data);
     return data;
 }
+
 
 export async function fetchQuizStats(quizID){
     let token;

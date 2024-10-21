@@ -24,155 +24,91 @@ export function TotalDashboard() {
     }
 
     return (
-        topicSummaryList && <div className="flex flex-col gap-3">
-            <div className="flex flex-row gap-3">
-                <div className="flex flex-col gap-1">
-                    <div className="bg-appleGray6 rounded-lg flex items-center justify-center text-xl font-bold text-center text-appleGray1 p-1">
+        topicSummaryList && <div className="flex flex-col">
+            <div className="flex flex-row justify-around h-[230px]">
+                <div className="flex flex-col gap-1 w-[48%]">
+                    <div className="bg-appleGray6 rounded-lg text-[15px] font-bold text-center text-appleGray1 p-1 mb-[-30px] z-[1]">
                         Math
                     </div>
-
-                    <div className="flex flex-row gap-3">
-
+                    <div className="flex flex-row justify-center gap-3">
                         <Card className="w-[240px] h-[240px] border-none" shadow="none">
-                            <CardBody className="justify-center items-center pt-0 pb-0 ">
+                            <CardBody className="justify-center items-center">
                                 <CircularProgress
                                     classNames={{
-                                        svg: "w-36 h-36 drop-shadow-md",
+                                        svg: "w-[100px] h-[100px] drop-shadow-md",
                                         indicator: "blue",
                                         track: "blue/5",
-                                        value: "text-3xl font-semibold blue",
+                                        value: "text-xl font-semibold blue",
                                     }}
                                     value={(getTopicSummaryElement("Math")?.num_answered ?? 0) / (getTopicSummaryElement("Math")?.num_total ?? 1) * 100}
-                                    strokeWidth={4}
+                                    strokeWidth={3.5}
                                     showValueLabel={true}
                                 />
+                                <div className="text-[12px] rounded-[25px] border-[2px] px-[5px] mt-[18px]">Question Bank Usage</div>
                             </CardBody>
-                            <CardFooter className="justify-center items-center pt-0">
-                                <Chip
-                                    classNames={{
-                                        base: "border-1 border-blue/30",
-                                        content: "text-small font-semibold",
-                                    }}
-                                    variant="bordered"
-                                >
-                                    Question Bank Usage
-                                </Chip>
-                            </CardFooter>
-
                         </Card>
-
                         <Card className="w-[240px] h-[240px] border-none" shadow="none">
-                            <CardBody className="justify-center items-center pb-0">
+                            <CardBody className="justify-center items-center">
                                 <CircularProgress
                                     classNames={{
-                                        svg: "w-36 h-36 drop-shadow-md",
+                                        svg: "w-[100px] h-[100px] drop-shadow-md",
                                         indicator: "blue",
                                         track: "blue/5",
-                                        value: "text-3xl font-semibold blue",
+                                        value: "text-xl font-semibold blue",
                                     }}
                                     value={(getTopicSummaryElement("Math")?.num_correct ?? 0) / (getTopicSummaryElement("Math")?.num_answered ?? 1) * 100}
-                                    strokeWidth={4}
+                                    strokeWidth={3.5}
                                     showValueLabel={true}
                                 />
+                                <div className="text-[12px] rounded-[25px] border-[2px] px-[5px] mt-[18px]">Accuracy %</div>
                             </CardBody>
-                            <CardFooter className="justify-center items-center pt-0">
-                                <Chip
-                                    classNames={{
-                                        base: "border-1 border-blue/30",
-                                        content: "text-small font-semibold",
-                                    }}
-                                    variant="bordered"
-                                >
-                                    Accuracy %
-                                </Chip>
-                            </CardFooter>
                         </Card>
                     </div>
                 </div>
 
 
-                <div className="border-[2px] border-gray-100" />
+                <div className="border-[1.5px] border-gray-100" />
 
-                <div className="flex flex-col gap-1">
-                    <div className="bg-appleGray6 rounded-lg flex items-center justify-center text-xl font-bold text-center text-appleGray1  p-1">
+                <div className="flex flex-col gap-1 w-[48%]">
+                    <div className="bg-appleGray6 rounded-lg text-[15px] font-bold text-center text-appleGray1 p-1 mb-[-30px] z-[1]">
                         Reading & writing
                     </div>
 
-                    <div className="flex flex-row gap-3">
-
+                    <div className="flex flex-row justify-center gap-3">
                         <Card className="w-[240px] h-[240px] border-none" shadow="none">
-                            <CardBody className="justify-center items-center pt-0 pb-0 ">
+                            <CardBody className="justify-center items-center">
                                 <CircularProgress
                                     classNames={{
-                                        svg: "w-36 h-36 drop-shadow-md",
+                                        svg: "w-[100px] h-[100px] drop-shadow-md",
                                         indicator: "blue",
                                         track: "blue/5",
-                                        value: "text-3xl font-semibold blue",
+                                        value: "text-xl font-semibold blue",
                                     }}
                                     value={(getTopicSummaryElement("Reading & writing")?.num_answered ?? 0) / (getTopicSummaryElement("Reading & writing")?.num_total ?? 1) * 100}
-                                    strokeWidth={4}
+                                    strokeWidth={3.5}
                                     showValueLabel={true}
                                 />
+                                <div className="text-[12px] rounded-[25px] border-[2px] px-[5px] mt-[18px]">Question Bank Usage</div>
                             </CardBody>
-                            <CardFooter className="justify-center items-center pt-0">
-                                <Chip
-                                    classNames={{
-                                        base: "border-1 border-blue/30",
-                                        content: "text-small font-semibold",
-                                    }}
-                                    variant="bordered"
-                                >
-                                    Question Bank Usage
-                                </Chip>
-                            </CardFooter>
-
                         </Card>
-
                         <Card className="w-[240px] h-[240px] border-none" shadow="none">
-                            <CardBody className="justify-center items-center pb-0">
+                            <CardBody className="justify-center items-center">
                                 <CircularProgress
                                     classNames={{
-                                        svg: "w-36 h-36 drop-shadow-md",
+                                        svg: "w-[100px] h-[100px] drop-shadow-md",
                                         indicator: "blue",
                                         track: "blue/5",
-                                        value: "text-3xl font-semibold blue",
+                                        value: "text-xl font-semibold blue",
                                     }}
                                     value={(getTopicSummaryElement("Reading & writing")?.num_correct ?? 0) / (getTopicSummaryElement("Reading & writing")?.num_answered ?? 1) * 100}
-                                    strokeWidth={4}
+                                    strokeWidth={3.5}
                                     showValueLabel={true}
                                 />
+                                <div className="text-[12px] rounded-[25px] border-[2px] px-[5px] mt-[18px]">Accuracy %</div>
                             </CardBody>
-                            <CardFooter className="justify-center items-center pt-0">
-                                <Chip
-                                    classNames={{
-                                        base: "border-1 border-blue/30",
-                                        content: "text-small font-semibold",
-                                    }}
-                                    variant="bordered"
-                                >
-                                    Accuracy %
-                                </Chip>
-                            </CardFooter>
                         </Card>
                     </div>
                 </div>
-
-                <div className="border-[2px] border-gray-100" />
-                <div className="flex flex-col gap-1 w-full">
-                    <div className="bg-appleGray6 rounded-lg flex items-center justify-center text-xl font-bold text-center text-appleGray1  p-1">
-                        Recommended Practice
-                    </div>
-                    <Card className="h-[240px] w-full border-none" shadow="none">
-
-                        <CardBody className="flex flex-wrap pb-0 gap-2">
-                            {["Linear equations in 1 variable", "Linear equations in 2 variables", "Linear functions", "Systems of 2 linear equations in 2 variables", "Linear inequalities in 1 or 2 variables"].map((topic, index) => (
-                                <Button radius="full" variant="bordered" color="secondary" key={topic}>{topic}</Button>
-                            ))}
-                        </CardBody>
-
-                    </Card>
-                </div>
-
             </div>
 
 

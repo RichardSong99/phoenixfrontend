@@ -8,7 +8,7 @@ import {Tabs, Tab, Card, CardBody} from "@nextui-org/react";
 export default function Landing() {
     return (
         <div className="w-screen h-screen flex justify-center items-center">
-            <div className="w-[20%] h-[80%]">
+            <div className="">
                 <Tabs aria-label="Options">
                     <Tab title="Signup">
                     <Card>

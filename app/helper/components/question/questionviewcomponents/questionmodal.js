@@ -9,7 +9,7 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode, rev
 
     const {
         activeQuestionIndex,
-        questionIDArray, 
+        questionIDArray,
         questionData,
         userResponseData,
         isFlaggedData,
@@ -29,9 +29,15 @@ export const QuestionModal = ({ isOpen, onOpenChange, pendingQuestion, mode, rev
             size="full"
         >
             <ModalContent className='bg-transparent flex items-center'>
-                {!pendingQuestion && <QuestionModalInterior
-                    mode={'single'}
-                />}
+
+                {(onClose) => (
+                    <>
+                        {!pendingQuestion && (
+                            <QuestionModalInterior mode={'single'} />
+                        )}
+                    </>
+                )}
+
             </ModalContent>
 
         </Modal>

@@ -2,24 +2,31 @@ import Cookies from 'js-cookie';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchTestByID({testID}){
+export async function fetchTestByID({testID}) {
     let token;
     try {
         token = Cookies.get('token');
     } catch (error) {
         console.error('Could not get token:', error);
     }
+
+    if (!token) {
+        console.error('User not logged in');
+        return { message: 'User not logged in' };
+    }
+
     const requestOptions = {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     };
 
-    const response = await fetch(`${apiUrl}/test/${testID}`, requestOptions);
+    const response = await fetch(`${apiUrl}/test?id=${testID}`, requestOptions);
 
     if (!response.ok) {
         throw new Error('Failed to fetch test');
     }
+
     const data = await response.json();
     return data;
 }

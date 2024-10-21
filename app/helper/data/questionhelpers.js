@@ -33,9 +33,37 @@ export function calculateResultHelper({
     question, userResponse
 }){
     try{
-        if (question.AnswerType === 'freeResponse') {
-            const difference = Math.abs(parseFloat(question.correct_answer_free) - parseFloat(userResponse));
-            return difference <= 0.001;
+        if (question.answer_type === 'freeResponse') {
+            // Parse the correct answer as a float
+            const correctAnswer = parseFloat(question.correct_answer_free);
+
+            // Function to parse fractions like "5/2"
+            const parseFraction = (input) => {
+                if (input.includes('/')) {
+                    const [numerator, denominator] = input.split('/').map(Number);
+                    if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+                        return numerator / denominator;
+                    } else {
+                        return NaN; // Invalid fraction
+                    }
+                }
+                return parseFloat(input); // Return float if not a fraction
+            };
+
+            // Parse the userResponse, supporting fractions like "5/2"
+            const userAnswer = parseFraction(userResponse);
+
+            console.log("Correct Answer:", correctAnswer);
+            console.log("User Answer:", userAnswer);
+
+            // Check if both values are valid numbers before comparison
+            if (isNaN(correctAnswer) || isNaN(userAnswer)) {
+                return false;
+            }
+
+            // Compare the difference with a small tolerance
+            const difference = Math.abs(correctAnswer - userAnswer);
+            return difference <= 0.001; // Allow for slight precision errors
         } else {
             return question.correct_answer_multiple === userResponse;
         }

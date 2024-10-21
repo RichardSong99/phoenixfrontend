@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardBody,
     Button,
+    Avatar
 } from "@nextui-org/react";
 
 import { useRouter } from 'next/navigation';
@@ -29,8 +30,10 @@ export default function MyDashboard() {
     const [selected, setSelected] = useState("topics");
 
     return (
-        <div className="flex flex-col w-full justify-center p-10 gap-4 pl-[300px] pr-[300px] pt-[70px] bg-themeWhite">
-            <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px]">
+        <div className="flex flex-col w-full justify-center gap-4 bg-themeWhite">
+
+            <div className="flex flex-col w-full justify-center p-10 gap-4 pl-[300px] pr-[300px] pt-[70px] bg-themeWhite">
+            <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px] shadow-md">
                 <h3>Phoenix <span className="text-themeLightGreen">SAT</span></h3>
             </div>
             <div className="flex flex-row w-full justify-center">
@@ -98,11 +101,26 @@ export default function MyDashboard() {
                 </CardBody>
             </Card>
             <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
-            <div className="absolute bottom-5 left-5 w-[30px] h-[30px] rounded-[25px] border-[2px] bg-white border-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-                    <path fill="currentColor" d="M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56"></path>
-                </svg>
-            </div>
+
+                <Avatar className="absolute bottom-5 left-5"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+
+             {/* Footer */}
+
+        </div>
+        <footer className="w-full bg-gray-800 text-white text-sm mt-8 py-6">
+                <div className="flex flex-col items-center justify-center space-y-2">
+                    <div className="flex space-x-4">
+                        <a href="/about" className="text-white transition">About Us</a>
+                        <a href="/privacy" className="text-white transition">Privacy Policy</a>
+                        <a href="/contact" className="text-white transition">Contact</a>
+                    </div>
+                    <div className="text-center">
+                        © {new Date().getFullYear()} Phoenix SAT. All rights reserved.
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }

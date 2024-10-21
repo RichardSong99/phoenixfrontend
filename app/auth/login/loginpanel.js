@@ -8,7 +8,8 @@ import { registerUser, loginUser } from '../../helper/apiservices/userservice';
 import { useUser } from '../../helper/context/usercontext';
 import { Button, Input, Checkbox, Link, Divider, Spinner } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-
+import { useData } from "@/app/helper/context/datacontext";
+import LoginLoading from "../loading/page";
 
 export default function LoginPanel() {
     const router = useRouter();
@@ -24,11 +25,19 @@ export default function LoginPanel() {
     const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
+    const {authLoading, setAuthLoading} = useUser();
+
     const { loginUserHandler } = useUser();
+
+    useEffect(() => {
+        setErrorMessage(null);
+        setAuthLoading(false);
+    }, [email, password, repeatPassword]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        router.push('/auth/loading');
+        // router.push('/auth/loading');
+        setAuthLoading(true);
     
         try {
             await loginUserHandler(email, password);
@@ -36,6 +45,7 @@ export default function LoginPanel() {
             setErrorMessage("Failed to log in. Please check your credentials.");
             router.push('/auth');
         }
+
     };
     
 
@@ -43,11 +53,16 @@ export default function LoginPanel() {
         router.push('/auth/register');
     };
 
+    if(authLoading) {
+        return <LoginLoading />
+    }
+
+
     return (
         <div>
-            <div className="flex flex-col gap-4 px-8 pb-10 pt-6 w-full">
-                <p className="pb-2 text-xl font-medium">Log In</p>
-                <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-4 px-8 pb-10 pt-6 w-[500px]">
+            <div className="text-[40px] mb-[20px] text-gray-700"><strong>Login</strong></div>
+            <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <Input
                         label="Email Address"
                         name="email"
@@ -89,7 +104,6 @@ export default function LoginPanel() {
                     </div>
                     <Button color="primary" type="submit" >
                         Log In
-                        {loginLoading && <Spinner />}
                     </Button>
                 </form>
                 <div className="flex items-center gap-4 py-2">
@@ -104,12 +118,12 @@ export default function LoginPanel() {
                     >
                         Continue with Google
                     </Button>
-                    <Button
+                    {/* <Button
                         startContent={<Icon className="text-default-500" icon="fe:github" width={24} />}
                         variant="bordered"
                     >
                         Continue with Github
-                    </Button>
+                    </Button> */}
                 </div>
                 <p className="text-center text-small">
                     Need to create an account?&nbsp;

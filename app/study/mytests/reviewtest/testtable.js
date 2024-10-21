@@ -77,6 +77,7 @@ export function TestTable() {
             setIsLoading(false);
         };
 
+        setGlobalLoading(false);
         fetchData();
     }, []);
 
@@ -88,7 +89,6 @@ export function TestTable() {
         } catch (e) {
             console.log(e);
         }
-        setGlobalLoading(false);
     };
 
     const resumeTestModule = async (quizName) => {
@@ -100,7 +100,6 @@ export function TestTable() {
         } catch (e) {
             console.log(e);
         }
-        setGlobalLoading(false);
     }
 
     const reviewTestModule = async (quizName) => {
@@ -113,7 +112,6 @@ export function TestTable() {
         } catch (e) {
             console.log(e);
         };
-        setGlobalLoading(false);
     };
 
     const getModuleButton = (quizName) => {

@@ -285,6 +285,7 @@ export const QuestionProvider = ({ children }) => {
             console.error("Could not create test quiz:", e);
         }
 
+        setGlobalLoading(false);
         return quizID;
     };
 
@@ -295,6 +296,9 @@ export const QuestionProvider = ({ children }) => {
         }catch(e){
             console.error("Could not resume test quiz:", e);
         }
+
+        setGlobalLoading(false);
+
     };
 
 
@@ -518,6 +522,8 @@ export const QuestionProvider = ({ children }) => {
         setIndQuizMode(QUIZMODE);
 
         initializeEngagementStates(QEIDCombos);
+        setGlobalLoading(false);
+
     };
 
     const convertToQEIDComboArray = (questionIDs) => {

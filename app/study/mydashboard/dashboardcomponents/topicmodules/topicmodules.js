@@ -121,12 +121,15 @@ const TopicModules = () => {
             <Tooltip content={`${Math.round(progressValue)}% completed`}>
               <Progress value={progressValue} color="default" className="w-60" size="md" />
             </Tooltip>
+            <div className = "w-14">
             <Chip
               size="sm"
               className={`text-white ${getBackgroundColor(progressValue)}`}
             >
               {Math.round(progressValue)}% completed
             </Chip>
+            </div>
+            <div className = "w-14">
 
             <Chip
               size="sm"
@@ -134,8 +137,9 @@ const TopicModules = () => {
             >
               {Math.round(accuracyValue) === 0 ? "--" : (Math.round(accuracyValue))}% correct
             </Chip>
-            <Button isIconOnly size="sm" onPress={() => handleTopicClick(topic)}>
-              <Icon icon="line-md:arrow-right" width="24" height="24" style={{ color: "#0B2149" }} />
+            </div>
+            <Button isIconOnly size="sm" onPress={() => handleTopicClick(topic)} className = "border-blue-800" variant = "bordered">
+              <Icon icon="line-md:arrow-right" width="15" height="15" style={{ color: "#0B2149" }} />
             </Button>
           </div>
         </div>
@@ -148,9 +152,9 @@ const TopicModules = () => {
       <div className="w-full p-0 border border-gray-300 shadow-md rounded-lg px-2 py-2 flex items-center">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex flex-row justify-between items-center w-full">
-            <div style={{ fontSize: "15px", color: "#333333", fontWeight: "bold" }} className="px-2">
+            <span style={{ fontSize: "20px", color: "#333333", fontWeight: "bold" }} className="px-2 mb-[-2]">
               Algebra
-            </div>
+            </span>
           </div>
           <Divider />
           {renderTopics("Algebra")}

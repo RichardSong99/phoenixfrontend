@@ -1,16 +1,13 @@
 "use client"
 
 import React, {useState} from "react";
-import RegisterPanel from "./registerpanel";
-
+import AuthPanel from "../authpanel";
 
 export default function Register() {
 
-  const [isLoginMode, setIsLoginMode] = useState(false);
-
   return (
     <div>
-      <RegisterPanel />
+      <AuthPanel initialSelectedTab="Signup" />
     </div>
   );
 }

@@ -159,13 +159,14 @@ export default function Chatbot() {
             <div>
                 <div className="flex justify-between">
                     <Button
-                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white rounded-[20px] p-[20px]"
+                        className="bg-blue-100 text-gray-800"
+                            
                         onClick={handleHint}
                     >
                         Give me a hint
                     </Button>
                     <Button
-                        className="w-half p-2 border border-gray-300 rounded bg-blue-500 text-white rounded-[20px] p-[20px]"
+                        className="bg-blue-800 text-white"
                         onClick={handleSolution}
                     >
                         Give me the solution

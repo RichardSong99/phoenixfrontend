@@ -6,8 +6,14 @@ import {
     CardHeader,
     CardBody,
     Button,
-    Avatar
+    Avatar,
+    User,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+
 } from "@nextui-org/react";
+import Cookies from "js-cookie";
 
 import { useRouter } from 'next/navigation';
 
@@ -20,6 +26,7 @@ import { QuestionContext } from "@/app/helper/context/questioncontext";
 import { QuestionModal } from "@/app/helper/components/question/questionviewcomponents/questionmodal";
 import NewDashboard from "./dashboardcomponents/totaldashboard/newdashboard";
 import { useData } from "@/app/helper/context/datacontext";
+import { useUser } from "@/app/helper/context/usercontext";
 
 export default function MyDashboard() {
     const {
@@ -29,20 +36,52 @@ export default function MyDashboard() {
 
     const router = useRouter();
     const [selected, setSelected] = useState("topics");
+    const { isAuthenticated, setIsAuthenticated } = useUser();
 
-    const {setGlobalLoading} = useData();
-    
+
+    const { setGlobalLoading, loadUserData } = useData();
+
     useEffect(() => {
         setGlobalLoading(false);
+
+        loadUserData();
     }, []);
+
+    const handleLogout = () => {
+        Cookies.remove('token');
+        setIsAuthenticated(false);
+        router.push('/');
+    };
 
     return (
         <div className="flex flex-col w-full justify-center items-center gap-4 bg-themeWhite">
 
             <div className="flex flex-col justify-center p-10 gap-4 min-w-80 w-2/3 pt-[70px] bg-themeWhite">
-                <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px] shadow-md">
-                    <h3>Phoenix <span className="text-themeLightGreen">SAT</span></h3>
+                <div className="w-full h-[55px] border-b bg-white fixed top-0 left-0 z-50 pl-[150px] pr-[100px] flex items-center justify-between  shadow-md">
+                    <div className="flex items-center">
+                        <h3 className="text-lg font-semibold">
+                            Phoenix <span className="text-themeLightGreen">SAT</span>
+                        </h3>
+                    </div>
+
+                    <div className="flex items-center">
+                        <Popover showArrow placement="bottom-end">
+                            <PopoverTrigger className="border-2px border-gray-500">
+                                <div>
+                                    <img src="https://guardiananimal.com/wp-content/uploads/2019/04/dog-1194077_1280.jpg"
+                                        className="h-[40px] w-[40px] rounded-full object-cover"
+                                    />
+                                </div>
+
+                            </PopoverTrigger>
+                            <PopoverContent className="p-1">
+                                <Button onClick={() => handleLogout()} className="text-sm text-red-800 bg-red-100">Logout</Button>
+                            </PopoverContent>
+                        </Popover>
+
+                    </div>
                 </div>
+
                 <div className="flex flex-row w-full justify-center">
                     <div className="w-full h-[75px] text-white bg-[#0B2149] text-white rounded-[10px] shadow-custom flex flex-row items-center pt-[10px] pl-[20px]">
                         <h4><strong>Welcome, Richard</strong></h4>
@@ -70,21 +109,21 @@ export default function MyDashboard() {
         </Card> */}
                 <Card>
                     <CardHeader>
-                        <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[10px] text-center">
+                        <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[50px] text-center">
                             <div
-                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'topics' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded-[20px] flex justify-center items-center ${selected === 'topics' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                                 onClick={() => setSelected("topics")}
                             >
                                 Topics
                             </div>
                             <div
-                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'quizandtests' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%]  rounded-[20px] flex justify-center items-center ${selected === 'quizandtests' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                                 onClick={() => setSelected("quizandtests")}
                             >
                                 Quizzes and Tests
                             </div>
                             <div
-                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'qbank' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%]  rounded-[20px] flex justify-center items-center ${selected === 'qbank' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                                 onClick={() => setSelected("qbank")}
                             >
                                 Question Bank
@@ -109,10 +148,7 @@ export default function MyDashboard() {
                 </Card>
                 <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
 
-                <Avatar className="absolute bottom-5 left-5"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-
+      
                 {/* Footer */}
 
             </div>

@@ -32,7 +32,7 @@ export default function QuestionView({ }) {
                                     </g>
                                     </svg>`);
 
-    const{
+    const {
         activeQuestionIndex,
         questionData,
         questionIDArray,
@@ -57,10 +57,10 @@ export default function QuestionView({ }) {
     };
 
     const handleSelect = (choice) => {
-        if(!crossOutMode){
-            if(!crossedOut.includes(choice)){
-                if(adaptiveRegularMode === 'adaptive'){
-                    if(activeQuestionIndex === activeQuestionIndex){
+        if (!crossOutMode) {
+            if (!crossedOut.includes(choice)) {
+                if (adaptiveRegularMode === 'adaptive') {
+                    if (activeQuestionIndex === activeQuestionIndex) {
                         handleReportUserResponse(choice, questionIDArray[activeQuestionIndex]);
                     }
                 } else {
@@ -69,29 +69,42 @@ export default function QuestionView({ }) {
             }
         } else {
             if (crossedOut.includes(choice)) {
-                if(adaptiveRegularMode === 'adaptive'){
-                    if(activeQuestionIndex === activeQuestionIndex){
+                if (adaptiveRegularMode === 'adaptive') {
+                    if (activeQuestionIndex === activeQuestionIndex) {
                         setCrossedOut(crossedOut.filter(item => item !== choice));
                     }
                 } else {
                     setCrossedOut(crossedOut.filter(item => item !== choice));
                 }
             } else {
-                if(adaptiveRegularMode === 'adaptive'){
-                    if(activeQuestionIndex === activeQuestionIndex){
-                        if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
+                if (adaptiveRegularMode === 'adaptive') {
+                    if (activeQuestionIndex === activeQuestionIndex) {
+                        if (userResponseData[questionIDArray[activeQuestionIndex]] === choice) {
                             handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
                         }
                         setCrossedOut([...crossedOut, choice]);
                     }
                 } else {
-                    if(userResponseData[questionIDArray[activeQuestionIndex]] === choice){
+                    if (userResponseData[questionIDArray[activeQuestionIndex]] === choice) {
                         handleReportUserResponse(null, questionIDArray[activeQuestionIndex]);
                     }
                     setCrossedOut([...crossedOut, choice]);
                 }
             }
         }
+    };
+
+    const getTextAreaStyle = () => {
+        if (engagementData && engagementData[questionIDArray[activeQuestionIndex]]?.status === 'correct') {
+            return 'bg-green-100 text-green-800 border-green-800';
+        }
+        if (engagementData && engagementData[questionIDArray[activeQuestionIndex]]?.status === 'incorrect') {
+            return 'bg-red-100 text-red-800 border-red-800';
+        }
+        if (engagementData && engagementData[questionIDArray[activeQuestionIndex]]?.status === 'omitted') {
+            return 'bg-yellow-100 text-yellow-800 border-yellow-800';
+        }
+        return 'bg-gray-100 text-gray-800';
     };
 
     // useEffect(() => {
@@ -106,9 +119,9 @@ export default function QuestionView({ }) {
             <div className='ml-[20px]'>Loading...</div>
         </div>;
     }
-    
+
     return (
-        <div className='w-[100%] h-[75%] flex justify-center items-center mt-[50px]'>
+        <div className='w-[100%] h-[85%] flex justify-center items-center mt-[50px]'>
             {showPauseTimer &&
                 <div className='w-[30%] h-[30%] bg-white absolute z-[2] border-[2px] border-appleGray3 rounded-[20px] flex flex-col justify-center items-center gap-4'>
                     <div className='text-[30px]'>
@@ -126,66 +139,70 @@ export default function QuestionView({ }) {
                 </div>
             }
             <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${showPauseTimer ? 'blur-sm' : null}`}>
-                { questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
+                {questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px] gap-3'>
+                        {questionData[questionIDArray[activeQuestionIndex]] && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== null && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== "" && <img src={questionData[questionIDArray[activeQuestionIndex]].question_image_url} className="w-3/4  object-contain" />}
+
+
+
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].equation1)}
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].equation2)}
 
                         {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}
-                        {/* { questionData[questionIDArray[activeQuestionIndex]].graphic ?
-                            questionData[questionIDArray[activeQuestionIndex]].graphic :
-                            (questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt))
-                        } */}
+
 
                     </div> :
                     <div className='flex flex-col items-center w-[45%] h-full'>
-                        <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-scroll pt-[10px] mt-[20px]'>
-                            { questionData[questionIDArray[activeQuestionIndex]].text2_description ?
-                                ( passage === 1 ?
+                        <div className='w-full h-[90%] flex flex-col justify-center items-center pl-[30px] pr-[30px] overflow-y-auto pt-[10px] mt-[20px]'>
+
+                            {questionData[questionIDArray[activeQuestionIndex]] && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== null && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== "" && <img src={questionData[questionIDArray[activeQuestionIndex]].question_image_url} className="w-3/4  object-contain" />}
+
+                            {questionData[questionIDArray[activeQuestionIndex]].text2_description ?
+                                (passage === 1 ?
                                     <>
-                                        <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
+                                        {questionData[questionIDArray[activeQuestionIndex]].text1_description}
                                         <br></br><br></br>
                                         {questionData[questionIDArray[activeQuestionIndex]].text1}
                                     </>
-                                :
+                                    :
                                     <>
-                                        <i>{questionData[questionIDArray[activeQuestionIndex]].text2_description}</i>
+                                        {questionData[questionIDArray[activeQuestionIndex]].text2_description}
                                         <br></br><br></br>
                                         {questionData[questionIDArray[activeQuestionIndex]].text2}
                                     </>
                                 )
-                            :
+                                :
                                 <>
-                                    <i>{questionData[questionIDArray[activeQuestionIndex]].text1_description}</i>
+                                    {questionData[questionIDArray[activeQuestionIndex]].text1_description}
                                     <br></br><br></br>
                                     {questionData[questionIDArray[activeQuestionIndex]].text1}
                                 </>
                             }
                         </div>
-                        {questionData[questionIDArray[activeQuestionIndex]].text1 !== "" && questionData[questionIDArray[activeQuestionIndex]].text2 !== "" && 
-                        <div className='flex flex-row justify-around items-center w-[30%]'>
-                            <div>
-                                <Button onClick={() => changePassage(1)} className='bg-transparent w-[10px]'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                        <g fill="none" fillRule="evenodd">
-                                            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
-                                            <path fill="currentColor" d="M8.293 12.707a1 1 0 0 1 0-1.414l5.657-5.657a1 1 0 1 1 1.414 1.414L10.414 12l4.95 4.95a1 1 0 0 1-1.414 1.414z"></path>
-                                        </g>
-                                    </svg>
-                                </Button>
-                            </div>
-                            {passage} / 2
-                            <div>
-                                <Button onClick={() => changePassage(2)} className='bg-transparent'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                        <g fill="none" fillRule="evenodd">
-                                            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
-                                            <path fill="currentColor" d="M15.707 11.293a1 1 0 0 1 0 1.414l-5.657 5.657a1 1 0 1 1-1.414-1.414l4.95-4.95l-4.95-4.95a1 1 0 0 1 1.414-1.414z"></path>
-                                        </g>
-                                    </svg>
-                                </Button>
-                            </div>
-                        </div>}
+                        {questionData[questionIDArray[activeQuestionIndex]].text1 !== "" && questionData[questionIDArray[activeQuestionIndex]].text2 !== "" &&
+                            <div className='flex flex-row justify-around items-center w-[30%]'>
+                                <div>
+                                    <Button onClick={() => changePassage(1)} className='bg-transparent w-[10px]'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <g fill="none" fillRule="evenodd">
+                                                <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
+                                                <path fill="currentColor" d="M8.293 12.707a1 1 0 0 1 0-1.414l5.657-5.657a1 1 0 1 1 1.414 1.414L10.414 12l4.95 4.95a1 1 0 0 1-1.414 1.414z"></path>
+                                            </g>
+                                        </svg>
+                                    </Button>
+                                </div>
+                                {passage} / 2
+                                <div>
+                                    <Button onClick={() => changePassage(2)} className='bg-transparent'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <g fill="none" fillRule="evenodd">
+                                                <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
+                                                <path fill="currentColor" d="M15.707 11.293a1 1 0 0 1 0 1.414l-5.657 5.657a1 1 0 1 1-1.414-1.414l4.95-4.95l-4.95-4.95a1 1 0 0 1 1.414-1.414z"></path>
+                                            </g>
+                                        </svg>
+                                    </Button>
+                                </div>
+                            </div>}
                     </div>
                 }
                 <div className='h-[95%] w-[2px] bg-appleGray1 opacity-[10%] rounded'></div>
@@ -202,66 +219,67 @@ export default function QuestionView({ }) {
                         </div>
                     </div>
                     <div className='h-[450px] w-full flex flex-col gap-y-[8px] justify-center items-center'>
-                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
-                            <p>Select one of the following: </p>
-                            :
+                        {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" && (
                             <>
-                                {questionData[questionIDArray[activeQuestionIndex]].subject === "math" ?
-                                    (parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)) : null
-                                }
+                                {questionData[questionIDArray[activeQuestionIndex]].subject === "Reading & Writing" && (
+                                    <p>{parseLatexString(questionData[questionIDArray[activeQuestionIndex]].prompt)}</p>
+                                )}
+                                <p>Select one of the following:</p>
                             </>
-                        }
+                        )}
+
                         {questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ?
                             <>
                                 {(activeReviewMode !== "review" && adaptiveRegularMode !== 'adaptive') || (activeReviewMode !== "review" && (adaptiveRegularMode === 'adaptive' && activeQuestionIndex === questionIDArray.length - 1)) ?
-                                (
-                                    answerChoices.map((choice, index) => (
-                                        <div key={choice} className="relative w-full max-w-xl mx-auto">
-                                            <Button 
-                                                className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                    (
+                                        answerChoices.map((choice, index) => (
+                                            <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                                <Button
+                                                    className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
                                                     ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'border-[2px] border-appleBlue bg-white' : 'bg-white border-appleGray5'}`}
-                                                onClick={() => handleSelect(choice)}
-                                            >
-                                                <Avatar
-                                                    className={`h-[30px] w-[30px] border-[2px]
+                                                    onClick={() => handleSelect(choice)}
+                                                >
+                                                    <Avatar
+                                                        className={`h-[30px] w-[30px] border-[2px]
                                                         ${userResponseData[questionIDArray[activeQuestionIndex]] === choice && !crossedOut.includes(choice) ? 'text-white border-appleGray6 bg-appleBlue' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
-                                                    name={choice}
-                                                />
-                                                <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
-                                                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
-                                                </div>
-                                            </Button>
-                                            {crossedOut.includes(choice) && (
-                                                <div
-                                                    className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
-                                                ></div>
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    answerChoices.map((choice, index) => (
-                                        <div key={choice} className="relative w-full max-w-xl mx-auto">
-                                            <Button 
-                                                className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
+                                                        name={choice}
+                                                    />
+                                                    <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis whitespace-normal break-words">
+                                                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+                                                    </div>
+                                                </Button>
+                                                {crossedOut.includes(choice) && (
+                                                    <div
+                                                        className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                                    ></div>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        answerChoices.map((choice, index) => (
+                                            <div key={choice} className="relative w-full max-w-xl mx-auto">
+                                                <Button
+                                                    className={`w-full h-auto border-[2px] rounded-[25px] shadow-custom flex flex-row justify-start pt-[20px] pb-[20px]
                                                     ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'border-appleGreen bg-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white' : 'bg-white border-appleGray5'}`}
-                                            >
-                                                <Avatar
-                                                    className={`h-[30px] w-[30px] border-[2px]
+                                                >
+                                                    <Avatar
+                                                        className={`h-[30px] w-[30px] border-[2px]
                                                         ${questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple === choice ? 'text-appleGreen border-appleGreen bg-white' : userResponseData[questionIDArray[activeQuestionIndex]] === choice ? 'border-appleRed bg-white text-appleRed' : 'opacity-70 bg-white border-appleGray3 text-appleBlue'}`}
-                                                    name={choice}
-                                                />
-                                                <div className="h-full text-left ml-4 mr-2 overflow-hidden text-ellipsis break-words">
-                                                    {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
-                                                </div>
-                                            </Button>
-                                            {crossedOut.includes(choice) && (
-                                                <div
-                                                    className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
-                                                ></div>
-                                            )}
-                                        </div>
-                                    ))
-                                )}
+                                                        name={choice}
+                                                    />
+                                                    <div className="h-full w-full text-left ml-4 mr-2 whitespace-normal break-words">
+                                                        {questionData[questionIDArray[activeQuestionIndex]] && parseLatexString(questionData[questionIDArray[activeQuestionIndex]].answer_choices[index])}
+
+                                                    </div>
+                                                </Button>
+                                                {crossedOut.includes(choice) && (
+                                                    <div
+                                                        className="absolute top-1/2 left-[-5%] w-[110%] h-[2px] bg-black transform -translate-y-1/2 pointer-events-none"
+                                                    ></div>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
                             </> :
                             <>
                                 {activeReviewMode !== "review" ? (
@@ -298,15 +316,15 @@ export default function QuestionView({ }) {
                                         </textarea>
                                     </div>
                                 ) : (
-                                    <div className = "flex flex-col gap-4 w-full p-4">
+                                    <div className="flex flex-col gap-4 w-full p-4">
                                         <textarea
-                                        disabled
-                                        className='w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] border-appleGray6 p-[10px]'
-                                        value={engagementData[questionIDArray[activeQuestionIndex]]?.user_answer || ''}
-                                    >
-                                    </textarea>
+                                            disabled
+                                            className={`w-[90%] h-[50px] resize-none rounded-[15px] border-[3px] p-[10px] ${getTextAreaStyle()}`}
+                                            value={engagementData[questionIDArray[activeQuestionIndex]]?.user_answer || ''}
+                                        >
+                                        </textarea>
 
-                                    <span>Correct answer: {parseLatexString(String("$" + questionData[questionIDArray[activeQuestionIndex]].correct_answer_free)+ "$")}</span>
+                                        <span>Correct answer: {parseLatexString(String("$" + questionData[questionIDArray[activeQuestionIndex]].correct_answer_free) + "$")}</span>
 
                                     </div>
                                 )}

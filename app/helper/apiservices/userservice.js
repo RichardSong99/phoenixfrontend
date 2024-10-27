@@ -21,6 +21,18 @@ export async function registerUser(first_name, last_name, email, phone_number, p
     return data;
 }
 
+export async function checkUserExists(email) {
+
+    const response = await fetch(`${apiUrl}/user/exists?email=${email}`);
+
+    if (!response.ok) {
+        throw new Error('Failed to check user existence');
+    }
+
+    const data = await response.json();
+    return data;
+}
+
 export async function loginUserAPI(email, password) {
     const response = await fetch(`${apiUrl}/user/login`, {
         method: 'POST',

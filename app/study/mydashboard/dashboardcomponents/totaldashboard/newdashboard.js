@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState, useContext, use } from 'react';
 
 import { Card, CardHeader, CardBody, CircularProgress, CardFooter, Divider, Link, Image, Progress, Button, Checkbox, Chip, Tooltip, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";

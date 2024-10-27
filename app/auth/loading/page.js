@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Spinner } from "@nextui-org/react";
 
-export default function Loading() {
+export default function LoginLoading() {
     return (
         <div className="w-screen h-screen flex flex-col justify-center items-center text-[25px]">
             Logging you in....

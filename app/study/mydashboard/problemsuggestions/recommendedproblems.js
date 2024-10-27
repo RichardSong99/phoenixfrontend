@@ -71,7 +71,7 @@ export function RecommendedProblems() {
                     }
 
                     return (
-                        <div onClick={() => viewQuestionModal({ questionId: question.Question.id })}
+                        <div key = {index} onClick={() => viewQuestionModal({ questionId: question.Question.id })}
                         className={`px-[20px] py-[10px] rounded-[15px] w-[300px] h-[150px] bg-gradient-to-br from-[#FFFFFF] to-[#EAF4FF]
                         flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-black text-center shadow-custom`}>
                             <div className="h-[75%] flex flex-col justify-around items-center">
@@ -157,7 +157,7 @@ export function RecentProblems() {
                     }
 
                     return (
-                        <div onClick={() => viewQuestionModal({
+                        <div key = {index} onClick={() => viewQuestionModal({
                             questionId: question.Question.id,
                             engagementId: question.Engagement.id})} className={`px-[20px] py-[10px] rounded-[15px] w-[300px] h-[150px] bg-gradient-to-br from-[#FFFFFF] to-[#EAF4FF]
                             flex flex-col justify-between items-center cursor-pointer mb-[10px] text-[12px] text-black text-center shadow-custom ${

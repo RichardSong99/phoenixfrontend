@@ -127,6 +127,14 @@ export const QuestionProvider = ({ children }) => {
     const [showChatbotButton, setShowChatbotButton] = useState(false);
     const [showMathRefSheet, setShowMathRefSheet] = useState(false);
 
+    // Active Quiz Actions ==================================
+
+    const NEWADAPTIVEQUIZACTION = "newadaptivequiz";
+    const NEWTESTACTION = "newtest";
+    const RESUMEACTION = "resume";
+    const REVIEWACTION = "review";
+
+
 
     // set up question display modes
 
@@ -239,7 +247,7 @@ export const QuestionProvider = ({ children }) => {
         setActiveReviewMode(ACTIVEMODE);
         setIndQuizMode(INDIVIDUALMODE);
 
-        initializeEngagementStates(QEIDCombos);
+        await initializeEngagementStates(QEIDCombos);
     };
 
     const resetAllVars = () => {
@@ -285,16 +293,20 @@ export const QuestionProvider = ({ children }) => {
             console.error("Could not create test quiz:", e);
         }
 
+        setGlobalLoading(false);
         return quizID;
     };
 
-    const resumeTestQuiz = async ({ quizID }) => {
+    const resumeTestQuiz = async (quizID) => {
 
         try{
             await setupTestMode(quizID);
         }catch(e){
             console.error("Could not resume test quiz:", e);
         }
+
+        setGlobalLoading(false);
+
     };
 
 
@@ -332,7 +344,7 @@ export const QuestionProvider = ({ children }) => {
         setActiveReviewMode(REVIEWMODE);
         setIndQuizMode(INDIVIDUALMODE);
 
-        initializeEngagementStates(QEIDCombos);
+        await initializeEngagementStates(QEIDCombos);
     };
 
     const handleNextAdaptiveButton = async () => {
@@ -408,7 +420,7 @@ export const QuestionProvider = ({ children }) => {
         setAdaptiveRegularMode(ADAPTIVEMODE);
         setIndQuizMode(QUIZMODE);
 
-        initializeEngagementStates(QEIDCombos);
+        await initializeEngagementStates(QEIDCombos);
     };
 
     const handleEndAdaptiveQuiz = async () => {
@@ -502,24 +514,39 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const setupReviewQuizMode = async (quizID) => {
+        console.log("Setting up review quiz mode");
+    
+        // setGlobalLoading(true);
         resetAllVars();
-        var QEIDCombos = [];
-
-        // fetch the quiz
+        let QEIDCombos = [];
+    
         try {
+            // Fetch the quiz
             const response = await fetchQuiz({ quizID: quizID });
-            setQuizID(quizID);
-            QEIDCombos = response.question_engagement_id_combos;
+            if (response) {
+                setQuizID(quizID);
+                QEIDCombos = response.question_engagement_id_combos || [];
+            } else {
+                console.error("No response received from fetchQuiz.");
+            }
+    
+            setActiveReviewMode(REVIEWMODE);
+            setIndQuizMode(QUIZMODE);
+    
+            // Initialize engagement states if QEIDCombos has data
+            if (QEIDCombos.length > 0) {
+                await initializeEngagementStates(QEIDCombos);
+                console.log("Review quiz mode initialized. DONE DONE DONE");
+            } else {
+                console.warn("No question engagement ID combos found.");
+            }
         } catch (error) {
             console.error("Could not fetch quiz:", error);
+        } finally {
+            // setGlobalLoading(false); // Ensure loading is reset
         }
-
-        setActiveReviewMode(REVIEWMODE);
-        setIndQuizMode(QUIZMODE);
-
-        initializeEngagementStates(QEIDCombos);
     };
-
+    
     const convertToQEIDComboArray = (questionIDs) => {
         return questionIDs.map((questionID) => {
             return { question_id: questionID, EngagementID: null };
@@ -527,47 +554,39 @@ export const QuestionProvider = ({ children }) => {
     };
 
     const initializeEngagementStates = async (QEIDCombos) => {
-        // ================== Initialize user response, flag status, star status, time spent ==================
         console.log("QEIDCombos", QEIDCombos);
-        // the QEIDCombos is an array of {QuestionID, EngagementID} objects
-        // const questionIDs = QEIDCombos.map((QEIDCombo) => QEIDCombo.question_id);
-        var questionIDs = [];
-        for (let i = 0; i < QEIDCombos.length; i++) {
-            const QEIDCombo = QEIDCombos[i];
-            console.log("Processing QEIDCombo:", QEIDCombo);
-            if(QEIDCombo.question_id && QEIDCombo.engagement_id){
-                questionIDs.push(QEIDCombo.question_id);
-            }
-        }
+    
+        const questionIDs = QEIDCombos
+            .filter(combo => combo.question_id && combo.engagement_id)
+            .map(combo => combo.question_id);
+    
         console.log("questionIDs in initialize engagement states", questionIDs);
-
+    
+        // Set question IDs array once
         setQuestionIDArray(questionIDs);
-        console.log("ids", questionIDs);
-        // fetch the questions for the questionIDs, then populate the questionData object
+    
+        // Initialize new question data
         const newQuestionData = {};
         try {
             const response = await fetchQuestionsById({ questionIdList: questionIDs });
-            response.forEach((question) => {
+            response.forEach(question => {
                 newQuestionData[question.id] = question;
             });
         } catch (error) {
             console.error("Could not fetch questions by ID:", error);
         }
         setQuestionData(newQuestionData);
-
-        // populate the engagementIDData object
+    
+        // Set up engagement ID data
         const newEngagementIDData = {};
-        questionIDs.forEach((questionID) => {
-            newEngagementIDData[questionID] = QEIDCombos.find(
-                (QEIDCombo) => QEIDCombo.question_id === questionID
-            ).engagement_id;
+        questionIDs.forEach(questionID => {
+            const match = QEIDCombos.find(combo => combo.question_id === questionID);
+            newEngagementIDData[questionID] = match ? match.engagement_id : null;
         });
         setEngagementIDData(newEngagementIDData);
-        console.log(newEngagementIDData);
-
-        // fetch the engagements for the questionIDs, if they exist
+    
+        // Fetch engagements
         const newEngagementData = {};
-        // loop through the engagementIDData and fetch the engagements, if they exist
         for (const questionID in newEngagementIDData) {
             if (newEngagementIDData[questionID]) {
                 try {
@@ -580,83 +599,37 @@ export const QuestionProvider = ({ children }) => {
                 }
             }
         }
-
         setEngagementData(newEngagementData);
-
-        console.log("newEngagementData", newEngagementData);
-        // for each questionID, the initial user response is null
+    
+        // Create engagement state objects with default values
         const newUserResponseData = {};
-        questionIDs.forEach((questionID) => {
-            // Check if newEngagementIDData and the corresponding entry for questionID exist
-            if (
-                newEngagementData[questionID] && newEngagementData[questionID].user_answer
-            ) {
-                newUserResponseData[questionID] = newEngagementData[questionID].user_answer;
-            } else {
-                newUserResponseData[questionID] = null;
-            }
-        });
-        setUserResponseData(newUserResponseData);
-
-        // for each questionID, the initial flag status is false
         const newIsFlaggedData = {};
-        questionIDs.forEach((questionID) => {
-            if (
-                newEngagementData[questionID] &&
-                newEngagementData[questionID].flagged
-            ) {
-                newIsFlaggedData[questionID] = newEngagementData[questionID].flagged;
-            } else {
-                newIsFlaggedData[questionID] = false;
-            }
-        });
-
-        setIsFlaggedData(newIsFlaggedData);
-
-        // for each questionID, the initial star status is false
         const newIsStarredData = {};
-        questionIDs.forEach((questionID) => {
-            if (
-                newEngagementData[questionID] &&
-                newEngagementData[questionID].starred
-            ) {
-                newIsStarredData[questionID] = newEngagementData[questionID].starred;
-            } else {
-                newIsStarredData[questionID] = false;
-            }
-        });
-
-        setIsStarredData(newIsStarredData);
-
-        // for each questionID, the initial review status is false
         const newWasReviewedData = {};
-        questionIDs.forEach((questionID) => {
-            if (
-                newEngagementData[questionID] && newEngagementData[questionID].reviewed
-            ) {
-                newWasReviewedData[questionID] = newEngagementData[questionID].reviewed;
-            } else {
-                newWasReviewedData[questionID] = false;
-            }
-        });
-
-        setWasReviewedData(newWasReviewedData);
-
-        // for each questionID, the initial time spent is zero
         const newTimeSpentData = {};
-        questionIDs.forEach((questionID) => {
-            if (newEngagementData[questionID] && newEngagementData[questionID].duration) {
-                newTimeSpentData[questionID] = newEngagementData[questionID].duration;
-            } else {
-                newTimeSpentData[questionID] = 0;
-            }
+    
+        questionIDs.forEach(questionID => {
+            const engagement = newEngagementData[questionID] || {};
+    
+            newUserResponseData[questionID] = engagement.user_answer || null;
+            newIsFlaggedData[questionID] = engagement.flagged || false;
+            newIsStarredData[questionID] = engagement.starred || false;
+            newWasReviewedData[questionID] = engagement.reviewed || false;
+            newTimeSpentData[questionID] = engagement.duration || 0;
         });
-
+    
+        // Batch state updates for performance
+        setUserResponseData(newUserResponseData);
+        setIsFlaggedData(newIsFlaggedData);
+        setIsStarredData(newIsStarredData);
+        setWasReviewedData(newWasReviewedData);
         setTimeSpentData(newTimeSpentData);
-
+    
+        // Set start time only once the process is complete
         setStartTime(Date.now());
-        console.log("engagementData", newEngagementIDData);
+        console.log("Engagement data initialized:", newEngagementData);
     };
+    
 
     const handleNextQuestion = () => {
         if (activeQuestionIndex < questionIDArray.length - 1) {
@@ -976,7 +949,11 @@ const updateTotalTimer = () => {
                 resumeTestQuiz,
                 TESTMODE,
                 handleEndTestModule,
-                handlePauseTestModule
+                handlePauseTestModule,
+                NEWADAPTIVEQUIZACTION,
+                NEWTESTACTION,
+                RESUMEACTION,
+                REVIEWACTION,
             }}
         >
             {children}

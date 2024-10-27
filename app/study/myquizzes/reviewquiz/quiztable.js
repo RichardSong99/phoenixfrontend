@@ -26,6 +26,7 @@ export function QuizTable() {
 
     const{
         setupReviewQuizMode,
+        REVIEWACTION,
     } = useContext(QuestionContext);
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -38,8 +39,8 @@ export function QuizTable() {
 
 
     const handleQuizClick = (quiz) => {
-        setupReviewQuizMode(quiz.id);
-        router.push(`/study/activequiz?quizid=${quiz.id}&review=true`);
+        // setupReviewQuizMode(quiz.id);
+        router.push(`/study/activequiz?quizid=${quiz.id}&action=${REVIEWACTION}`);
         console.log(quiz, "quiz")
     }
 

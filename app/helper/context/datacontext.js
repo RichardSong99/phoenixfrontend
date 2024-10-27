@@ -119,6 +119,14 @@ export const DataProvider = ({ children }) => {
         }
     }
 
+    const getWorstTopics = (subject, count) => {
+        const filteredList = topicSummaryList.filter(item => item.subject === subject);
+        const sortedList = filteredList.sort((a, b) => a.accuracy - b.accuracy);
+        console.log("sortedList", sortedList)
+
+        return sortedList.slice(0, count);
+    }
+
     const loadTestUnderlyingList = async () => {
         try {
             var testUnderlyingForUserResponse = await fetchTestsUnderlyingForUser()
@@ -157,7 +165,7 @@ export const DataProvider = ({ children }) => {
     }, [isAuthenticated, loginToggle, reloadDataToggle]);
 
     return (
-        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll, getTopicsBySubject, loadUserData, globalLoading, setGlobalLoading }}>
+        <DataContext.Provider value={{ loading, quizList, quizListQuizType, testUnderlyingList, userData, topicSummaryList, topicMapping, getTopicsByCategory, getCategoryList, filterTopicSummaryListByCategory, getTopicSummaryElement, filterTopicSummaryListBySubject, filterTopicSummaryListBySubjectAll, getTopicsBySubject, loadUserData, globalLoading, setGlobalLoading, getWorstTopics }}>
             {children}
         </DataContext.Provider>
     );

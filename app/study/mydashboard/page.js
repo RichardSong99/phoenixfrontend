@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardBody,
     Button,
+    Avatar
 } from "@nextui-org/react";
 
 import { useRouter } from 'next/navigation';
@@ -18,6 +19,7 @@ import QuizzesAndTests from "@/app/helper/components/quizzestests/quizzesandtest
 import { QuestionContext } from "@/app/helper/context/questioncontext";
 import { QuestionModal } from "@/app/helper/components/question/questionviewcomponents/questionmodal";
 import NewDashboard from "./dashboardcomponents/totaldashboard/newdashboard";
+import { useData } from "@/app/helper/context/datacontext";
 
 export default function MyDashboard() {
     const {
@@ -28,19 +30,27 @@ export default function MyDashboard() {
     const router = useRouter();
     const [selected, setSelected] = useState("topics");
 
-    return (
-        <div className="flex flex-col w-full justify-center p-10 gap-4 pl-[300px] pr-[300px] pt-[70px] bg-themeWhite">
-            <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px]">
-                <h3>Phoenix <span className="text-themeLightGreen">SAT</span></h3>
-            </div>
-            <div className="flex flex-row w-full justify-center">
-                <div className="w-full h-[75px] text-white bg-[#0B2149] text-white rounded-[10px] shadow-custom flex flex-row items-center pt-[10px] pl-[20px]">
-                    <h4><strong>Welcome, Richard</strong></h4>
-                </div>
-            </div>
+    const {setGlobalLoading} = useData();
+    
+    useEffect(() => {
+        setGlobalLoading(false);
+    }, []);
 
-            <NewDashboard />
-            {/* <Card>
+    return (
+        <div className="flex flex-col w-full justify-center items-center gap-4 bg-themeWhite">
+
+            <div className="flex flex-col justify-center p-10 gap-4 min-w-80 w-2/3 pt-[70px] bg-themeWhite">
+                <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px] shadow-md">
+                    <h3>Phoenix <span className="text-themeLightGreen">SAT</span></h3>
+                </div>
+                <div className="flex flex-row w-full justify-center">
+                    <div className="w-full h-[75px] text-white bg-[#0B2149] text-white rounded-[10px] shadow-custom flex flex-row items-center pt-[10px] pl-[20px]">
+                        <h4><strong>Welcome, Richard</strong></h4>
+                    </div>
+                </div>
+
+                <NewDashboard />
+                {/* <Card>
             <CardHeader>
                 <div className="flex flex-row w-full justify-between items-center">
                     <h5 className="text-[18px] mb-[-15px]">Recommended Problems</h5>
@@ -58,28 +68,28 @@ export default function MyDashboard() {
                 <RecentProblems />
             </CardBody>
         </Card> */}
-            <Card>
-                <CardHeader>
-                    <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[10px] text-center">
-                        <div
-                            className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'topics' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
-                            onClick={() => setSelected("topics")}
-                        >
-                            Topics
-                        </div>
-                        <div
-                            className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'quizandtests' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
-                            onClick={() => setSelected("quizandtests")}
-                        >
-                            Quizzes and Tests
-                        </div>
-                        <div
-                            className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'qbank' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
-                            onClick={() => setSelected("qbank")}
-                        >
-                            Question Bank
-                        </div>
-                        {/* <div
+                <Card>
+                    <CardHeader>
+                        <div className="w-full flex flex-row justify-around items-center font-bold bg-[#F8F7F7] rounded-[10px] text-center">
+                            <div
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'topics' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                onClick={() => setSelected("topics")}
+                            >
+                                Topics
+                            </div>
+                            <div
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'quizandtests' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                onClick={() => setSelected("quizandtests")}
+                            >
+                                Quizzes and Tests
+                            </div>
+                            <div
+                                className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'qbank' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
+                                onClick={() => setSelected("qbank")}
+                            >
+                                Question Bank
+                            </div>
+                            {/* <div
                             className={`cursor-pointer text-[14px] h-[40px] w-[20%] rounded flex justify-center items-center ${selected === 'rec' ? 'bg-[#0B2149] text-white' : 'text-themeDarkGray'}`}
                             onClick={() => setSelected("rec")}
                         >
@@ -91,18 +101,33 @@ export default function MyDashboard() {
                         >
                             Recently Completed
                         </div> */}
-                    </div>
-                </CardHeader>
-                <CardBody className="overflow-x-hidden flex-row justify-center">
-                    {selected === "topics" ? <TopicModules /> : (selected === 'qbank' ? <NewQBankViewer /> : (selected === 'rec' ? <RecommendedProblems /> : (selected === 'recent' ? <RecentProblems /> : <QuizzesAndTests />)))}
-                </CardBody>
-            </Card>
-            <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
-            <div className="absolute bottom-5 left-5 w-[30px] h-[30px] rounded-[25px] border-[2px] bg-white border-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-                    <path fill="currentColor" d="M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56"></path>
-                </svg>
+                        </div>
+                    </CardHeader>
+                    <CardBody className="overflow-x-hidden flex-row justify-center">
+                        {selected === "topics" ? <TopicModules /> : (selected === 'qbank' ? <NewQBankViewer /> : (selected === 'rec' ? <RecommendedProblems /> : (selected === 'recent' ? <RecentProblems /> : <QuizzesAndTests />)))}
+                    </CardBody>
+                </Card>
+                <QuestionModal isOpen={isOpen} onOpenChange={onOpenChange} mode="practice" />
+
+                <Avatar className="absolute bottom-5 left-5"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+
+                {/* Footer */}
+
             </div>
+            <footer className="w-full bg-gray-800 text-white text-sm mt-8 py-6">
+                <div className="flex flex-col items-center justify-center space-y-2">
+                    <div className="flex space-x-4">
+                        <a href="/about" className="text-white transition">About Us</a>
+                        <a href="/privacy" className="text-white transition">Privacy Policy</a>
+                        <a href="/contact" className="text-white transition">Contact</a>
+                    </div>
+                    <div className="text-center">
+                        © {new Date().getFullYear()} Phoenix SAT. All rights reserved.
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }

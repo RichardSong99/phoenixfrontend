@@ -366,10 +366,10 @@ const NewQBankViewer = () => {
                     <Button color="#AAAAAA" isIconOnly variant="ghost" onPress={handleResetFilters}>
                         <Icon icon="ri:reset-right-fill" width="384" height="384" style={{ color: "#AAAAAA" }} />
                     </Button>
-
+{/* 
                     <Button color="#AAAAAA" isIconOnly variant="ghost" >
                         <Icon icon="lets-icons:sort-random" width="384" height="384" style={{ color: "#AAAAAA" }} />
-                    </Button>
+                    </Button> */}
 
 
 

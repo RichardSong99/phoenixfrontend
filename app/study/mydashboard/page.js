@@ -19,6 +19,7 @@ import QuizzesAndTests from "@/app/helper/components/quizzestests/quizzesandtest
 import { QuestionContext } from "@/app/helper/context/questioncontext";
 import { QuestionModal } from "@/app/helper/components/question/questionviewcomponents/questionmodal";
 import NewDashboard from "./dashboardcomponents/totaldashboard/newdashboard";
+import { useData } from "@/app/helper/context/datacontext";
 
 export default function MyDashboard() {
     const {
@@ -29,10 +30,16 @@ export default function MyDashboard() {
     const router = useRouter();
     const [selected, setSelected] = useState("topics");
 
+    const {setGlobalLoading} = useData();
+    
+    useEffect(() => {
+        setGlobalLoading(false);
+    }, []);
+
     return (
         <div className="flex flex-col w-full justify-center items-center gap-4 bg-themeWhite">
 
-            <div className="flex flex-col w-full justify-center p-10 gap-4 min-w-80 w-2/3 pt-[70px] bg-themeWhite">
+            <div className="flex flex-col justify-center p-10 gap-4 min-w-80 w-2/3 pt-[70px] bg-themeWhite">
                 <div className="w-screen h-[55px] border-bottom bg-white absolute top-0 left-0 z-[999] pl-[150px] pt-[10px] shadow-md">
                     <h3>Phoenix <span className="text-themeLightGreen">SAT</span></h3>
                 </div>

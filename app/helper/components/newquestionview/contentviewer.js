@@ -7,6 +7,7 @@ import React, { useContext } from 'react';
 import {Icon} from '@iconify/react';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import { useData } from '../../context/datacontext';
 
 export default function ContentViewer({ }) {
     const {
@@ -14,10 +15,14 @@ export default function ContentViewer({ }) {
         indquizMode,
     } = useContext(QuestionContext);
 
+    const { setGlobalLoading } = useData();
+
     const router = useRouter();
 
     const handleGoBack = () => {
-        router.back();
+        setGlobalLoading(true);
+        router.push('/study/mydashboard');
+        setGlobalLoading(false);
     }
 
     // useEffect(() => {

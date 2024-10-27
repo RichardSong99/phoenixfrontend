@@ -34,7 +34,7 @@ export function TestTable() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const { createTestQuiz, setupActiveQuizMode, resumeTestQuiz, setupReviewQuizMode } = useContext(QuestionContext);
+    const { createTestQuiz, setupActiveQuizMode, resumeTestQuiz, setupReviewQuizMode, NEWTESTACTION, REVIEWACTION, RESUMEACTION } = useContext(QuestionContext);
     const [testData, setTestData] = useState([]);
 
     const [scoreReportTestName, setScoreReportTestName] = useState("");
@@ -112,34 +112,60 @@ export function TestTable() {
         setGlobalLoading(true);
         try {
             const quizID = await createTestQuiz({ quizName });
-            router.push(`/study/activequiz?quizid=${quizID}&review=false`);
+            if (quizID) {
+                router.push(`/study/activequiz?quizid=${quizID}&action=${NEWTESTACTION}`);
+            } else {
+                console.error("Quiz ID not received from createTestQuiz.");
+            }
         } catch (e) {
-            console.log(e);
+            console.error("Error starting test module:", e);
+        } finally {
+            setGlobalLoading(false); // Ensure loading is reset
         }
     };
-
+    
     const resumeTestModule = async (quizName) => {
         setGlobalLoading(true);
         try {
-            const quizID = testData.find(item => item.quizName === quizName).id;
-            await resumeTestQuiz({ quizID });
-            router.push(`/study/activequiz?quizid=${quizID}&review=false`);
+            const quiz = testData.find(item => item.quizName === quizName);
+            if (!quiz || !quiz.id) {
+                console.error(`Quiz with name "${quizName}" not found or has no ID.`);
+                return;
+            }
+    
+            const quizID = quiz.id;
+    
+            // Navigate to resume the quiz
+            router.push(`/study/activequiz?quizid=${quizID}&action=${RESUMEACTION}`);
         } catch (e) {
-            console.log(e);
+            console.error("Error resuming test module:", e);
+        } finally {
+            setGlobalLoading(false); // Ensure loading is reset
         }
-    }
+    };
+    
 
     const reviewTestModule = async (quizName) => {
         setGlobalLoading(true);
         try {
-            const quizID = testData.find(item => item.quizName === quizName).id;
-
-            await setupReviewQuizMode(quizID);
-            router.push(`/study/activequiz?quizid=${quizID}&review=true`);
+            const quiz = testData.find(item => item.quizName === quizName);
+    
+            if (!quiz || !quiz.id) {
+                console.error(`Quiz with name "${quizName}" not found or has no ID.`);
+                return;
+            }
+    
+            const quizID = quiz.id;
+    
+            // Navigate to the review page
+            router.push(`/study/activequiz?quizid=${quizID}&action=${REVIEWACTION}`);
         } catch (e) {
-            console.log(e);
-        };
+            console.error("Error navigating to review module:", e);
+        } finally {
+            setGlobalLoading(false); // Ensure loading is reset after function completes
+        }
     };
+    
 
     const getModuleButton = (quizName) => {
         const module = testData.find(item => item.quizName === quizName);

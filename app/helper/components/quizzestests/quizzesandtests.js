@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react";
 
 import { QuizTable } from "@/app/study/myquizzes/reviewquiz/quiztable";

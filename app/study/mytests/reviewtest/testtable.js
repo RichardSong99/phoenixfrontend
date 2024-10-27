@@ -168,12 +168,12 @@ export function TestTable() {
     
 
     const getModuleButton = (quizName) => {
-        const module = testData.find(item => item.quizName === quizName);
-        if (!module) return null;
+        const thisModule = testData.find(item => item.quizName === quizName);
+        if (!thisModule) return null;
 
-        if (module.status === "completed") {
+        if (thisModule.status === "completed") {
             return <Button className="bg-blue-100" size="sm" onPress={() => reviewTestModule(quizName)}>Review</Button>;
-        } else if (module.status === "paused") {
+        } else if (thisModule.status === "paused") {
             return (
                 <Button
                     className="bg-blue-700 text-white"
@@ -185,7 +185,7 @@ export function TestTable() {
             );
         }
 
-        else if (module.startCounter === 0) {
+        else if (thisModule.startCounter === 0) {
             return (
                 <Button
                     className="bg-blue-700 text-white"

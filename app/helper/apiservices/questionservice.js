@@ -13,6 +13,7 @@ export async function getQuestions({
     pageSize = 10,
     sortOption = 'attemptTime',
     sortDirection = 1,
+    starred = ""
 }) {
     let token;
     try {
@@ -48,6 +49,8 @@ export async function getQuestions({
     queryParams.append('pageSize', pageSize);
     queryParams.append('sortOption', sortOption);
     queryParams.append('sortDirection', sortDirection);
+
+    queryParams.append('starred', starred);
     
     console.log('queryParams', queryParams.toString());
 

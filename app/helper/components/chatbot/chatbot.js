@@ -111,13 +111,17 @@ export default function Chatbot() {
         ]);
 
         try {
-            const response = await getChatbotResponse(
-                message,
-                questionData[questionIDArray[activeQuestionIndex]].prompt,
-                questionData[questionIDArray[activeQuestionIndex]].answer_choices,
-                questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple,
-                questionData[questionIDArray[activeQuestionIndex]].answer_type
-            );
+            const response = await getChatbotResponse({
+                user_message: message,
+                prompt: questionData[questionIDArray[activeQuestionIndex]].prompt,
+                answer_choices: questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ? questionData[questionIDArray[activeQuestionIndex]].answer_choices : [],
+                answer: questionData[questionIDArray[activeQuestionIndex]].answer_type === "multipleChoice" ? questionData[questionIDArray[activeQuestionIndex]].correct_answer_multiple : questionData[questionIDArray[activeQuestionIndex]].correct_answer_free,
+                type: questionData[questionIDArray[activeQuestionIndex]].answer_type,
+                image_url: questionData[questionIDArray[activeQuestionIndex]].image_url || "",
+                text1: questionData[questionIDArray[activeQuestionIndex]].text1 || "",
+                text2: questionData[questionIDArray[activeQuestionIndex]].text2 || ""
+            });
+   
 
             let streamedMessage = '';
             for (let i = 0; i < response.length; i++) {
@@ -147,7 +151,7 @@ export default function Chatbot() {
             <div className="h-[65%] w-[100%] overflow-y-auto p-[5px] text-black rounded border border-gray-300 bg-white">
                 <div className="w-full flex flex-col justify-end">
                     {messages.map((msg, index) => (
-                        <div key={index} className="border-[2px] rounded-[20px] py-[5px] px-[8px] mt-[5px]">
+                        <div key={index} className="border-[2px] rounded-[20px] py-[5px] px-[8px] mt-[5px] text-[14px]">
                             <div className={`message ${msg.role}`}>
                                 <strong>{msg.role}: </strong>{msg.message}
                             </div>

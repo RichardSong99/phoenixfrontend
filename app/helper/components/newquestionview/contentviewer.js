@@ -35,6 +35,8 @@ export default function ContentViewer({ }) {
     //     }
     // }, []);
 
+
+
     return (
         <div className='custom-font w-screen h-screen bg-appleGray6 z-[10] absolute top-0 left-0'>
             <style jsx>{`

@@ -141,7 +141,7 @@ export default function QuestionView({ }) {
             <div className={`h-full w-[98%] rounded flex flex-row justify-between pt-[20px] ${showPauseTimer ? 'blur-sm' : null}`}>
                 {questionData[questionIDArray[activeQuestionIndex]].subject === "Math" ?
                     <div className='w-[50%] h-[80%] flex flex-col justify-center items-center pl-[30px] pr-[30px] gap-3'>
-                        {questionData[questionIDArray[activeQuestionIndex]] && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== null && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== "" && <img src={questionData[questionIDArray[activeQuestionIndex]].question_image_url} className="w-3/4  object-contain" />}
+                        {questionData[questionIDArray[activeQuestionIndex]] && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== null && questionData[questionIDArray[activeQuestionIndex]].question_image_url !== "" && <img src={questionData[questionIDArray[activeQuestionIndex]].question_image_url} className="w-3/4 max-h-72 object-contain" />}
 
 
 

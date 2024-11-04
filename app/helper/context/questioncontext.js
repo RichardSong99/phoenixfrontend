@@ -628,6 +628,8 @@ export const QuestionProvider = ({ children }) => {
         // Set start time only once the process is complete
         setStartTime(Date.now());
         console.log("Engagement data initialized:", newEngagementData);
+
+        setActiveQuestionIndex(0);
     };
     
 

@@ -17,22 +17,27 @@ export const UserProvider = ({ children }) => {
 
     const loginUserHandler = async (email, password) => {
 
-        setAuthLoading(true);
 
         try {
             const data = await loginUserAPI(email, password);
+            setAuthLoading(true);
             Cookies.set('token', data.token);
             setUser(data.user);
+            console.log("user data", data);
             setIsAuthenticated(true);
             setLoginToggle(!loginToggle)
     
             // go to the study page
             router.push('/study/mydashboard');
             console.log("user data", data.token);
+            return true;
         } catch (error) {
+            setAuthLoading(false);
             console.error('Failed to login user:', error);
             setIsAuthenticated(false);
         }
+
+        return false;
 
     };
 
@@ -51,7 +56,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginToggle, loginUserHandler, user,  setUser, authLoading, setAuthLoading }}>
+        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginToggle, setLoginToggle, loginUserHandler, user,  setUser, authLoading, setAuthLoading }}>
             {children}
         </UserContext.Provider>
     );

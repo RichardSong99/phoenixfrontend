@@ -9,7 +9,7 @@ import { useUser } from '../../helper/context/usercontext';
 import { Button, Input, Checkbox, Link, Divider, Spinner } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useData } from "@/app/helper/context/datacontext";
-import LoginLoading from "../loading/page";
+import LoginLoading from "../loading/authloading";
 
 export default function LoginPanel() {
     const router = useRouter();
@@ -17,7 +17,6 @@ export default function LoginPanel() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
     
     const [loginLoading, setLoginLoading] = useState(false);
@@ -32,18 +31,20 @@ export default function LoginPanel() {
     useEffect(() => {
         setErrorMessage(null);
         setAuthLoading(false);
-    }, [email, password, repeatPassword]);
+    }, [email, password]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         // router.push('/auth/loading');
-        setAuthLoading(true);
+        var loginSuccess = false;
     
         try {
-            await loginUserHandler(email, password);
+            loginSuccess = await loginUserHandler(email, password);
         } catch (error) {
-            setErrorMessage("Failed to log in. Please check your credentials.");
-            router.push('/auth');
+        }
+
+        if(!loginSuccess) {
+            setErrorMessage('Invalid email or password');
         }
 
     };
@@ -53,9 +54,6 @@ export default function LoginPanel() {
         router.push('/auth/register');
     };
 
-    if(authLoading) {
-        return <LoginLoading />
-    }
 
 
     return (
@@ -102,6 +100,7 @@ export default function LoginPanel() {
                             Forgot password?
                         </Link>
                     </div>
+                    <div className="text-red-500 text-sm w-full">{errorMessage}</div>
                     <Button color="primary" type="submit" >
                         Log In
                     </Button>

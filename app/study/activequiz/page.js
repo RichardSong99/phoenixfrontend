@@ -54,11 +54,15 @@ export default function Page() {
             }
         };
 
+        
+
         // Only initialize when `action` and `quizID` are defined
         if (action && quizID) {
             initializeContentViewer();
         }
     }, []);
+
+    
 
     return (
         <ContentViewer />

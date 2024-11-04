@@ -10,6 +10,7 @@ import { DataProvider } from "./helper/context/datacontext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavBarProvider } from "./helper/context/navbarcontext";
 import { MyNextUIProvider } from "./helper/context/mynextuiprovider";
+
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
@@ -29,9 +30,13 @@ export default function RootLayout({ children }) {
             <DataProvider>
               <QuestionProvider>
                 <NavBarProvider>
-                  <body className={`${inter.className} bodyStyles`} style={{ position: "relative" }}>
+                  <body
+                    className={`${inter.className} bodyStyles`}
+                    style={{ position: "relative", overflowY: "hidden" }}
+                  >
                     {/* Content */}
                     {children}
+
 
                     {/* Top Navbar */}
                     {/* <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 1000 }}>

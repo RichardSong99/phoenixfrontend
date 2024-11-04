@@ -1,6 +1,6 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getChatbotResponse(user_message, prompt, answer_choices, answer, type){
+export async function getChatbotResponse({user_message, prompt, answer_choices, answer, type, image_url, text1, text2}){
     // query parameters
     const queryParams = new URLSearchParams({user_message}).toString();
 
@@ -9,7 +9,10 @@ export async function getChatbotResponse(user_message, prompt, answer_choices, a
         prompt: prompt,
         answer_choices: answer_choices,
         answer: answer,
-        type: type
+        type: type,
+        image_url: image_url,
+        text1: text1,
+        text2: text2
     });
 
     // request params

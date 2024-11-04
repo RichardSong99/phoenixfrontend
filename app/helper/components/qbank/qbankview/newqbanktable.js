@@ -25,7 +25,6 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
     const [questionEngagementCombos, setQuestionEngagementCombos] = useState(initialCombos);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
 
     const {
         viewQuestionModal,
@@ -107,12 +106,7 @@ const NewQBankTable = ({ questionEngagementCombos: initialCombos }) => {
         }
     }, [initialCombos]);
 
-    if (user === null) {
-        return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
-            <Spinner />
-            <div className='ml-[20px]'>Loading...</div>
-        </div>;
-    }
+
 
     return (
         <div className="flex flex-col gap-y-4 p-2">

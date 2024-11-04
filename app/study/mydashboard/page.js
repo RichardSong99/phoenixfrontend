@@ -36,7 +36,7 @@ export default function MyDashboard() {
 
     const router = useRouter();
     const [selected, setSelected] = useState("topics");
-    const { isAuthenticated, setIsAuthenticated } = useUser();
+    const { isAuthenticated, setIsAuthenticated, user } = useUser();
 
 
     const { setGlobalLoading, loadUserData } = useData();
@@ -60,7 +60,7 @@ export default function MyDashboard() {
                 <div className="w-full h-[55px] border-b bg-white fixed top-0 left-0 z-50 pl-[150px] pr-[100px] flex items-center justify-between  shadow-md">
                     <div className="flex items-center">
                         <h3 className="text-lg font-semibold">
-                            Phoenix <span className="text-themeLightGreen">SAT</span>
+                            
                         </h3>
                     </div>
 
@@ -84,7 +84,7 @@ export default function MyDashboard() {
 
                 <div className="flex flex-row w-full justify-center">
                     <div className="w-full h-[75px] text-white bg-[#0B2149] text-white rounded-[10px] shadow-custom flex flex-row items-center pt-[10px] pl-[20px]">
-                        <h4><strong>Welcome, Richard</strong></h4>
+                        <h4><strong>Welcome, {user?.first_name || ""}</strong></h4>
                     </div>
                 </div>
 

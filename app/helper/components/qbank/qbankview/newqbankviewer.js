@@ -73,6 +73,8 @@ const NewQBankViewer = () => {
 
     const [starredFilter, setStarredFilter] = useState(false);
 
+    const [tableLoading, setTableLoading] = useState(false);
+
     const {
         selectedDifficulties,
         setSelectedDifficulties,
@@ -227,8 +229,10 @@ const NewQBankViewer = () => {
                 console.error('Could not fetch questions:', error);
             }
         }
-
+        setTableLoading(true);
         loadQuestions();
+
+        setTableLoading(false);
     }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject, starredFilter]);
 
 
@@ -409,7 +413,12 @@ const NewQBankViewer = () => {
                         <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
                     </div> */}
                 </div>
-                <NewQBankTable questionEngagementCombos={questions} />
+                {tableLoading ? 
+                    <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+                    <Spinner />
+                    <div className='ml-[20px]'>Loading...</div>
+                </div> :
+                <NewQBankTable questionEngagementCombos={questions} />}
                 <Pagination aria-label="table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color="primary" />
 
             </div >

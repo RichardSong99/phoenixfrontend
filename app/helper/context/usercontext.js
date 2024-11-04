@@ -23,6 +23,7 @@ export const UserProvider = ({ children }) => {
             setAuthLoading(true);
             Cookies.set('token', data.token);
             setUser(data.user);
+            console.log("user data", data);
             setIsAuthenticated(true);
             setLoginToggle(!loginToggle)
     

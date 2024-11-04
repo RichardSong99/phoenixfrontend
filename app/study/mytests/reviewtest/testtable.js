@@ -104,7 +104,7 @@ export function TestTable() {
             setIsLoading(false);
         };
 
-        setGlobalLoading(false);
+        // setGlobalLoading(false);
         fetchData();
     }, []);
 

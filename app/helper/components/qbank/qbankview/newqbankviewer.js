@@ -71,6 +71,10 @@ const NewQBankViewer = () => {
 
     const [selectedTopicButton, setSelectedTopicButton] = useState("All Math");
 
+    const [starredFilter, setStarredFilter] = useState(false);
+
+    const [tableLoading, setTableLoading] = useState(false);
+
     const {
         selectedDifficulties,
         setSelectedDifficulties,
@@ -89,7 +93,7 @@ const NewQBankViewer = () => {
         getTopicsByCategory,
         getTopicsBySubject,
     }
-    = useContext(DataContext);
+        = useContext(DataContext);
 
 
 
@@ -110,6 +114,8 @@ const NewQBankViewer = () => {
         setSelectedDifficultyKeys(new Set([]));
         setSelectedAnswerStatusKeys(new Set([]));
         setFilterValue("");
+
+        setStarredFilter(false);
         setPage(1);
     };
 
@@ -172,7 +178,7 @@ const NewQBankViewer = () => {
         if (selectedTopicButton) {
             console.log(selectedTopicButton, "selectedTopicButton");
             if (selectedTopicButton === "All Math") {
-                setSelectedTopics(getTopicsBySubject ("Math"));
+                setSelectedTopics(getTopicsBySubject("Math"));
             } else if (selectedTopicButton === "Algebra") {
                 setSelectedTopics(getTopicsByCategory("Algebra"));
             } else if (selectedTopicButton === "Advanced Math") {
@@ -193,11 +199,11 @@ const NewQBankViewer = () => {
                 setSelectedTopics(getTopicsByCategory("Effective expression and revision"));
             }
 
-                
+
         } else {
             setSelectedTopics([]);
         }
-        
+
     }, [selectedTopicButton]);
 
 
@@ -212,7 +218,8 @@ const NewQBankViewer = () => {
                     sortOption: sortOption,
                     sortDirection: sortDirection,
                     page: page,
-                    subject: activeSubject
+                    subject: activeSubject,
+                    starred: starredFilter ? "true" : "",
                 });
                 setQuestions(data.data);
                 setPage(data.currentPage);
@@ -222,9 +229,11 @@ const NewQBankViewer = () => {
                 console.error('Could not fetch questions:', error);
             }
         }
-
+        setTableLoading(true);
         loadQuestions();
-    }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject]);
+
+        setTableLoading(false);
+    }, [questionsUpdated, page, selectedTopics, selectedDifficulties, selectedAnswerStatuses, selectedAnswerTypes, sortOption, sortDirection, activeSubject, starredFilter]);
 
 
 
@@ -363,10 +372,37 @@ const NewQBankViewer = () => {
                         onValueChange={onSearchChange}
                     /> */}
 
+                    <div className = "w-10">
+
+                    {!starredFilter ? (
+                        <svg
+                            className='h-[30px] w-[30px] fill-[#1865F2] cursor-pointer'
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 256 256"
+                            onClick={() => setStarredFilter(true)}
+                        >
+                            <path d="M243 96a20.33 20.33 0 0 0-17.74-14l-56.59-4.57l-21.84-52.81a20.36 20.36 0 0 0-37.66 0L87.35 77.44L30.76 82a20.45 20.45 0 0 0-11.66 35.88l43.18 37.24l-13.2 55.7A20.37 20.37 0 0 0 79.57 233L128 203.19L176.43 233a20.39 20.39 0 0 0 30.49-22.15l-13.2-55.7l43.18-37.24A20.43 20.43 0 0 0 243 96m-70.47 45.7a12 12 0 0 0-3.84 11.86L181.58 208l-47.29-29.08a12 12 0 0 0-12.58 0L74.42 208l12.89-54.4a12 12 0 0 0-3.84-11.86l-42.27-36.5l55.4-4.47a12 12 0 0 0 10.13-7.38L128 41.89l21.27 51.5a12 12 0 0 0 10.13 7.38l55.4 4.47Z"></path>
+                        </svg>
+                    ) : (
+                        <svg
+                            className='h-[30px] w-[30px] fill-[#1865F2] cursor-pointer'
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 256 256"
+                            onClick={() => setStarredFilter(false)}
+                        >
+                            <path d="m234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07l-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76l22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08l59 4.76a16.46 16.46 0 0 1 9.37 28.86Z"></path>
+                        </svg>
+                    )}
+                    </div>
+
                     <Button color="#AAAAAA" isIconOnly variant="ghost" onPress={handleResetFilters}>
                         <Icon icon="ri:reset-right-fill" width="384" height="384" style={{ color: "#AAAAAA" }} />
                     </Button>
-{/* 
+                    {/* 
                     <Button color="#AAAAAA" isIconOnly variant="ghost" >
                         <Icon icon="lets-icons:sort-random" width="384" height="384" style={{ color: "#AAAAAA" }} />
                     </Button> */}
@@ -377,7 +413,12 @@ const NewQBankViewer = () => {
                         <Button color="primary" variant="ghost" onPress={handleSetReviewMode}>Review mode</Button>
                     </div> */}
                 </div>
-                <NewQBankTable questionEngagementCombos={questions} />
+                {tableLoading ? 
+                    <div className='w-full h-[200px] flex flex-row justify-center items-center'>
+                    <Spinner />
+                    <div className='ml-[20px]'>Loading...</div>
+                </div> :
+                <NewQBankTable questionEngagementCombos={questions} />}
                 <Pagination aria-label="table-pagination" total={lastPage} page={page} onChange={(newPage) => setPage(newPage)} showControls color="primary" />
 
             </div >

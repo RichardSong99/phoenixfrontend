@@ -24,14 +24,14 @@ import { useData } from '@/app/helper/context/datacontext';
 
 export function QuizTable() {
 
-    const{
+    const {
         setupReviewQuizMode,
         REVIEWACTION,
     } = useContext(QuestionContext);
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [activeQuiz, setActiveQuiz] = useState(null);
-    const { topicMapping, quizListQuizType } = useData();
+    const { topicMapping, quizListQuizType, loadQuizList } = useData();
     const [isLoading, setIsLoading] = useState(true);
 
     const router = useRouter();
@@ -62,41 +62,50 @@ export function QuizTable() {
 
     useEffect(() => {
         const fetchQuizData = async () => {
-            const data = await Promise.all(
-                quizListQuizType.map(async (quiz) => {
-                    try {
-                        const quizStats = await fetchQuizStats(quiz?.id);
-                        const quizQECombos = await fetchQECombos(quiz?.id);
-                        const uniqueTopicNames = Array.from(new Set(quizQECombos.question_engagement_combos.map(qeCombo => qeCombo.question.topic)));
-                        
-                        console.log("quiz stats", quizStats);
-                        console.log("quiz qe combos", quizQECombos);
-                        console.log("unique topic names", uniqueTopicNames);
-                        
-                        return {
-                            quiz,
-                            quizStats,
-                            uniqueTopicNames,
-                        };
+            try {
+                const data = await Promise.all(
+                    quizListQuizType.map(async (quiz) => {
+                        try {
+                            const quizStats = await fetchQuizStats(quiz?.id);
+                            const quizQECombos = await fetchQECombos(quiz?.id);
+                            const uniqueTopicNames = Array.from(
+                                new Set(quizQECombos.question_engagement_combos.map((qeCombo) => qeCombo.question.topic))
+                            );
 
-                        
-                    } catch (error) {
-                        console.log("Error fetching quiz data", error);
-                        return null;
-                    }
-                })
-            );
-            setQuizData(data.filter(item => item !== null));
+                            console.log("quiz stats", quizStats);
+                            console.log("quiz qe combos", quizQECombos);
+                            console.log("unique topic names", uniqueTopicNames);
 
-            setIsLoading(false);
+                            return {
+                                quiz,
+                                quizStats,
+                                uniqueTopicNames,
+                            };
+                        } catch (error) {
+                            console.error("Error fetching quiz data", error);
+                            return null;
+                        }
+                    })
+                );
+
+                setQuizData(data.filter((item) => item !== null));
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Error in fetchQuizData", error);
+            }
         };
 
-        fetchQuizData();
+        const loadData = async () => {
+            await loadQuizList();
+            fetchQuizData();
+        };
+
+        loadData();
     }, [quizListQuizType]);
 
-    
 
-    if(isLoading){
+
+    if (isLoading) {
         return <div className='w-full h-[200px] flex flex-row justify-center items-center'>
             <Spinner />
             <div className='ml-[20px]'>Loading...</div>
@@ -104,20 +113,20 @@ export function QuizTable() {
     }
 
     return (
-        <div className = "w-full">
+        <div className="w-full">
 
 
-            <Table removeWrapper aria-label="Example static collection table" className = "w-full">
+            <Table removeWrapper aria-label="Example static collection table" className="w-full">
                 <TableHeader>
                     {/* <TableColumn>Review Quiz</TableColumn> */}
                     <TableColumn>Quiz Name</TableColumn>
                     <TableColumn>Topics</TableColumn>
-                    <TableColumn width = "200">Score</TableColumn>
+                    <TableColumn width="200">Score</TableColumn>
                     <TableColumn>Date</TableColumn>
                 </TableHeader>
                 <TableBody emptyContent={"No quizzes completed yet."}>
                     {quizData.map((item, index) => (
-                        <TableRow key={index} onClick={() => handleQuizClick(item.quiz)} className = "cursor-pointer hover:bg-gray-100">
+                        <TableRow key={index} onClick={() => handleQuizClick(item.quiz)} className="cursor-pointer hover:bg-gray-100">
                             {/* <TableCell>
                                 <Button color="success" variant="bordered" size="sm" onClick={() => handleQuizClick(item.quiz)}>
                                     Review Quiz
@@ -132,7 +141,7 @@ export function QuizTable() {
                             </TableCell>
 
                             <TableCell>
-                                <Progress size = "sm" label={`Score: ${item.quizStats.total_correct} / ${item.quizStats.total_questions}`} value={item.quizStats.accuracy * 100} />
+                                <Progress size="sm" label={`Score: ${item.quizStats.total_correct} / ${item.quizStats.total_questions}`} value={item.quizStats.accuracy * 100} />
                             </TableCell>
 
                             <TableCell>{new Date(item.quiz?.attempt_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</TableCell>

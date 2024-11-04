@@ -61,7 +61,7 @@ export default function QuestionNavBar() {
 
         console.log("userresponse data", userResponseData);
 
-        if (indquizMode === TESTMODE && userResponseStatus !== null) {
+        if (indquizMode === TESTMODE && userResponseStatus !== null && activeReviewMode === 'active') {
             bgColor = "bg-gray-200";
         }
 

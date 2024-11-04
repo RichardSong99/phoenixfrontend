@@ -1,65 +1,113 @@
-// components/SiteNavBar.js
-"use client"
+"use client";
 
-import Link from 'next/link';
-import React, {useContext} from 'react';
-import styles from './sitenavbar.module.css'; // Assuming you use CSS Modules
-import { useUser } from '../../../context/usercontext';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
-import { NavBarContext } from '../../../context/navbarcontext';
+import React, {useState} from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Divider,
+  cn,
+} from "@nextui-org/react";
 
+import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
-const SiteNavBar = () => {
+const menuItems = ["Home", "SAT Bible", "About Us"];
 
-    const { isAuthenticated, setIsAuthenticated } = useUser();
-    const { isTopNavBarVisible } = useContext(NavBarContext);
+const CenteredNavbar = React.forwardRef(
+  ({ classNames: { base, wrapper, ...otherClassNames } = {}, ...props }, ref) => {
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-
-    const handleLogout = () => {
-        //remove the token from cookies
-        Cookies.remove('token');
-
-        setIsAuthenticated(false);
-        
-        
-        const link = document.createElement('a');
-        link.href = '/';
-        document.body.appendChild(link);
-        link.click();
-    };
-
-    if(!isTopNavBarVisible){
-        return null;
-    }
+    const router = useRouter();
 
     return (
-        <nav className={styles.navBar}>
-            <ul className={styles.navList}>
-                <li >
-                    <Link href="/about" className={styles.navLink}>Our Company</Link>
-                </li>
+      <Navbar
+        ref={ref}
+        classNames={{
+          base: cn(
+            "max-w-full bg-white rounded-none px-4 py-2",
+            base
+          ),
+          wrapper: cn("px-0", wrapper),
+          ...otherClassNames,
+        }}
+        height="60px"
+        isMenuOpen={isMenuOpen}
+        position="static"
+        onMenuOpenChange={setIsMenuOpen}
+        {...props}
+      >
+        <NavbarBrand>
+          <span className="text-lg font-semibold text-gray-800">ACME</span>
+        </NavbarBrand>
 
-                <li >
-                    <Link href="/study" className={styles.navLink}>Start Studying</Link>
-                </li>
+        <NavbarContent className="hidden md:flex" justify="center">
+          {menuItems.map((item, index) => (
+            <NavbarItem key={index}>
+              <Link className="text-gray-600 hover:text-gray-800" href="#" size="sm">
+                {item}
+              </Link>
+            </NavbarItem>
+          ))}
+        </NavbarContent>
 
+        <NavbarContent className="hidden md:flex" justify="end">
+          <NavbarItem>
+            <Button
+              className="bg-gray-800 text-white hover:bg-gray-700"
+              endContent={
+                <Icon className="pointer-events-none" icon="solar:alt-arrow-right-linear" />
+              }
+              onClick={ () => router.push('/auth') }
+              radius="full"
+            >
+              Get Started
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
 
-            </ul>
+        <NavbarMenuToggle className="text-gray-600 md:hidden" />
 
-            <div className={styles.authButtonDiv}>
-                {!isAuthenticated ? (
-                    <>
-                        <Link href="/login"><button className={styles.loginButton}>Log In</button></Link>
-                        <Link href="/login"><button className={styles.loginButton}>Sign Up!</button></Link>
-                    </>
-                ) : (
-                    <button className={styles.loginButton} onClick={handleLogout}>Log out</button>
-                )}
-            </div>
-
-        </nav>
+        <NavbarMenu
+          className="bottom-0 top-[initial] max-h-fit rounded-t-lg bg-white shadow-lg pb-6 pt-6"
+          motionProps={{
+            initial: { y: "100%" },
+            animate: { y: 0 },
+            exit: { y: "100%" },
+            transition: { type: "spring", bounce: 0, duration: 0.3 },
+          }}
+        >
+          {menuItems.map((item, index) => (
+            <NavbarMenuItem key={index}>
+              <Link className="mb-2 w-full text-gray-600" href="#" size="md">
+                {item}
+              </Link>
+              {index < menuItems.length - 1 && <Divider className="opacity-50" />}
+            </NavbarMenuItem>
+          ))}
+          <NavbarMenuItem>
+            <Button fullWidth as={Link} className="border-0 text-gray-800" href="/#" variant="faded">
+              Sign In
+            </Button>
+          </NavbarMenuItem>
+          <NavbarMenuItem className="mb-4">
+            <Button fullWidth as={Link} className="bg-gray-800 text-white"  onClick={ () => router.push('/auth') }
+            >
+              Get Started
+            </Button>
+          </NavbarMenuItem>
+        </NavbarMenu>
+      </Navbar>
     );
-};
+  }
+);
 
-export default SiteNavBar;
+CenteredNavbar.displayName = "CenteredNavbar";
+
+export default CenteredNavbar;

@@ -218,6 +218,8 @@ export const QuestionProvider = ({ children }) => {
             if (engagementId) {
                 setupReviewIndividualMode(questionId, engagementId);
             } else {
+
+                console.log("questionId", questionId);
                 setupActiveIndividualMode(questionId);
             }
 
@@ -243,6 +245,8 @@ export const QuestionProvider = ({ children }) => {
     const setupActiveIndividualMode = async (questionID) => {
         resetAllVars();
         const QEIDCombos = convertToQEIDComboArray([questionID]);
+
+        console.log("QEIDCombos", QEIDCombos);
 
         setActiveReviewMode(ACTIVEMODE);
         setIndQuizMode(INDIVIDUALMODE);
@@ -549,7 +553,7 @@ export const QuestionProvider = ({ children }) => {
     
     const convertToQEIDComboArray = (questionIDs) => {
         return questionIDs.map((questionID) => {
-            return { question_id: questionID, EngagementID: null };
+            return { question_id: questionID, engagement_id: null };
         });
     };
 
@@ -557,7 +561,7 @@ export const QuestionProvider = ({ children }) => {
         console.log("QEIDCombos", QEIDCombos);
     
         const questionIDs = QEIDCombos
-            .filter(combo => combo.question_id && combo.engagement_id)
+            // .filter(combo => combo.question_id && combo.engagement_id)
             .map(combo => combo.question_id);
     
         console.log("questionIDs in initialize engagement states", questionIDs);
